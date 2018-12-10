@@ -43,6 +43,12 @@ public class FurModel : MonoBehaviour {
     float blowPowerEffect_ = 1.0f;
 
     [SerializeField]
+    float dropRegistConst_ = 0.0f;
+
+    [SerializeField]
+    float gravity_ = 0.3f;
+
+    [SerializeField]
     float furDepthColor = 0.0f;
 
     [SerializeField]
@@ -54,6 +60,12 @@ public class FurModel : MonoBehaviour {
     [SerializeField]
     Transform mainCameraTrans_;
 
+
+    public void addBlow( Vector3 blow )
+    {
+        // 瞬間的な風で物理的力を加える
+        impactList_.Add( blow );
+    }
 
     // Use this for initialization
     void Start () {
@@ -117,13 +129,31 @@ public class FurModel : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        Vector3 relativeBlow = calcRelativeBlow();
+        // 重力と空気抵抗から加速度を算出
+        //  ma = mg - kv
+        //   a =  g - kv / m
+        // 外部衝撃力で加速度を更新
+        Vector3 acc = Vector3.down * gravity_ - dropRegistConst_ * preVelo_;
+        foreach ( var i in impactList_ )
+            acc += i;
+        impactList_.Clear();
 
+        // 速度更新
+        preVelo_ += acc;
+
+        // 位置更新
+        Vector3 p = transform.localPosition;
+        p += preVelo_;
+        transform.localPosition = p;
+
+        // 相対的な風の強さを算出
+        Vector3 relativeBlow = calcRelativeBlow();
         foreach ( var m in furMats_ ) {
             m.SetVector( "_Blow", relativeBlow );
             m.SetFloat( "_BlowPower", relativeBlow.magnitude * blowPowerEffect_ );
         }
 
+        // カメラの位置を更新
         Vector3 cameraPos = mainCameraTrans_.localPosition;
         cameraPos.x = prePos_.x;
         cameraPos.y = prePos_.y;
@@ -159,7 +189,6 @@ public class FurModel : MonoBehaviour {
     }
 
     List<Material> furMats_ = new List<Material>();
-    Vector3 prePos_;
     List<Vector3> relativeBlows_ = new List<Vector3>();
     List<Vector3> randomBlows_ = new List<Vector3>();
     int curIdx = 0;
@@ -167,4 +196,7 @@ public class FurModel : MonoBehaviour {
     int curRandomBlowIdx_ = 0;
     int randomBlowNum_ = 10;
     float relativeBlowWeight_ = 1.0f / 20.0f;
+    Vector3 prePos_;
+    Vector3 preVelo_ = Vector3.zero;
+    List<Vector3> impactList_ = new List<Vector3>();
 }
