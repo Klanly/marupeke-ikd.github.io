@@ -50,7 +50,18 @@ public class Blower : MonoBehaviour {
             vpPos.y -= 0.5f;
             vpPos.x *= ( float )Screen.width / Screen.height;
             vpPos.z = 0.0f;
-            blowTasks_.Add( new BlowTask( -vpPos, blowPower_, blowDecRate_ ) );
+
+            // ブローパワー係数算出
+            float power = 0.0f;
+            float dist = vpPos.magnitude;
+            float r1 = 0.1f;
+            if ( dist <= r1 )
+                power = 1.0f;
+            else if ( dist >= 0.5f )
+                power = 0.0f;
+            else
+                power = -( dist - r1 ) / ( 0.5f - r1 ) + 1.0f;
+            blowTasks_.Add( new BlowTask( -vpPos, blowPower_ * power, blowDecRate_ ) );
         }
 
         if ( blowTasks_.Count > 0 ) {
