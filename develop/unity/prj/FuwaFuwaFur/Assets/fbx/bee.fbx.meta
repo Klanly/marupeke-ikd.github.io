@@ -1,0 +1,245 @@
+fileFormatVersion: 2
+guid: 6fe326dd1a586d64dab580f3f50e8ff1
+timeCreated: 1544786494
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Armature
+    100002: back
+    100004: Bee
+    100006: //RootNode
+    100008: head
+    100010: head_end
+    100012: lower_arm_l_0
+    100014: lower_arm_l_1
+    100016: lower_arm_l_2
+    100018: lower_arm_l_3
+    100020: lower_arm_l_4
+    100022: lower_arm_l_4_end
+    100024: lower_arm_r_0
+    100026: lower_arm_r_1
+    100028: lower_arm_r_2
+    100030: lower_arm_r_3
+    100032: lower_arm_r_4
+    100034: lower_arm_r_4_end
+    100036: lower_root_l
+    100038: lower_root_r
+    100040: master
+    100042: middle_arm_l_0
+    100044: middle_arm_l_1
+    100046: middle_arm_l_2
+    100048: middle_arm_l_3
+    100050: middle_arm_l_4
+    100052: middle_arm_l_4_end
+    100054: middle_arm_r_0
+    100056: middle_arm_r_1
+    100058: middle_arm_r_2
+    100060: middle_arm_r_3
+    100062: middle_arm_r_4
+    100064: middle_arm_r_4_end
+    100066: middle_root_l
+    100068: middle_root_r
+    100070: sholder_l
+    100072: sholder_r
+    100074: tail_0
+    100076: tail_1
+    100078: tail_2
+    100080: tail_3
+    100082: tail_3_end
+    100084: upper_arm_l_0
+    100086: upper_arm_l_1
+    100088: upper_arm_l_2
+    100090: upper_arm_l_3
+    100092: upper_arm_l_4
+    100094: upper_arm_l_4_end
+    100096: upper_arm_r_0
+    100098: upper_arm_r_1
+    100100: upper_arm_r_2
+    100102: upper_arm_r_3
+    100104: upper_arm_r_4
+    100106: upper_arm_r_4_end
+    100108: wing_l
+    100110: wing_l_end
+    100112: wing_r
+    100114: wing_r_end
+    100116: wing_root_l
+    100118: wing_root_r
+    400000: Armature
+    400002: back
+    400004: Bee
+    400006: //RootNode
+    400008: head
+    400010: head_end
+    400012: lower_arm_l_0
+    400014: lower_arm_l_1
+    400016: lower_arm_l_2
+    400018: lower_arm_l_3
+    400020: lower_arm_l_4
+    400022: lower_arm_l_4_end
+    400024: lower_arm_r_0
+    400026: lower_arm_r_1
+    400028: lower_arm_r_2
+    400030: lower_arm_r_3
+    400032: lower_arm_r_4
+    400034: lower_arm_r_4_end
+    400036: lower_root_l
+    400038: lower_root_r
+    400040: master
+    400042: middle_arm_l_0
+    400044: middle_arm_l_1
+    400046: middle_arm_l_2
+    400048: middle_arm_l_3
+    400050: middle_arm_l_4
+    400052: middle_arm_l_4_end
+    400054: middle_arm_r_0
+    400056: middle_arm_r_1
+    400058: middle_arm_r_2
+    400060: middle_arm_r_3
+    400062: middle_arm_r_4
+    400064: middle_arm_r_4_end
+    400066: middle_root_l
+    400068: middle_root_r
+    400070: sholder_l
+    400072: sholder_r
+    400074: tail_0
+    400076: tail_1
+    400078: tail_2
+    400080: tail_3
+    400082: tail_3_end
+    400084: upper_arm_l_0
+    400086: upper_arm_l_1
+    400088: upper_arm_l_2
+    400090: upper_arm_l_3
+    400092: upper_arm_l_4
+    400094: upper_arm_l_4_end
+    400096: upper_arm_r_0
+    400098: upper_arm_r_1
+    400100: upper_arm_r_2
+    400102: upper_arm_r_3
+    400104: upper_arm_r_4
+    400106: upper_arm_r_4_end
+    400108: wing_l
+    400110: wing_l_end
+    400112: wing_r
+    400114: wing_r_end
+    400116: wing_root_l
+    400118: wing_root_r
+    2100000: Material
+    4300000: Bee
+    7400000: Armature|fly_idle
+    9500000: //RootNode
+    13700000: Bee
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: 397b0a7a40fd18e4195c32e075392f22, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Armature|fly_idle
+      takeName: Armature|fly_idle
+      firstFrame: 0
+      lastFrame: 8
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 1
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

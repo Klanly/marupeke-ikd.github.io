@@ -73,7 +73,7 @@
 
 					// 回転角度算出
 					float th = _MaxFurRadian * pow( blowEffect, _FurTension ) * ( _FurStep / _ShellNum ) * _BlowPower;
-					th = clamp( th, -1.57, 1.57 );
+					th = clamp( th, -1.57, 2.14 );
 
 					// Blowの逆方向に頂点を回転
 					float3 x = cross( blow_n, v.n );
