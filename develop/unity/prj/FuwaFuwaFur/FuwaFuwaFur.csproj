@@ -244,6 +244,7 @@
     <Compile Include="Assets\code\FurModel.cs" />
     <Compile Include="Assets\code\HormingBee.cs" />
     <Compile Include="Assets\code\MoveValue.cs" />
+    <Compile Include="Assets\code\Space2DManager.cs" />
     <Compile Include="Assets\code\StageManager.cs" />
     <Compile Include="Assets\code\State.cs" />
     <Compile Include="Assets\code\TimeObj.cs" />
