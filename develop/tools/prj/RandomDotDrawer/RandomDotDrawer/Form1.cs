@@ -17,6 +17,11 @@ namespace RandomDotDrawer
             InitializeComponent();
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            filtersLB.SelectedIndex = 0;
+        }
+
         private void runBtn_Click(object sender, EventArgs e)
         {
             releaseOldResources();
@@ -54,6 +59,28 @@ namespace RandomDotDrawer
 
             // イメージ表示
             dotImage.Image = bmp_;
+            dotImage.Refresh();
+        }
+
+        private void filterApplyBtn_Click(object sender, EventArgs e)
+        {
+            if ( bmp_ == null )
+                return;
+
+            // フィルター適用
+            var selectedName = filtersLB.Text;
+            FilterBase filter = null;
+            switch ( selectedName ) {
+                case "Gaussian Blur":
+                    float radius = getFloat( gaussianBlurCtl.Radius.Text, 0.0f );
+                    int samplingNum = getInt( gaussianBlurCtl.SamplingNum.Text, 10 );
+                    filter = new Filter_GaussianBlur( g_, bmp_, radius, samplingNum );
+                    break;
+            }
+
+            if ( filter != null )
+                filter.run();
+
             dotImage.Refresh();
         }
 
@@ -125,6 +152,5 @@ namespace RandomDotDrawer
         Graphics g_ = null;             // 描画対象キャンバス
         Bitmap bmp_ = null;             // 描画先Bitmap
         Pen pen_ = null;                // ペン
-
     }
 }

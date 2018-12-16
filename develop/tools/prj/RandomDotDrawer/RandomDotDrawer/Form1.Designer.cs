@@ -45,8 +45,14 @@
             this.textureSizeTxt = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.filtersLB = new System.Windows.Forms.ListBox();
+            this.filterPanel = new System.Windows.Forms.Panel();
+            this.filterApplyBtn = new System.Windows.Forms.Button();
+            this.gaussianBlurCtl = new RandomDotDrawer.gaussianblurctl();
             ((System.ComponentModel.ISupportInitialize)(this.dotImage)).BeginInit();
             this.panel1.SuspendLayout();
+            this.filterPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // runBtn
@@ -208,11 +214,61 @@
             this.label8.TabIndex = 18;
             this.label8.Text = "texture size";
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(472, 21);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(43, 15);
+            this.label9.TabIndex = 19;
+            this.label9.Text = "filters";
+            // 
+            // filtersLB
+            // 
+            this.filtersLB.FormattingEnabled = true;
+            this.filtersLB.ItemHeight = 15;
+            this.filtersLB.Items.AddRange(new object[] {
+            "Gaussian Blur"});
+            this.filtersLB.Location = new System.Drawing.Point(475, 39);
+            this.filtersLB.Name = "filtersLB";
+            this.filtersLB.Size = new System.Drawing.Size(135, 49);
+            this.filtersLB.TabIndex = 20;
+            // 
+            // filterPanel
+            // 
+            this.filterPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.filterPanel.Controls.Add(this.gaussianBlurCtl);
+            this.filterPanel.Location = new System.Drawing.Point(475, 94);
+            this.filterPanel.Name = "filterPanel";
+            this.filterPanel.Size = new System.Drawing.Size(268, 180);
+            this.filterPanel.TabIndex = 21;
+            // 
+            // filterApplyBtn
+            // 
+            this.filterApplyBtn.Location = new System.Drawing.Point(616, 65);
+            this.filterApplyBtn.Name = "filterApplyBtn";
+            this.filterApplyBtn.Size = new System.Drawing.Size(75, 23);
+            this.filterApplyBtn.TabIndex = 22;
+            this.filterApplyBtn.Text = "Apply";
+            this.filterApplyBtn.UseVisualStyleBackColor = true;
+            this.filterApplyBtn.Click += new System.EventHandler(this.filterApplyBtn_Click);
+            // 
+            // gaussianBlurCtl
+            // 
+            this.gaussianBlurCtl.Location = new System.Drawing.Point(3, 3);
+            this.gaussianBlurCtl.Name = "gaussianBlurCtl";
+            this.gaussianBlurCtl.Size = new System.Drawing.Size(229, 150);
+            this.gaussianBlurCtl.TabIndex = 0;
+            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.Silver;
-            this.ClientSize = new System.Drawing.Size(471, 284);
+            this.ClientSize = new System.Drawing.Size(750, 282);
+            this.Controls.Add(this.filterApplyBtn);
+            this.Controls.Add(this.filterPanel);
+            this.Controls.Add(this.filtersLB);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.textureSizeTxt);
             this.Controls.Add(this.label7);
@@ -233,9 +289,11 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "Form1";
             this.Text = "Random Dot Drawer v1.0.0";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dotImage)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.filterPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -261,6 +319,11 @@
         private System.Windows.Forms.TextBox textureSizeTxt;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ListBox filtersLB;
+        private System.Windows.Forms.Panel filterPanel;
+        private System.Windows.Forms.Button filterApplyBtn;
+        private gaussianblurctl gaussianBlurCtl;
     }
 }
 
