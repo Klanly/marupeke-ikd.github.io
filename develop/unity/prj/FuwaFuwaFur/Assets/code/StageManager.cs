@@ -13,6 +13,8 @@ public class StageManager : MonoBehaviour {
     [SerializeField]
     Camera mainCamera_;
 
+    [SerializeField]
+    float beeDensity_ = 50.0f;     // 蜂密度。1m^2当たりの蜂の数
 
     class UnitRegion
     {
@@ -53,8 +55,7 @@ public class StageManager : MonoBehaviour {
         beeFactory_.beePrefab = beePrefab_;
 
         // 5m位から100mまで、幅-2mから2mの範囲に適当にハチを散りばめてみる
-        float density = 50.0f; // 密度。1m^2当たりの蜂の数
-        int beeNum = ( int )( ( hiHeightM - lowHeightM ) * ( rightM - leftM ) * density );
+        int beeNum = ( int )( ( hiHeightM - lowHeightM ) * ( rightM - leftM ) * beeDensity_ );
         for ( int i = 0; i < beeNum; ++i ) {
             var bee = beeFactory_.create( Vector3.zero, 3.0f, 8.0f, 40.0f, 20.0f, 30.0f );
             bee.transform.localPosition = new Vector3( Random.Range( leftM, rightM ) / mesureUnit, Random.Range( lowHeightM, hiHeightM ) / mesureUnit, 0.0f );
