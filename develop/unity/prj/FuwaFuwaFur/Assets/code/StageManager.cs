@@ -34,7 +34,7 @@ public class StageManager : MonoBehaviour {
         float mesureUnit = 0.001f;  // ワールドの1ユニット1mm
 
         // 空間管理人
-        float lowHeightM = 0.0f;
+        float lowHeightM = 1.0f;
         float hiHeightM = 100.0f;
         float leftM = -0.2f;
         float rightM = 0.2f;

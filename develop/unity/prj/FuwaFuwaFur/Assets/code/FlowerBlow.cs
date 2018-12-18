@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FieldBlow : Blower
+public class FlowerBlow : Blower
 {
     [SerializeField]
     Transform target_;
