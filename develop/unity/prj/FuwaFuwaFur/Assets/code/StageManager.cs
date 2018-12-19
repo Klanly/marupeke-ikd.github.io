@@ -35,6 +35,35 @@ public class StageManager : MonoBehaviour {
         furModel_.addBlow( direction );
     }
 
+    public bool isFinish()
+    {
+        return bFinish_;
+    }
+
+    class FinishWaitState : State
+    {
+        public FinishWaitState( StageManager parent, float waitTime, System.Action callback )
+        {
+            parent_ = parent;
+            waitTime_ = waitTime;
+            callback_ = callback;
+        }
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            t += Time.deltaTime;
+            if ( t >= waitTime_ ) {
+                callback_();
+                return null;
+            }
+            return this;
+        }
+        StageManager parent_;
+        float waitTime_ = 2.0f;
+        float t = 0.0f;
+        System.Action callback_;
+    }
+
     // Use this for initialization
     void Start () {
         float mesureUnit = 0.001f;  // ワールドの1ユニット1mm
@@ -82,6 +111,9 @@ public class StageManager : MonoBehaviour {
             furModel_.gameOverFinishCallback_ = () => {
                 fader_.setFade( 0.5f );
                 gameOverSprite_.gameObject.SetActive( true );
+                finishWaitState_ = new FinishWaitState( this, 5.0f, () => {
+                    bFinish_ = true;
+                } );
             };
         };
 	}
@@ -104,6 +136,9 @@ public class StageManager : MonoBehaviour {
                 }
             }
         }
+
+        if ( finishWaitState_ != null )
+            finishWaitState_ = finishWaitState_.update();
     }
 
     BeeFactory beeFactory_ = new BeeFactory();
@@ -111,4 +146,6 @@ public class StageManager : MonoBehaviour {
     GameObject spaceRoot_;
     List<UnitRegion> unitRegions_ = new List<UnitRegion>();
     bool bGameOver_ = false;
+    bool bFinish_ = false;
+    State finishWaitState_ = null;
 }

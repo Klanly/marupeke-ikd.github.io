@@ -247,8 +247,10 @@
     <Compile Include="Assets\code\FlowerBlow.cs" />
     <Compile Include="Assets\code\FurModel.cs" />
     <Compile Include="Assets\code\GameOverSprite.cs" />
+    <Compile Include="Assets\code\GameStateManager.cs" />
     <Compile Include="Assets\code\HeightLine.cs" />
     <Compile Include="Assets\code\HormingBee.cs" />
+    <Compile Include="Assets\code\MainGame.cs" />
     <Compile Include="Assets\code\MoveValue.cs" />
     <Compile Include="Assets\code\Player.cs" />
     <Compile Include="Assets\code\SideBlow.cs" />
