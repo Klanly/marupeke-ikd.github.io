@@ -1,0 +1,13 @@
+{
+"companyName": "DefaultCompany",
+"productName": "FuwaFuwaFur",
+"dataUrl": "FuwaFuwa.data.unityweb",
+"asmCodeUrl": "FuwaFuwa.asm.code.unityweb",
+"asmMemoryUrl": "FuwaFuwa.asm.memory.unityweb",
+"asmFrameworkUrl": "FuwaFuwa.asm.framework.unityweb",
+"TOTAL_MEMORY": 367001600,
+"graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"splashScreenStyle": "Dark",
+"backgroundColor": "#231F20"
+}
