@@ -10,6 +10,12 @@ public class Bee : MonoBehaviour {
     [SerializeField]
     Transform beeLocal_;    // 蜂の行動中心点
 
+    [SerializeField]
+    ColliderCallback collider_; // 衝突コールバック
+
+    public ColliderCallback ColliderCallback { get { return collider_; } }
+
+
     protected class NormalRoundMotiionState : State
     {
         public NormalRoundMotiionState( Bee parent, EnemyMotionUnit motion )

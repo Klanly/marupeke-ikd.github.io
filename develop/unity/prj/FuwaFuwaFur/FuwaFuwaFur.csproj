@@ -238,12 +238,15 @@
     <Compile Include="Assets\code\Bee.cs" />
     <Compile Include="Assets\code\BeeFactory.cs" />
     <Compile Include="Assets\code\Blower.cs" />
+    <Compile Include="Assets\code\ColliderCallback.cs" />
     <Compile Include="Assets\code\DustParticle.cs" />
     <Compile Include="Assets\code\EnemyMotion_Circle.cs" />
     <Compile Include="Assets\code\EnemyMotion_Linear.cs" />
     <Compile Include="Assets\code\EnemyMotionUnit.cs" />
+    <Compile Include="Assets\code\Fader.cs" />
     <Compile Include="Assets\code\FlowerBlow.cs" />
     <Compile Include="Assets\code\FurModel.cs" />
+    <Compile Include="Assets\code\GameOverSprite.cs" />
     <Compile Include="Assets\code\HeightLine.cs" />
     <Compile Include="Assets\code\HormingBee.cs" />
     <Compile Include="Assets\code\MoveValue.cs" />

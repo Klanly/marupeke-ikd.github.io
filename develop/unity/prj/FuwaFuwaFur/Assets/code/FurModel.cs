@@ -60,11 +60,28 @@ public class FurModel : MonoBehaviour {
     [SerializeField]
     Transform mainCameraTrans_;
 
+    [SerializeField]
+    ColliderCallback colliderCallback_;
+
+    public ColliderCallback ColliderCallback { get { return colliderCallback_; } }
+    public System.Action gameOverFinishCallback_ = null;
 
     public void addBlow( Vector3 blow )
     {
         // 瞬間的な風で物理的力を加える
-        impactList_.Add( blow );
+        if ( bGameOver_ == false )
+            impactList_.Add( blow );
+    }
+
+    public bool isGameOver()
+    {
+        return bGameOver_;
+    }
+
+    // ゲームオーバーへ遷移
+    public void toGameOver()
+    {
+        bGameOver_ = true;
     }
 
     // Use this for initialization
@@ -127,8 +144,108 @@ public class FurModel : MonoBehaviour {
             randomBlows_.Add( Vector3.zero );
     }
 
+    class GameOverWait : State
+    {
+        public GameOverWait( FurModel parent )
+        {
+            parent_ = parent;
+        }
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            t -= Time.deltaTime;
+            if ( t <= 0.0f )
+                return new GameOverScaleUp( parent_ );
+            return this;
+        }
+        FurModel parent_;
+        float t = 0.50f;
+    }
+    class GameOverScaleUp : State
+    {
+        public GameOverScaleUp( FurModel parent )
+        {
+            parent_ = parent;
+        }
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            t += Time.deltaTime;
+            float d = t / tm;
+            scale_ = 1.0f + 1.0f * d + 0.1f * Mathf.Cos( d * 12.0f * Mathf.PI * 2.0f );
+            if ( t >= tm ) {
+                parent_.transform.localScale = Vector3.one * scale_;
+                return new GameOverScaleDown( parent_, scale_ );
+            }
+            parent_.transform.localScale = Vector3.one * scale_;
+            return this;
+        }
+        FurModel parent_;
+        float scale_ = 1.0f;
+        float t = 0.0f;
+        float tm = 1.3f;
+    }
+    class GameOverScaleDown : State
+    {
+        public GameOverScaleDown( FurModel parent, float scale )
+        {
+            parent_ = parent;
+            scale_ = scale;
+        }
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            scale_ -= 0.15f;
+            if ( scale_ <= 1.0f ) {
+                parent_.transform.localScale = Vector3.one * scale_;
+                return new GameOverFall( parent_ );
+            }
+            parent_.transform.localScale = Vector3.one * scale_;
+            return this;
+        }
+        FurModel parent_;
+        float scale_ = 1.0f;
+    }
+    class GameOverFall : State
+    {
+        public GameOverFall( FurModel parent )
+        {
+            parent_ = parent;
+        }
+
+        // 内部初期化
+        override protected void innerInit()
+        {
+            if ( parent_.gameOverFinishCallback_ != null )
+                parent_.gameOverFinishCallback_();
+        }
+
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            return this;
+        }
+        FurModel parent_;
+    }
+
+    bool bGameOverInit_ = false;
+    State gameOverState_ = null;
+    void gameOverState()
+    {
+        if ( bGameOverInit_ == false ) {
+            bGameOverInit_ = true;
+            gameOverState_ = new GameOverWait( this );
+        }
+        gameOverState_ = gameOverState_.update();
+    }
+
     // Update is called once per frame
     void Update () {
+        if ( bGameOver_ == true ) {
+            bCameraChasing_ = false;
+            gameOverState();
+        }
+
         // 重力と空気抵抗から加速度を算出
         //  ma = mg - kv
         //   a =  g - kv / m
@@ -153,11 +270,13 @@ public class FurModel : MonoBehaviour {
             m.SetFloat( "_BlowPower", relativeBlow.magnitude * blowPowerEffect_ );
         }
 
-        // カメラの位置を更新
-        Vector3 cameraPos = mainCameraTrans_.localPosition;
-        cameraPos.x = prePos_.x;
-        cameraPos.y = prePos_.y;
-        mainCameraTrans_.localPosition = cameraPos;
+        if ( bCameraChasing_ == true ) {
+            // カメラの位置を更新
+            Vector3 cameraPos = mainCameraTrans_.localPosition;
+            cameraPos.x = prePos_.x;
+            cameraPos.y = prePos_.y;
+            mainCameraTrans_.localPosition = cameraPos;
+        }
     }
 
     Vector3 calcRelativeBlow()
@@ -199,4 +318,6 @@ public class FurModel : MonoBehaviour {
     Vector3 prePos_;
     Vector3 preVelo_ = Vector3.zero;
     List<Vector3> impactList_ = new List<Vector3>();
+    bool bGameOver_ = false;
+    bool bCameraChasing_ = true;
 }

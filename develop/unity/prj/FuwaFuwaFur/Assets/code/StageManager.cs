@@ -14,7 +14,13 @@ public class StageManager : MonoBehaviour {
     Camera mainCamera_;
 
     [SerializeField]
+    Fader fader_;
+
+    [SerializeField]
     float beeDensity_ = 50.0f;     // 蜂密度。1m^2当たりの蜂の数
+
+    [SerializeField]
+    GameOverSprite gameOverSprite_;
 
     class UnitRegion
     {
@@ -38,7 +44,7 @@ public class StageManager : MonoBehaviour {
         float hiHeightM = 100.0f;
         float leftM = -0.2f;
         float rightM = 0.2f;
-        spaceManager_ = new Space2DManager( new Vector2( leftM / mesureUnit, lowHeightM / mesureUnit ), new Vector2( rightM / mesureUnit, hiHeightM / mesureUnit ), 0.4f / mesureUnit );
+        spaceManager_ = new Space2DManager( new Vector2( leftM / mesureUnit, lowHeightM / mesureUnit ), new Vector2( rightM / mesureUnit, hiHeightM / mesureUnit ), 1.0f / mesureUnit );
 
         // 空間ユニットインデックスに対応する範囲を管理するGameObject生成
         spaceRoot_ = new GameObject( "SpaceRoot" );
@@ -67,22 +73,35 @@ public class StageManager : MonoBehaviour {
             }
             bee.transform.parent = unitRegions_[ spaceIdx ].manageGameObj_.transform;
         }
+
+        // Mofに蜂が当たったらGameOver
+        furModel_.ColliderCallback.onTriggerEnter_ = ( collision ) => {
+            furModel_.toGameOver();
+            furModel_.ColliderCallback.onTriggerEnter_ = null;
+            bGameOver_ = true;
+            furModel_.gameOverFinishCallback_ = () => {
+                fader_.setFade( 0.5f );
+                gameOverSprite_.gameObject.SetActive( true );
+            };
+        };
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        List<int> actives, noneActies;
-        Vector3 furPos = furModel_.transform.localPosition;
-        spaceManager_.setVisibleRegion( new Vector2( furPos.x, furPos.y ), 200.0f );
-        spaceManager_.update( out actives, out noneActies );
-        if ( actives.Count > 0 ) {
-            foreach( var i in actives ) {
-                unitRegions_[ i ].manageGameObj_.SetActive( true );
+        if ( bGameOver_ == false ) {
+            List<int> actives, noneActies;
+            Vector3 furPos = furModel_.transform.localPosition;
+            spaceManager_.setVisibleRegion( new Vector2( furPos.x, furPos.y ), 400.0f );
+            spaceManager_.update( out actives, out noneActies );
+            if ( actives.Count > 0 ) {
+                foreach( var i in actives ) {
+                    unitRegions_[ i ].manageGameObj_.SetActive( true );
+                }
             }
-        }
-        if ( noneActies.Count > 0 ) {
-            foreach ( var i in noneActies ) {
-                unitRegions_[ i ].manageGameObj_.SetActive( false );
+            if ( noneActies.Count > 0 ) {
+                foreach ( var i in noneActies ) {
+                    unitRegions_[ i ].manageGameObj_.SetActive( false );
+                }
             }
         }
     }
@@ -91,4 +110,5 @@ public class StageManager : MonoBehaviour {
     Space2DManager spaceManager_;
     GameObject spaceRoot_;
     List<UnitRegion> unitRegions_ = new List<UnitRegion>();
+    bool bGameOver_ = false;
 }
