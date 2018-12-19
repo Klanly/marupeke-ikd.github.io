@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuwaFuwaFur", "FuwaFuwaFur.csproj", "{9E9C48B5-E4DF-F377-5EB6-913190B8DAB2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuwaFuwaFur.Editor.Plugins", "FuwaFuwaFur.Editor.Plugins.csproj", "{736BDAE5-4C7C-217F-2719-38D3AF0F9612}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{9E9C48B5-E4DF-F377-5EB6-913190B8DAB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E9C48B5-E4DF-F377-5EB6-913190B8DAB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E9C48B5-E4DF-F377-5EB6-913190B8DAB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{736BDAE5-4C7C-217F-2719-38D3AF0F9612}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{736BDAE5-4C7C-217F-2719-38D3AF0F9612}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{736BDAE5-4C7C-217F-2719-38D3AF0F9612}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{736BDAE5-4C7C-217F-2719-38D3AF0F9612}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
