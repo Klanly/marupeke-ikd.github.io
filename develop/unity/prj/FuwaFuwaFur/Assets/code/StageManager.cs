@@ -22,6 +22,9 @@ public class StageManager : MonoBehaviour {
     [SerializeField]
     GameOverSprite gameOverSprite_;
 
+    [SerializeField]
+    Transform root_;
+
     class UnitRegion
     {
         public GameObject manageGameObj_;
@@ -69,7 +72,7 @@ public class StageManager : MonoBehaviour {
         float mesureUnit = 0.001f;  // ワールドの1ユニット1mm
 
         // 空間管理人
-        float lowHeightM = 1.0f;
+        float lowHeightM = 0.5f;
         float hiHeightM = 100.0f;
         float leftM = -0.2f;
         float rightM = 0.2f;
@@ -77,6 +80,7 @@ public class StageManager : MonoBehaviour {
 
         // 空間ユニットインデックスに対応する範囲を管理するGameObject生成
         spaceRoot_ = new GameObject( "SpaceRoot" );
+        spaceRoot_.transform.parent = root_;
         int unitNum = spaceManager_.getUnitNum();
         for ( int i = 0; i < unitNum; ++i ) {
             UnitRegion r = new UnitRegion();

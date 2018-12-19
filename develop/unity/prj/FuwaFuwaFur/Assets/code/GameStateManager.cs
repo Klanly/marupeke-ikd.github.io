@@ -9,6 +9,33 @@ public class GameStateManager : MonoBehaviour {
     [SerializeField]
     MainGame mainGame_;
 
+    [SerializeField]
+    TitleManager titleManager_;
+
+    class Title : State
+    {
+        public Title( GameStateManager parent )
+        {
+            parent_ = parent;
+        }
+        // 内部初期化
+        override protected void innerInit()
+        {
+            title_ = GameObject.Instantiate<TitleManager>( parent_.titleManager_ );
+        }
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            if ( title_.isFinish() == true ) {
+                Destroy( title_.gameObject );
+                return new GameStart( parent_ );
+            }
+            return this;
+        }
+        GameStateManager parent_;
+        TitleManager title_;
+    }
+
     class GameStart : State
     {
         public GameStart( GameStateManager parent )
@@ -26,7 +53,7 @@ public class GameStateManager : MonoBehaviour {
         {
             if ( mainGameObj_.isFinish() == true ) {
                 DestroyObject( mainGameObj_.gameObject );
-                return null;
+                return new Title( parent_ );
             }
             return this;
         }
@@ -36,7 +63,7 @@ public class GameStateManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        state_ = new GameStart( this );
+        state_ = new Title( this );
     }
 	
 	// Update is called once per frame
