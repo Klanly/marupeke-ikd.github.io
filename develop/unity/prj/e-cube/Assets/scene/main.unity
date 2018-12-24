@@ -113,6 +113,46 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &678539956
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 678539958}
+  - component: {fileID: 678539957}
+  m_Layer: 0
+  m_Name: CubeTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &678539957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 678539956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9336e1fbec8f88444afd6f7a0a6d9b19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &678539958
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 678539956}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &694063425
 Prefab:
   m_ObjectHideFlags: 0
@@ -200,6 +240,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 633c07e591a45af46bdce8490bd05734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bTestRotPlus90_X: 0
+  bTestRotPlus180_X: 0
+  bTestRotPlus270_X: 0
+  testRotDegPerFrame_: 10
   n_: 3
   body_: {fileID: 1808960808}
   piecePrefab_: {fileID: 114149874529398754, guid: 13e81294584e1c14fba325cf56a8afff,

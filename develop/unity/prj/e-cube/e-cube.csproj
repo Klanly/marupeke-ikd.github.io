@@ -235,7 +235,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\code\AxisType.cs" />
     <Compile Include="Assets\code\Cube.cs" />
+    <Compile Include="Assets\code\CubeRotationType.cs" />
+    <Compile Include="Assets\code\CubeTest.cs" />
     <Compile Include="Assets\code\FaceType.cs" />
     <Compile Include="Assets\code\NormalPiece.cs" />
   </ItemGroup>
