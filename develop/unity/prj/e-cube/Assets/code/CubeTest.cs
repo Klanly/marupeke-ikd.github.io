@@ -11,6 +11,12 @@ public class CubeTest : MonoBehaviour {
     bool bApplyParameters_ = false;
 
     [SerializeField]
+    CubeRotationType rotType_ = CubeRotationType.CRT_Plus_90;
+
+    [SerializeField]
+    AxisType axis_ = AxisType.AxisType_X;
+
+    [SerializeField]
     float defDegPerFrame_ = 10.0f;
 
     [SerializeField]
@@ -25,7 +31,7 @@ public class CubeTest : MonoBehaviour {
             bApplyParameters_ = false;
 
             cube_.RotDegPerFrame = defDegPerFrame_;
-            cube_.onRotation( AxisType.AxisType_X, colIndices_, CubeRotationType.CRT_Plus_90 );
+            cube_.onRotation( axis_, colIndices_, rotType_ );
         }
     }
 

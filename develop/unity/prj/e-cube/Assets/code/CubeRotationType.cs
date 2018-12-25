@@ -7,4 +7,5 @@ public enum CubeRotationType : int {
     CRT_Minus_90 = -90,      // -90度
     CRT_Minus_180 = -180,    // -180度
     CRT_Minus_270 = -270,    // -270度
+    CRT_NUM = 7
 }
