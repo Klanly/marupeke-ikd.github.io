@@ -31,9 +31,12 @@ class RotationMethod
         }
         // フェイス置き換え
         foreach ( var info in infos ) {
-            var targetPiece = pieceMap[ NormalPiece.convCoordToHash( info.transCoord_ ) ];
-            targetPiece.setFaceColors( info.transFaceType_ );
-            targetPiece.resetRotate();    // ピースの姿勢をリセット
+            uint hash = NormalPiece.convCoordToHash( info.transCoord_ );
+            if ( pieceMap.ContainsKey( hash ) == true ) {
+                var targetPiece = pieceMap[ NormalPiece.convCoordToHash( info.transCoord_ ) ];
+                targetPiece.setFaceColors( info.transFaceType_ );
+                targetPiece.resetRotate();    // ピースの姿勢をリセット
+            }
         }
     }
 
@@ -54,7 +57,8 @@ class RotationMethod_AxisX : RotationMethod
         foreach ( var x in colIndices ) {
             for ( int y = 0; y < pieces.GetLength( 1 ); ++y ) {
                 for ( int z = 0; z < pieces.GetLength( 2 ); ++z ) {
-                    pieces_.Add( pieces[ x, y, z ] );
+                    if ( pieces[ x, y, z ] != null )
+                        pieces_.Add( pieces[ x, y, z ] );
                 }
             }
         }
@@ -102,7 +106,8 @@ class RotationMethod_AxisY : RotationMethod
         foreach ( var y in colIndices ) {
             for ( int x = 0; x < pieces.GetLength( 0 ); ++x ) {
                 for ( int z = 0; z < pieces.GetLength( 2 ); ++z ) {
-                    pieces_.Add( pieces[ x, y, z ] );
+                    if ( pieces[ x, y, z ] != null )
+                        pieces_.Add( pieces[ x, y, z ] );
                 }
             }
         }
@@ -150,7 +155,8 @@ class RotationMethod_AxisZ : RotationMethod
         foreach ( var z in colIndices ) {
             for ( int x = 0; x < pieces.GetLength( 0 ); ++x ) {
                 for ( int y = 0; y < pieces.GetLength( 1 ); ++y ) {
-                    pieces_.Add( pieces[ x, y, z ] );
+                    if ( pieces[ x, y, z ] != null )
+                        pieces_.Add( pieces[ x, y, z ] );
                 }
             }
         }

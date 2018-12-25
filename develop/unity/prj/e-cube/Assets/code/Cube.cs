@@ -64,9 +64,17 @@ public class Cube : MonoBehaviour {
         pieces_ = new NormalPiece[ n_, n_, n_ ];
 
         // 全ピースをインスタンスする
+        float removeDist = n_ * 0.5f - 1.0f;    // 内接球半径から1ピース分内側
+        Vector3 center = new Vector3( n_ * 0.5f, n_ * 0.5f, n_ * 0.5f );
         for ( int z = 0; z < n_; ++z ) {
             for ( int y = 0; y < n_; ++y ) {
                 for ( int x = 0; x < n_; ++x ) {
+                    // 内接球の内側にあるピースは除く
+                    Vector3 pos = new Vector3( x + 0.5f, y + 0.5f, z + 0.5f );
+                    float r = ( pos - center ).magnitude;
+                    if ( r < removeDist )
+                        continue;
+
                     NormalPiece p = Instantiate<NormalPiece>( piecePrefab_ );
                     p.transform.parent = body_;
                     p.initialize( n_, new Vector3Int( x, y, z ) );

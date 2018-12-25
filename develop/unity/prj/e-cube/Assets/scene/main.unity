@@ -145,7 +145,7 @@ MonoBehaviour:
   rotType_: 90
   axis_: 0
   defDegPerFrame_: 1
-  colIndices_: 00000000
+  colIndices_: 02000000
 --- !u!4 &678539958
 Transform:
   m_ObjectHideFlags: 0
@@ -247,7 +247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotDegPerFrame_: 10
-  n_: 3
+  n_: 10
   body_: {fileID: 1808960808}
   piecePrefab_: {fileID: 114149874529398754, guid: 13e81294584e1c14fba325cf56a8afff,
     type: 2}
@@ -519,7 +519,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1290776343}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
