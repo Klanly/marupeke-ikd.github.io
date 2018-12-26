@@ -22,8 +22,6 @@ class RotationManager
             rotMethod_ = new RotationMethod_AxisY( colIndices, rotType, parent_ );
         else if ( axis == AxisType.AxisType_Z )
             rotMethod_ = new RotationMethod_AxisZ( colIndices, rotType, parent_ );
-
-        // 回転後の回転対象ピース及びそのカラー情報を書き出し
     }
 
     // 回転更新

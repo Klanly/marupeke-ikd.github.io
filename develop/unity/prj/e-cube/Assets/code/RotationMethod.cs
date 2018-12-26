@@ -62,7 +62,10 @@ class RotationMethod_AxisX : RotationMethod
                 }
             }
         }
+        var cubeData = cube.getCubeData();
+        cubeData.onRotation( AxisType.AxisType_X, colIndices, rotType );
     }
+
     public override RotationMethod update(float defDeg)
     {
         bool bFinish = false;
@@ -111,7 +114,10 @@ class RotationMethod_AxisY : RotationMethod
                 }
             }
         }
+        var cubeData = cube.getCubeData();
+        cubeData.onRotation( AxisType.AxisType_Y, colIndices, rotType );
     }
+
     public override RotationMethod update(float defDeg)
     {
         bool bFinish = false;
@@ -160,7 +166,10 @@ class RotationMethod_AxisZ : RotationMethod
                 }
             }
         }
+        var cubeData = cube.getCubeData();
+        cubeData.onRotation( AxisType.AxisType_Z, colIndices, rotType );
     }
+
     public override RotationMethod update(float defDeg)
     {
         bool bFinish = false;

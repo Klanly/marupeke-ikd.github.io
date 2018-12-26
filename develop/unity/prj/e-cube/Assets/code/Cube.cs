@@ -35,6 +35,18 @@ public class Cube : MonoBehaviour {
         return piecesMap_;
     }
 
+    // キューブデータを取得
+    public CubeData getCubeData()
+    {
+        return cubeData_;
+    }
+
+    // 現在の各面の情報を取得
+    public FaceType[,] getFaces()
+    {
+        return cubeData_.getFaces();
+    }
+
     // 回転指示
     // axis   : 回転軸
     // colIdx : 列番号配列
@@ -42,10 +54,13 @@ public class Cube : MonoBehaviour {
     // defDegPerFrame: 1フレーム当たりの回転角度
     public virtual void onRotation( AxisType axis, int[] colIndices, CubeRotationType rotType )
     {
+        HashSet<int> colHash = new HashSet<int>();
         List<int> ary = new List<int>();
-        foreach( var c in colIndices ) {
-            if ( c >= 0 && c < n_ )
+        foreach ( var c in colIndices ) {
+            if ( c >= 0 && c < n_ && colHash.Contains( c ) == false ) {
                 ary.Add( c );
+                colHash.Add( c );
+            }
         }
 
         // 回転タスクを再初期化
@@ -59,6 +74,7 @@ public class Cube : MonoBehaviour {
     private void Awake()
     {
         rotationManager_ = new RotationManager( this );
+        cubeData_ = new CubeData( n_ );
 
         // 回転グループ初期化
         pieces_ = new NormalPiece[ n_, n_, n_ ];
@@ -105,4 +121,5 @@ public class Cube : MonoBehaviour {
     NormalPiece[,,] pieces_;
     Dictionary<uint, NormalPiece> piecesMap_ = new Dictionary<uint, NormalPiece>();
     RotationManager rotationManager_;
+    CubeData cubeData_;
 }
