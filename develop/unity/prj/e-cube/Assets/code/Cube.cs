@@ -71,6 +71,12 @@ public class Cube : MonoBehaviour {
         rotationManager_.run( axis, ary.ToArray(), rotType, Mathf.Abs( rotDegPerFrame_ ) );
     }
 
+    // キューブが揃っている？
+    public bool isComplete()
+    {
+        return cubeData_.isComplete();
+    }
+
     private void Awake()
     {
         rotationManager_ = new RotationManager( this );

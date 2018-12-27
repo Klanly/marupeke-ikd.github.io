@@ -148,6 +148,19 @@ public class CubeData {
         }
     }
 
+    // キューブが揃っている？
+    public bool isComplete()
+    {
+        for ( int i = 0; i < 6; ++i ) {
+            FaceType faceColor = faces_[ i, 0 ];
+            for ( int idx = 1; idx < n_ * n_; ++idx ) {
+                if ( faceColor != faces_[ i, idx ] )
+                    return false;
+            }
+        }
+        return true;
+    }
+
     // 指定軸で回転
     List<Vector3Int> rotateCoords( AxisType axis, CubeRotationType rotTyep, List< Vector3Int > coords )
     {

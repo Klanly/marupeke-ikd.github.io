@@ -237,7 +237,14 @@
   <ItemGroup>
     <Compile Include="Assets\code\AxisType.cs" />
     <Compile Include="Assets\code\Cube.cs" />
+    <Compile Include="Assets\code\CubeController.cs" />
+    <Compile Include="Assets\code\CubeControllerManager.cs" />
     <Compile Include="Assets\code\CubeData.cs" />
+    <Compile Include="Assets\code\CubeEvent.cs" />
+    <Compile Include="Assets\code\CubeEventFactory.cs" />
+    <Compile Include="Assets\code\CubeEventType.cs" />
+    <Compile Include="Assets\code\CubeGameManager.cs" />
+    <Compile Include="Assets\code\CubeKeyboardController.cs" />
     <Compile Include="Assets\code\CubeRotationType.cs" />
     <Compile Include="Assets\code\CubeTest.cs" />
     <Compile Include="Assets\code\FaceType.cs" />
