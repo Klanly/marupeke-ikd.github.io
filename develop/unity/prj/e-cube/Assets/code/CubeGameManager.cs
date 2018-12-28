@@ -21,12 +21,28 @@ public class CubeGameManager : MonoBehaviour {
 
         // TEST
         var keyboardCont = new CubeKeyboardController( cube_.getN() );
-        keyboardCont.setKey( KeyCode.D, CubeEventType.Rot_R );
+        // X軸回転
+        keyboardCont.setKey( KeyCode.E, CubeEventType.Rot_R );
         keyboardCont.setKey( KeyCode.C, CubeEventType.Rot_IR );
         keyboardCont.setKey( KeyCode.X, CubeEventType.Rot_Inv_Right | CubeEventType.RotCol_2 | CubeEventType.RotDeg_90 );
-        keyboardCont.setKey( KeyCode.S, CubeEventType.Rot_Right | CubeEventType.RotCol_2 | CubeEventType.RotDeg_90 );
+        keyboardCont.setKey( KeyCode.W, CubeEventType.Rot_Right | CubeEventType.RotCol_2 | CubeEventType.RotDeg_90 );
         keyboardCont.setKey( KeyCode.Z, CubeEventType.Rot_IL );
-        keyboardCont.setKey( KeyCode.A, CubeEventType.Rot_L );
+        keyboardCont.setKey( KeyCode.Q, CubeEventType.Rot_L );
+        // Y軸回転
+        keyboardCont.setKey( KeyCode.Q, KeyCode.V, CubeEventType.Rot_U );
+        keyboardCont.setKey( KeyCode.E, KeyCode.V, CubeEventType.Rot_IU );
+        keyboardCont.setKey( KeyCode.D, KeyCode.V, CubeEventType.Rot_Inv_Up | CubeEventType.RotCol_2 | CubeEventType.RotDeg_90 );
+        keyboardCont.setKey( KeyCode.A, KeyCode.V, CubeEventType.Rot_Up | CubeEventType.RotCol_2 | CubeEventType.RotDeg_90 );
+        keyboardCont.setKey( KeyCode.C, KeyCode.V, CubeEventType.Rot_ID );
+        keyboardCont.setKey( KeyCode.Z, KeyCode.V, CubeEventType.Rot_D );
+        // Z軸回転
+        keyboardCont.setKey( KeyCode.Q, KeyCode.B, CubeEventType.Rot_B );
+        keyboardCont.setKey( KeyCode.E, KeyCode.B, CubeEventType.Rot_IB );
+        keyboardCont.setKey( KeyCode.D, KeyCode.B, CubeEventType.Rot_Inv_Back | CubeEventType.RotCol_2 | CubeEventType.RotDeg_90 );
+        keyboardCont.setKey( KeyCode.A, KeyCode.B, CubeEventType.Rot_Back | CubeEventType.RotCol_2 | CubeEventType.RotDeg_90 );
+        keyboardCont.setKey( KeyCode.C, KeyCode.B, CubeEventType.Rot_IF );
+        keyboardCont.setKey( KeyCode.Z, KeyCode.B, CubeEventType.Rot_F );
+
         controllerManager_.joinController( keyboardCont );
         controllerManager_.setActive( true );
         controllerManager_.setAutoNonActiveWhenComplete( bStopControllerActiveWhenComplete_ );
