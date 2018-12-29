@@ -44,6 +44,15 @@ public class CubeCamera : MonoBehaviour {
             deg = ( deg >= 0.0f ? latLimitDeg_ : -latLimitDeg_ );
         }
         aimLatDeg_ = deg;
+        if ( moveLatVal_ == null )
+            moveLatVal_ = new MoveValue( aimLatDeg_, 0.3f, 0.0001f );
+        moveLatVal_.setAim( aimLatDeg_ );
+    }
+
+    // 緯度の限界値を取得
+    public float getLatitudeLimit()
+    {
+        return latLimitDeg_;
     }
 
     // ゴールとなる経度を設定
@@ -53,6 +62,15 @@ public class CubeCamera : MonoBehaviour {
             deg = ( deg >= 0.0f ? longLimitDeg_ : -longLimitDeg_ );
         }
         aimLongDeg_ = deg;
+        if ( moveLongVal_ == null )
+            moveLongVal_ = new MoveValue( aimLatDeg_, 0.3f, 0.0001f );
+        moveLongVal_.setAim( aimLongDeg_ );
+    }
+
+    // 経度の限界値を取得
+    public float getLongitudeLimit()
+    {
+        return longLimitDeg_;
     }
 
     // カメラ位置をホールド（緯度、経度を保持）
@@ -130,7 +148,9 @@ public class CubeCamera : MonoBehaviour {
         camera_.gameObject.transform.localPosition = pos;
         camera_.gameObject.transform.LookAt( rotRoot_, Vector3.up );
         camera_.fieldOfView = fovYDeg_;
-        moveSlerp_ = new MoveSlerp( pos, 0.1f, 0.01f );
+        //        moveSlerp_ = new MoveSlerp( pos, 0.1f, 0.01f );
+        setLatitude( aimLatDeg_ );
+        setLongitude( aimLongDeg_ );
     }
 	
 	void Update () {
@@ -138,18 +158,21 @@ public class CubeCamera : MonoBehaviour {
         setLatitude( aimLatDeg_ );
         setLongitude( aimLongDeg_ );
         if ( bHold_ == false ) {
-            aimLatDeg_ = aimLongDeg_ = 0.0f;
+            setLatitude( 0.0f );
+            setLongitude( 0.0f );
         }
-        Vector3 pos = SphereSurfUtil.convPolerToPos( aimLatDeg_, aimLongDeg_ ) * dist_;
-        moveSlerp_.setAim( pos );
-        pos = moveSlerp_.update();
+        Vector3 pos = SphereSurfUtil.convPolerToPos( moveLatVal_.update(), moveLongVal_.update() ) * dist_;
+        // moveSlerp_.setAim( pos );
         Vector3 up = calcUpVector( pos.normalized );
         camera_.gameObject.transform.localPosition = pos;
         camera_.gameObject.transform.LookAt( rotRoot_, up );
         camera_.fieldOfView = fovYDeg_;
     }
 
-    MoveSlerp moveSlerp_;
+//    MoveSlerp moveSlerp_;
+    MoveValue moveLatVal_;
+    MoveValue moveLongVal_;
+
     [SerializeField]
     float aimLatDeg_ = 0.0f;   // 目標経度角
     [SerializeField]

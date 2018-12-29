@@ -13,6 +13,9 @@ public class NormalPiece : MonoBehaviour
     Renderer renderer_;
 
     [SerializeField]
+    Collider collider_;
+
+    [SerializeField]
     List<Material> materials_;
 
     [SerializeField]
@@ -256,6 +259,17 @@ public class NormalPiece : MonoBehaviour
         initPos_ = new Vector3( pieceCoord.x - ofs, pieceCoord.y - ofs, pieceCoord.z - ofs );
         transform.localPosition = initPos_;
         initRot_ = transform.localRotation;
+
+        // 内部ピースの場合はコライダーを切る
+        //  内部ピース：ピース座標の成分に0もしくはn-1が一つも含まれていない
+        if (
+            coord_.x != 0 && coord_.x != n - 1 &&
+            coord_.y != 0 && coord_.y != n - 1 &&
+            coord_.z != 0 && coord_.z != n - 1
+        ) {
+            // 内部ピース
+            collider_.gameObject.SetActive( false );
+        }
 
         gameObject.name = "Piece(" + coord_.x + ", "+ coord_.y +", "+ coord_.z +")";
     }

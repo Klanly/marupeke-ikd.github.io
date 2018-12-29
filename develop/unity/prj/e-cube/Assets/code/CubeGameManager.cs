@@ -12,15 +12,25 @@ public class CubeGameManager : MonoBehaviour {
     [SerializeField]
     bool bStopControllerActiveWhenComplete_;    // 揃った時にキー入力を無効にするか？
 
+    [SerializeField]
+    int n_ = 3;
+
+    [SerializeField]
+    CubeCamera camera_;
+
 	// Use this for initialization
 	void Start () {
         cube_ = Instantiate<Cube>( cubePrefab_ );
         cube_.transform.parent = transform;
         cube_.transform.localPosition = Vector3.zero;
+        cube_.initialize( n_ );
+
         controllerManager_.initialize( cube_ );
 
         // TEST
+        var mouseCont = new CubeMouseController( cube_, camera_ );
         var keyboardCont = new CubeKeyboardController( cube_.getN() );
+
         // X軸回転
         keyboardCont.setKey( KeyCode.E, CubeEventType.Rot_R );
         keyboardCont.setKey( KeyCode.C, CubeEventType.Rot_IR );
@@ -44,6 +54,7 @@ public class CubeGameManager : MonoBehaviour {
         keyboardCont.setKey( KeyCode.Z, KeyCode.B, CubeEventType.Rot_F );
 
         controllerManager_.joinController( keyboardCont );
+        controllerManager_.joinController( mouseCont );
         controllerManager_.setActive( true );
         controllerManager_.setAutoNonActiveWhenComplete( bStopControllerActiveWhenComplete_ );
 
