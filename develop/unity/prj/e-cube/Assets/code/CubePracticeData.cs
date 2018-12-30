@@ -7,48 +7,53 @@ using UnityEngine;
 public class CubePracticeData {
 
     // 練習データをロード
-    public bool load( string dataName )
+    public void load( string dataName, System.Action< bool > callback )
     {
-        // TEST
-        string json = "{\"N\" : 3,\"Pieces\" : {\"Left\" : [2,2,2,2,2,2,2,2,2],\"Right\" : [2,2,2,2,2,2,2,2,2],\"Down\" : [2,2,2,2,2,2,2,2,2],\"Up\" : [2,2,2,2,2,2,2,2,2],\"Front\" : [2,2,2,2,2,2,2,2,2],\"Back\" : [2,2,2,2,2,2,2,2,2]},\"Solve\" : [ \"R\", \"R'\", \"L\", \"L'\", \"D\", \"D'\", \"U\", \"U'\", \"F\", \"F'\", \"B\", \"B'\" ]}";
-        var obj = MiniJSON.Json.Deserialize( json );
+        System.Action<bool> _callback = callback;
+        ResourceLoader.getInstance().loadAsync<TextAsset>( dataName, (_res, _obj) => {
+            if ( _res == false ) {
+                _callback( false );
+                return;
+            }
 
-        // 練習データはJSON形式
-        // var obj = MiniJSON.Json.Deserialize( "AssetBundles/PracticeDataBundles/" + dataName + ".json.bytes" );
-        var parameters = obj as Dictionary<string, object>;
-        if ( parameters == null ) {
-            return false;
-        }
+            // 練習データはJSON形式
+            string json = _obj.text;
+            var obj = MiniJSON.Json.Deserialize( json );
+            var parameters = obj as Dictionary<string, object>;
+            if ( parameters == null ) {
+                return;
+            }
 
-        n_ = ToVal.Conv.toInt( parameters[ "N" ].ToString(), 3 );
-        var pieces_ = parameters[ "Pieces" ] as Dictionary<string, object>;
-        if ( pieces_ == null )
-            return false;
+            n_ = ToVal.Conv.toInt( parameters[ "N" ].ToString(), 3 );
+            var pieces_ = parameters[ "Pieces" ] as Dictionary<string, object>;
+            if ( pieces_ == null )
+                return;
 
-        string[] faceNames = new string[ 6 ] {
+            string[] faceNames = new string[ 6 ] {
             "Left", "Right", "Down", "Up", "Front", "Back"
         };
-        list_ = new List<int>[ 6 ];
-        for ( int i = 0; i < 6; ++i ) {
-            var l = pieces_[ faceNames[ i ] ] as List< object >;
-            if ( l == null )
-                return false;
-            list_[ i ] = new List<int>();
-            for ( int j = 0; j < l.Count; ++j ) {
-                list_[ i ].Add( ToVal.Conv.toInt( l[ j ].ToString(), 0 ) );
+            list_ = new List<int>[ 6 ];
+            for ( int i = 0; i < 6; ++i ) {
+                var l = pieces_[ faceNames[ i ] ] as List<object>;
+                if ( l == null )
+                    return;
+                list_[ i ] = new List<int>();
+                for ( int j = 0; j < l.Count; ++j ) {
+                    list_[ i ].Add( ToVal.Conv.toInt( l[ j ].ToString(), 0 ) );
+                }
             }
-        }
-        var solve = parameters[ "Solve" ] as List<object>;
-        if ( solve == null )
-            return false;
-        solve_ = new List<string>();
-        for ( int i = 0; i < solve.Count; ++i ) {
-            solve_.Add( solve[ i ].ToString() );
-        }
+            var solve = parameters[ "Solve" ] as List<object>;
+            if ( solve == null )
+                return;
+            solve_ = new List<string>();
+            for ( int i = 0; i < solve.Count; ++i ) {
+                solve_.Add( solve[ i ].ToString() );
+            }
 
-        bLoaded_ = true;
+            bLoaded_ = true;
 
-        return true;
+            _callback( true );
+        } );
     }
 
     // Cube数を取得

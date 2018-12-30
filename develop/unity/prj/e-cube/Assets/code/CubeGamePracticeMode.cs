@@ -8,13 +8,14 @@ public class CubeGamePracticeMode : CubeGameManager {
     string practiceDataName_;
 
     // 練習データを読み込み
-    public bool loadPracticeData( string dataName )
+    public void loadPracticeData( string dataName, System.Action<bool> callback )
     {
         practiceData_ = new CubePracticeData();
-        if ( practiceData_.load( dataName ) == true )
-            practiceDataName_ = dataName;
-
-        return true;
+        practiceData_.load( dataName, ( _res ) => {
+            if ( _res == true )
+                practiceDataName_ = dataName;
+            callback( _res );
+        } );
     }
 
     // 初期化
@@ -23,21 +24,26 @@ public class CubeGamePracticeMode : CubeGameManager {
         if ( bInitialized_ == true )
             return;
 
+        bInitialized_ = true;
+
         if ( practiceData_ == null ) {
             if ( practiceDataName_ != "" ) {
-                if ( loadPracticeData( practiceDataName_ ) == false )
-                    return;
+                loadPracticeData( practiceDataName_, ( _res ) => {
+                    if ( _res == false ) {
+                        bError_ = true;
+                        return;
+                    }
+                    N = practiceData_.getN();
+                    base.initialize();
+
+                    var cube = getCube();
+                    practiceData_.setPiecesOnCube( cube );
+
+                    bReady_ = true;
+                } );
             } else
                 return;
         }
-
-        N = practiceData_.getN();
-        base.initialize();
-
-        var cube = getCube();
-        practiceData_.setPiecesOnCube( cube );
-
-        bInitialized_ = true;
     }
 
     // Use this for initialization
@@ -47,9 +53,13 @@ public class CubeGamePracticeMode : CubeGameManager {
 	
 	// Update is called once per frame
 	void Update () {
-        innerUpdate();	
+        ResourceLoader.getInstance().update();
+        if ( bError_ == false && bReady_ == true )
+            innerUpdate();	
 	}
 
     bool bInitialized_ = false;
+    bool bReady_ = false;
+    bool bError_ = false;
     CubePracticeData practiceData_;
 }

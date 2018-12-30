@@ -256,6 +256,7 @@
     <Compile Include="Assets\code\MoveSlerp.cs" />
     <Compile Include="Assets\code\MoveValue.cs" />
     <Compile Include="Assets\code\NormalPiece.cs" />
+    <Compile Include="Assets\code\ResourceLoader.cs" />
     <Compile Include="Assets\code\RotationManager.cs" />
     <Compile Include="Assets\code\RotationMethod.cs" />
     <Compile Include="Assets\code\SphereSurfUtil.cs" />

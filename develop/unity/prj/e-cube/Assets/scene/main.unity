@@ -483,7 +483,7 @@ MonoBehaviour:
   bStopControllerActiveWhenComplete_: 0
   n_: 3
   camera_: {fileID: 424246935}
-  practiceDataName_: hoge
+  practiceDataName_: AssetBundles/PracticeDataBundles/sample_practice2.json
 --- !u!4 &859590916
 Transform:
   m_ObjectHideFlags: 0
