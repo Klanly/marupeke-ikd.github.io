@@ -83,63 +83,6 @@ public class CubeCamera : MonoBehaviour {
     Vector3 calcUpVector( Vector3 pos )
     {
         return Vector3.up;
-
-        float lat = 0.0f;
-        float longi = 0.0f;
-        SphereSurfUtil.convPosToPoler( pos, out lat, out longi );
-
-        // 補間Upベクトル算出
-        Vector3 left = new Vector3( -1.0f, 0.0f, 0.0f );
-        Vector3 right = new Vector3( 1.0f, 0.0f, 0.0f );
-        Vector3 down = new Vector3( 0.0f, -1.0f, 0.0f );
-        Vector3 up = new Vector3( 0.0f, 1.0f, 0.0f );
-        Vector3 front = new Vector3( 0.0f, 0.0f, -1.0f );
-        Vector3 back = new Vector3( 0.0f, 0.0f, 1.0f );
-
-        Vector3 leftUp = new Vector3( 0.0f, 1.0f, 0.0f );
-        Vector3 rightUp = new Vector3( 0.0f, 1.0f, 0.0f );
-        Vector3 downUp = new Vector3( 0.0f, 0.0f, -1.0f );
-        Vector3 upUp = new Vector3( 0.0f, 0.0f, 1.0f );
-        Vector3 frontUp = new Vector3( 0.0f, 1.0f, 0.0f );
-        Vector3 backUp = new Vector3( 0.0f, 1.0f, 0.0f );
-
-        if ( lat >= 0.0f ) {
-            if ( longi <= 0.0f ) {
-                if ( longi >= -90.0f ) {
-                    // L,F,U領域
-                    return SphereSurfUtil.triInterpolateV3( left, front, up, pos, leftUp, frontUp, upUp );
-                } else {
-                    // L,B,U領域
-                    return SphereSurfUtil.triInterpolateV3( left, back, up, pos, leftUp, backUp, upUp );
-                }
-            } else {
-                if ( longi <= 90.0f ) {
-                    // R,F,U領域
-                    return SphereSurfUtil.triInterpolateV3( right, front, up, pos, rightUp, frontUp, upUp );
-                } else {
-                    // R,B,U領域
-                    return SphereSurfUtil.triInterpolateV3( right, back, up, pos, rightUp, backUp, upUp );
-                }
-            }
-        } else {
-            if ( longi <= 0.0f ) {
-                if ( longi >= -90.0f ) {
-                    // L,F,D領域
-                    return SphereSurfUtil.triInterpolateV3( left, front, down, pos, leftUp, frontUp, downUp );
-                } else {
-                    // L,B,D領域
-                    return SphereSurfUtil.triInterpolateV3( left, back, down, pos, leftUp, backUp, downUp );
-                }
-            } else {
-                if ( longi <= 90.0f ) {
-                    // R,F,D領域
-                    return SphereSurfUtil.triInterpolateV3( right, front, down, pos, rightUp, frontUp, downUp );
-                } else {
-                    // R,B,D領域
-                    return SphereSurfUtil.triInterpolateV3( right, back, down, pos, rightUp, backUp, downUp );
-                }
-            }
-        }
     }
 
     void Start () {
@@ -148,7 +91,6 @@ public class CubeCamera : MonoBehaviour {
         camera_.gameObject.transform.localPosition = pos;
         camera_.gameObject.transform.LookAt( rotRoot_, Vector3.up );
         camera_.fieldOfView = fovYDeg_;
-        //        moveSlerp_ = new MoveSlerp( pos, 0.1f, 0.01f );
         setLatitude( aimLatDeg_ );
         setLongitude( aimLongDeg_ );
     }

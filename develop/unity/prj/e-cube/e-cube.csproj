@@ -245,17 +245,21 @@
     <Compile Include="Assets\code\CubeEventFactory.cs" />
     <Compile Include="Assets\code\CubeEventType.cs" />
     <Compile Include="Assets\code\CubeGameManager.cs" />
+    <Compile Include="Assets\code\CubeGamePracticeMode.cs" />
     <Compile Include="Assets\code\CubeKeyboardController.cs" />
     <Compile Include="Assets\code\CubeMouseController.cs" />
+    <Compile Include="Assets\code\CubePracticeData.cs" />
     <Compile Include="Assets\code\CubeRotationType.cs" />
     <Compile Include="Assets\code\CubeTest.cs" />
     <Compile Include="Assets\code\FaceType.cs" />
+    <Compile Include="Assets\code\MiniJSON.cs" />
     <Compile Include="Assets\code\MoveSlerp.cs" />
     <Compile Include="Assets\code\MoveValue.cs" />
     <Compile Include="Assets\code\NormalPiece.cs" />
     <Compile Include="Assets\code\RotationManager.cs" />
     <Compile Include="Assets\code\RotationMethod.cs" />
     <Compile Include="Assets\code\SphereSurfUtil.cs" />
+    <Compile Include="Assets\code\ToVal.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

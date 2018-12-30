@@ -197,6 +197,50 @@ public class NormalPiece : MonoBehaviour
         );
     }
 
+    // FaceTypeとFaceインデックスからその面を保持するピース座標を算出
+    static public Vector3Int convFaceTypeAndIndexToCoord(int n, FaceType faceType, int index)
+    {
+        int fcX = index % n;
+        int fcY = index / n;
+
+        Vector3Int coord = Vector3Int.zero;
+
+        switch ( faceType ) {
+            case FaceType.FaceType_Left:
+                coord.x = 0;
+                coord.y = fcY;
+                coord.z = ( n - 1 ) - fcX;
+                break;
+            case FaceType.FaceType_Right:
+                coord.x = n - 1;
+                coord.y = fcY;
+                coord.z = fcX;
+                break;
+            case FaceType.FaceType_Down:
+                coord.x = fcX;
+                coord.y = 0;
+                coord.z = ( n - 1 ) - fcY;
+                break;
+            case FaceType.FaceType_Up:
+                coord.x = fcX;
+                coord.y = n - 1;
+                coord.z = fcY;
+                break;
+            case FaceType.FaceType_Front:
+                coord.x = fcX;
+                coord.y = fcY;
+                coord.z = 0;
+                break;
+            case FaceType.FaceType_Back:
+                coord.x = fcX;
+                coord.y = fcY;
+                coord.z = n - 1;
+                break;
+        }
+
+        return coord;
+    }
+
     // 指定の回転をした時の置換先情報を返す
     public TransInfo calcRotateInfo(int n, Vector3Int coord, AxisType axis, CubeRotationType rotType)
     {
@@ -290,6 +334,16 @@ public class NormalPiece : MonoBehaviour
         updateMaterials( materials );
     }
 
+    // 指定のフェイスに差し替え
+    public void setFaceColor( FaceType face, FaceType faceColor )
+    {
+        curFaceColors_[ ( int )face ] = faceColor;
+        if ( faceColor == FaceType.FaceType_None )
+            updateMaterial( face, blackMaterial_ );
+        else
+            updateMaterial( face, materials_[ ( int )faceColor ] );
+    }
+
     // ピース座標を取得
     public Vector3Int getCoord()
     {
@@ -319,6 +373,16 @@ public class NormalPiece : MonoBehaviour
         faceMaterials[ 3 ] = materials[ ( int )FaceType.FaceType_Up ];
         faceMaterials[ 4 ] = materials[ ( int )FaceType.FaceType_Back ];
         faceMaterials[ 6 ] = materials[ ( int )FaceType.FaceType_Left ];
+        renderer_.materials = faceMaterials;
+    }
+
+    // 指定マテリアルをフェイスに適用
+    void updateMaterial( FaceType face, Material material )
+    {
+        var faceMaterials = renderer_.materials;
+        int[] idx = new int[ 6 ] { 6, 2, 1, 3, 0, 4 };
+        int i = idx[ ( int )face ];
+        faceMaterials[ i ] = material;
         renderer_.materials = faceMaterials;
     }
 

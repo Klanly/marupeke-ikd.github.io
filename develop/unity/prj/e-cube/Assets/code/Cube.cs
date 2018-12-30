@@ -154,6 +154,14 @@ public class Cube : MonoBehaviour {
         return body_.transform.position;
     }
 
+    // キューブのピースのフェイス面を個別設定
+    public void setPieceFace(FaceType face, int idx, FaceType faceColor)
+    {
+        var coord = NormalPiece.convFaceTypeAndIndexToCoord( n_, face, idx );
+        var piece = pieces_[ coord.x, coord.y, coord.z ];
+        piece.setFaceColor( face, faceColor );
+    }
+
     // 回転指示
     // axis   : 回転軸
     // colIdx : 列番号配列

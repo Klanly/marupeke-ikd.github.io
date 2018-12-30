@@ -168,5 +168,4 @@ public class CubeMouseController : CubeController
     float dragDist_ = 10.0f;
     Vector3 cameraRotOrigin_ = Vector3.zero;
     bool rButtonDraging_ = false;
-    float cameraRotRadius_ = 150.0f;    // カメラ回転時のマウス移動距離
 }
