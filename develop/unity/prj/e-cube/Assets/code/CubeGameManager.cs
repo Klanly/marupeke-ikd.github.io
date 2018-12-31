@@ -20,7 +20,6 @@ public class CubeGameManager : MonoBehaviour {
 
     protected int N { set { n_ = value; } }
 
-
     virtual protected void initialize()
     {
         cube_ = Instantiate<Cube>( cubePrefab_ );
@@ -30,6 +29,11 @@ public class CubeGameManager : MonoBehaviour {
 
         controllerManager_.initialize( cube_ );
 
+        initializeControllers( controllerManager_ );
+    }
+
+    virtual protected void initializeControllers(CubeControllerManager controllerManager)
+    {
         var mouseCont = new CubeMouseController( cube_, camera_ );
         var keyboardCont = new CubeKeyboardController( cube_.getN() );
 
@@ -69,6 +73,11 @@ public class CubeGameManager : MonoBehaviour {
     protected Cube getCube()
     {
         return cube_;
+    }
+
+    protected CubeCamera getCubeCamera()
+    {
+        return camera_;
     }
 
     void Start () {

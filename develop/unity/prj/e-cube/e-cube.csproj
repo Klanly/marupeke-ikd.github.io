@@ -241,6 +241,8 @@
     <Compile Include="Assets\code\CubeController.cs" />
     <Compile Include="Assets\code\CubeControllerManager.cs" />
     <Compile Include="Assets\code\CubeData.cs" />
+    <Compile Include="Assets\code\CubeDefines.cs" />
+    <Compile Include="Assets\code\CubeEditController.cs" />
     <Compile Include="Assets\code\CubeEvent.cs" />
     <Compile Include="Assets\code\CubeEventFactory.cs" />
     <Compile Include="Assets\code\CubeEventType.cs" />
@@ -249,6 +251,7 @@
     <Compile Include="Assets\code\CubeKeyboardController.cs" />
     <Compile Include="Assets\code\CubeMouseController.cs" />
     <Compile Include="Assets\code\CubePracticeData.cs" />
+    <Compile Include="Assets\code\CubePracticeEditManager.cs" />
     <Compile Include="Assets\code\CubeRotationType.cs" />
     <Compile Include="Assets\code\CubeTest.cs" />
     <Compile Include="Assets\code\FaceType.cs" />

@@ -6,6 +6,25 @@ using UnityEngine;
 
 public class CubePracticeData {
 
+    public class RotateUnit
+    {
+        public RotateUnit(FaceType face, CubeRotationType rotType)
+        {
+            face_ = face;
+            rotType_ = rotType;
+            colIndices_.Add( 1 );
+        }
+        public RotateUnit(FaceType face, CubeRotationType rotType, int colIndex )
+        {
+            face_ = face;
+            rotType = rotType_;
+            colIndices_.Add( colIndex );
+        }
+        public FaceType face_;             // 回転フェイス
+        public CubeRotationType rotType_;  // 回転タイプ
+        public List<int> colIndices_ = new List<int>();      // 回転列
+    }
+
     // 練習データをロード
     public void load( string dataName, System.Action< bool > callback )
     {
@@ -76,6 +95,56 @@ public class CubePracticeData {
         }
 
         return true;
+    }
+
+    // 練習データをCubeから作成
+    public static string createDataStrFromCube( Cube cube, List< RotateUnit > solve )
+    {
+        var root = new Dictionary<string, object>();
+        root[ "N" ] = cube.getN();
+        var pieces = new Dictionary<string, object>();
+        string[] pieceNames = new string[ 6 ] {
+            "Left", "Right", "Down", "Up", "Front", "Back"
+        };
+
+        var faces = cube.getFaces();
+        for ( int i = 0; i < 6; ++i ) {
+            var flist = new List<int>();
+            for ( int idx = 0; idx < faces.GetLength( 0 ); ++idx ) {
+                FaceType f = faces[ i, idx ];
+                flist.Add( ( int )f );
+            }
+            pieces[ pieceNames[ i ] ] = flist;
+        }
+        root[ "Pieces" ] = pieces;
+
+        string[] faceNames = new string[ 6 ] {
+            "L", "R", "D", "U", "F", "B"
+        };
+        var solveList = new List<string>();
+        foreach( var s in solve ) {
+            string name = faceNames[ ( int )s.face_ ];
+            string indices = name + "(";
+            for ( int c = 0; c < s.colIndices_.Count; ++c ) {
+                indices += s.colIndices_[ c ];
+                if ( c + 1 < s.colIndices_.Count )
+                    indices += ":";
+            }
+            indices += ")";
+            switch ( s.rotType_ ) {
+                case CubeRotationType.CRT_Plus_90: indices += "'"; break;
+                case CubeRotationType.CRT_Plus_180: indices += "w'"; break;
+                case CubeRotationType.CRT_Plus_270: indices += "3'"; break;
+                case CubeRotationType.CRT_Minus_90: indices += ""; break;
+                case CubeRotationType.CRT_Minus_180: indices += "w"; break;
+                case CubeRotationType.CRT_Minus_270: indices += "3"; break;
+            }
+            solveList.Add( indices );
+        }
+
+        root[ "Solve" ] = solveList;
+
+        return MiniJSON.Json.Serialize( root );
     }
 
     bool bLoaded_ = false;
