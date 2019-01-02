@@ -16,10 +16,16 @@ public class CubeMouseController : CubeController
         public int[] colIdx_;
     }
 
-    public CubeMouseController( Cube cube, CubeCamera camera )
+    public CubeMouseController( Cube cube, CubeCamera camera, System.Action<AxisType, CubeRotationType, int[]> rotateCallback = null )
     {
         cube_ = cube;
         camera_ = camera;
+        rotateCallback_ = rotateCallback;
+    }
+
+    public void setRotateCallback( System.Action<AxisType, CubeRotationType, int[]> rotateCallback )
+    {
+        rotateCallback_ = rotateCallback;
     }
 
     // コントローラのイベントを取得
@@ -119,6 +125,9 @@ public class CubeMouseController : CubeController
                 int hash = ( int )pickUpFace_ | ( idx << 4 );
                 RotDir res = rotDirs[ hash ];
                 events.Add( new CubeEvent_Rotate( res.axis_, res.rotType_, res.colIdx_ ) );
+                if ( rotateCallback_ != null ) {
+                    rotateCallback_( res.axis_, res.rotType_, res.colIdx_ );
+                }
 
                 // リセット
                 pickUpPiece_ = null;
@@ -163,9 +172,10 @@ public class CubeMouseController : CubeController
     Cube cube_;
     CubeCamera camera_;
     Vector3 pickUpPos_ = Vector3.zero;
-    NormalPiece pickUpPiece_ = null;
+    ReadOnlyNormalPiece pickUpPiece_ = null;
     FaceType pickUpFace_ = FaceType.FaceType_None;
     float dragDist_ = 10.0f;
     Vector3 cameraRotOrigin_ = Vector3.zero;
     bool rButtonDraging_ = false;
+    System.Action<AxisType, CubeRotationType, int[]> rotateCallback_;
 }

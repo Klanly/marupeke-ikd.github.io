@@ -421,4 +421,25 @@ public class NormalPiece : MonoBehaviour
     FaceType[] curFaceColors_;
     Vector3Int coord_ = Vector3Int.zero;
 }
- 
+
+
+// 読み込み専用ピース
+public class ReadOnlyNormalPiece
+{
+    public ReadOnlyNormalPiece( NormalPiece piece )
+    {
+        piece_ = piece;
+    }
+
+    public Vector3Int getCoord()
+    {
+        return piece_.getCoord();
+    }
+
+    public uint getPieceHash()
+    {
+        return piece_.getCoordHash();
+    }
+
+    NormalPiece piece_;
+}

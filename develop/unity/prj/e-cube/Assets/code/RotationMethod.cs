@@ -38,6 +38,14 @@ class RotationMethod
                 targetPiece.resetRotate();    // ピースの姿勢をリセット
             }
         }
+        if ( rotateFinishCallback_ != null )
+            rotateFinishCallback_();
+    }
+
+    // 回転終了コールバックを設定
+    public void setRotateFinishCallback( System.Action rotateFinishCallback )
+    {
+        rotateFinishCallback_ = rotateFinishCallback;
     }
 
     protected Cube cube_;
@@ -46,6 +54,7 @@ class RotationMethod
     protected float comRad_ = 0.0f;
     protected float aimRad_ = 0.0f;     // 目標角度
     protected float sign_ = 1.0f;
+    System.Action rotateFinishCallback_ = null;
 }
 
 // X軸回転

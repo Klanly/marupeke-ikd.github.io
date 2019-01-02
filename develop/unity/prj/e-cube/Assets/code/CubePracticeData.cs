@@ -17,9 +17,58 @@ public class CubePracticeData {
         public RotateUnit(FaceType face, CubeRotationType rotType, int colIndex )
         {
             face_ = face;
-            rotType = rotType_;
+            rotType_ = rotType;
             colIndices_.Add( colIndex );
         }
+        public RotateUnit(FaceType face, CubeRotationType rotType, int[] colIndices)
+        {
+            face_ = face;
+            rotType_ = rotType;
+            colIndices_.AddRange( colIndices );
+        }
+        public string getRotateCode()
+        {
+            string[] names = new string[ 6 ] { "L", "R", "D", "U", "F", "B" };
+            bool bFoward = true;
+            if ( face_ == FaceType.FaceType_Right || face_ == FaceType.FaceType_Up || face_ == FaceType.FaceType_Back )
+                bFoward = false;
+            string indicesStr = "(";
+            for ( int i = 0; i < colIndices_.Count; ++i ) {
+                indicesStr += colIndices_[ i ] + 1;
+                if ( i + 1 != colIndices_.Count ) {
+                    indicesStr += ":";
+                }
+            }
+            indicesStr += ")";
+            string[] rotNamesFoward  = new string[ 7 ] { "", "", "w", "3", "'", "w'", "3'" };
+            string[] rotNamesInverse = new string[ 7 ] { "", "'", "w'", "3'", "", "w", "3" };
+            int rotIndex = CubeRotateUtil.Util.getRotateIndex( rotType_ );
+            return names[ (int)face_ ] + indicesStr + ( bFoward ? rotNamesFoward[ rotIndex ] : rotNamesInverse[ rotIndex ] );
+        }
+        public int[] getInvColIndices( int n )
+        {
+            var indices = new int[ colIndices_.Count ];
+            for ( int i = 0; i < colIndices_.Count; ++i ) {
+                indices[ i ] = n - 1 - colIndices_[ i ];
+            }
+            return indices;
+        }
+        public AxisType getRotateAxis()
+        {
+            switch ( face_ ) {
+                case FaceType.FaceType_Left:
+                case FaceType.FaceType_Right:
+                    return AxisType.AxisType_X;
+                case FaceType.FaceType_Down:
+                case FaceType.FaceType_Up:
+                    return AxisType.AxisType_Y;
+                case FaceType.FaceType_Front:
+                case FaceType.FaceType_Back:
+                    return AxisType.AxisType_Z;
+            }
+            return AxisType.AxisType_X;
+        }
+
         public FaceType face_;             // 回転フェイス
         public CubeRotationType rotType_;  // 回転タイプ
         public List<int> colIndices_ = new List<int>();      // 回転列
@@ -90,11 +139,35 @@ public class CubePracticeData {
         for ( int i = 0; i < 6; ++i ) {
             var faces = list_[ i ];
             for ( int idx = 0; idx < faces.Count; ++idx ) {
-                cube.setPieceFace( (FaceType)i, idx, (FaceType)faces[ idx ] );
+                cube.setFaceColor( ( FaceType )i, idx, ( FaceType )faces[ idx ] );
             }
         }
 
         return true;
+    }
+
+    // 軸回転情報からRotateUnitを生成
+    public static RotateUnit convAxisRotateToRotUnit( int n, AxisType axis, CubeRotationType rotType, int[] colIndices )
+    {
+        FaceType face = FaceType.FaceType_None;
+        int[] invColIndices = new int[ colIndices .Length ];
+        for ( int i = 0; i < colIndices.Length; ++i ) {
+            invColIndices[ i ] = n - colIndices[ i ] - 1;
+        }
+        bool bSingle = ( colIndices.Length == 1 );
+        bool useFoward = ( bSingle == true && colIndices[ 0 ] == 0 );   // Idx0の1列のみ順回転
+        switch( axis ) {
+            case AxisType.AxisType_X:
+                face = useFoward ? FaceType.FaceType_Left : FaceType.FaceType_Right;
+                break;
+            case AxisType.AxisType_Y:
+                face = useFoward ? FaceType.FaceType_Down : FaceType.FaceType_Up;
+                break;
+            case AxisType.AxisType_Z:
+                face = useFoward ? FaceType.FaceType_Front : FaceType.FaceType_Back;
+                break;
+        }
+        return new RotateUnit( face, rotType, useFoward ? colIndices : invColIndices );
     }
 
     // 練習データをCubeから作成
@@ -110,7 +183,7 @@ public class CubePracticeData {
         var faces = cube.getFaces();
         for ( int i = 0; i < 6; ++i ) {
             var flist = new List<int>();
-            for ( int idx = 0; idx < faces.GetLength( 0 ); ++idx ) {
+            for ( int idx = 0; idx < faces.GetLength( 1 ); ++idx ) {
                 FaceType f = faces[ i, idx ];
                 flist.Add( ( int )f );
             }
@@ -118,28 +191,9 @@ public class CubePracticeData {
         }
         root[ "Pieces" ] = pieces;
 
-        string[] faceNames = new string[ 6 ] {
-            "L", "R", "D", "U", "F", "B"
-        };
         var solveList = new List<string>();
         foreach( var s in solve ) {
-            string name = faceNames[ ( int )s.face_ ];
-            string indices = name + "(";
-            for ( int c = 0; c < s.colIndices_.Count; ++c ) {
-                indices += s.colIndices_[ c ];
-                if ( c + 1 < s.colIndices_.Count )
-                    indices += ":";
-            }
-            indices += ")";
-            switch ( s.rotType_ ) {
-                case CubeRotationType.CRT_Plus_90: indices += "'"; break;
-                case CubeRotationType.CRT_Plus_180: indices += "w'"; break;
-                case CubeRotationType.CRT_Plus_270: indices += "3'"; break;
-                case CubeRotationType.CRT_Minus_90: indices += ""; break;
-                case CubeRotationType.CRT_Minus_180: indices += "w"; break;
-                case CubeRotationType.CRT_Minus_270: indices += "3"; break;
-            }
-            solveList.Add( indices );
+            solveList.Add( s.getRotateCode() );
         }
 
         root[ "Solve" ] = solveList;

@@ -22,7 +22,8 @@ public class CubeEditController : CubeController
                 pickUpPiece_ = piece;
 
                 // 現在セレクト中の色でピックアップ面を塗る
-                pickUpPiece_.setFaceColor( pickUpFace_, pasteColor_ );
+                cube_.setFaceColor( pickUpPiece_.getCoord(), pickUpFace_, pasteColor_ );
+                // pickUpPiece_.setFaceColor( pickUpFace_, pasteColor_ );
             }
         }
 
@@ -67,7 +68,7 @@ public class CubeEditController : CubeController
     float preLongDeg_ = 0.0f;
     Cube cube_;
     CubeCamera camera_;
-    NormalPiece pickUpPiece_ = null;
+    ReadOnlyNormalPiece pickUpPiece_ = null;
     FaceType pickUpFace_ = FaceType.FaceType_None;
     Vector3 cameraRotOrigin_ = Vector3.zero;
     bool rButtonDraging_ = false;

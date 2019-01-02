@@ -14,6 +14,18 @@ public class CubeData {
         createRotateGroup();
     }
 
+    // クローン作成
+    public CubeData clone()
+    {
+        var cloneCubeData = new CubeData( n_ );
+        for ( int i = 0; i < 6; ++i ) {
+            for ( int idx = 0; idx < n_ * n_; ++idx ) {
+                cloneCubeData.faces_[ i, idx ] = faces_[ i, idx ];
+            }
+        }
+        return cloneCubeData;
+    }
+
     // フェイスを取得
     public FaceType[,] getFaces()
     {
@@ -112,6 +124,37 @@ public class CubeData {
         convCoordToFaceTypeAndIndex( coord, out outFaceType, out outIndex );
     }
 
+    // ピース座標からFaceインデックスを算出
+    public int convPieceCoordToIndex( Vector3Int pieceCoord, FaceType faceType )
+    {
+        int x = 0;
+        int y = 0;
+        switch ( faceType ) {
+            case FaceType.FaceType_Left:
+                x = n_ - 1 - pieceCoord.z;
+                y = pieceCoord.y;
+                break;
+            case FaceType.FaceType_Right:
+                x = pieceCoord.z;
+                y = pieceCoord.y;
+                break;
+            case FaceType.FaceType_Down:
+                x = pieceCoord.x;
+                y = n_ - 1 - pieceCoord.z;
+                break;
+            case FaceType.FaceType_Up:
+                x = pieceCoord.x;
+                y = pieceCoord.z;
+                break;
+            case FaceType.FaceType_Front:
+            case FaceType.FaceType_Back:
+                x = pieceCoord.x;
+                y = pieceCoord.y;
+                break;
+        }
+        return y * n_ + x;
+    }
+
     // 回転
     public void onRotation( AxisType axis, int[] colIndices, CubeRotationType rotType )
     {
@@ -159,6 +202,12 @@ public class CubeData {
             }
         }
         return true;
+    }
+
+    // 指定の色で直接塗る
+    public void setFaceColor( FaceType faceType, int faceIndex, FaceType faceColor )
+    {
+        faces_[ ( int )faceType, faceIndex ] = faceColor;
     }
 
     // 指定軸で回転
@@ -316,5 +365,4 @@ public class CubeData {
     List<Vector3Int>[,] rotGroup_;   // [ axis, face ]
     FaceType[,] faces_;   // 現在のFaceカラー [FaceType, FaceIndex]
     int n_ = 3;
-
 }

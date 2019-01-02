@@ -87,7 +87,7 @@ public class Cube : MonoBehaviour {
     }
 
     // レイの先にあるピースを取得
-    public NormalPiece ray( Ray r, out FaceType collideFaceType )
+    public ReadOnlyNormalPiece ray( Ray r, out FaceType collideFaceType )
     {
         collideFaceType = FaceType.FaceType_None;
 
@@ -130,7 +130,7 @@ public class Cube : MonoBehaviour {
                 }
                 collideFaceType = ( FaceType )dirIdx;
             }
-            return hitPiece;
+            return new ReadOnlyNormalPiece( hitPiece );
         }
         return null;
     }
@@ -154,20 +154,12 @@ public class Cube : MonoBehaviour {
         return body_.transform.position;
     }
 
-    // キューブのピースのフェイス面を個別設定
-    public void setPieceFace(FaceType face, int idx, FaceType faceColor)
-    {
-        var coord = NormalPiece.convFaceTypeAndIndexToCoord( n_, face, idx );
-        var piece = pieces_[ coord.x, coord.y, coord.z ];
-        piece.setFaceColor( face, faceColor );
-    }
-
     // 回転指示
     // axis   : 回転軸
     // colIdx : 列番号配列
     // rotType: 回転方向及び角度
     // defDegPerFrame: 1フレーム当たりの回転角度
-    public virtual void onRotation( AxisType axis, int[] colIndices, CubeRotationType rotType )
+    public virtual void onRotation( AxisType axis, int[] colIndices, CubeRotationType rotType, System.Action rotateFinishCallback = null )
     {
         HashSet<int> colHash = new HashSet<int>();
         List<int> ary = new List<int>();
@@ -177,19 +169,50 @@ public class Cube : MonoBehaviour {
                 colHash.Add( c );
             }
         }
-
-        // 回転タスクを再初期化
-        // 既に回転タスクが動いていたらスキップ
-        if ( rotationManager_.isRun() == true ) {
-            rotationManager_.skip();
-        }
-        rotationManager_.run( axis, ary.ToArray(), rotType, Mathf.Abs( rotDegPerFrame_ ) );
+        rotationManager_.run( axis, ary.ToArray(), rotType, Mathf.Abs( rotDegPerFrame_ ), rotateFinishCallback );
     }
 
     // キューブが揃っている？
     public bool isComplete()
     {
         return cubeData_.isComplete();
+    }
+
+    // 指定のフェイスを指定の色で塗る
+    public void setFaceColor( Vector3Int pieceCoord, FaceType faceType, FaceType faceColor )
+    {
+        uint pieceHash = NormalPiece.convCoordToHash( pieceCoord );
+        if ( piecesMap_.ContainsKey( pieceHash ) == false )
+            return;
+        piecesMap_[ pieceHash ].setFaceColor( faceType, faceColor );
+        int faceIdx = cubeData_.convPieceCoordToIndex( pieceCoord, faceType );
+        cubeData_.setFaceColor( faceType, faceIdx, faceColor );
+    }
+
+    // 指定のフェイスを指定の色で塗る
+    public void setFaceColor(FaceType faceType, int idx, FaceType faceColor)
+    {
+        var coord = NormalPiece.convFaceTypeAndIndexToCoord( n_, faceType, idx );
+        var piece = pieces_[ coord.x, coord.y, coord.z ];
+        piece.setFaceColor( faceType, faceColor );
+        cubeData_.setFaceColor( faceType, idx, faceColor );
+    }
+
+    // Cubeデータをバックアップ
+    public CubeData dataBackUp()
+    {
+        return cubeData_.clone();
+    }
+
+    // バックアップデータで復元
+    public void setFromBackUp( CubeData cubeData )
+    {
+        var faces = cubeData.getFaces();
+        for ( int i = 0; i < 6; ++i ) {
+            for ( int idx = 0; idx < faces.GetLength( 1 ); ++idx ) {
+                setFaceColor( ( FaceType )i, idx, faces[ i, idx ] );
+            }
+        }
     }
 
     private void Awake()
