@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// 練習モード管理人
+
 public class CubeGamePracticeMode : CubeGameManager {
 
     [SerializeField]
