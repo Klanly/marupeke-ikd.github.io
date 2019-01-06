@@ -237,6 +237,7 @@
   <ItemGroup>
     <Compile Include="Assets\code\AxisType.cs" />
     <Compile Include="Assets\code\Cube.cs" />
+    <Compile Include="Assets\code\CubeAutoOperator.cs" />
     <Compile Include="Assets\code\CubeCamera.cs" />
     <Compile Include="Assets\code\CubeController.cs" />
     <Compile Include="Assets\code\CubeControllerManager.cs" />
@@ -249,9 +250,11 @@
     <Compile Include="Assets\code\CubeGameManager.cs" />
     <Compile Include="Assets\code\CubeGamePracticeMode.cs" />
     <Compile Include="Assets\code\CubeKeyboardController.cs" />
+    <Compile Include="Assets\code\CubeMissMark.cs" />
     <Compile Include="Assets\code\CubeMouseController.cs" />
     <Compile Include="Assets\code\CubePracticeData.cs" />
     <Compile Include="Assets\code\CubePracticeEditManager.cs" />
+    <Compile Include="Assets\code\CubeRotateTexts.cs" />
     <Compile Include="Assets\code\CubeRotationType.cs" />
     <Compile Include="Assets\code\CubeTest.cs" />
     <Compile Include="Assets\code\FaceType.cs" />
@@ -313,6 +316,14 @@
     <Compile Include="Assets\PostProcessing\Utilities\CustomMotionTexture\ExampleWheelController.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Plugins\BitmapFontImporter\Examples\Font1\font1.fnt" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Examples\Font2\font2.fnt" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Examples\font3\font3.fnt" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\BFILogic.cginc" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font2.shader" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font3.shader" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font4.shader" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font5.shader" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\HistogramCompute.compute" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\HistogramRender.shader" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\ParadeRender.shader" />
@@ -354,6 +365,7 @@
     <None Include="Assets\PostProcessing\Resources\Shaders\Uber.shader" />
     <None Include="Assets\PostProcessing\Resources\Shaders\UberSecondPass.cginc" />
     <None Include="Assets\PostProcessing\Utilities\CustomMotionTexture\Shaders\CustomMotionVectorTexture.shader" />
+    <None Include="Assets\fonts\coupe_64_ascii.fnt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

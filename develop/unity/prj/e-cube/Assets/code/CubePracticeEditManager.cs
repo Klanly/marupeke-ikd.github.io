@@ -204,7 +204,7 @@ public class CubePracticeEditManager : CubeGameManager {
         getCube().onRotation(
             axis,
             bFoward ? undoUnit.colIndices_.ToArray() : undoUnit.getInvColIndices( getCube().getN() ),
-            CubeRotateUtil.Util.getInvRotType( undoUnit.rotType_ )
+            CubeRotateUtil.Util.getInvRotType( undoUnit.getRotType() )
         );
         solveCode_.text = createSolveText();
     }
@@ -329,7 +329,7 @@ public class CubePracticeEditManager : CubeGameManager {
             parent_.getCube().onRotation(
                 axis,
                 bInv ? solve_[ 0 ].getInvColIndices( parent_.getCube().getN() ) : solve_[ 0 ].colIndices_.ToArray(),
-                solve_[ 0 ].rotType_,
+                solve_[ 0 ].getRotType(),
                 rotateFinishCallback
             );
         }
@@ -360,7 +360,7 @@ public class CubePracticeEditManager : CubeGameManager {
                 parent_.getCube().onRotation(
                     axis,
                     bInv ? solve_[ i ].getInvColIndices( parent_.getCube().getN() ) : solve_[ i ].colIndices_.ToArray(),
-                    solve_[ i ].rotType_,
+                    solve_[ i ].getRotType(),
                     rotateFinishCallback
                 );
                 return false;

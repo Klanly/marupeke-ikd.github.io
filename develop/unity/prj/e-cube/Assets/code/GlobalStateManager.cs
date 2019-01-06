@@ -56,7 +56,17 @@ public class GlobalStateUpdater
 }
 
 // どこでも使えるステート
-public class GlobalState
+public class GlobalStateBase
+{
+    public GlobalStateBase() { }
+
+    // 強制終了する
+    public virtual void forceFinish() { bForceStop_ = true;  }
+
+    protected bool bForceStop_ = false;
+}
+
+public class GlobalState : GlobalStateBase
 {
     GlobalState( System.Func< bool > action, System.Action post )
     {
@@ -107,18 +117,20 @@ public class GlobalState
     public GlobalState next( System.Func< bool > action, System.Action post = null )
     {
         nextState_ = new GlobalState( action, post );
+        nextState_.preState_ = this;
         return nextState_;
     }
     public GlobalState next( System.Action init, System.Func<bool> action, System.Action post = null)
     {
         nextState_ = new GlobalState( init, action, post );
+        nextState_.preState_ = this;
         return nextState_;
     }
 
     // 最終アクション
     public void finish( System.Action onFinish )
     {
-        onFinish_ = onFinish;
+        nextState_ = new GlobalState( onFinish, () => { return false; }, () => { } );
     }
 
     // ステート更新
@@ -129,24 +141,34 @@ public class GlobalState
             init_ = null;
         }
 
-        if ( action_ == null || action_() == false ) {
+        // 終わった？
+        if ( action_ == null || action_() == false || bForceStop_ == true ) {
             if ( onPost_ != null ) {
                 onPost_();
             }
+
+            // 強制終了時は次のステートは実行しない
+            if ( bForceStop_ == true )
+                return false;
+
             if ( nextState_ != null ) {
-                nextState_.onFinish_ = onFinish_;
                 GlobalStateUpdater.getInstance().add( nextState_ );
-            } else if ( onFinish_ != null ) {
-                onFinish_();
             }
             return false;   // このステート自体は終了
         }
         return true;
     }
 
+    // 強制終了する
+    public override void forceFinish() {
+        base.forceFinish();
+        if ( preState_ != null )
+            preState_.forceFinish();
+    }
+
     System.Action init_ = null;
     System.Func<bool> action_ = null;
     System.Action onPost_ = null;
-    System.Action onFinish_ = null;
     GlobalState nextState_ = null;
+    GlobalState preState_ = null;
 }

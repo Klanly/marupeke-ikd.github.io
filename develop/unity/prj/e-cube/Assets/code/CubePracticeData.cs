@@ -6,32 +6,44 @@ using UnityEngine;
 
 public class CubePracticeData {
 
+    public enum RotDir : int
+    {
+        RotDir_Clockwise90 = 0,         // 時計回り90度
+        RotDir_Clockwise180 = 1,        // 時計回り180度
+        RotDir_CounterClockwise90 = 2,  // 反時計回り90度
+        RotDir_CounterClockwise180 = 3  // 反時計回り180度
+    }
+
     public class RotateUnit
     {
-        public RotateUnit(FaceType face, CubeRotationType rotType)
+        private RotateUnit()
+        {
+
+        }
+
+        public RotateUnit(FaceType face, RotDir rotDir)
         {
             face_ = face;
-            rotType_ = rotType;
+            rotDir_ = rotDir;
             colIndices_.Add( 1 );
         }
-        public RotateUnit(FaceType face, CubeRotationType rotType, int colIndex )
+        public RotateUnit(FaceType face, RotDir rotDir, int colIndex)
         {
             face_ = face;
-            rotType_ = rotType;
+            rotDir_ = rotDir;
             colIndices_.Add( colIndex );
         }
-        public RotateUnit(FaceType face, CubeRotationType rotType, int[] colIndices)
+        public RotateUnit(FaceType face, RotDir rotDir, int[] colIndices)
         {
             face_ = face;
-            rotType_ = rotType;
+            rotDir_ = rotDir;
             colIndices_.AddRange( colIndices );
         }
+
+        // 回転コードを取得
         public string getRotateCode()
         {
             string[] names = new string[ 6 ] { "L", "R", "D", "U", "F", "B" };
-            bool bFoward = true;
-            if ( face_ == FaceType.FaceType_Right || face_ == FaceType.FaceType_Up || face_ == FaceType.FaceType_Back )
-                bFoward = false;
             string indicesStr = "(";
             for ( int i = 0; i < colIndices_.Count; ++i ) {
                 indicesStr += colIndices_[ i ] + 1;
@@ -40,11 +52,45 @@ public class CubePracticeData {
                 }
             }
             indicesStr += ")";
-            string[] rotNamesFoward  = new string[ 7 ] { "", "", "w", "3", "'", "w'", "3'" };
-            string[] rotNamesInverse = new string[ 7 ] { "", "'", "w'", "3'", "", "w", "3" };
-            int rotIndex = CubeRotateUtil.Util.getRotateIndex( rotType_ );
-            return names[ (int)face_ ] + indicesStr + ( bFoward ? rotNamesFoward[ rotIndex ] : rotNamesInverse[ rotIndex ] );
+            string[] rotNames = new string[ 4 ] { "", "2", "'", "2'" };
+            return names[ ( int )face_ ] + indicesStr + rotNames[ (int)rotDir_ ];
         }
+
+        // 回転方向シンボルマークを取得
+        public string getRotDirSymbolMark()
+        {
+            switch ( rotDir_ ) {
+                case RotDir.RotDir_Clockwise90: return "";
+                case RotDir.RotDir_Clockwise180: return "2";
+                case RotDir.RotDir_CounterClockwise90: return "'";
+                case RotDir.RotDir_CounterClockwise180: return "2'";
+            }
+            return "";
+        }
+
+        // 回転タイプを取得
+        public CubeRotationType getRotType()
+        {
+            bool bLDF = ( face_ == FaceType.FaceType_Left || face_ == FaceType.FaceType_Down || face_ == FaceType.FaceType_Front );
+            if ( bLDF == true ) {
+                switch ( rotDir_ ) {
+                    case RotDir.RotDir_Clockwise90: return CubeRotationType.CRT_Plus_90;
+                    case RotDir.RotDir_Clockwise180: return CubeRotationType.CRT_Plus_180;
+                    case RotDir.RotDir_CounterClockwise90: return CubeRotationType.CRT_Minus_90;
+                    case RotDir.RotDir_CounterClockwise180: return CubeRotationType.CRT_Minus_180;
+                }
+            } else {
+                switch ( rotDir_ ) {
+                    case RotDir.RotDir_Clockwise90: return CubeRotationType.CRT_Minus_90;
+                    case RotDir.RotDir_Clockwise180: return CubeRotationType.CRT_Minus_180;
+                    case RotDir.RotDir_CounterClockwise90: return CubeRotationType.CRT_Plus_90;
+                    case RotDir.RotDir_CounterClockwise180: return CubeRotationType.CRT_Plus_180;
+                }
+            }
+            return CubeRotationType.CRT_0;
+        }
+
+        // 反転インデックスを取得
         public int[] getInvColIndices( int n )
         {
             var indices = new int[ colIndices_.Count ];
@@ -53,6 +99,20 @@ public class CubePracticeData {
             }
             return indices;
         }
+
+        // 軸・回転タイプ・インデックスのセットを取得
+        public void getAxisRotColindicesSet(int n, out AxisType axis, out CubeRotationType rotType, out int[] colIndices)
+        {
+            // 登録されているフェイスを基準とする
+            // LDF: Clockwise -> Plus  : CounterClockwise -> Minus
+            // RUB: Clockwise -> Minus : CounterClockwise -> Plus
+            axis = getRotateAxis();
+            rotType = getRotType();
+            bool bLDF = ( face_ == FaceType.FaceType_Left || face_ == FaceType.FaceType_Down || face_ == FaceType.FaceType_Front );
+            colIndices = ( bLDF ? colIndices_.ToArray() : getInvColIndices( n ) );
+        }
+
+        // 回転軸を取得
         public AxisType getRotateAxis()
         {
             switch ( face_ ) {
@@ -69,8 +129,68 @@ public class CubePracticeData {
             return AxisType.AxisType_X;
         }
 
-        public FaceType face_;             // 回転フェイス
-        public CubeRotationType rotType_;  // 回転タイプ
+        // 反転するRotUnitを取得
+        public RotateUnit getInvRotUnit()
+        {
+            var ru = new RotateUnit();
+            ru.face_ = face_;
+            ru.rotDir_ = getInvRotDir( rotDir_ );
+            for( int i = 0; i < colIndices_.Count; ++i ) {
+                ru.colIndices_.Add( colIndices_[ i ] );
+            }
+            return ru;
+        }
+
+        // 反転する回転方向を取得
+        public static RotDir getInvRotDir( RotDir rotDir )
+        {
+            switch ( rotDir ) {
+                case RotDir.RotDir_Clockwise90: return RotDir.RotDir_CounterClockwise90;
+                case RotDir.RotDir_Clockwise180: return RotDir.RotDir_CounterClockwise180;
+                case RotDir.RotDir_CounterClockwise90: return RotDir.RotDir_Clockwise90;
+                case RotDir.RotDir_CounterClockwise180: return RotDir.RotDir_Clockwise180;
+            }
+            return RotDir.RotDir_Clockwise90;
+        }
+
+        public bool isCorrect(int n, AxisType axis, CubeRotationType rotType, int[] colIndices) {
+            AxisType myAxis;
+            CubeRotationType myRotType;
+            int[] myColIndices;
+            getAxisRotColindicesSet( n, out myAxis, out myRotType, out myColIndices );
+            if ( axis != myAxis )
+                return false;
+            if ( myRotType != rotType )
+                return false;
+            foreach ( int idx in colIndices ) {
+                bool isDetect = false;
+                foreach ( int myIdx in myColIndices ) {
+                    if ( myIdx == idx ) {
+                        isDetect = true;
+                        break;
+                    }
+                }
+                if ( isDetect == false )
+                    return false;
+            }
+            foreach ( int myIdx in myColIndices ) {
+                bool isDetect = false;
+                foreach ( int idx in colIndices ) {
+                    if ( myIdx == idx ) {
+                        isDetect = true;
+                        break;
+                    }
+                }
+                if ( isDetect == false )
+                    return false;
+            }
+
+            // 同じと判断
+            return true;
+        }
+
+        public FaceType face_;  // 回転フェイス
+        public RotDir rotDir_;  // 回転方向
         public List<int> colIndices_ = new List<int>();      // 回転列
     }
 
@@ -124,6 +244,41 @@ public class CubePracticeData {
         } );
     }
 
+    // RotateUnitリストを取得
+    public List< RotateUnit > getRotateList()
+    {
+        var faceMap = new Dictionary<string, FaceType> {
+            { "L", FaceType.FaceType_Left },
+            { "R", FaceType.FaceType_Right },
+            { "D", FaceType.FaceType_Down },
+            { "U", FaceType.FaceType_Up },
+            { "F", FaceType.FaceType_Front },
+            { "B", FaceType.FaceType_Back },
+        };
+        var rotTypeMap = new Dictionary<string, RotDir> {
+            { "", RotDir.RotDir_Clockwise90 },
+            { "2", RotDir.RotDir_Clockwise180 },
+            { "3", RotDir.RotDir_CounterClockwise90 },
+            { "'", RotDir.RotDir_CounterClockwise90 },
+            { "2'", RotDir.RotDir_CounterClockwise180 },
+            { "3'", RotDir.RotDir_Clockwise90 },
+        };
+        var list = new List<RotateUnit>();
+        foreach ( var s in solve_ ) {
+            var colIndices = new List<int>();
+            // R(0,1)' -> [R] [0,1] [']
+            string[] strs = System.Text.RegularExpressions.Regex.Split( s, "[(]|[)]" );
+            FaceType face = faceMap[ strs[ 0 ] ];
+            RotDir rotDir = rotTypeMap[ strs[ 2 ] ];
+            string[] cols = strs[ 1 ].Split( ',' );
+            for ( int i = 0; i < cols.Length; ++i ) {
+                colIndices.Add( ToVal.Conv.toInt( cols[ i ], 0 ) - 1 );
+            }
+            list.Add( new RotateUnit( face, rotDir, colIndices.ToArray() ) );
+        }
+        return list;
+    }
+
     // Cube数を取得
     public int getN()
     {
@@ -149,25 +304,29 @@ public class CubePracticeData {
     // 軸回転情報からRotateUnitを生成
     public static RotateUnit convAxisRotateToRotUnit( int n, AxisType axis, CubeRotationType rotType, int[] colIndices )
     {
+        // 軸回転情報はすべてLDFを基準とする(colIndicesを変更しない);
         FaceType face = FaceType.FaceType_None;
-        int[] invColIndices = new int[ colIndices .Length ];
-        for ( int i = 0; i < colIndices.Length; ++i ) {
-            invColIndices[ i ] = n - colIndices[ i ] - 1;
-        }
-        bool bSingle = ( colIndices.Length == 1 );
-        bool useFoward = ( bSingle == true && colIndices[ 0 ] == 0 );   // Idx0の1列のみ順回転
         switch( axis ) {
             case AxisType.AxisType_X:
-                face = useFoward ? FaceType.FaceType_Left : FaceType.FaceType_Right;
+                face = FaceType.FaceType_Left;
                 break;
             case AxisType.AxisType_Y:
-                face = useFoward ? FaceType.FaceType_Down : FaceType.FaceType_Up;
+                face = FaceType.FaceType_Down;
                 break;
             case AxisType.AxisType_Z:
-                face = useFoward ? FaceType.FaceType_Front : FaceType.FaceType_Back;
+                face = FaceType.FaceType_Front;
                 break;
         }
-        return new RotateUnit( face, rotType, useFoward ? colIndices : invColIndices );
+        RotDir rotDir = RotDir.RotDir_Clockwise90;
+        switch ( rotType ) {
+            case CubeRotationType.CRT_Plus_90: rotDir = RotDir.RotDir_Clockwise90; break;
+            case CubeRotationType.CRT_Plus_180: rotDir = RotDir.RotDir_Clockwise180; break;
+            case CubeRotationType.CRT_Plus_270: rotDir = RotDir.RotDir_CounterClockwise90; break;
+            case CubeRotationType.CRT_Minus_90: rotDir = RotDir.RotDir_CounterClockwise90; break;
+            case CubeRotationType.CRT_Minus_180: rotDir = RotDir.RotDir_CounterClockwise180; break;
+            case CubeRotationType.CRT_Minus_270: rotDir = RotDir.RotDir_Clockwise90; break;
+        }
+        return new RotateUnit( face, rotDir, colIndices );
     }
 
     // 練習データをCubeから作成

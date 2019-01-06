@@ -28,12 +28,18 @@ public class CubeMouseController : CubeController
         rotateCallback_ = rotateCallback;
     }
 
+    // 回転操作のON/OFF
+    public void setActiveRotationOp( bool isActive )
+    {
+        bRotationOp = isActive;
+    }
+
     // コントローラのイベントを取得
     override public void getInputEvents(ref List<CubeEvent> events)
     {
         // 左クリックマウスアクションをチェック
         // 左ボタン押し下げ
-        if ( Input.GetMouseButtonDown( 0 ) == true ) {
+        if ( bRotationOp == true && Input.GetMouseButtonDown( 0 ) == true ) {
             // カーソル位置にキューブのピースがあればつまむ
             var piece = cube_.ray( Camera.main.ScreenPointToRay( Input.mousePosition ), out pickUpFace_ );
             if ( piece != null ) {
@@ -178,4 +184,5 @@ public class CubeMouseController : CubeController
     Vector3 cameraRotOrigin_ = Vector3.zero;
     bool rButtonDraging_ = false;
     System.Action<AxisType, CubeRotationType, int[]> rotateCallback_;
+    bool bRotationOp = true;
 }
