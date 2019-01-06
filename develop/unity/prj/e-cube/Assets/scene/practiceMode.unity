@@ -1102,7 +1102,7 @@ MonoBehaviour:
   bStopControllerActiveWhenComplete_: 0
   n_: 3
   camera_: {fileID: 424246935}
-  practiceDataName_: AssetBundles/PracticeDataBundles/test.json
+  practiceDataName_: AssetBundles/PracticeDataBundles/pra_easy_step1_3.json
   solveText_: {fileID: 542989987}
   solveTextBG_: {fileID: 1359104459}
   retryButtonSet_: {fileID: 355267524}

@@ -153,6 +153,16 @@ public class CubePracticeData {
             return RotDir.RotDir_Clockwise90;
         }
 
+        // 反転インデックスを取得
+        public static int[] getInvColIndices(int n, int[] colIndices )
+        {
+            var indices = new int[ colIndices.Length ];
+            for ( int i = 0; i < colIndices.Length; ++i ) {
+                indices[ i ] = n - 1 - colIndices[ i ];
+            }
+            return indices;
+        }
+
         public bool isCorrect(int n, AxisType axis, CubeRotationType rotType, int[] colIndices) {
             AxisType myAxis;
             CubeRotationType myRotType;
@@ -302,31 +312,76 @@ public class CubePracticeData {
     }
 
     // 軸回転情報からRotateUnitを生成
-    public static RotateUnit convAxisRotateToRotUnit( int n, AxisType axis, CubeRotationType rotType, int[] colIndices )
+    public static RotateUnit convAxisRotateToRotUnit( int n, AxisType axis, CubeRotationType rotType, int[] colIndices, bool useRDB = true )
     {
-        // 軸回転情報はすべてLDFを基準とする(colIndicesを変更しない);
-        FaceType face = FaceType.FaceType_None;
-        switch( axis ) {
-            case AxisType.AxisType_X:
-                face = FaceType.FaceType_Left;
-                break;
-            case AxisType.AxisType_Y:
-                face = FaceType.FaceType_Down;
-                break;
-            case AxisType.AxisType_Z:
-                face = FaceType.FaceType_Front;
-                break;
+        if ( useRDB == true ) {
+            // 軸回転情報はLDFを基準とするが
+            // colIndicesがn-1の時だけRDBとする
+            bool isRDB = ( colIndices.Length == 1 && colIndices[ 0 ] == n - 1 );
+            FaceType face = FaceType.FaceType_None;
+            switch ( axis ) {
+                case AxisType.AxisType_X:
+                    face = isRDB ? FaceType.FaceType_Right : FaceType.FaceType_Left;
+                    break;
+                case AxisType.AxisType_Y:
+                    face = isRDB ? FaceType.FaceType_Up : FaceType.FaceType_Down;
+                    break;
+                case AxisType.AxisType_Z:
+                    face = isRDB ? FaceType.FaceType_Back : FaceType.FaceType_Front;
+                    break;
+            }
+            RotDir rotDir = RotDir.RotDir_Clockwise90;
+            switch ( rotType ) {
+                case CubeRotationType.CRT_Plus_90:
+                    rotDir = RotDir.RotDir_Clockwise90;
+                    break;
+                case CubeRotationType.CRT_Plus_180:
+                    rotDir = RotDir.RotDir_Clockwise180;
+                    break;
+                case CubeRotationType.CRT_Plus_270:
+                    rotDir = RotDir.RotDir_CounterClockwise90;
+                    break;
+                case CubeRotationType.CRT_Minus_90:
+                    rotDir = RotDir.RotDir_CounterClockwise90;
+                    break;
+                case CubeRotationType.CRT_Minus_180:
+                    rotDir = RotDir.RotDir_CounterClockwise180;
+                    break;
+                case CubeRotationType.CRT_Minus_270:
+                    rotDir = RotDir.RotDir_Clockwise90;
+                    break;
+            }
+            return new RotateUnit( 
+                face,
+                isRDB ? RotateUnit.getInvRotDir( rotDir ) : rotDir,
+                isRDB ? RotateUnit.getInvColIndices( n, colIndices ) : colIndices
+            );
+
+        } else { 
+            // 軸回転情報はLDFを基準とする
+            FaceType face = FaceType.FaceType_None;
+            switch( axis ) {
+                case AxisType.AxisType_X:
+                    face = FaceType.FaceType_Left;
+                    break;
+                case AxisType.AxisType_Y:
+                    face = FaceType.FaceType_Down;
+                    break;
+                case AxisType.AxisType_Z:
+                    face = FaceType.FaceType_Front;
+                    break;
+            }
+            RotDir rotDir = RotDir.RotDir_Clockwise90;
+            switch ( rotType ) {
+                case CubeRotationType.CRT_Plus_90: rotDir = RotDir.RotDir_Clockwise90; break;
+                case CubeRotationType.CRT_Plus_180: rotDir = RotDir.RotDir_Clockwise180; break;
+                case CubeRotationType.CRT_Plus_270: rotDir = RotDir.RotDir_CounterClockwise90; break;
+                case CubeRotationType.CRT_Minus_90: rotDir = RotDir.RotDir_CounterClockwise90; break;
+                case CubeRotationType.CRT_Minus_180: rotDir = RotDir.RotDir_CounterClockwise180; break;
+                case CubeRotationType.CRT_Minus_270: rotDir = RotDir.RotDir_Clockwise90; break;
+            }
+            return new RotateUnit( face, rotDir, colIndices );
         }
-        RotDir rotDir = RotDir.RotDir_Clockwise90;
-        switch ( rotType ) {
-            case CubeRotationType.CRT_Plus_90: rotDir = RotDir.RotDir_Clockwise90; break;
-            case CubeRotationType.CRT_Plus_180: rotDir = RotDir.RotDir_Clockwise180; break;
-            case CubeRotationType.CRT_Plus_270: rotDir = RotDir.RotDir_CounterClockwise90; break;
-            case CubeRotationType.CRT_Minus_90: rotDir = RotDir.RotDir_CounterClockwise90; break;
-            case CubeRotationType.CRT_Minus_180: rotDir = RotDir.RotDir_CounterClockwise180; break;
-            case CubeRotationType.CRT_Minus_270: rotDir = RotDir.RotDir_Clockwise90; break;
-        }
-        return new RotateUnit( face, rotDir, colIndices );
     }
 
     // 練習データをCubeから作成
