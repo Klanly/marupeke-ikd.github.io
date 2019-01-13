@@ -25,6 +25,9 @@ public class Bridge : MonoBehaviour {
     [SerializeField]
     float curYLevel_ = 0.0f;
 
+    [SerializeField]
+    int index_;
+
     public enum BridgeType
     {
         Bridge_One_Shot,    // スイッチを押すと自動的にライズアップ
@@ -57,6 +60,12 @@ public class Bridge : MonoBehaviour {
     public void switchOn()
     {
         bridge_.switchOn();
+    }
+
+    // インデックスを取得
+    public int getIndex()
+    {
+        return index_;
     }
 
     // Use this for initialization

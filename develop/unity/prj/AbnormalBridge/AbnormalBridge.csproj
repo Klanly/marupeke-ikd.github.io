@@ -253,6 +253,7 @@
     <Compile Include="Assets\codes\Ship.cs" />
     <Compile Include="Assets\codes\ShipRule.cs" />
     <Compile Include="Assets\codes\SunManager.cs" />
+    <Compile Include="Assets\codes\ZoomInCamera.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\font_time.fnt" />

@@ -52,6 +52,9 @@ public class Human : Passenger {
         }
         preState_ = actionState_;
 
+        if ( bMiss_ == true )
+            return;
+
         var p = transform.localPosition;
         float preX = p.x;
         p.x += speed_ * dir_;
@@ -60,9 +63,19 @@ public class Human : Passenger {
         if ( ( p.x - removePosX_ ) * ( preX - removePosX_ ) <= 0.0f )
             Destroy( this.gameObject );
 
-        // 橋チェック
-        updateOnBridge();
-	}
+
+        // 人の高さが規定以下になったらミス
+        if ( p.y <= -14.8f ) {
+            bMiss_ = true;
+            if ( onMiss_ != null ) {
+                Bridge bridge = manager_.getCollideBridge( transform.position );
+                onMiss_( bridge != null ? bridge.getIndex() : 0 );  // ミスを通達
+            }
+        } else {
+            // 橋チェック
+            updateOnBridge();
+        }
+    }
 
     // Use this for initialization
     void Start()
@@ -202,4 +215,5 @@ public class Human : Passenger {
     float removePosX_ = 50.0f;
     State state_ = null;
     float dir_ = 1.0f;
+    bool bMiss_ = false;
 }

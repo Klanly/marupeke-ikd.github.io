@@ -14,6 +14,8 @@ public class Passenger : MonoBehaviour {
         Ship
     }
 
+    public System.Action<int> OnMiss { set { onMiss_ = value;  } }
+
     // 初期化
     public void setup( GameManager manager )
     {
@@ -42,4 +44,5 @@ public class Passenger : MonoBehaviour {
 	}
 
     protected GameManager manager_;
+    protected System.Action<int> onMiss_;
 }

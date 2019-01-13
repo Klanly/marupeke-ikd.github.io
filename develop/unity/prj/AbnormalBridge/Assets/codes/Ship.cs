@@ -56,6 +56,9 @@ public class Ship : Passenger {
 
     // Update is called once per frame
     void Update () {
+        if ( bMiss_ == true )
+            return;
+
         if ( state_ != null )
             state_ = state_.update();
 
@@ -99,8 +102,9 @@ public class Ship : Passenger {
             parent_.transform.localRotation = Quaternion.LookRotation( pos - parent_.prePos_ );
 
             // 橋との衝突をチェック
-            if ( checkCollision( pos ) == true ) {
-                return new State_Collide( parent_ );
+            Bridge collideBridge = null;
+            if ( checkCollision( pos, out collideBridge ) == true ) {
+                return new State_Collide( parent_, collideBridge );
             }
 
             // トリガー位置を通過していたら警告を
@@ -111,14 +115,17 @@ public class Ship : Passenger {
         }
 
         // 橋との衝突をチェック
-        bool checkCollision( Vector3 pos )
+        bool checkCollision( Vector3 pos, out Bridge collideBridge )
         {
             // 衝突しないケース
             // ・橋が規定の高さ以上に上がっている
             var bridge = parent_.manager_.getCollideBridge( pos );
-            if ( bridge == null )
+            if ( bridge == null ) {
+                collideBridge = bridge;
                 return false;
+            }
             float bridgeY = bridge.getYLevel();
+            collideBridge = bridge;
             return ( bridgeY <= -7.5f );
         }
     }
@@ -126,12 +133,21 @@ public class Ship : Passenger {
     // 衝突しちゃった
     class State_Collide : StateBase
     {
-        public State_Collide( Ship parent ) : base(parent) { }
+        public State_Collide( Ship parent, Bridge collideBridge ) : base(parent) {
+            collideBridge_ = collideBridge;
+        }
+
         override protected State innerUpdate()
         {
+            parent_.bMiss_ = true;
+            if ( parent_.onMiss_ != null )
+                parent_.onMiss_( collideBridge_ .getIndex() );  // ミスを報告
+
             Destroy( this.parent_.gameObject );
             return null;
         }
+
+        Bridge collideBridge_;
     }
 
         SimplePath sp = new SimplePath();
@@ -141,4 +157,5 @@ public class Ship : Passenger {
     float warningTriggerZ_ = 0.0f;
     bool bUpper_ = true;
     bool bLightOn_ = false;
+    bool bMiss_ = false;
 }
