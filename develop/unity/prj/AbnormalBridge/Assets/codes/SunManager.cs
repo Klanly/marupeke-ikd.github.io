@@ -11,6 +11,9 @@ public class SunManager : MonoBehaviour {
     Light light_;
 
     [SerializeField]
+    Light[] spotLights_;
+
+    [SerializeField]
     float secPerDay_ = 120.0f;  // 1日の実秒数
 
     [SerializeField]
@@ -28,7 +31,7 @@ public class SunManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
+        state_ = new State_EarlyMorning( this );
 	}
 	
 	// Update is called once per frame
@@ -46,10 +49,32 @@ public class SunManager : MonoBehaviour {
         light_.transform.localRotation = Quaternion.LookRotation( new Vector3(-x, -y, -z ) );
         light_.color = sunColor_.Evaluate( t + 0.25f );    // 6時を起点とする
 
+        timeText_.text = string.Format( "{0:00}:{1:00}", getHour(), getMin() );
+
+        if ( state_ != null )
+            state_ = state_.update();
+    }
+
+    // 時間を取得
+    public int getHour()
+    {
         int sec = ( ( int )( curGameSec_ ) + 6 * 60 * 60 ) % 86400;     // 6時を起点とする
-        int hour = sec / 3600;
-        int min = ( sec % 3600 ) / 60;
-        timeText_.text = string.Format( "{0:00}:{1:00}", hour, min );
+        return sec / 3600;
+    }
+
+    // 分を取得
+    public int getMin()
+    {
+        int sec = ( ( int )( curGameSec_ ) + 6 * 60 * 60 ) % 86400;     // 6時を起点とする
+        return ( sec % 3600 ) / 60;
+    }
+
+    // スポットライトをスイッチング
+    void turnSpotLight( bool isTurnOn )
+    {
+        foreach ( var s in spotLights_ ) {
+            s.gameObject.SetActive( isTurnOn );
+        }
     }
 
     class StateBase : State
@@ -58,10 +83,10 @@ public class SunManager : MonoBehaviour {
         {
             parent_ = parent;
         }
-        SunManager parent_;
+        protected SunManager parent_;
     }
 
-    // 早朝（5:30 ～ 8:00）
+    // 早朝（6:00）
     class State_EarlyMorning : StateBase
     {
         public State_EarlyMorning( SunManager parent ) : base( parent ) {}
@@ -69,15 +94,43 @@ public class SunManager : MonoBehaviour {
         // 内部初期化
         override protected void innerInit()
         {
+            // スポットライトをオフ
+            parent_.turnSpotLight( false );
         }
 
         // 内部状態
         override protected State innerUpdate()
         {
+            // 夕刻(17:00)になったら遷移
+            if ( parent_.getHour() == 17 ) {
+                return new State_Evening( parent_ );
+            }
+            return this;
+        }
+    }
 
-            return null;
+    // 夕刻 (17:00)
+    class State_Evening : StateBase
+    {
+        public State_Evening( SunManager parent ) : base( parent ) { }
+        // 内部初期化
+        override protected void innerInit()
+        {
+            // スポットライトをオン
+            parent_.turnSpotLight( true );
+        }
+
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            // 朝(7:00)になったら遷移
+            if ( parent_.getHour() == 7 ) {
+                return new State_EarlyMorning( parent_ );
+            }
+            return this;
         }
     }
 
     float curGameSec_ = 0.0f;
+    State state_;
 }

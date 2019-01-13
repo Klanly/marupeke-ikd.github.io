@@ -5,6 +5,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
     [SerializeField]
+    SunManager sunManager_;
+
+    [SerializeField]
     Bridge[] bridges_;
 
     [SerializeField]
@@ -33,6 +36,12 @@ public class GameManager : MonoBehaviour {
 
     [SerializeField]
     int debugCreateLine_ = 0;
+
+    // 太陽マネージャを取得
+    public SunManager getSunManager()
+    {
+        return sunManager_;
+    }
 
     // 衝突している橋を取得
     public Bridge getCollideBridge( Vector3 pos )

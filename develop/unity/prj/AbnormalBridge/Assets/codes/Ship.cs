@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Ship : Passenger {
 
+    [SerializeField]
+    Light spotLight_;
+
 	// Use this for initialization
 	void Start () {
 
@@ -46,6 +49,8 @@ public class Ship : Passenger {
         prePos_.y = initY_;
         transform.localPosition = prePos_;
 
+        spotLight_.gameObject.SetActive( false );
+
         state_ = new State_Move( this );
     }
 
@@ -53,7 +58,19 @@ public class Ship : Passenger {
     void Update () {
         if ( state_ != null )
             state_ = state_.update();
-	}
+
+        // ライト設定
+        int hour = manager_.getSunManager().getHour();
+        if ( bLightOn_ == false && ( hour >= 18 || hour < 6 ) ) {
+            // 時刻が18時-6時ならライトオン
+            spotLight_.gameObject.SetActive( true );
+            bLightOn_ = true;
+        } else if ( bLightOn_ == true && ( hour >= 6 && hour < 18 ) ) {
+            // 時刻が18時-6時ならライトオフ
+            spotLight_.gameObject.SetActive( false );
+            bLightOn_ = false;
+        }
+    }
 
     class StateBase : State
     {
@@ -123,4 +140,5 @@ public class Ship : Passenger {
     State state_;
     float warningTriggerZ_ = 0.0f;
     bool bUpper_ = true;
+    bool bLightOn_ = false;
 }
