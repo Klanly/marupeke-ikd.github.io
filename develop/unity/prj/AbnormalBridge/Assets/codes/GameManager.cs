@@ -8,6 +8,12 @@ public class GameManager : MonoBehaviour {
     SunManager sunManager_;
 
     [SerializeField]
+    HumanRule humanRule_;
+
+    [SerializeField]
+    ShipRule shipRule_;
+
+    [SerializeField]
     Bridge[] bridges_;
 
     [SerializeField]
@@ -66,6 +72,12 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    private void Awake()
+    {
+        humanRule_.setup( this );
+        shipRule_.setup( this );
+    }
+
     // Use this for initialization
     void Start () {
         // ボタンと橋の挙動を関連付け
@@ -85,6 +97,40 @@ public class GameManager : MonoBehaviour {
         // 船接近警告イメージ
         shipWarningUpBrinker_.setup( shipWarningUpImage_, 0.25f, 0.10f, 10, true, false );
         shipWarningDownBrinker_.setup( shipWarningDownImage_, 0.25f, 0.10f, 10, true, false );
+
+        // 発生ルール関連付け
+        humanRule_.WalkerEmmitCallback = () => {
+            var human = passengerFactory_.create( Passenger.Type.Human_Walk );
+            emmitHuman( human as Human );
+        };
+        humanRule_.RunnerEmmitCallback = () => {
+            var human = passengerFactory_.create( Passenger.Type.Human_Run );
+            emmitHuman( human as Human );
+        };
+        shipRule_.EmmitCallback = () => {
+            var ship = passengerFactory_.create( Passenger.Type.Ship );
+            ship.setup( this );
+        };
+    }
+
+    void emmitHuman( Human human )
+    {
+        if ( human == null )
+            return;
+
+        human.setup( this );
+        float posZ = Random.Range( -2.0f, 2.0f );
+        float posX = -60.0f;
+        if ( Random.Range( 0, 2 ) != 0 ) {
+            var h = human as Human;
+            h.setMoveDir( false );
+            posX = 60.0f;
+            posZ -= 30.0f;
+        }
+        var p = human.transform.position;
+        p.x = posX;
+        p.z = posZ;
+        human.transform.position = p;
     }
 
     // Update is called once per frame

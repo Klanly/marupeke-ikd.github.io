@@ -36,7 +36,9 @@ public class SunManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        curGameSec_ += ( 86400 / secPerDay_ ) * Time.deltaTime;
+        float deltaSec = ( 86400 / secPerDay_ ) * Time.deltaTime;
+        curGameSec_ += deltaSec;
+        curElapsedSec_ += deltaSec;
         curGameSec_ %= 86400;
         // 現在の時刻に合わせた太陽の位置を設定
         float t = ( curGameSec_ ) / 86400.0f;
@@ -67,6 +69,12 @@ public class SunManager : MonoBehaviour {
     {
         int sec = ( ( int )( curGameSec_ ) + 6 * 60 * 60 ) % 86400;     // 6時を起点とする
         return ( sec % 3600 ) / 60;
+    }
+
+    // 経過秒を取得
+    public float getElapsedSec()
+    {
+        return curElapsedSec_;
     }
 
     // スポットライトをスイッチング
@@ -132,5 +140,6 @@ public class SunManager : MonoBehaviour {
     }
 
     float curGameSec_ = 0.0f;
+    float curElapsedSec_ = 0.0f;
     State state_;
 }

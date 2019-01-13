@@ -41,10 +41,11 @@ public class Human : Passenger {
             dir_ = -1.0f;
             transform.localRotation = Quaternion.Euler( 0.0f, 180.0f, 0.0f );
         }
+        removePosX_ *= dir_;
     }
 
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update () {
 		if ( preState_ != actionState_ ) {
             animator_.SetInteger( "state", actionState_ );
             speed_ = speeds_[ actionState_ ];
@@ -52,10 +53,11 @@ public class Human : Passenger {
         preState_ = actionState_;
 
         var p = transform.localPosition;
+        float preX = p.x;
         p.x += speed_ * dir_;
         transform.localPosition = p;
 
-        if ( p.x >= removePosX_ )
+        if ( ( p.x - removePosX_ ) * ( preX - removePosX_ ) <= 0.0f )
             Destroy( this.gameObject );
 
         // 橋チェック
@@ -197,7 +199,7 @@ public class Human : Passenger {
 
     int preState_ = -1;
     float[] speeds_;
-    float removePosX_ = 85.0f;
+    float removePosX_ = 50.0f;
     State state_ = null;
     float dir_ = 1.0f;
 }

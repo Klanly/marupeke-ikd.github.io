@@ -240,15 +240,18 @@
     <Compile Include="Assets\codes\CameraFrick.cs" />
     <Compile Include="Assets\codes\common\Bezier.cs" />
     <Compile Include="Assets\codes\common\ImageBillboarding.cs" />
+    <Compile Include="Assets\codes\common\Math\RandomEmitter.cs" />
     <Compile Include="Assets\codes\common\SimplePath.cs" />
     <Compile Include="Assets\codes\common\State.cs" />
     <Compile Include="Assets\codes\GameManager.cs" />
     <Compile Include="Assets\codes\HoldButton.cs" />
     <Compile Include="Assets\codes\Human.cs" />
+    <Compile Include="Assets\codes\HumanRule.cs" />
     <Compile Include="Assets\codes\ImageBrinker.cs" />
     <Compile Include="Assets\codes\Passenger.cs" />
     <Compile Include="Assets\codes\PassengerFactory.cs" />
     <Compile Include="Assets\codes\Ship.cs" />
+    <Compile Include="Assets\codes\ShipRule.cs" />
     <Compile Include="Assets\codes\SunManager.cs" />
   </ItemGroup>
   <ItemGroup>
