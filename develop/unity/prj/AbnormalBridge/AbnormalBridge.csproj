@@ -239,6 +239,7 @@
     <Compile Include="Assets\codes\BridgeBase.cs" />
     <Compile Include="Assets\codes\CameraFrick.cs" />
     <Compile Include="Assets\codes\common\Bezier.cs" />
+    <Compile Include="Assets\codes\common\ImageBillboarding.cs" />
     <Compile Include="Assets\codes\common\SimplePath.cs" />
     <Compile Include="Assets\codes\common\State.cs" />
     <Compile Include="Assets\codes\GameManager.cs" />
