@@ -71,6 +71,13 @@ public class SunManager : MonoBehaviour {
         return ( sec % 3600 ) / 60;
     }
 
+    // 経過日数を取得
+    public int getDay()
+    {
+        // 6:00が起点なので
+        return ( int )( ( curElapsedSec_ + 6.0f * 60.0f * 60.0f ) / 86400.0f );
+    }
+
     // 経過秒を取得
     public float getElapsedSec()
     {

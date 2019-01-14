@@ -8,7 +8,10 @@ public class GameManager : MonoBehaviour {
     SunManager sunManager_;
 
     [SerializeField]
-    HumanRule humanRule_;
+    HumanRule humanWalkRule_;
+
+    [SerializeField]
+    HumanRule humanRunRule_;
 
     [SerializeField]
     ShipRule shipRule_;
@@ -39,6 +42,9 @@ public class GameManager : MonoBehaviour {
 
     [SerializeField]
     UnityEngine.UI.Image gameOverImage_;
+
+    [SerializeField]
+    UnityEngine.UI.Text resultText_;
 
     [SerializeField]
     bool debugCreateHuman_ = false;
@@ -86,8 +92,13 @@ public class GameManager : MonoBehaviour {
 
     private void Awake()
     {
-        humanRule_.setup( this );
+        humanWalkRule_.setup( this );
+        humanRunRule_.setup( this );
         shipRule_.setup( this );
+
+        passengerRule_[ 0 ] = humanWalkRule_;
+        passengerRule_[ 1 ] = humanRunRule_;
+        passengerRule_[ 2 ] = shipRule_;
     }
 
     // Use this for initialization
@@ -107,17 +118,17 @@ public class GameManager : MonoBehaviour {
         };
 
         // 船接近警告イメージ
-        shipWarningUpBrinker_.setup( shipWarningUpImage_, 0.25f, 0.10f, 10, true, false );
-        shipWarningDownBrinker_.setup( shipWarningDownImage_, 0.25f, 0.10f, 10, true, false );
+        shipWarningUpBrinker_.setup( shipWarningUpImage_, 0.25f, 0.10f, 35, true, false );
+        shipWarningDownBrinker_.setup( shipWarningDownImage_, 0.25f, 0.10f, 35, true, false );
 
         // 発生ルール関連付け
-        humanRule_.WalkerEmmitCallback = () => {
+        humanWalkRule_.EmmitCallback = () => {
             if ( debugEmitActive_ == false )
                 return;
             var human = passengerFactory_.create( Passenger.Type.Human_Walk );
             emmitHuman( human as Human );
         };
-        humanRule_.RunnerEmmitCallback = () => {
+        humanRunRule_.EmmitCallback = () => {
             if ( debugEmitActive_ == false )
                 return;
             var human = passengerFactory_.create( Passenger.Type.Human_Run );
@@ -205,6 +216,15 @@ public class GameManager : MonoBehaviour {
 
         if ( state_ != null )
             state_ = state_.update();
+
+        int day = sunManager_.getDay();
+        int hour = sunManager_.getHour();
+
+        // 難易度調整
+        float intensity = 0.2f + ( day * 24 + hour - 6 ) * 0.05f;   // 難易度
+        foreach ( var ps in passengerRule_ ) {
+            ps.setNumPerHourIntensity( intensity );
+        }
     }
 
     // ゲームオーバー処理
@@ -212,6 +232,10 @@ public class GameManager : MonoBehaviour {
     {
         if ( bGameOver_ == false ) {
             bGameOver_ = true;
+            int day = sunManager_.getDay() + 1;
+            int hour = sunManager_.getHour();
+            int min = sunManager_.getMin();
+            resultText_.text = string.Format( "{0}Day {1:00}:{2:00}", day, hour, min );
             state_ = new State_CameraZoomIn( this, bridgeIndex );
         }
     }
@@ -289,4 +313,5 @@ public class GameManager : MonoBehaviour {
     ImageBrinker shipWarningDownBrinker_ = new ImageBrinker();
     State state_;
     bool bGameOver_ = false;
+    PassengerRule[] passengerRule_ = new PassengerRule[ 3 ];
 }

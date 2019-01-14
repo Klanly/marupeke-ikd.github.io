@@ -5,6 +5,9 @@ using UnityEngine;
 public class Bridge : MonoBehaviour {
 
     [SerializeField]
+    UnityEngine.UI.Text enduranceText_;
+
+    [SerializeField]
     BridgeType type_;
 
     [SerializeField]
@@ -125,12 +128,14 @@ public class Bridge : MonoBehaviour {
             endurance_ += enduranceUpPerFlame_;
         } else if ( h < 0.01f && h > -14.8f ) {
             // 橋が下がっている状態はヒートダウン
-            endurance_ -= enduranceUpPerFlame_;
+            endurance_ -= enduranceDownPerFlame_;
         } else {
             // 橋が完全に下がり切ったらクールダウン
             endurance_ = 0.0f;
         }
         endurance_ = Mathf.Clamp01( endurance_ );
+
+        enduranceText_.text = string.Format( "{0}%", ( int )( endurance_ * 100 ) );
     }
 
     // 橋の耐久度に対応した色変化

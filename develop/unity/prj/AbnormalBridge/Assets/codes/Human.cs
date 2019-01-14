@@ -69,7 +69,7 @@ public class Human : Passenger {
             bMiss_ = true;
             if ( onMiss_ != null ) {
                 Bridge bridge = manager_.getCollideBridge( transform.position );
-                onMiss_( bridge != null ? bridge.getIndex() : 0 );  // ミスを通達
+                onMiss_( bridge != null ? bridge.getIndex() : preBridgeIndex_ );  // ミスを通達
             }
         } else {
             // 橋チェック
@@ -127,6 +127,7 @@ public class Human : Passenger {
             // 橋内に侵入したら「橋内移動」へ
             Bridge bridge = parent_.manager_.getCollideBridge( parent_.transform.position );
             if ( bridge != null ) {
+                parent_.preBridgeIndex_ = bridge.getIndex();
                 return new State_InBridge( parent_, bridge );
             }
 
@@ -216,4 +217,5 @@ public class Human : Passenger {
     State state_ = null;
     float dir_ = 1.0f;
     bool bMiss_ = false;
+    int preBridgeIndex_ = 0;
 }
