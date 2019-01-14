@@ -235,7 +235,10 @@ public class GameManager : MonoBehaviour {
             int day = sunManager_.getDay() + 1;
             int hour = sunManager_.getHour();
             int min = sunManager_.getMin();
-            resultText_.text = string.Format( "{0}Day {1:00}:{2:00}", day, hour, min );
+            if ( day == 1 )
+                resultText_.text = string.Format( "{0}Day {1:00}:{2:00}", day, hour, min );
+            else
+                resultText_.text = string.Format( "{0}Days {1:00}:{2:00}", day, hour, min );
             state_ = new State_CameraZoomIn( this, bridgeIndex );
         }
     }

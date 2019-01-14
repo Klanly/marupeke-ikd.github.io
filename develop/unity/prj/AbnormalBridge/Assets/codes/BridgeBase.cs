@@ -13,6 +13,11 @@ public class BridgeBase {
         riseUpAcc_ = acc;
     }
 
+    public void setRiseWaitTime( float sec )
+    {
+        riseWaitTime_ = sec;
+    }
+
     // 橋の現在位置を取得
     virtual public Vector3 getCurPos()
     {
@@ -31,6 +36,7 @@ public class BridgeBase {
 
     protected float sinkAcc_ = 1.0f;
     protected float riseUpAcc_ = 1.0f;
+    protected float riseWaitTime_ = 3.0f;
 }
 
 // ワンショットブリッヂ
@@ -116,7 +122,6 @@ public class OneShotBridge : BridgeBase
     Vector3 curPos_ = Vector3.zero;
     bool bRise_ = false;
     float riseVec_ = 0.0f;
-    float riseWaitTime_ = 3.0f;
     float curRiseWaitTime_ = 0.0f;
     float sinkVec_ = 0.0f;
     float sinkDist_ = -15.0f;
@@ -211,7 +216,6 @@ public class HoldBridge : BridgeBase
     Vector3 curPos_ = Vector3.zero;
     bool bRise_ = false;
     float riseVec_ = 0.0f;
-    float riseWaitTime_ = 3.0f;
     float curRiseWaitTime_ = 0.0f;
     float sinkVec_ = 0.0f;
     float sinkDist_ = -15.0f;

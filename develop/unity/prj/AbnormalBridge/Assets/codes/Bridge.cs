@@ -16,6 +16,9 @@ public class Bridge : MonoBehaviour {
     [SerializeField]
     float sinkAcc_ = 1.0f;
 
+    [SerializeField]
+    float riseWaitTime_ = 3.0f;
+
     [SerializeField, Range(0, 1)]
     float endurance_ = 0.0f;   // 耐久度(0-1)
 
@@ -101,6 +104,7 @@ public class Bridge : MonoBehaviour {
     void Update () {
         bridge_.setRiseUpAcc( riseUpAcc_ );
         bridge_.setSinkAcc( sinkAcc_ );
+        bridge_.setRiseWaitTime( riseWaitTime_ );
 
         transform.localPosition = bridge_.update( transform.localPosition );
 
@@ -148,13 +152,13 @@ public class Bridge : MonoBehaviour {
         } else if ( endurance_ < 1.0f ) {
             // 耐久度が1.0に近付く程点滅周期を上げる
             float minW = 1.0f;
-            float maxW = 10.0f;
+            float maxW = 3.0f;
             float et = ( endurance_ - 0.5f ) * 2.0f;
             enduranceVec_ = Mathf.Lerp( minW, maxW, et ) * 360.0f * Time.deltaTime;
             enduranceTh_ += enduranceVec_;
             enduranceTh_ %= 360;
             float t = ( Mathf.Sin( enduranceTh_ * Mathf.Deg2Rad ) + 1.0f ) * 0.5f;
-            dangerColor_.g = dangerColor_.b = ( 1.0f - et );
+            dangerColor_.g = dangerColor_.b = 0.4f + 0.6f * ( 1.0f - et );
             Color c = Color.Lerp( normal_, dangerColor_, t );
             material_.color = c;
             renderer_.material = material_;

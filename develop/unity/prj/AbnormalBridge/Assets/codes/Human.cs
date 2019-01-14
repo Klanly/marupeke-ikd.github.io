@@ -18,11 +18,15 @@ public class Human : Passenger {
     [SerializeField]
     int actionState_;
 
+    [SerializeField]
+    GameObject light_;
+
     public enum ActionState : int
     {
         State_Idle = 0,
         State_Walk = 1,
         State_Run = 2,
+        State_Help = 3,
     }
 
     // 状態を変更
@@ -70,11 +74,25 @@ public class Human : Passenger {
             if ( onMiss_ != null ) {
                 Bridge bridge = manager_.getCollideBridge( transform.position );
                 onMiss_( bridge != null ? bridge.getIndex() : preBridgeIndex_ );  // ミスを通達
+                setState( ActionState.State_Help ); // 溺れた
             }
         } else {
             // 橋チェック
             updateOnBridge();
         }
+
+        // ライト設定
+        int hour = manager_.getSunManager().getHour();
+        if ( bLightOn_ == false && ( hour >= 18 || hour < 6 ) ) {
+            // 時刻が18時-6時ならライトオン
+            light_.gameObject.SetActive( true );
+            bLightOn_ = true;
+        } else if ( bLightOn_ == true && ( hour >= 6 && hour < 18 ) ) {
+            // 時刻が18時-6時ならライトオフ
+            light_.gameObject.SetActive( false );
+            bLightOn_ = false;
+        }
+
     }
 
     // Use this for initialization
@@ -84,7 +102,8 @@ public class Human : Passenger {
         speeds_ = new float[] {
             0.0f,
             0.04f,
-            0.08f
+            0.08f,
+            0.0f
         };
 
     }
@@ -218,4 +237,5 @@ public class Human : Passenger {
     float dir_ = 1.0f;
     bool bMiss_ = false;
     int preBridgeIndex_ = 0;
+    bool bLightOn_ = true;
 }

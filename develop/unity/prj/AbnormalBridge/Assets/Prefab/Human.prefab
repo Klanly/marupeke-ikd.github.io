@@ -636,6 +636,7 @@ MonoBehaviour:
   run_: {fileID: 7400000, guid: 36e4c1e8d2d6c2348a72c009111e965a, type: 2}
   animator_: {fileID: 95303662052009182}
   actionState_: 0
+  light_: {fileID: 1932182090316310}
 --- !u!212 &212758186917445270
 SpriteRenderer:
   m_ObjectHideFlags: 1
