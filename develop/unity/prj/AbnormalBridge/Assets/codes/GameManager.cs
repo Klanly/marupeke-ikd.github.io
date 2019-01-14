@@ -123,19 +123,19 @@ public class GameManager : MonoBehaviour {
 
         // 発生ルール関連付け
         humanWalkRule_.EmmitCallback = () => {
-            if ( debugEmitActive_ == false )
+            if ( debugEmitActive_ == false || bGameOver_ == true )
                 return;
             var human = passengerFactory_.create( Passenger.Type.Human_Walk );
             emmitHuman( human as Human );
         };
         humanRunRule_.EmmitCallback = () => {
-            if ( debugEmitActive_ == false )
+            if ( debugEmitActive_ == false || bGameOver_ == true )
                 return;
             var human = passengerFactory_.create( Passenger.Type.Human_Run );
             emmitHuman( human as Human );
         };
         shipRule_.EmmitCallback = () => {
-            if ( debugEmitActive_ == false )
+            if ( debugEmitActive_ == false || bGameOver_ == true )
                 return;
             var ship = passengerFactory_.create( Passenger.Type.Ship );
             ship.setup( this );

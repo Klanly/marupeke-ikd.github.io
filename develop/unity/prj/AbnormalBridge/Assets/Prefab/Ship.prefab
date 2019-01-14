@@ -280,6 +280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed_: 6
   spotLight_: {fileID: 108210172474227638}
+  smork_: {fileID: 1347742513493604, guid: dfd431f6a10f93947a53ee3d51abab24, type: 2}
 --- !u!114 &114771733532119698
 MonoBehaviour:
   m_ObjectHideFlags: 1

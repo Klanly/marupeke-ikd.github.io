@@ -7,6 +7,9 @@ public class Ship : Passenger {
     [SerializeField]
     Light spotLight_;
 
+    [SerializeField]
+    GameObject smork_;
+
 	// Use this for initialization
 	void Start () {
 
@@ -143,7 +146,11 @@ public class Ship : Passenger {
             if ( parent_.onMiss_ != null )
                 parent_.onMiss_( collideBridge_ .getIndex() );  // ミスを報告
 
-            Destroy( this.parent_.gameObject );
+            // 煙を上げる
+            var p = Instantiate<GameObject>( parent_.smork_ );
+            p.transform.parent = parent_.transform;
+            p.transform.localPosition = Vector3.zero;
+            p.gameObject.SetActive( true );
             return null;
         }
 
