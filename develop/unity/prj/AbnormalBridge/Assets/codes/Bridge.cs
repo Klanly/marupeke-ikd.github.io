@@ -143,12 +143,14 @@ public class Bridge : MonoBehaviour {
         } else if ( endurance_ < 1.0f ) {
             // 耐久度が1.0に近付く程点滅周期を上げる
             float minW = 1.0f;
-            float maxW = 3.0f;
-            enduranceVec_ = Mathf.Lerp( minW, maxW, endurance_ ) * 360.0f * Time.deltaTime;
+            float maxW = 10.0f;
+            float et = ( endurance_ - 0.5f ) * 2.0f;
+            enduranceVec_ = Mathf.Lerp( minW, maxW, et ) * 360.0f * Time.deltaTime;
             enduranceTh_ += enduranceVec_;
             enduranceTh_ %= 360;
             float t = ( Mathf.Sin( enduranceTh_ * Mathf.Deg2Rad ) + 1.0f ) * 0.5f;
-            Color c = Color.Lerp( normal_, abnormal_, t );
+            dangerColor_.g = dangerColor_.b = ( 1.0f - et );
+            Color c = Color.Lerp( normal_, dangerColor_, t );
             material_.color = c;
             renderer_.material = material_;
         } else {
@@ -173,6 +175,7 @@ public class Bridge : MonoBehaviour {
     float enduranceTh_ = 0.0f;
     Color normal_ = Color.white;
     Color abnormal_ = Color.red;
+    Color dangerColor_ = Color.white;
     Material material_;
     bool bOverheat_ = false;
     System.Action<int> onMiss_;

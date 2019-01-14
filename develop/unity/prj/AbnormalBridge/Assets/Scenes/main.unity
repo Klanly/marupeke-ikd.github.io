@@ -261,7 +261,7 @@ MonoBehaviour:
   debugHumanType_: 0
   debugCreateShip_: 0
   debugCreateLine_: 0
-  debugEmitActive_: 0
+  debugEmitActive_: 1
 --- !u!1 &101661089
 GameObject:
   m_ObjectHideFlags: 0
