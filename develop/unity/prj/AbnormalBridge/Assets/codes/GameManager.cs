@@ -52,6 +52,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     int debugCreateLine_ = 0;
 
+    [SerializeField]
+    bool debugEmitActive_ = true;
+
     // 太陽マネージャを取得
     public SunManager getSunManager()
     {
@@ -109,14 +112,20 @@ public class GameManager : MonoBehaviour {
 
         // 発生ルール関連付け
         humanRule_.WalkerEmmitCallback = () => {
+            if ( debugEmitActive_ == false )
+                return;
             var human = passengerFactory_.create( Passenger.Type.Human_Walk );
             emmitHuman( human as Human );
         };
         humanRule_.RunnerEmmitCallback = () => {
+            if ( debugEmitActive_ == false )
+                return;
             var human = passengerFactory_.create( Passenger.Type.Human_Run );
             emmitHuman( human as Human );
         };
         shipRule_.EmmitCallback = () => {
+            if ( debugEmitActive_ == false )
+                return;
             var ship = passengerFactory_.create( Passenger.Type.Ship );
             ship.setup( this );
             ship.OnMiss = ( bridgeIdx ) => {
@@ -124,6 +133,14 @@ public class GameManager : MonoBehaviour {
                 toGameOver( bridgeIdx );
             };
         };
+
+        // 橋オーバーヒート検出
+        foreach ( var br in bridges_ ) {
+            br.OnMiss = ( bridgeIdx ) => {
+                // ゲームオーバーへ
+                toGameOver( bridgeIdx );
+            };
+        }
     }
 
     void emmitHuman( Human human )

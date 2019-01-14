@@ -13,6 +13,18 @@ public class Bridge : MonoBehaviour {
     [SerializeField]
     float sinkAcc_ = 1.0f;
 
+    [SerializeField, Range(0, 1)]
+    float endurance_ = 0.0f;   // 耐久度(0-1)
+
+    [SerializeField]
+    float enduranceUpPerFlame_ = 0.01f;
+
+    [SerializeField]
+    float enduranceDownPerFlame_ = 0.02f;
+
+    [SerializeField]
+    GameObject overheatSmorkPrefab_;
+
     [SerializeField]
     bool debugSwitchOn_;
 
@@ -27,6 +39,8 @@ public class Bridge : MonoBehaviour {
 
     [SerializeField]
     int index_;
+
+    public System.Action< int > OnMiss { set { onMiss_ = value; } }
 
     public enum BridgeType
     {
@@ -70,6 +84,9 @@ public class Bridge : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        renderer_ = GetComponent<MeshRenderer>();
+        material_ = renderer_.material;
+
         if ( type_ == BridgeType.Bridge_One_Shot )
             bridge_ = new OneShotBridge();
         else
@@ -90,7 +107,73 @@ public class Bridge : MonoBehaviour {
         }
 
         curYLevel_ = getYLevel();
+
+        if ( bOverheat_ == false ) {
+            calcEndurance( curYLevel_ );
+            updateColor();
+        }
+    }
+
+    // 橋の耐久度を計算
+    void calcEndurance( float h )
+    {
+        if ( endurance_ >= 1.0f )
+            return;
+
+        if ( h >= -0.01f ) {
+            // 橋が完全に上がりきっている状態で耐久度の値が上がる
+            endurance_ += enduranceUpPerFlame_;
+        } else if ( h < 0.01f && h > -14.8f ) {
+            // 橋が下がっている状態はヒートダウン
+            endurance_ -= enduranceUpPerFlame_;
+        } else {
+            // 橋が完全に下がり切ったらクールダウン
+            endurance_ = 0.0f;
+        }
+        endurance_ = Mathf.Clamp01( endurance_ );
+    }
+
+    // 橋の耐久度に対応した色変化
+    void updateColor()
+    {
+        // 耐久度が0.5以下の時は変化無し
+        if ( endurance_ < 0.5f ) {
+            material_.color = normal_;
+            renderer_.material = material_;
+        } else if ( endurance_ < 1.0f ) {
+            // 耐久度が1.0に近付く程点滅周期を上げる
+            float minW = 1.0f;
+            float maxW = 3.0f;
+            enduranceVec_ = Mathf.Lerp( minW, maxW, endurance_ ) * 360.0f * Time.deltaTime;
+            enduranceTh_ += enduranceVec_;
+            enduranceTh_ %= 360;
+            float t = ( Mathf.Sin( enduranceTh_ * Mathf.Deg2Rad ) + 1.0f ) * 0.5f;
+            Color c = Color.Lerp( normal_, abnormal_, t );
+            material_.color = c;
+            renderer_.material = material_;
+        } else {
+            // 耐久度が1.0はゲームオーバー
+            material_.color = abnormal_;
+            renderer_.material = material_;
+
+            var overheat = Instantiate<GameObject>( overheatSmorkPrefab_ );
+            overheat.transform.parent = transform;
+            overheat.transform.localPosition = Vector3.zero;
+            overheat.transform.localScale = Vector3.one;
+            if ( onMiss_ != null )
+                onMiss_( getIndex() );
+
+            bOverheat_ = true;
+        }
     }
 
     BridgeBase bridge_;
+    MeshRenderer renderer_;
+    float enduranceVec_ = 0.0f;
+    float enduranceTh_ = 0.0f;
+    Color normal_ = Color.white;
+    Color abnormal_ = Color.red;
+    Material material_;
+    bool bOverheat_ = false;
+    System.Action<int> onMiss_;
 }

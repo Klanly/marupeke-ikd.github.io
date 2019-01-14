@@ -177,6 +177,11 @@ MonoBehaviour:
   type_: 1
   riseUpAcc_: 0.45
   sinkAcc_: 0.04
+  endurance_: 0
+  enduranceUpPerFlame_: 0.002
+  enduranceDownPerFlame_: 0.0025
+  overheatSmorkPrefab_: {fileID: 1347742513493604, guid: dfd431f6a10f93947a53ee3d51abab24,
+    type: 2}
   debugSwitchOn_: 0
   bridgeWidth_: 20
   bridgeRoadWidth_: 5
@@ -256,6 +261,7 @@ MonoBehaviour:
   debugHumanType_: 0
   debugCreateShip_: 0
   debugCreateLine_: 0
+  debugEmitActive_: 0
 --- !u!1 &101661089
 GameObject:
   m_ObjectHideFlags: 0
@@ -1297,6 +1303,11 @@ MonoBehaviour:
   type_: 0
   riseUpAcc_: 0.45
   sinkAcc_: 0.04
+  endurance_: 0
+  enduranceUpPerFlame_: 0.002
+  enduranceDownPerFlame_: 0.002
+  overheatSmorkPrefab_: {fileID: 1347742513493604, guid: dfd431f6a10f93947a53ee3d51abab24,
+    type: 2}
   debugSwitchOn_: 0
   bridgeWidth_: 20
   bridgeRoadWidth_: 5
@@ -1705,6 +1716,11 @@ MonoBehaviour:
   type_: 1
   riseUpAcc_: 0.45
   sinkAcc_: 0.04
+  endurance_: 0
+  enduranceUpPerFlame_: 0.002
+  enduranceDownPerFlame_: 0.0025
+  overheatSmorkPrefab_: {fileID: 1347742513493604, guid: dfd431f6a10f93947a53ee3d51abab24,
+    type: 2}
   debugSwitchOn_: 0
   bridgeWidth_: 20
   bridgeRoadWidth_: 5
@@ -2125,6 +2141,11 @@ MonoBehaviour:
   type_: 0
   riseUpAcc_: 0.45
   sinkAcc_: 0.04
+  endurance_: 0
+  enduranceUpPerFlame_: 0.002
+  enduranceDownPerFlame_: 0.002
+  overheatSmorkPrefab_: {fileID: 1347742513493604, guid: dfd431f6a10f93947a53ee3d51abab24,
+    type: 2}
   debugSwitchOn_: 0
   bridgeWidth_: 20
   bridgeRoadWidth_: 5
