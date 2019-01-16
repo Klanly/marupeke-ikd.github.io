@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "e-cube", "e-cube.csproj", "{47E780FB-6FAE-0E67-ED71-9A018E467F38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "e-cube.Editor", "e-cube.Editor.csproj", "{8EA5F5A5-DE1B-0F51-EFF7-8E7731D46854}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "e-cube.Editor.Plugins", "e-cube.Editor.Plugins.csproj", "{7131BD71-2D63-4805-D42B-1FBE0D451A45}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{47E780FB-6FAE-0E67-ED71-9A018E467F38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47E780FB-6FAE-0E67-ED71-9A018E467F38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47E780FB-6FAE-0E67-ED71-9A018E467F38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47E780FB-6FAE-0E67-ED71-9A018E467F38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EA5F5A5-DE1B-0F51-EFF7-8E7731D46854}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EA5F5A5-DE1B-0F51-EFF7-8E7731D46854}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EA5F5A5-DE1B-0F51-EFF7-8E7731D46854}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EA5F5A5-DE1B-0F51-EFF7-8E7731D46854}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7131BD71-2D63-4805-D42B-1FBE0D451A45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7131BD71-2D63-4805-D42B-1FBE0D451A45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7131BD71-2D63-4805-D42B-1FBE0D451A45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7131BD71-2D63-4805-D42B-1FBE0D451A45}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

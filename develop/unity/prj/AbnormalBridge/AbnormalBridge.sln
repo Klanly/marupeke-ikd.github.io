@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbnormalBridge", "AbnormalBridge.csproj", "{958E6FB8-4E65-8559-6DFE-702E133DBFC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbnormalBridge.Plugins", "AbnormalBridge.Plugins.csproj", "{EBD2B5A0-E037-BF09-29A8-D9D8CF057B01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbnormalBridge.Editor.Plugins", "AbnormalBridge.Editor.Plugins.csproj", "{D19DC0D7-2A7C-F0E4-7C5D-8413DD1A4680}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{958E6FB8-4E65-8559-6DFE-702E133DBFC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{958E6FB8-4E65-8559-6DFE-702E133DBFC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{958E6FB8-4E65-8559-6DFE-702E133DBFC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{958E6FB8-4E65-8559-6DFE-702E133DBFC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBD2B5A0-E037-BF09-29A8-D9D8CF057B01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBD2B5A0-E037-BF09-29A8-D9D8CF057B01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBD2B5A0-E037-BF09-29A8-D9D8CF057B01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBD2B5A0-E037-BF09-29A8-D9D8CF057B01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D19DC0D7-2A7C-F0E4-7C5D-8413DD1A4680}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D19DC0D7-2A7C-F0E4-7C5D-8413DD1A4680}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D19DC0D7-2A7C-F0E4-7C5D-8413DD1A4680}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D19DC0D7-2A7C-F0E4-7C5D-8413DD1A4680}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
