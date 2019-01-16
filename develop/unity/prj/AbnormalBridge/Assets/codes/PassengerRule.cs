@@ -18,6 +18,22 @@ public class PassengerRule : MonoBehaviour {
 
     public System.Action EmmitCallback { set { emmitCallback_ = value; } }
 
+    // リセット
+    public void resetAll()
+    {
+        preSec_ = 0.0f;
+        nextOutTime_ = 0.0f;
+        bValidateEmit_ = true;
+        bFirstUpdate_ = true;
+        bActive_ = false;
+    }
+
+    // 稼働させる
+    public void setActive()
+    {
+        bActive_ = true;
+    }
+
     // 時間内排出量の倍率設定
     public void setNumPerHourIntensity( float intensity )
     {
@@ -38,6 +54,10 @@ public class PassengerRule : MonoBehaviour {
 
     void innerUpdate()
     {
+        if ( bFirstUpdate_ == true ) {
+            bFirstUpdate_ = false;
+            innerStart();
+        }
         int hour = manager_.getSunManager().getHour();
         float sec = manager_.getSunManager().getElapsedSec();
         float elapsed = sec - preSec_;
@@ -62,16 +82,11 @@ public class PassengerRule : MonoBehaviour {
         }
     }
 
-    // Use this for initialization
-    void Start()
-    {
-        innerStart();
-    }
-
     // Update is called once per frame
     void Update()
     {
-        innerUpdate();
+        if ( bActive_ == true )
+            innerUpdate();
     }
 
     GameManager manager_;
@@ -79,4 +94,6 @@ public class PassengerRule : MonoBehaviour {
     float nextOutTime_ = 0.0f;
     System.Action emmitCallback_;
     bool bValidateEmit_ = true;
+    bool bActive_ = false;
+    bool bFirstUpdate_ = true;
 }

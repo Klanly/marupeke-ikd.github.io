@@ -22,6 +22,7 @@ public class ZoomInCamera : MonoBehaviour {
         startQ_ = Camera.main.transform.rotation;
         endP_ = zoomCameraPoses_[ idx_ ].transform.position;
         endQ_ = zoomCameraPoses_[ idx_ ].transform.rotation;
+        t_ = 0.0f;
     }
 	
 	// Update is called once per frame

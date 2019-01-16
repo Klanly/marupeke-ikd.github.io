@@ -54,6 +54,32 @@ public class Bridge : MonoBehaviour {
         Bridge_Hold,        // スイッチを押している時だけライズアップ
     }
 
+    // 状態を戻す
+    public void resetAll()
+    {
+        endurance_ = 0.0f;
+        enduranceVec_ = 0.0f;
+        enduranceTh_ = 0.0f;
+        dangerColor_ = Color.white;
+        bOverheat_ = false;
+        bActive_ = false;
+        var p = transform.localPosition;
+        p.y = 0.0f;
+        transform.localPosition = p;
+        if ( overheatSmork_ != null )
+            Destroy( overheatSmork_ );
+        bridge_.resetAll();
+
+        material_.color = normal_;
+        renderer_.material = material_;
+    }
+
+    // 稼働させる
+    public void setActive()
+    {
+        bActive_ = true;
+    }
+
     // 橋の高さを取得
     public float getYLevel()
     {
@@ -97,11 +123,13 @@ public class Bridge : MonoBehaviour {
             bridge_ = new OneShotBridge();
         else
             bridge_ = new HoldBridge();
-
     }
 
     // Update is called once per frame
     void Update () {
+        if ( bActive_ == false )
+            return;
+
         bridge_.setRiseUpAcc( riseUpAcc_ );
         bridge_.setSinkAcc( sinkAcc_ );
         bridge_.setRiseWaitTime( riseWaitTime_ );
@@ -167,10 +195,10 @@ public class Bridge : MonoBehaviour {
             material_.color = abnormal_;
             renderer_.material = material_;
 
-            var overheat = Instantiate<GameObject>( overheatSmorkPrefab_ );
-            overheat.transform.parent = transform;
-            overheat.transform.localPosition = Vector3.zero;
-            overheat.transform.localScale = Vector3.one;
+            overheatSmork_ = Instantiate<GameObject>( overheatSmorkPrefab_ );
+            overheatSmork_.transform.parent = transform;
+            overheatSmork_.transform.localPosition = Vector3.zero;
+            overheatSmork_.transform.localScale = Vector3.one;
             if ( onMiss_ != null )
                 onMiss_( getIndex() );
 
@@ -188,4 +216,6 @@ public class Bridge : MonoBehaviour {
     Material material_;
     bool bOverheat_ = false;
     System.Action<int> onMiss_;
+    bool bActive_ = false;
+    GameObject overheatSmork_;
 }

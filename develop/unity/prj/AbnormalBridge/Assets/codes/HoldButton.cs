@@ -44,6 +44,12 @@ public class HoldButton : MonoBehaviour {
         }
     }
 
+    public void resetAll()
+    {
+        buttonOn_ = false;
+        count_ = 0;
+    }
+
     UnityEngine.UI.Button button_;
     bool buttonOn_ = false;
 }

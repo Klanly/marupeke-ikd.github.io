@@ -24,6 +24,24 @@ public class SunManager : MonoBehaviour {
     [Range(0,1)]
     public float debugTime_ = 0.0f;
 
+    // 状態を最初に戻す
+    public void resetAll()
+    {
+        curGameSec_ = 0.0f;
+        curElapsedSec_ = 0.0f;
+        turnSpotLight( false );
+        innerUpdate( 0.0f );
+        bActive_ = false;
+
+        state_ = new State_EarlyMorning( this );
+    }
+
+    // 稼働させる
+    public void setActive()
+    {
+        bActive_ = true;
+    }
+
     private void OnValidate()
     {
         light_.color = sunColor_.Evaluate( debugTime_ );
@@ -33,10 +51,9 @@ public class SunManager : MonoBehaviour {
     void Start () {
         state_ = new State_EarlyMorning( this );
 	}
-	
-	// Update is called once per frame
-	void Update () {
-        float deltaSec = ( 86400 / secPerDay_ ) * Time.deltaTime;
+
+    void innerUpdate( float deltaSec )
+    {
         curGameSec_ += deltaSec;
         curElapsedSec_ += deltaSec;
         curGameSec_ %= 86400;
@@ -48,10 +65,20 @@ public class SunManager : MonoBehaviour {
         float x = -r * Mathf.Sin( 25.0f * Mathf.Deg2Rad );
         float y = r * Mathf.Cos( 25.0f * Mathf.Deg2Rad );
 
-        light_.transform.localRotation = Quaternion.LookRotation( new Vector3(-x, -y, -z ) );
+        light_.transform.localRotation = Quaternion.LookRotation( new Vector3( -x, -y, -z ) );
         light_.color = sunColor_.Evaluate( t + 0.25f );    // 6時を起点とする
 
         timeText_.text = string.Format( "{0:00}:{1:00}", getHour(), getMin() );
+    }
+
+    // Update is called once per frame
+    void Update () {
+        if ( bActive_ == false )
+            return;
+
+        float deltaSec = ( 86400 / secPerDay_ ) * Time.deltaTime;
+
+        innerUpdate( deltaSec );
 
         if ( state_ != null )
             state_ = state_.update();
@@ -149,4 +176,5 @@ public class SunManager : MonoBehaviour {
     float curGameSec_ = 0.0f;
     float curElapsedSec_ = 0.0f;
     State state_;
+    bool bActive_;
 }

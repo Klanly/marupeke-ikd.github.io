@@ -5,9 +5,21 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
     [SerializeField]
+    TitleManager titleManager_;
+
+    [SerializeField]
     SunManager sunManager_;
 
     [SerializeField]
+    Transform passengerRoot_;
+
+    [SerializeField]
+    UnityStandardAssets.ImageEffects.Blur blur_;
+
+    [SerializeField]
+    RectTransform uiCanvas_;
+
+    [ SerializeField]
     HumanRule humanWalkRule_;
 
     [SerializeField]
@@ -61,6 +73,49 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     bool debugEmitActive_ = true;
 
+    // ゲームを初期状態に戻す
+    void resetAll()
+    {
+        sunManager_.resetAll();
+        uiCanvas_.gameObject.SetActive( false );
+        shipWarningUpBrinker_.setActive( false );
+        shipWarningDownBrinker_.setActive( false );
+        foreach ( var rule in passengerRule_ ) {
+            rule.resetAll();
+        }
+        foreach ( var b in bridges_ ) {
+            b.resetAll();
+        }
+        bGameOver_ = false;
+        bUpdateGame_ = false;
+
+        foreach( Transform passanger in passengerRoot_.transform ) {
+            Destroy( passanger.gameObject );
+        }
+        gameOverImage_.gameObject.SetActive( false );
+        foreach ( var hb in holdButtons_ ) {
+            hb.resetAll();
+        }
+    }
+
+    // ゲーム開始
+    void start()
+    {
+        bUpdateGame_ = true;
+        sunManager_.resetAll();
+        sunManager_.setActive();
+        uiCanvas_.gameObject.SetActive( true );
+        foreach ( var rule in passengerRule_ ) {
+            rule.resetAll();
+            rule.setActive();
+        }
+        foreach ( var b in bridges_ ) {
+            b.resetAll();
+            b.setActive();
+        }
+        bridgeButtons_.SetActive( true );
+    }
+
     // 太陽マネージャを取得
     public SunManager getSunManager()
     {
@@ -92,6 +147,8 @@ public class GameManager : MonoBehaviour {
 
     private void Awake()
     {
+        titleManager_.initialize();
+
         humanWalkRule_.setup( this );
         humanRunRule_.setup( this );
         shipRule_.setup( this );
@@ -99,6 +156,10 @@ public class GameManager : MonoBehaviour {
         passengerRule_[ 0 ] = humanWalkRule_;
         passengerRule_[ 1 ] = humanRunRule_;
         passengerRule_[ 2 ] = shipRule_;
+
+        uiCanvas_.gameObject.SetActive( false );
+
+        state_ = new State_Title( this );
     }
 
     // Use this for initialization
@@ -117,7 +178,7 @@ public class GameManager : MonoBehaviour {
             bridges_[ 3 ].switchOn();
         };
 
-        // 船接近警告イメージ
+        // 船接近警告イメージ初期化
         shipWarningUpBrinker_.setup( shipWarningUpImage_, 0.25f, 0.10f, 35, true, false );
         shipWarningDownBrinker_.setup( shipWarningDownImage_, 0.25f, 0.10f, 35, true, false );
 
@@ -139,6 +200,7 @@ public class GameManager : MonoBehaviour {
                 return;
             var ship = passengerFactory_.create( Passenger.Type.Ship );
             ship.setup( this );
+            ship.transform.parent = passengerRoot_;
             ship.OnMiss = ( bridgeIdx ) => {
                 // ゲームオーバーへ
                 toGameOver( bridgeIdx );
@@ -160,6 +222,8 @@ public class GameManager : MonoBehaviour {
             return;
 
         human.setup( this );
+        human.transform.parent = passengerRoot_;
+
         float posZ = Random.Range( -2.0f, 2.0f );
         float posX = -60.0f;
         if ( Random.Range( 0, 2 ) != 0 ) {
@@ -208,22 +272,23 @@ public class GameManager : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
-        debugUpdate();
-
-        // 船接近警告ブリンカー
-        shipWarningUpBrinker_.update();
-        shipWarningDownBrinker_.update();
-
         if ( state_ != null )
             state_ = state_.update();
 
-        int day = sunManager_.getDay();
-        int hour = sunManager_.getHour();
+        debugUpdate();
 
-        // 難易度調整
-        float intensity = 0.2f + ( day * 24 + hour - 6 ) * 0.05f;   // 難易度
-        foreach ( var ps in passengerRule_ ) {
-            ps.setNumPerHourIntensity( intensity );
+        if ( bUpdateGame_ == true ) {
+            // 船接近警告ブリンカー
+            shipWarningUpBrinker_.update();
+            shipWarningDownBrinker_.update();
+
+            // 難易度調整
+            int day = sunManager_.getDay();
+            int hour = sunManager_.getHour();
+            float intensity = 0.2f + ( day * 24 + hour - 6 ) * 0.05f;   // 難易度
+            foreach ( var ps in passengerRule_ ) {
+                ps.setNumPerHourIntensity( intensity );
+            }
         }
     }
 
@@ -243,6 +308,12 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    // タイトルへ戻る
+    void toTitle()
+    {
+        resetAll();
+    }
+
     class StateBase : State
     {
         public StateBase( GameManager parent )
@@ -251,6 +322,47 @@ public class GameManager : MonoBehaviour {
         }
         protected GameManager parent_;
     }
+
+    // タイトル画面中
+    class State_Title : StateBase
+    {
+        public State_Title(GameManager parent) : base( parent ) { }
+        // 内部初期化
+        override protected void innerInit()
+        {
+            parent_.titleManager_.gameObject.SetActive( true );
+            parent_.titleManager_.OnFinish = () => {
+                bFinish_ = true;
+            };
+        }
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            if ( bFinish_ == true ) {
+                return new State_MainGame( parent_ );
+            }
+            return this;
+        }
+        bool bFinish_ = false;
+    }
+
+    // ゲーム再生中
+    class State_MainGame : StateBase
+    {
+        public State_MainGame(GameManager parent) : base( parent ) { }
+        // 内部初期化
+        override protected void innerInit()
+        {
+            parent_.start();
+        }
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            return null;    // ゲームオーバーになったら遷移復帰
+        }
+    }
+
+    // ゲームオーバー前カメラズーム
     class State_CameraZoomIn : StateBase
     {
         public State_CameraZoomIn(GameManager parent, int bridgeIndex ) : base( parent ) {
@@ -305,8 +417,12 @@ public class GameManager : MonoBehaviour {
         override protected State innerUpdate()
         {
             t_ += Time.deltaTime;
-            if ( t_ >= 5.0f )
-                return null;
+            if ( t_ >= 5.0f ) {
+                // タイトルへ
+                parent_.toTitle();
+                parent_.titleManager_.toTitle();
+                return new State_Title( parent_ );
+            }
             return this;
         }
         float t_ = 0.0f;
@@ -316,5 +432,6 @@ public class GameManager : MonoBehaviour {
     ImageBrinker shipWarningDownBrinker_ = new ImageBrinker();
     State state_;
     bool bGameOver_ = false;
+    bool bUpdateGame_ = false;
     PassengerRule[] passengerRule_ = new PassengerRule[ 3 ];
 }

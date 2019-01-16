@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BridgeBase {
+
+    // 状態を戻す
+    virtual public void resetAll()
+    {
+
+    }
+
     public void setSinkAcc( float acc )
     {
         sinkAcc_ = acc;
@@ -46,6 +53,17 @@ public class OneShotBridge : BridgeBase
     public OneShotBridge()
     {
         curState_ = riseWait;
+    }
+
+    // 状態を戻す
+    override public void resetAll()
+    {
+        curState_ = riseWait;
+        Vector3 curPos_ = Vector3.zero;
+        bRise_ = false;
+        riseVec_ = 0.0f;
+        curRiseWaitTime_ = 0.0f;
+        sinkVec_ = 0.0f;
     }
 
     override public void switchOn()
@@ -134,6 +152,17 @@ public class HoldBridge : BridgeBase
     public HoldBridge()
     {
         curState_ = riseWait;
+    }
+
+    // 状態を戻す
+    override public void resetAll()
+    {
+        curState_ = riseWait;
+        Vector3 curPos_ = Vector3.zero;
+        bRise_ = false;
+        riseVec_ = 0.0f;
+        curRiseWaitTime_ = 0.0f;
+        sinkVec_ = 0.0f;
     }
 
     override public void switchOn()
