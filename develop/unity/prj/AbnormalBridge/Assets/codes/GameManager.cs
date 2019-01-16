@@ -59,6 +59,9 @@ public class GameManager : MonoBehaviour {
     UnityEngine.UI.Text resultText_;
 
     [SerializeField]
+    AudioSource gameBgm_;
+
+    [SerializeField]
     bool debugCreateHuman_ = false;
 
     [SerializeField]
@@ -78,7 +81,9 @@ public class GameManager : MonoBehaviour {
     {
         sunManager_.resetAll();
         uiCanvas_.gameObject.SetActive( false );
+        shipWarningUpBrinker_.reset();
         shipWarningUpBrinker_.setActive( false );
+        shipWarningDownBrinker_.reset();
         shipWarningDownBrinker_.setActive( false );
         foreach ( var rule in passengerRule_ ) {
             rule.resetAll();
@@ -114,6 +119,8 @@ public class GameManager : MonoBehaviour {
             b.setActive();
         }
         bridgeButtons_.SetActive( true );
+
+        gameBgm_.Play();
     }
 
     // 太陽マネージャを取得
@@ -137,10 +144,10 @@ public class GameManager : MonoBehaviour {
     public void warningShipApproaching( bool isUpper )
     {
         if (isUpper == true) {
-            shipWarningUpBrinker_.reset();
+            shipWarningUpBrinker_.switchOn();
             shipWarningUpBrinker_.setActive( true );
         } else {
-            shipWarningDownBrinker_.reset();
+            shipWarningDownBrinker_.switchOn();
             shipWarningDownBrinker_.setActive( true );
         }
     }
@@ -277,11 +284,11 @@ public class GameManager : MonoBehaviour {
 
         debugUpdate();
 
-        if ( bUpdateGame_ == true ) {
-            // 船接近警告ブリンカー
-            shipWarningUpBrinker_.update();
-            shipWarningDownBrinker_.update();
+        // 船接近警告ブリンカー
+        shipWarningUpBrinker_.update();
+        shipWarningDownBrinker_.update();
 
+        if ( bUpdateGame_ == true ) {
             // 難易度調整
             int day = sunManager_.getDay();
             int hour = sunManager_.getHour();
@@ -305,6 +312,12 @@ public class GameManager : MonoBehaviour {
             else
                 resultText_.text = string.Format( "{0}Days {1:00}:{2:00}", day, hour, min );
             state_ = new State_CameraZoomIn( this, bridgeIndex );
+
+            gameBgm_.Stop();
+            shipWarningUpBrinker_.reset();
+            shipWarningUpBrinker_.setActive( false );
+            shipWarningDownBrinker_.reset();
+            shipWarningDownBrinker_.setActive( false );
         }
     }
 

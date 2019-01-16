@@ -22,11 +22,21 @@ public class ImageBrinker {
         state_ = null;
     }
 
+    // スイッチON（ブリンク開始）
+    public void switchOn()
+    {
+        image_.gameObject.SetActive( false );
+        state_ = transShow;
+        count_ = 0;
+
+    }
+
     // リセット
     public void reset()
     {
-        // 最初に戻す
-        state_ = transShow;
+        // 待機状態に戻す
+        image_.gameObject.SetActive( false );
+        state_ = null;
         count_ = 0;
     }
 
@@ -50,8 +60,10 @@ public class ImageBrinker {
     }
 
     public void update() {
-        if ( bActive_ == true && state_ != null )
-            state_();
+        if ( bActive_) {
+            if ( state_ != null )
+                state_();
+        }
     }
 
     void transShow()
@@ -92,8 +104,10 @@ public class ImageBrinker {
 
     void wait()
     {
-        if ( bLoop_ == false )
+        if ( bLoop_ == false ) {
+            state_ = null;
             return;
+        }
 
         t_ += Time.deltaTime;
         if ( t_ >= intervalSecBetweenOneSet_ ) {

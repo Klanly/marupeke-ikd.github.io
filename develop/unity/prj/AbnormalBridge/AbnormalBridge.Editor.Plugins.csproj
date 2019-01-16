@@ -323,6 +323,7 @@
     <Compile Include="Assets\Standard Assets\Editor\ImageEffects\VignetteAndChromaticAberrationEditor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Fonts\font_copyright.fnt" />
     <None Include="Assets\Fonts\font_percent.fnt" />
     <None Include="Assets\Fonts\font_result.fnt" />
     <None Include="Assets\Fonts\font_time.fnt" />

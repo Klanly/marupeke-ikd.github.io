@@ -7,6 +7,12 @@ public class HoldButton : MonoBehaviour {
     [SerializeField]
     int count_ = 0;
 
+    [SerializeField]
+    AudioSource se_on;
+
+    [SerializeField]
+    AudioSource se_off;
+
     public System.Action OnPush { set { onPush_ = value; } }
     System.Action onPush_ = null;
 
@@ -29,6 +35,7 @@ public class HoldButton : MonoBehaviour {
         entryOff.eventID = UnityEngine.EventSystems.EventTriggerType.PointerUp;
         entryOff.callback.AddListener( (x) => {
             buttonOn_ = false;
+            se_off.Play();
         } );
         eventTrigger.triggers.Add( entryOff );
 
@@ -38,9 +45,14 @@ public class HoldButton : MonoBehaviour {
     private void Update()
     {
         if ( buttonOn_ == true ) {
+            if ( count_ == 0 ) {
+                se_on.Play();
+            }
             count_++;
             if ( onPush_ != null )
                 onPush_();
+        } else {
+            count_ = 0;
         }
     }
 

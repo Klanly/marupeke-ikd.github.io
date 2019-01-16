@@ -8,6 +8,9 @@ public class TitleManager : MonoBehaviour {
     UnityEngine.UI.Image logo_;
 
     [SerializeField]
+    UnityEngine.UI.Text copyRightText_;
+
+    [SerializeField]
     UnityStandardAssets.ImageEffects.BlurOptimized blur_;
 
     [SerializeField]
@@ -34,6 +37,7 @@ public class TitleManager : MonoBehaviour {
     public void toTitle()
     {
         logo_.gameObject.SetActive( true );
+        copyRightText_.gameObject.SetActive( true );
         state_ = new State_ToTitle( this );
     }
 
@@ -75,9 +79,10 @@ public class TitleManager : MonoBehaviour {
         override protected State innerUpdate()
         {
             t_ += Time.deltaTime;
-            parent_.blur_.blurSize = Mathf.Lerp( 0.0f, parent_.blurSpread_, t_ / time_ );
-            parent_.camera_.transform.position = Vector3.Slerp( parent_.mainCameraPosObj_.transform.position, cameraPos_, 1.0f - t_ / time_ );
-            parent_.camera_.transform.rotation = Quaternion.Slerp( parent_.mainCameraPosObj_.transform.rotation, cameraRot_, 1.0f - t_ / time_ );
+            float t2 = Mathf.SmoothStep( 0.0f, 1.0f, t_ / time_ );
+            parent_.blur_.blurSize = Mathf.Lerp( 0.0f, parent_.blurSpread_, t2 );
+            parent_.camera_.transform.position = Vector3.Slerp( cameraPos_, parent_.mainCameraPosObj_.transform.position, t2 );
+            parent_.camera_.transform.rotation = Quaternion.Slerp( cameraRot_, parent_.mainCameraPosObj_.transform.rotation, t2 );
             if ( t_ >= time_ )
                 return new State_Idle( parent_ );
             return this;
@@ -124,15 +129,17 @@ public class TitleManager : MonoBehaviour {
             // メインカメラをゲームのアングルへ移動
             // またブラーの数値を0にして最後にOFFにする
             parent_.logo_.gameObject.SetActive( false );
+            parent_.copyRightText_.gameObject.SetActive( false );
         }
 
         // 内部状態
         override protected State innerUpdate()
         {
             t_ += Time.deltaTime;
-            parent_.blur_.blurSize = Mathf.Lerp( parent_.blurSpread_, 0.0f, t_ / time_ );
-            parent_.camera_.transform.position = Vector3.Slerp( parent_.mainCameraPosObj_.transform.position, parent_.mainCameraPos_, t_ / time_ );
-            parent_.camera_.transform.rotation = Quaternion.Slerp( parent_.mainCameraPosObj_.transform.rotation, parent_.mainCameraRot_, t_ / time_ );
+            float t2 = Mathf.SmoothStep( 0.0f, 1.0f, t_ / time_ );
+            parent_.blur_.blurSize = Mathf.Lerp( parent_.blurSpread_, 0.0f, t2 );
+            parent_.camera_.transform.position = Vector3.Slerp( parent_.mainCameraPosObj_.transform.position, parent_.mainCameraPos_, t2 );
+            parent_.camera_.transform.rotation = Quaternion.Slerp( parent_.mainCameraPosObj_.transform.rotation, parent_.mainCameraRot_, t2 );
 
             if ( t_ >= time_ ) {
                 parent_.blur_.enabled = false;

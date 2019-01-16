@@ -281,6 +281,7 @@
     <Compile Include="Assets\Standard Assets\Effects\ImageEffects\Scripts\Vortex.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Fonts\font_copyright.fnt" />
     <None Include="Assets\Fonts\font_percent.fnt" />
     <None Include="Assets\Fonts\font_result.fnt" />
     <None Include="Assets\Fonts\font_time.fnt" />

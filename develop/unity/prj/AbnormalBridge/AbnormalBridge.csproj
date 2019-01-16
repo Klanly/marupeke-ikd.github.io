@@ -249,6 +249,7 @@
   <ItemGroup>
     <Compile Include="Assets\codes\Bridge.cs" />
     <Compile Include="Assets\codes\BridgeBase.cs" />
+    <Compile Include="Assets\codes\BridgeSound.cs" />
     <Compile Include="Assets\codes\CameraFrick.cs" />
     <Compile Include="Assets\codes\common\Bezier.cs" />
     <Compile Include="Assets\codes\common\ImageBillboarding.cs" />
@@ -260,6 +261,7 @@
     <Compile Include="Assets\codes\Human.cs" />
     <Compile Include="Assets\codes\HumanRule.cs" />
     <Compile Include="Assets\codes\ImageBrinker.cs" />
+    <Compile Include="Assets\codes\NormalButton.cs" />
     <Compile Include="Assets\codes\Passenger.cs" />
     <Compile Include="Assets\codes\PassengerFactory.cs" />
     <Compile Include="Assets\codes\PassengerRule.cs" />
@@ -270,6 +272,7 @@
     <Compile Include="Assets\codes\ZoomInCamera.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Fonts\font_copyright.fnt" />
     <None Include="Assets\Fonts\font_percent.fnt" />
     <None Include="Assets\Fonts\font_result.fnt" />
     <None Include="Assets\Fonts\font_time.fnt" />
