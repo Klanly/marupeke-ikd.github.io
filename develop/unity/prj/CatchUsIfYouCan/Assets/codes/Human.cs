@@ -11,7 +11,11 @@ public class Human : SphereSurfaceObject {
     float boostRate_ = 3.0f;
 
     [SerializeField]
+    float downRate_ = 0.5f;
+
+    [SerializeField]
     float lrBoostRate_ = 3.0f;
+
 
     public enum ActionState : int
     {
@@ -35,10 +39,16 @@ public class Human : SphereSurfaceObject {
     {
         // 上キーが押されていたらスピードを上げる
         bool speedUp = Input.GetKey( KeyCode.UpArrow );
-        cont_.setSpeed( speed_ * ( speedUp ? boostRate_ : 1.0f ) );
+        bool speedDown = Input.GetKey( KeyCode.DownArrow );
+        cont_.setSpeed( speed_ * (
+                speedUp
+                ? boostRate_
+                : ( speedDown ? downRate_ : 1.0f )
+            )
+        );
 
-        // 左シフトが押されていたらLRブースト
-        bool boost = Input.GetKey( KeyCode.LeftShift );
+        // 左コントロールが押されていたらLRブースト
+        bool boost = Input.GetKey( KeyCode.LeftControl );
 
         // 左右キーが押されていたら進行方向に対して左右に少し曲がる
         float lr = 0.0f;
@@ -51,7 +61,7 @@ public class Human : SphereSurfaceObject {
         cont_.setDir( tangent );
 
         // モーションを変更
-        animatior_.SetFloat( "speed", speedUp ? 3.0f : 1.0f );
+        animatior_.SetFloat( "speed", speedUp ? 5.0f : 3.0f );
 
         base.innerUpdate();
     }

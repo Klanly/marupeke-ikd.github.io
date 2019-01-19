@@ -17,6 +17,7 @@ public class SphereSurfaceObject : MonoBehaviour {
         cont_.setDir( initDir );
         transform.position = cont_.getPos();
         transform.rotation = Quaternion.LookRotation( cont_.getForward(), cont_.getUp() );
+        setSpeed( speed_ );
     }
 
     // 速さを変更
