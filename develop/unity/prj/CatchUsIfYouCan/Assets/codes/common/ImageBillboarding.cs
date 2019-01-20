@@ -17,6 +17,6 @@ public class ImageBillboarding : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        target_.transform.rotation = Quaternion.LookRotation( Camera.main.transform.position );
+        target_.transform.rotation = Quaternion.LookRotation( Camera.main.transform.position - target_.transform.position );
 	}
 }

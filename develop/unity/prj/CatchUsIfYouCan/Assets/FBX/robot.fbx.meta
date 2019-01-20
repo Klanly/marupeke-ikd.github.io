@@ -1,33 +1,67 @@
 fileFormatVersion: 2
-guid: 8c58740cfb5d01245bce1193226e53ca
-timeCreated: 1547882825
+guid: eaa6936388a9bda49a64dc9fe980a62e
+timeCreated: 1547962777
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: Camera
-    100004: Icosphere
-    100006: Lamp
-    400000: //RootNode
-    400002: Camera
-    400004: Icosphere
-    400006: Lamp
-    2000000: Camera
-    2100000: No Name
-    2100002: Material.001
-    2300000: //RootNode
-    2300002: Icosphere
-    3300000: //RootNode
-    3300002: Icosphere
-    4300000: Icosphere
-    10800000: Lamp
+    100000: Eye
+    100002: hand
+    100004: //RootNode
+    100006: Tire
+    400000: Eye
+    400002: hand
+    400004: //RootNode
+    400006: Tire
+    2100000: body
+    2100002: tire
+    2100004: wheel_axis
+    2100006: hand
+    2100008: eye_side
+    2100010: eye
+    2300000: Eye
+    2300002: hand
+    2300004: //RootNode
+    2300006: Tire
+    3300000: Eye
+    3300002: hand
+    3300004: //RootNode
+    3300006: Tire
+    4300000: Body
+    4300002: Tire
+    4300004: hand
+    4300006: Eye
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Material.001
-    second: {fileID: 2100000, guid: c011c6d4763d1ba4180be594c8d03706, type: 2}
+      name: body
+    second: {fileID: 2100000, guid: 57aea7b9af246bc479294abcc2bb008c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: eye
+    second: {fileID: 2100000, guid: f8f3f1336121ad94ca22f122fd217b74, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: eye_side
+    second: {fileID: 2100000, guid: 5e9aeffd3326d374ab0d6c9853c471cb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: hand
+    second: {fileID: 2100000, guid: 0a33bf7b8ada5f44ea1a00bc4f10b57c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: tire
+    second: {fileID: 2100000, guid: f882ec79cf461204b9e2a2f8c145a66b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wheel_axis
+    second: {fileID: 2100000, guid: 1ddf13d4fb024ed4f8635ddb5f039a1e, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

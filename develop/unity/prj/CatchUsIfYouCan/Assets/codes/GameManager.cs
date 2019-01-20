@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour {
     BulletFactory bulletFactory_;
 
     [SerializeField]
+    EnemyFactory enemyFactory_;
+
+    [SerializeField]
     FieldFactory fieldFactory_;
 
     [SerializeField]
@@ -43,21 +46,32 @@ public class GameManager : MonoBehaviour {
         camera_.transform.localRotation = Quaternion.LookRotation( -camera_.transform.localPosition + new Vector3( 0.0f, 0.0f, 10.0f ) );
 
         // 弾テスト
-        //  適当に50発位あちこちに
+        //  適当にあちこちに
         int num = 150;
         for ( int i = 0; i < num; ++i ) {
             var bullet = bulletFactory_.create();
-            bullet.transform.parent = objectRoot_.transform;
             bullet.transform.parent = objectRoot_.transform;
             bullet.transform.localPosition = Vector3.zero;
             var bpos = SphereSurfUtil.randomPos( Random.value, Random.value );
             var v = SphereSurfUtil.randomPos( Random.value, Random.value );
             bullet.setup( field_.getRadius(), bpos, v );
         }
+
+        // 敵テスト
+        //  適当にあちこちに
+        int enNum = 30;
+        for ( int i = 0; i < enNum; ++i ) {
+            var enemy = enemyFactory_.createRobot();
+            enemy.transform.parent = objectRoot_.transform;
+            enemy.transform.localPosition = Vector3.zero;
+            var bpos = SphereSurfUtil.randomPos( Random.value, Random.value );
+            var v = SphereSurfUtil.randomPos( Random.value, Random.value );
+            enemy.setup( field_.getRadius(), bpos, v );
+        }
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
  	}
 
     Human human_;
