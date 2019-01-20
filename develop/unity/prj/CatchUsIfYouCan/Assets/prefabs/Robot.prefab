@@ -443,7 +443,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed_: 50
-  lrSpeed_: 1
+  lrSpeed_: 70
+  escapeRegion_: 50
+  minEscapeSec_: 1
+  escapeSecRange_: 3
 --- !u!212 &212718000079287578
 SpriteRenderer:
   m_ObjectHideFlags: 1

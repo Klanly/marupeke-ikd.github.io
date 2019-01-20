@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour {
             var bpos = SphereSurfUtil.randomPos( Random.value, Random.value );
             var v = SphereSurfUtil.randomPos( Random.value, Random.value );
             enemy.setup( field_.getRadius(), bpos, v );
+            enemy.Human = human_;
         }
     }
 
