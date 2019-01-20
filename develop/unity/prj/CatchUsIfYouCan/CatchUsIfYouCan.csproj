@@ -255,6 +255,7 @@
     <Compile Include="Assets\codes\GameManager.cs" />
     <Compile Include="Assets\codes\Human.cs" />
     <Compile Include="Assets\codes\NormalBullet.cs" />
+    <Compile Include="Assets\codes\PatoLamp.cs" />
     <Compile Include="Assets\codes\Robot.cs" />
     <Compile Include="Assets\codes\SphereField.cs" />
     <Compile Include="Assets\codes\SphereSurfaceController.cs" />
