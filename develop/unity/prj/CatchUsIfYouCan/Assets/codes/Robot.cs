@@ -16,6 +16,12 @@ public class Robot : SphereSurfaceObject {
     [SerializeField]
     float escapeSecRange_ = 3.0f;
 
+    [SerializeField]
+    float catchDist_ = 1.0f;
+
+    [SerializeField]
+    GameObject treasure_;
+
     public Human Human { set { human_ = value; } }
 
 	// Use this for initialization
@@ -85,7 +91,8 @@ public class Robot : SphereSurfaceObject {
         override protected State innerUpdate()
         {
             // Humanが離れたら通常に
-            if ( parent_.calcDistFromHuman() >= parent_.escapeRegion_ )
+            float dist = parent_.calcDistFromHuman();
+            if ( dist >= parent_.escapeRegion_ )
                 return new Normal( parent_ );
 
             // 指定時間追われ続けていると判断
@@ -97,6 +104,12 @@ public class Robot : SphereSurfaceObject {
             }
 
             curState_();
+
+            // Humanとの距離が拿捕距離以内になったら拿捕
+            if ( dist <= parent_.catchDist_ ) {
+                parent_.human_.catchMe( parent_.treasure_ );
+                Destroy( parent_.gameObject );
+            }
 
             return this;
         }

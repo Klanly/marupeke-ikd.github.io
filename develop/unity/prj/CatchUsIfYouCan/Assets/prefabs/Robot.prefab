@@ -444,9 +444,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed_: 50
   lrSpeed_: 70
+  escapeSpeed_: 90
   escapeRegion_: 50
   minEscapeSec_: 1
   escapeSecRange_: 3
+  catchDist_: 4
+  treasure_: {fileID: 1782770936860198}
 --- !u!212 &212718000079287578
 SpriteRenderer:
   m_ObjectHideFlags: 1
