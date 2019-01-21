@@ -46,6 +46,12 @@ public class Human : SphereSurfaceObject {
         ActionState_Run = 1
     }
 
+    // 速さを取得
+    override public float getSpeed()
+    {
+        return curSpeed_;
+    }
+
     // 行動変更
     public void setAction( ActionState state )
     {
@@ -103,12 +109,12 @@ public class Human : SphereSurfaceObject {
         // 上キーが押されていたらスピードを上げる
         bool speedUp = Input.GetKey( KeyCode.UpArrow );
         bool speedDown = Input.GetKey( KeyCode.DownArrow );
-        cont_.setSpeed( speed_ * (
+        curSpeed_ = speed_ * (
                 speedUp
                 ? boostRate_
                 : ( speedDown ? downRate_ : 1.0f )
-            )
-        );
+            );
+        cont_.setSpeed( curSpeed_ );
 
         // [Z]が押されていたらLRブースト
         bool boost = Input.GetKey( KeyCode.Z );
@@ -146,4 +152,5 @@ public class Human : SphereSurfaceObject {
     }
 
     bool bZeroStamina_ = false;
+    float curSpeed_ = 0.0f;
 }

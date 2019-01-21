@@ -258,6 +258,7 @@
     <Compile Include="Assets\codes\NormalBullet.cs" />
     <Compile Include="Assets\codes\PatoLamp.cs" />
     <Compile Include="Assets\codes\Robot.cs" />
+    <Compile Include="Assets\codes\RobotBoss.cs" />
     <Compile Include="Assets\codes\SphereField.cs" />
     <Compile Include="Assets\codes\SphereSurfaceController.cs" />
     <Compile Include="Assets\codes\SphereSurfaceObject.cs" />

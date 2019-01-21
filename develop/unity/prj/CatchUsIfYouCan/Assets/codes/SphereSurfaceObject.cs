@@ -27,6 +27,12 @@ public class SphereSurfaceObject : MonoBehaviour {
         speed_ = speed;
     }
 
+    // 速さを取得
+    virtual public float getSpeed()
+    {
+        return speed_;
+    }
+
     // 左右に曲がるスピードを変更
     virtual public void setLRSpeed(float speed)
     {

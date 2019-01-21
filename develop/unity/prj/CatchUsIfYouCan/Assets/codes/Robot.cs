@@ -5,7 +5,7 @@ using UnityEngine;
 public class Robot : SphereSurfaceObject {
 
     [SerializeField]
-    float escapeSpeed_ = 90.0f;
+    protected float escapeSpeed_ = 90.0f;
 
     [SerializeField]
     float escapeRegion_ = 50.0f;
@@ -20,20 +20,30 @@ public class Robot : SphereSurfaceObject {
     float catchDist_ = 1.0f;
 
     [SerializeField]
-    GameObject treasure_;
+    GameObject[] treasures_;
 
     public Human Human { set { human_ = value; } }
 
 	// Use this for initialization
 	void Start () {
-        state_ = new Normal( this );
+        initialize();
     }
 	
 	// Update is called once per frame
 	void Update () {
+        innerUpdate();
+    }
+
+    protected virtual void initialize()
+    {
+        state_ = new Normal( this );
+    }
+
+    protected override void innerUpdate()
+    {
         if ( state_ != null )
             state_ = state_.update();
-        innerUpdate();
+        base.innerUpdate();
     }
 
     float calcDistFromHuman()
@@ -107,7 +117,14 @@ public class Robot : SphereSurfaceObject {
 
             // Humanとの距離が拿捕距離以内になったら拿捕
             if ( dist <= parent_.catchDist_ ) {
-                parent_.human_.catchMe( parent_.treasure_ );
+                for ( int i = 0; i < parent_.treasures_.Length; ++i ) {
+                    var tr = parent_.treasures_[ i ];
+                    tr.transform.parent = null;
+                    GlobalState.wait( i * 0.333f, () => {
+                        parent_.human_.catchMe( tr );
+                        return false;
+                    } );
+                }
                 Destroy( parent_.gameObject );
             }
 
@@ -138,6 +155,6 @@ public class Robot : SphereSurfaceObject {
         float t_ = 0.0f;
     }
 
-    Human human_;
+    protected Human human_;
     State state_;
 }

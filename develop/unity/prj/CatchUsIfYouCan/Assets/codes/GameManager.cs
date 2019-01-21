@@ -73,6 +73,15 @@ public class GameManager : MonoBehaviour {
             enemy.setup( field_.getRadius(), bpos, v );
             enemy.Human = human_;
         }
+
+        // ボステスト
+        var boss = enemyFactory_.createBoss();
+        boss.transform.parent = objectRoot_.transform;
+        boss.transform.localPosition = Vector3.zero;
+        var bossPos = SphereSurfUtil.randomPos( Random.value, Random.value );
+        var bossDir = SphereSurfUtil.randomPos( Random.value, Random.value );
+        boss.setup( field_.getRadius(), bossPos, bossDir );
+        boss.Human = human_;
     }
 
     // Update is called once per frame
