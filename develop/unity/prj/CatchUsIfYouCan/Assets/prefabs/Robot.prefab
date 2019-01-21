@@ -451,6 +451,8 @@ MonoBehaviour:
   catchDist_: 4
   treasures_:
   - {fileID: 1782770936860198}
+  markerPrefab_: {fileID: 114293143588879302, guid: 2f0e577dc994d29499a3528d19021035,
+    type: 2}
 --- !u!212 &212718000079287578
 SpriteRenderer:
   m_ObjectHideFlags: 1

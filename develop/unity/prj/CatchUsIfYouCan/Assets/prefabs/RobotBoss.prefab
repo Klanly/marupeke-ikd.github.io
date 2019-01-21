@@ -673,6 +673,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target_: {fileID: 1706258361130720}
+  useCameraUp_: 0
 --- !u!114 &114162124828190246
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -685,6 +686,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target_: {fileID: 1805870599485512}
+  useCameraUp_: 0
 --- !u!114 &114170674805435130
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -709,6 +711,8 @@ MonoBehaviour:
   - {fileID: 1706258361130720}
   - {fileID: 1805870599485512}
   - {fileID: 1034864796155032}
+  markerPrefab_: {fileID: 114760980922537766, guid: 654ddfff83e64ca46b7c65b56f2d79ca,
+    type: 2}
   relativeSpeedToHuman_: 0.92
 --- !u!114 &114454292185723926
 MonoBehaviour:
@@ -722,6 +726,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target_: {fileID: 1894441637372274}
+  useCameraUp_: 0
 --- !u!114 &114612091688472478
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -734,6 +739,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target_: {fileID: 1034864796155032}
+  useCameraUp_: 0
 --- !u!114 &114883623871328876
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -746,6 +752,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target_: {fileID: 1379118959075878}
+  useCameraUp_: 0
 --- !u!212 &212289892174946660
 SpriteRenderer:
   m_ObjectHideFlags: 1

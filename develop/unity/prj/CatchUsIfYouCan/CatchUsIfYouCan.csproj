@@ -252,6 +252,7 @@
     <Compile Include="Assets\codes\common\SphereSurfUtil.cs" />
     <Compile Include="Assets\codes\common\State.cs" />
     <Compile Include="Assets\codes\EnemyFactory.cs" />
+    <Compile Include="Assets\codes\EnemyMarker.cs" />
     <Compile Include="Assets\codes\FieldFactory.cs" />
     <Compile Include="Assets\codes\GameManager.cs" />
     <Compile Include="Assets\codes\Human.cs" />

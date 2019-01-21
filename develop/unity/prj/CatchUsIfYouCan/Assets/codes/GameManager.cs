@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour {
 
         // 敵テスト
         //  適当にあちこちに
-        int enNum = 30;
+        int enNum = 16;
         for ( int i = 0; i < enNum; ++i ) {
             var enemy = enemyFactory_.createRobot();
             enemy.transform.parent = objectRoot_.transform;

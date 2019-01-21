@@ -22,6 +22,10 @@ public class Robot : SphereSurfaceObject {
     [SerializeField]
     GameObject[] treasures_;
 
+    [SerializeField]
+    EnemyMarker markerPrefab_;
+
+
     public Human Human { set { human_ = value; } }
 
 	// Use this for initialization
@@ -36,6 +40,12 @@ public class Robot : SphereSurfaceObject {
 
     protected virtual void initialize()
     {
+        marker_ = Instantiate<EnemyMarker>( markerPrefab_ );
+        marker_.transform.parent = transform;
+        marker_.transform.localPosition = Vector3.zero;
+        marker_.Radius = radius_ + 25.0f;
+        marker_.Target = transform;
+        marker_.Human = human_;
         state_ = new Normal( this );
     }
 
@@ -157,4 +167,5 @@ public class Robot : SphereSurfaceObject {
 
     protected Human human_;
     State state_;
+    EnemyMarker marker_;
 }

@@ -18,6 +18,8 @@ public class SphereSurfaceObject : MonoBehaviour {
         transform.position = cont_.getPos();
         transform.rotation = Quaternion.LookRotation( cont_.getForward(), cont_.getUp() );
         setSpeed( speed_ );
+
+        radius_ = r;
     }
 
     // 速さを変更
@@ -58,4 +60,5 @@ public class SphereSurfaceObject : MonoBehaviour {
 	}
 
     protected SphereSurfaceController cont_ = new SphereSurfaceController();
+    protected float radius_ = 0.0f;
 }

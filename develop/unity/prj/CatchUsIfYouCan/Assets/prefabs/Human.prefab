@@ -742,7 +742,7 @@ MonoBehaviour:
   boostRate_: 2
   downRate_: 0.5
   lrBoostRate_: 2
-  initHP_: 12000
+  initHP_: 18000
   curHP_: 0
   normalRunStamina_: 1
   overRunStamina_: 2
@@ -759,6 +759,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target_: {fileID: 1887519907409342}
+  useCameraUp_: 0
 --- !u!114 &114847605153348848
 MonoBehaviour:
   m_ObjectHideFlags: 1
