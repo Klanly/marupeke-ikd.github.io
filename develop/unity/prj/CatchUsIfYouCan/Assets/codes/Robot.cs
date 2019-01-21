@@ -27,6 +27,7 @@ public class Robot : SphereSurfaceObject {
 
 
     public Human Human { set { human_ = value; } }
+    public System.Action< CollideType > CatchCallback { set { catchCallback_ = value; } }
 
 	// Use this for initialization
 	void Start () {
@@ -135,6 +136,9 @@ public class Robot : SphereSurfaceObject {
                         return false;
                     } );
                 }
+                if ( parent_.catchCallback_ != null )
+                    parent_.catchCallback_( parent_.collideType_ );
+
                 Destroy( parent_.gameObject );
             }
 
@@ -168,4 +172,6 @@ public class Robot : SphereSurfaceObject {
     protected Human human_;
     State state_;
     EnemyMarker marker_;
+    System.Action<CollideType> catchCallback_;
+    protected CollideType collideType_ = CollideType.CT_Enemy;
 }

@@ -10,6 +10,7 @@ public class RobotBoss : Robot {
 
 	// Use this for initialization
 	void Start () {
+        collideType_ = CollideType.CT_Boss;
         normalSpeed_ = getSpeed();
         initialize();		
 	}

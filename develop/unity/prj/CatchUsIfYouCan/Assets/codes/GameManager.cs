@@ -63,8 +63,8 @@ public class GameManager : MonoBehaviour {
 
         // 敵テスト
         //  適当にあちこちに
-        int enNum = 16;
-        for ( int i = 0; i < enNum; ++i ) {
+        remainEnemyNum_ = 16;
+        for ( int i = 0; i < remainEnemyNum_; ++i ) {
             var enemy = enemyFactory_.createRobot();
             enemy.transform.parent = objectRoot_.transform;
             enemy.transform.localPosition = Vector3.zero;
@@ -72,16 +72,29 @@ public class GameManager : MonoBehaviour {
             var v = SphereSurfUtil.randomPos( Random.value, Random.value );
             enemy.setup( field_.getRadius(), bpos, v );
             enemy.Human = human_;
+            enemy.CatchCallback = catchEnemy;
         }
+    }
 
-        // ボステスト
-        var boss = enemyFactory_.createBoss();
-        boss.transform.parent = objectRoot_.transform;
-        boss.transform.localPosition = Vector3.zero;
-        var bossPos = SphereSurfUtil.randomPos( Random.value, Random.value );
-        var bossDir = SphereSurfUtil.randomPos( Random.value, Random.value );
-        boss.setup( field_.getRadius(), bossPos, bossDir );
-        boss.Human = human_;
+    void catchEnemy( CollideType type )
+    {
+        if ( type == CollideType.CT_Enemy ) {
+            remainEnemyNum_--;
+            if ( remainEnemyNum_ == 0 ) {
+                // ボス出現
+                var boss = enemyFactory_.createBoss();
+                boss.transform.parent = objectRoot_.transform;
+                boss.transform.localPosition = Vector3.zero;
+                var bossPos = SphereSurfUtil.randomPos( Random.value, Random.value );
+                var bossDir = SphereSurfUtil.randomPos( Random.value, Random.value );
+                boss.setup( field_.getRadius(), bossPos, bossDir );
+                boss.Human = human_;
+                boss.CatchCallback = catchEnemy;
+            }
+        }
+        else if ( type == CollideType.CT_Boss ) {
+            // ボスを確保！
+        }
     }
 
     // Update is called once per frame
@@ -92,4 +105,5 @@ public class GameManager : MonoBehaviour {
 
     Human human_;
     SphereField field_;
+    int remainEnemyNum_ = 0;
 }
