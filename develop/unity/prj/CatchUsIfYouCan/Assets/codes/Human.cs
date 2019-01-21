@@ -16,6 +16,29 @@ public class Human : SphereSurfaceObject {
     [SerializeField]
     float lrBoostRate_ = 3.0f;
 
+    [SerializeField]
+    float initHP_ = 6000.0f;
+
+    [SerializeField]
+    float curHP_ = 0.0f;
+
+    [SerializeField]
+    float normalRunStamina_ = 60.0f;    // 通常走行時に1フレームで減るスタミナ
+
+    [SerializeField]
+    float overRunStamina_ = 180.0f;     // オーバーラン走行時に1フレームで減るスタミナ
+
+    [SerializeField]
+    float normalMissileDamage_ = 1600.0f;   // 通常ミサイルに衝突した時のダメージ
+
+
+    public System.Action StaminaZeroCallback { set { zeroStaminaCallback_ = value; } }
+    System.Action zeroStaminaCallback_;
+
+    private void Awake()
+    {
+        curHP_ = initHP_;
+    }
 
     public enum ActionState : int
     {
@@ -51,6 +74,21 @@ public class Human : SphereSurfaceObject {
         } );
     }
 
+    // スタミナレートを取得
+    public float getStaminaRate()
+    {
+        return curHP_ / initHP_;
+    }
+
+    // 衝突報告
+    public void onCollide( CollideType colType )
+    {
+        if ( colType == CollideType.CT_NormalMissile ) {
+            // スタミナを減らす
+            curHP_ -= normalMissileDamage_;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -59,6 +97,9 @@ public class Human : SphereSurfaceObject {
 
     override protected void innerUpdate()
     {
+        if ( bZeroStamina_ == true )
+            return;
+
         // 上キーが押されていたらスピードを上げる
         bool speedUp = Input.GetKey( KeyCode.UpArrow );
         bool speedDown = Input.GetKey( KeyCode.DownArrow );
@@ -69,8 +110,8 @@ public class Human : SphereSurfaceObject {
             )
         );
 
-        // 左コントロールが押されていたらLRブースト
-        bool boost = Input.GetKey( KeyCode.LeftControl );
+        // [Z]が押されていたらLRブースト
+        bool boost = Input.GetKey( KeyCode.Z );
 
         // 左右キーが押されていたら進行方向に対して左右に少し曲がる
         float lr = 0.0f;
@@ -85,7 +126,24 @@ public class Human : SphereSurfaceObject {
         // モーションを変更
         animatior_.SetFloat( "speed", speedUp ? 5.0f : 3.0f );
 
+        // スタミナを減少
+        if ( speedUp == true ) {
+            curHP_ -= overRunStamina_;
+        } else {
+            curHP_ -= normalRunStamina_;
+        }
+        if ( bZeroStamina_ == false && curHP_ <= 0.0f ) {
+            curHP_ = 0.0f;
+            bZeroStamina_ = true;
+            if ( zeroStaminaCallback_ != null )
+                zeroStaminaCallback_();
+
+            // モーションを変更
+            setAction( ActionState.ActionState_Idle );
+        }
+
         base.innerUpdate();
     }
 
+    bool bZeroStamina_ = false;
 }

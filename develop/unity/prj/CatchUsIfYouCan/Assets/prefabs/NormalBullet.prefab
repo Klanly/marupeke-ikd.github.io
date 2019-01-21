@@ -257,6 +257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed_: 70
   lrSpeed_: 1
+  collisionRadius_: 2
 --- !u!114 &114588233026427924
 MonoBehaviour:
   m_ObjectHideFlags: 1

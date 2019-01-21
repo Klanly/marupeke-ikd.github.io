@@ -443,7 +443,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed_: 50
-  lrSpeed_: 70
+  lrSpeed_: 0
   escapeSpeed_: 90
   escapeRegion_: 50
   minEscapeSec_: 1

@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     Camera camera_;
 
+    [SerializeField]
+    UIGauge gauge_;
+
 	// Use this for initialization
 	void Start () {
         field_ = Instantiate<SphereField>( fieldPrefab_ );
@@ -55,6 +58,7 @@ public class GameManager : MonoBehaviour {
             var bpos = SphereSurfUtil.randomPos( Random.value, Random.value );
             var v = SphereSurfUtil.randomPos( Random.value, Random.value );
             bullet.setup( field_.getRadius(), bpos, v );
+            bullet.Human = human_;
         }
 
         // 敵テスト
@@ -73,7 +77,9 @@ public class GameManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
- 	}
+        gauge_.setLevel( human_.getStaminaRate() );
+
+     }
 
     Human human_;
     SphereField field_;

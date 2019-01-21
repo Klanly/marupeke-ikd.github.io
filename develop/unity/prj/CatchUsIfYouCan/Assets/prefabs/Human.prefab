@@ -742,6 +742,10 @@ MonoBehaviour:
   boostRate_: 2
   downRate_: 0.5
   lrBoostRate_: 2
+  initHP_: 12000
+  curHP_: 0
+  normalRunStamina_: 1
+  overRunStamina_: 3
 --- !u!114 &114553947088879070
 MonoBehaviour:
   m_ObjectHideFlags: 1

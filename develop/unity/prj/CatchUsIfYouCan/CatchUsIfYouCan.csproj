@@ -244,6 +244,7 @@
     <Compile Include="Assets\codes\BoosterMotion.cs" />
     <Compile Include="Assets\codes\Bullet.cs" />
     <Compile Include="Assets\codes\BulletFactory.cs" />
+    <Compile Include="Assets\codes\CollideType.cs" />
     <Compile Include="Assets\codes\common\Bezier.cs" />
     <Compile Include="Assets\codes\common\GlobalStateManager.cs" />
     <Compile Include="Assets\codes\common\ImageBillboarding.cs" />
@@ -261,6 +262,7 @@
     <Compile Include="Assets\codes\SphereSurfaceController.cs" />
     <Compile Include="Assets\codes\SphereSurfaceObject.cs" />
     <Compile Include="Assets\codes\TreasureFactory.cs" />
+    <Compile Include="Assets\codes\UIGauge.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
