@@ -26,6 +26,13 @@ public class UIIntroColorAnimation : MonoBehaviour {
     public AnimationCurve b_ = new AnimationCurve( new Keyframe( 0.0f, 1.0f ), new Keyframe( 1.0f, 1.0f ) );
     public AnimationCurve a_ = new AnimationCurve( new Keyframe( 0.0f, 1.0f ), new Keyframe( 1.0f, 1.0f ) );
 
+    [SerializeField]
+    bool useAutoDestroy_ = false;
+
+    [SerializeField]
+    float destroyWait_ = 0.0f;
+
+
     enum BlendType
     {
         Absolute,   // 上書き
@@ -55,6 +62,9 @@ public class UIIntroColorAnimation : MonoBehaviour {
             float vB = animB.Evaluate( t_ );
             float vA = animA.Evaluate( t_ );
             callback( vR, vG, vB, vA );
+            if ( t_ >= end_ && useAutoDestroy_ == true ) {
+                Destroy( this.gameObject, destroyWait_ );
+            }
             return !( t_ >= end_ );
         } );
     }
@@ -63,7 +73,13 @@ public class UIIntroColorAnimation : MonoBehaviour {
     {
         var image = GetComponent<UnityEngine.UI.Image>();
         var c = image.color;
+
         if ( blendType_ == BlendType.Absolute ) {
+            c.r = r_.Evaluate( 0.0f );
+            c.g = g_.Evaluate( 0.0f );
+            c.b = b_.Evaluate( 0.0f );
+            c.a = a_.Evaluate( 0.0f );
+            image.color = c;
             setAnimState4( wait_, r_, g_, b_, a_, (r, g, b, a) => {
                 c.r = r;
                 c.g = g;
@@ -73,6 +89,11 @@ public class UIIntroColorAnimation : MonoBehaviour {
             } );
         } else if ( blendType_ == BlendType.Add ) {
             var c0 = c;
+            c0.r = r_.Evaluate( 0.0f );
+            c0.g = g_.Evaluate( 0.0f );
+            c0.b = b_.Evaluate( 0.0f );
+            c0.a = a_.Evaluate( 0.0f );
+            image.color = c + c0;
             setAnimState4( wait_, r_, g_, b_, a_, (r, g, b, a) => {
                 c.r = c0.r + r;
                 c.g = c0.g + g;
@@ -82,6 +103,11 @@ public class UIIntroColorAnimation : MonoBehaviour {
             } );
         } else if ( blendType_ == BlendType.Mult ) {
             var c0 = c;
+            c0.r = r_.Evaluate( 0.0f );
+            c0.g = g_.Evaluate( 0.0f );
+            c0.b = b_.Evaluate( 0.0f );
+            c0.a = a_.Evaluate( 0.0f );
+            image.color = c * c0;
             setAnimState4( wait_, r_, g_, b_, a_, (r, g, b, a) => {
                 c.r = c0.r * r;
                 c.g = c0.g * g;

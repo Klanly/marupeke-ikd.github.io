@@ -35,6 +35,9 @@ public class GameManager : MonoBehaviour {
     UIGauge gauge_;
 
     [SerializeField]
+    GameObject warning_;
+
+    [SerializeField]
     GameObject clearImage_;
 
 	// Use this for initialization
@@ -129,6 +132,11 @@ public class GameManager : MonoBehaviour {
                     boss.setup( p_.field_.getRadius(), bossPos, bossDir );
                     boss.Human = p_.human_;
                     boss.CatchCallback = catchEnemy;
+
+                    GlobalState.wait( 0.75f, () => {
+                        p_.warning_.SetActive( true );
+                        return false;
+                    } );
                 }
             } else if ( type == CollideType.CT_Boss ) {
                 // ボスを確保！

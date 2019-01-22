@@ -135,6 +135,8 @@ public class UIIntroAnimation : MonoBehaviour {
             var p = new Vector3();
             if ( scaleAsAbsolute_ == true ) {
                 setAnimState3( scaleWait_, scaleCurveX_, scaleCurveY_, scaleCurveZ_, (x, y, z) => {
+                    if ( rt == null )
+                        return;
                     p.x = x;
                     p.y = y;
                     p.z = z;
@@ -142,6 +144,8 @@ public class UIIntroAnimation : MonoBehaviour {
                 } );
             } else {
                 setAnimState3( scaleWait_, scaleCurveX_, scaleCurveY_, scaleCurveZ_, (x, y, z) => {
+                    if ( rt == null )
+                        return;
                     p.x = x * initScale.x;
                     p.y = y * initScale.y;
                     p.z = z * initScale.z;
