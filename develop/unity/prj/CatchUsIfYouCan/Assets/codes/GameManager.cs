@@ -56,7 +56,6 @@ public class GameManager : MonoBehaviour {
         camera_.transform.parent = human_.transform;
         camera_.transform.localPosition = new Vector3( 0.0f, 25.0f, -20.0f );
         camera_.transform.localRotation = Quaternion.LookRotation( -camera_.transform.localPosition + new Vector3( 0.0f, 0.0f, 10.0f ) );
-
     }
 
     private void Start()
@@ -163,9 +162,31 @@ public class GameManager : MonoBehaviour {
         override protected void innerInit()
         {
             p_.human_.setClear();
+
             GlobalState.wait( 1.0f, () => {
                 p_.clearImage_.SetActive( true );
                 return false;
+            } );
+
+            var v = p_.camera_.transform.localPosition;
+            float t0 = 0.0f;
+            float t1 = 0.0f;
+            var sl = new Vector3( 0.0f, 0.0f, 10.0f );
+            var el = Vector3.zero;
+            var pos = new Vector3( 0.0f, 25.0f, -20.0f );
+
+            GlobalState.start( () => {
+                t0 += Time.deltaTime * 1.0f;
+                t0 = Mathf.Clamp01( t0 );
+                var lp = Vector3.Lerp( sl, el, t0 );
+
+                t1 += Time.deltaTime * 20.0f;
+                t1 %= 360;
+                var q = Quaternion.AngleAxis( t1, Vector3.up );
+                var p = q * pos;
+                p_.camera_.transform.localPosition = p;
+                p_.camera_.transform.rotation = Quaternion.LookRotation( p_.human_.transform.position + lp - p_.camera_.transform.position, p_.human_.transform.up );
+                return true;
             } );
         }
 
