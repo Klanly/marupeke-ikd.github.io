@@ -127,7 +127,7 @@ public class Robot : SphereSurfaceObject {
             curState_();
 
             // Humanとの距離が拿捕距離以内になったら拿捕
-            if ( dist <= parent_.catchDist_ ) {
+            if ( parent_.human_.isLimitOfStamina() == false && dist <= parent_.catchDist_ ) {
                 for ( int i = 0; i < parent_.treasures_.Length; ++i ) {
                     var tr = parent_.treasures_[ i ];
                     tr.transform.parent = null;

@@ -40,6 +40,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     GameObject clearImage_;
 
+    [SerializeField]
+    GameObject limitStaminaImage_;
+
 	// Use this for initialization
 	void initialize () {
         field_ = Instantiate<SphereField>( fieldPrefab_ );
@@ -52,6 +55,9 @@ public class GameManager : MonoBehaviour {
         human_.transform.localPosition = Vector3.zero;
         human_.setup( field_.getRadius(), new Vector3( 0.0f, 0.0f, -1.0f ), new Vector3( 0.0f, 1.0f, 0.0f ) );
         human_.setAction( Human.ActionState.ActionState_Run );
+        human_.StaminaZeroCallback = () => {
+            limitStaminaImage_.SetActive( true );
+        };
 
         camera_.transform.parent = human_.transform;
         camera_.transform.localPosition = new Vector3( 0.0f, 25.0f, -20.0f );
@@ -174,6 +180,7 @@ public class GameManager : MonoBehaviour {
             var sl = new Vector3( 0.0f, 0.0f, 10.0f );
             var el = Vector3.zero;
             var pos = new Vector3( 0.0f, 25.0f, -20.0f );
+            var posE = new Vector3( 0.0f, 10.0f, -25.0f );
 
             GlobalState.start( () => {
                 t0 += Time.deltaTime * 1.0f;
@@ -183,7 +190,7 @@ public class GameManager : MonoBehaviour {
                 t1 += Time.deltaTime * 20.0f;
                 t1 %= 360;
                 var q = Quaternion.AngleAxis( t1, Vector3.up );
-                var p = q * pos;
+                var p = q * Vector3.Lerp( pos, posE, t0 );
                 p_.camera_.transform.localPosition = p;
                 p_.camera_.transform.rotation = Quaternion.LookRotation( p_.human_.transform.position + lp - p_.camera_.transform.position, p_.human_.transform.up );
                 return true;

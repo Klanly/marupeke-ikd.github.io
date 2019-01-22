@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class NormalBullet : Bullet {
 
+    [SerializeField]
+    GameObject explosionParticle_;
+
     // 衝突報告
     protected override void onCollide(CollideType colType)
     {
         if ( colType == CollideType.CT_Human ) {
-            // TODO:
             //  爆発演出。ちょっと派手で。
+            explosionParticle_.SetActive( true );
+            explosionParticle_.transform.parent = null;
+            Destroy( explosionParticle_, 4.0f );
 
             // オブジェクトは無くす
             Destroy( this.gameObject );

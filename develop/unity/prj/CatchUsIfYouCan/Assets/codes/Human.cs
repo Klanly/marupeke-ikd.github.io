@@ -40,6 +40,10 @@ public class Human : SphereSurfaceObject {
         curHP_ = initHP_;
     }
 
+    public bool isLimitOfStamina()
+    {
+        return ( curHP_ <= 0.0f );
+    }
     public void setClear()
     {
         bCleared_ = true;
@@ -112,6 +116,15 @@ public class Human : SphereSurfaceObject {
         if ( colType == CollideType.CT_NormalMissile ) {
             // スタミナを減らす
             curHP_ -= normalMissileDamage_;
+            // 爆発中状態に遷移
+            bExplosioning_ = true;
+            setAction( ActionState.ActionState_Idle );  // モーションを変更
+            curSpeed_ = 0.0f;
+            GlobalState.wait( 2.0f, () => {
+                bExplosioning_ = false;
+                setAction( ActionState.ActionState_Run );
+                return false;
+            } );
         }
     }
 
@@ -121,16 +134,8 @@ public class Human : SphereSurfaceObject {
         innerUpdate();
     }
 
-    override protected void innerUpdate()
+    void normalRun()
     {
-        if ( bCleared_ == true ) {
-            base.innerUpdate();
-            return;
-        }
-
-        if ( bZeroStamina_ == true )
-            return;
-
         // 上キーが押されていたらスピードを上げる
         bool speedUp = Input.GetKey( KeyCode.UpArrow );
         bool speedDown = Input.GetKey( KeyCode.DownArrow );
@@ -172,10 +177,32 @@ public class Human : SphereSurfaceObject {
             // モーションを変更
             setAction( ActionState.ActionState_Idle );
         }
+    }
+
+    void explosioning()
+    {
+        cont_.setSpeed( curSpeed_ );
+    }
+
+    override protected void innerUpdate()
+    {
+        if ( bCleared_ == true ) {
+            base.innerUpdate();
+            return;
+        }
+
+        if ( bZeroStamina_ == true )
+            return;
+
+        if ( bExplosioning_ == false )
+            normalRun();
+        else
+            explosioning();
 
         base.innerUpdate();
     }
 
+    bool bExplosioning_ = false;
     bool bZeroStamina_ = false;
     float curSpeed_ = 0.0f;
     bool bCleared_ = false;
