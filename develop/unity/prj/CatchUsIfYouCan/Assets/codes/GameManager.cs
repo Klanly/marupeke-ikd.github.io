@@ -5,6 +5,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
     [SerializeField]
+    int emitEnemyNum_ = 16;
+
+    [SerializeField]
     GameObject objectRoot_;
 
     [SerializeField]
@@ -30,6 +33,9 @@ public class GameManager : MonoBehaviour {
 
     [SerializeField]
     UIGauge gauge_;
+
+    [SerializeField]
+    GameObject clearImage_;
 
 	// Use this for initialization
 	void initialize () {
@@ -94,7 +100,7 @@ public class GameManager : MonoBehaviour {
 
             // 敵テスト
             //  適当にあちこちに
-            remainEnemyNum_ = 16;
+            remainEnemyNum_ = p_.emitEnemyNum_;
             for ( int i = 0; i < remainEnemyNum_; ++i ) {
                 var enemy = p_.enemyFactory_.createRobot();
                 enemy.transform.parent = p_.objectRoot_.transform;
@@ -149,7 +155,7 @@ public class GameManager : MonoBehaviour {
         override protected void innerInit()
         {
             GlobalState.wait( 1.0f, () => {
-                
+                p_.clearImage_.SetActive( true );
                 return false;
             } );
         }

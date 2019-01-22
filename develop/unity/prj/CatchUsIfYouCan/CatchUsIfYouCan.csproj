@@ -248,9 +248,12 @@
     <Compile Include="Assets\codes\common\Bezier.cs" />
     <Compile Include="Assets\codes\common\GlobalStateManager.cs" />
     <Compile Include="Assets\codes\common\ImageBillboarding.cs" />
+    <Compile Include="Assets\codes\common\IntroAnimation.cs" />
     <Compile Include="Assets\codes\common\SimplePath.cs" />
     <Compile Include="Assets\codes\common\SphereSurfUtil.cs" />
     <Compile Include="Assets\codes\common\State.cs" />
+    <Compile Include="Assets\codes\common\UIIntroAnimation.cs" />
+    <Compile Include="Assets\codes\common\UIIntroColorAnimation.cs" />
     <Compile Include="Assets\codes\EnemyFactory.cs" />
     <Compile Include="Assets\codes\EnemyMarker.cs" />
     <Compile Include="Assets\codes\FieldFactory.cs" />
