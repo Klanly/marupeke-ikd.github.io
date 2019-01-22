@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour {
     UIGauge gauge_;
 
 	// Use this for initialization
-	void Start () {
+	void initialize () {
         field_ = Instantiate<SphereField>( fieldPrefab_ );
         field_.transform.parent = transform;
         field_.transform.localPosition = Vector3.zero;
@@ -48,62 +48,119 @@ public class GameManager : MonoBehaviour {
         camera_.transform.localPosition = new Vector3( 0.0f, 25.0f, -20.0f );
         camera_.transform.localRotation = Quaternion.LookRotation( -camera_.transform.localPosition + new Vector3( 0.0f, 0.0f, 10.0f ) );
 
-        // 弾テスト
-        //  適当にあちこちに
-        int num = 150;
-        for ( int i = 0; i < num; ++i ) {
-            var bullet = bulletFactory_.create();
-            bullet.transform.parent = objectRoot_.transform;
-            bullet.transform.localPosition = Vector3.zero;
-            var bpos = SphereSurfUtil.randomPos( Random.value, Random.value );
-            var v = SphereSurfUtil.randomPos( Random.value, Random.value );
-            bullet.setup( field_.getRadius(), bpos, v );
-            bullet.Human = human_;
-        }
-
-        // 敵テスト
-        //  適当にあちこちに
-        remainEnemyNum_ = 16;
-        for ( int i = 0; i < remainEnemyNum_; ++i ) {
-            var enemy = enemyFactory_.createRobot();
-            enemy.transform.parent = objectRoot_.transform;
-            enemy.transform.localPosition = Vector3.zero;
-            var bpos = SphereSurfUtil.randomPos( Random.value, Random.value );
-            var v = SphereSurfUtil.randomPos( Random.value, Random.value );
-            enemy.setup( field_.getRadius(), bpos, v );
-            enemy.Human = human_;
-            enemy.CatchCallback = catchEnemy;
-        }
     }
 
-    void catchEnemy( CollideType type )
+    private void Start()
     {
-        if ( type == CollideType.CT_Enemy ) {
-            remainEnemyNum_--;
-            if ( remainEnemyNum_ == 0 ) {
-                // ボス出現
-                var boss = enemyFactory_.createBoss();
-                boss.transform.parent = objectRoot_.transform;
-                boss.transform.localPosition = Vector3.zero;
-                var bossPos = SphereSurfUtil.randomPos( Random.value, Random.value );
-                var bossDir = SphereSurfUtil.randomPos( Random.value, Random.value );
-                boss.setup( field_.getRadius(), bossPos, bossDir );
-                boss.Human = human_;
-                boss.CatchCallback = catchEnemy;
-            }
-        }
-        else if ( type == CollideType.CT_Boss ) {
-            // ボスを確保！
-        }
+        state_ = new Game( this );
     }
 
     // Update is called once per frame
     void Update () {
-        gauge_.setLevel( human_.getStaminaRate() );
-
+        if ( state_ != null )
+            state_ = state_.update();
      }
 
+    class StateBase : State
+    {
+        public StateBase( GameManager parent )
+        {
+            p_ = parent;
+        }
+        protected GameManager p_;
+    }
+
+    class Game : StateBase
+    {
+        public Game( GameManager parent ) : base( parent ) { }
+
+        // 内部初期化
+        override protected void innerInit()
+        {
+            p_.initialize();
+
+            // 弾テスト
+            //  適当にあちこちに
+            int num = 150;
+            for ( int i = 0; i < num; ++i ) {
+                var bullet = p_.bulletFactory_.create();
+                bullet.transform.parent = p_.objectRoot_.transform;
+                bullet.transform.localPosition = Vector3.zero;
+                var bpos = SphereSurfUtil.randomPos( Random.value, Random.value );
+                var v = SphereSurfUtil.randomPos( Random.value, Random.value );
+                bullet.setup( p_.field_.getRadius(), bpos, v );
+                bullet.Human = p_.human_;
+            }
+
+            // 敵テスト
+            //  適当にあちこちに
+            remainEnemyNum_ = 16;
+            for ( int i = 0; i < remainEnemyNum_; ++i ) {
+                var enemy = p_.enemyFactory_.createRobot();
+                enemy.transform.parent = p_.objectRoot_.transform;
+                enemy.transform.localPosition = Vector3.zero;
+                var bpos = SphereSurfUtil.randomPos( Random.value, Random.value );
+                var v = SphereSurfUtil.randomPos( Random.value, Random.value );
+                enemy.setup( p_.field_.getRadius(), bpos, v );
+                enemy.Human = p_.human_;
+                enemy.CatchCallback = catchEnemy;
+            }
+
+            nextState_ = this;
+        }
+
+        void catchEnemy(CollideType type)
+        {
+            if ( type == CollideType.CT_Enemy ) {
+                remainEnemyNum_--;
+                if ( remainEnemyNum_ == 0 ) {
+                    // ボス出現
+                    var boss = p_.enemyFactory_.createBoss();
+                    boss.transform.parent = p_.objectRoot_.transform;
+                    boss.transform.localPosition = Vector3.zero;
+                    var bossPos = SphereSurfUtil.randomPos( Random.value, Random.value );
+                    var bossDir = SphereSurfUtil.randomPos( Random.value, Random.value );
+                    boss.setup( p_.field_.getRadius(), bossPos, bossDir );
+                    boss.Human = p_.human_;
+                    boss.CatchCallback = catchEnemy;
+                }
+            } else if ( type == CollideType.CT_Boss ) {
+                // ボスを確保！
+                nextState_ = new Clear( p_ );
+            }
+        }
+
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            p_.gauge_.setLevel( p_.human_.getStaminaRate() );
+            return nextState_;
+        }
+
+        int remainEnemyNum_ = 0;
+        State nextState_ = null;
+    }
+
+    class Clear : StateBase
+    {
+        public Clear(GameManager manager) : base( manager ) { }
+        
+        // 内部初期化
+        override protected void innerInit()
+        {
+            GlobalState.wait( 1.0f, () => {
+                
+                return false;
+            } );
+        }
+
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            return null;
+        }
+    }
     Human human_;
     SphereField field_;
-    int remainEnemyNum_ = 0;
+    State state_;
 }

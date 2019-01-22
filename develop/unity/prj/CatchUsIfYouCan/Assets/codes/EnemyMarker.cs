@@ -10,6 +10,9 @@ public class EnemyMarker : MonoBehaviour {
     [SerializeField]
     SpriteRenderer marker_;
 
+    [SerializeField]
+    ImageBillboarding markerBillboard_;
+
     public Human Human { set { human_ = value; } }
     public Transform Target { set { target_ = value; } }
     public float Radius { set { radius_ = value; } }
@@ -39,9 +42,9 @@ public class EnemyMarker : MonoBehaviour {
         var pos = SphereSurfUtil.calcMovePos( hp, dir, rad ) * radius_;
         transform.position = pos;
 
-        // マーカーカラーを設定
+        // マーカーカラーとUpベクトルを更新
         marker_.color = color_;
-
+        markerBillboard_.setUserUp( markerBillboard_.transform.position );
     }
 
     Transform target_;

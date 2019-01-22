@@ -83,6 +83,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   marker_: {fileID: 212103191880542430}
+  markerBillboard_: {fileID: 114815947954429214}
 --- !u!114 &114815947954429214
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -95,7 +96,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target_: {fileID: 1700349149301510}
-  useCameraUp_: 1
+  useCameraUp_: 0
+  useUserUp_: 1
 --- !u!212 &212103191880542430
 SpriteRenderer:
   m_ObjectHideFlags: 1

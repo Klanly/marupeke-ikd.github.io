@@ -742,7 +742,7 @@ MonoBehaviour:
   boostRate_: 2
   downRate_: 0.5
   lrBoostRate_: 2
-  initHP_: 18000
+  initHP_: 24000
   curHP_: 0
   normalRunStamina_: 1
   overRunStamina_: 2
