@@ -40,6 +40,23 @@ public class Human : SphereSurfaceObject {
         curHP_ = initHP_;
     }
 
+    public void setClear()
+    {
+        bCleared_ = true;
+
+        float s = curSpeed_;
+        float e = speed_;
+        float t = 0.0f;
+        GlobalState.start( () => {
+            t += Time.deltaTime * 1.0f;
+            t = Mathf.Clamp01( t );
+            cont_.setSpeed( Mathf.Lerp( s, e, t ) );
+            // モーションを変更
+            animatior_.SetFloat( "speed", Mathf.Lerp( 5.0f, 3.0f, t ) );
+            return ( t < 1.0f );
+        } );
+    }
+
     public enum ActionState : int
     {
         ActionState_Idle = 0,
@@ -89,6 +106,9 @@ public class Human : SphereSurfaceObject {
     // 衝突報告
     public void onCollide( CollideType colType )
     {
+        if ( bCleared_ == true )
+            return;
+
         if ( colType == CollideType.CT_NormalMissile ) {
             // スタミナを減らす
             curHP_ -= normalMissileDamage_;
@@ -103,6 +123,11 @@ public class Human : SphereSurfaceObject {
 
     override protected void innerUpdate()
     {
+        if ( bCleared_ == true ) {
+            base.innerUpdate();
+            return;
+        }
+
         if ( bZeroStamina_ == true )
             return;
 
@@ -153,4 +178,5 @@ public class Human : SphereSurfaceObject {
 
     bool bZeroStamina_ = false;
     float curSpeed_ = 0.0f;
+    bool bCleared_ = false;
 }

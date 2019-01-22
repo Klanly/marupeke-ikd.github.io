@@ -162,6 +162,7 @@ public class GameManager : MonoBehaviour {
         // 内部初期化
         override protected void innerInit()
         {
+            p_.human_.setClear();
             GlobalState.wait( 1.0f, () => {
                 p_.clearImage_.SetActive( true );
                 return false;
