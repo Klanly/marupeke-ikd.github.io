@@ -43,8 +43,17 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     GameObject limitStaminaImage_;
 
-	// Use this for initialization
-	void initialize () {
+    [SerializeField]
+    UnityEngine.UI.Text catachEnemies_;
+
+    [SerializeField]
+    GameObject introReady_;
+
+    [SerializeField]
+    GameObject introGo_;
+
+    // Use this for initialization
+    void initialize () {
         field_ = Instantiate<SphereField>( fieldPrefab_ );
         field_.transform.parent = transform;
         field_.transform.localPosition = Vector3.zero;
@@ -66,7 +75,7 @@ public class GameManager : MonoBehaviour {
 
     private void Start()
     {
-        state_ = new Game( this );
+        state_ = new Intro( this );
     }
 
     // Update is called once per frame
@@ -84,14 +93,19 @@ public class GameManager : MonoBehaviour {
         protected GameManager p_;
     }
 
-    class Game : StateBase
+    // イントロ
+    //  「Ready Go!」表示
+    class Intro : StateBase
     {
-        public Game( GameManager parent ) : base( parent ) { }
+        public Intro( GameManager parent ) : base( parent ) { }
 
         // 内部初期化
         override protected void innerInit()
         {
             p_.initialize();
+            p_.human_.setEnableCollide( false );
+
+            var game = new Game( p_ );
 
             // 弾テスト
             //  適当にあちこちに
@@ -108,8 +122,7 @@ public class GameManager : MonoBehaviour {
 
             // 敵テスト
             //  適当にあちこちに
-            remainEnemyNum_ = p_.emitEnemyNum_;
-            for ( int i = 0; i < remainEnemyNum_; ++i ) {
+            for ( int i = 0; i < p_.emitEnemyNum_; ++i ) {
                 var enemy = p_.enemyFactory_.createRobot();
                 enemy.transform.parent = p_.objectRoot_.transform;
                 enemy.transform.localPosition = Vector3.zero;
@@ -117,9 +130,63 @@ public class GameManager : MonoBehaviour {
                 var v = SphereSurfUtil.randomPos( Random.value, Random.value );
                 enemy.setup( p_.field_.getRadius(), bpos, v );
                 enemy.Human = p_.human_;
-                enemy.CatchCallback = catchEnemy;
+                enemy.CatchCallback = game.CatchEnemyCallback;
             }
 
+            // [Catch <p_.emitEnemyNum_> enemies !]
+            // [Ready]
+            // [Go!]
+            float t = 0.0f;
+            GlobalState.start( () => {
+                p_.catachEnemies_.text = string.Format("Catach {0} Enemies !", p_.emitEnemyNum_ );
+                p_.catachEnemies_.gameObject.SetActive( true );
+            }, () => {
+                t += Time.deltaTime;
+                return ( t <= 3.5f );
+            }, () => { t = 0.0f; }
+
+            ).next( () => {
+                p_.introReady_.SetActive( true );
+            }, () => {
+                t += Time.deltaTime;
+                return ( t <= 1.0f );
+            }, () => { t = 0.0f; }
+
+            ).next( () => {
+                p_.introGo_.SetActive( true );
+            }, () => {
+                t += Time.deltaTime;
+                return ( t <= 0.4f );
+            }, () => {
+                nextState_ = game;
+            }
+            );
+        }
+
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            if ( nextState_ != null )
+                return nextState_;
+            return this;
+        }
+
+        State nextState_;
+    }
+
+    // ゲーム中
+    class Game : StateBase
+    {
+
+        public System.Action<CollideType> CatchEnemyCallback
+        {
+            get {
+                return (type) => { catchEnemy( type ); };
+            }
+        }
+
+        public Game( GameManager parent ) : base( parent ) {
+            remainEnemyNum_ = p_.emitEnemyNum_;
             nextState_ = this;
         }
 
@@ -147,6 +214,12 @@ public class GameManager : MonoBehaviour {
                 // ボスを確保！
                 nextState_ = new Clear( p_ );
             }
+        }
+
+        protected override void innerInit()
+        {
+            p_.human_.setGameStart();
+            p_.human_.setEnableCollide( true );
         }
 
         // 内部状態

@@ -15,8 +15,7 @@ public class Bullet : SphereSurfaceObject {
         if ( bCollided_ == true )
             return false;
 
-        // 人のHPがもうなくなっていたら無視
-        if ( human_.isLimitOfStamina() == true )
+        if ( human_.isEnableCollide() == false )
             return false;
 
         if ( ( transform.position - human_.transform.position ).magnitude <= collisionRadius_ ) {

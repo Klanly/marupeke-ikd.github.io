@@ -54,6 +54,7 @@ public class UIIntroAnimation : MonoBehaviour {
     [SerializeField]
     float scaleWait_ = 0.0f;
 
+    public AnimationCurve scaleCurveAll_ = new AnimationCurve( new Keyframe( 0.0f, 1.0f ), new Keyframe( 1.0f, 1.0f ) );
     public AnimationCurve scaleCurveX_ = new AnimationCurve( new Keyframe( 0.0f, 1.0f ), new Keyframe( 1.0f, 1.0f ) );
     public AnimationCurve scaleCurveY_ = new AnimationCurve( new Keyframe( 0.0f, 1.0f ), new Keyframe( 1.0f, 1.0f ) );
     public AnimationCurve scaleCurveZ_ = new AnimationCurve( new Keyframe( 0.0f, 1.0f ), new Keyframe( 1.0f, 1.0f ) );
@@ -97,6 +98,32 @@ public class UIIntroAnimation : MonoBehaviour {
         } );
     }
 
+    void setAnimState4(float waitSec, AnimationCurve animX, AnimationCurve animY, AnimationCurve animZ, AnimationCurve animW, System.Action<float, float, float, float> callback)
+    {
+        bool bX = animX.keys.Length > 0;
+        bool bY = animY.keys.Length > 0;
+        bool bZ = animZ.keys.Length > 0;
+        bool bW = animW.keys.Length > 0;
+        float t_ = 0.0f;
+        float end_ = Mathf.Max(
+            ( bX ? animX.keys[ animX.keys.Length - 1 ].time : 0.0f ),
+            ( bY ? animY.keys[ animY.keys.Length - 1 ].time : 0.0f ),
+            ( bZ ? animZ.keys[ animZ.keys.Length - 1 ].time : 0.0f ),
+            ( bW ? animW.keys[ animZ.keys.Length - 1 ].time : 0.0f )
+        );
+        GlobalState.wait( waitSec, () => {
+            t_ += Time.deltaTime * timeScale_;
+            if ( t_ >= end_ )
+                t_ = end_;
+            float vX = animX.Evaluate( t_ );
+            float vY = animY.Evaluate( t_ );
+            float vZ = animZ.Evaluate( t_ );
+            float vW = animW.Evaluate( t_ );
+            callback( vX, vY, vZ, vW );
+            return !( t_ >= end_ );
+        } );
+    }
+
     void startAnimation()
     {
         RectTransform rt = GetComponent<RectTransform>();
@@ -134,21 +161,21 @@ public class UIIntroAnimation : MonoBehaviour {
         if ( useScale_ == true ) {
             var p = new Vector3();
             if ( scaleAsAbsolute_ == true ) {
-                setAnimState3( scaleWait_, scaleCurveX_, scaleCurveY_, scaleCurveZ_, (x, y, z) => {
+                setAnimState4( scaleWait_, scaleCurveX_, scaleCurveY_, scaleCurveZ_, scaleCurveAll_, (x, y, z, all) => {
                     if ( rt == null )
                         return;
-                    p.x = x;
-                    p.y = y;
-                    p.z = z;
+                    p.x = x * all;
+                    p.y = y * all;
+                    p.z = z * all;
                     rt.localScale = p;
                 } );
             } else {
-                setAnimState3( scaleWait_, scaleCurveX_, scaleCurveY_, scaleCurveZ_, (x, y, z) => {
+                setAnimState4( scaleWait_, scaleCurveX_, scaleCurveY_, scaleCurveZ_, scaleCurveAll_, (x, y, z, all) => {
                     if ( rt == null )
                         return;
-                    p.x = x * initScale.x;
-                    p.y = y * initScale.y;
-                    p.z = z * initScale.z;
+                    p.x = x * initScale.x * all;
+                    p.y = y * initScale.y * all;
+                    p.z = z * initScale.z * all;
                     rt.localScale = p;
                 } );
             }

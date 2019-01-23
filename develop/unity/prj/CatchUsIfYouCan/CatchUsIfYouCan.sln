@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatchUsIfYouCan", "CatchUsIfYouCan.csproj", "{09BAE3BF-1DBF-C538-4426-6DC3AA0F1C57}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatchUsIfYouCan.Editor.Plugins", "CatchUsIfYouCan.Editor.Plugins.csproj", "{D18E026D-ACE6-EAA2-5815-0CB2769239F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{09BAE3BF-1DBF-C538-4426-6DC3AA0F1C57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09BAE3BF-1DBF-C538-4426-6DC3AA0F1C57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09BAE3BF-1DBF-C538-4426-6DC3AA0F1C57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D18E026D-ACE6-EAA2-5815-0CB2769239F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D18E026D-ACE6-EAA2-5815-0CB2769239F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D18E026D-ACE6-EAA2-5815-0CB2769239F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D18E026D-ACE6-EAA2-5815-0CB2769239F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

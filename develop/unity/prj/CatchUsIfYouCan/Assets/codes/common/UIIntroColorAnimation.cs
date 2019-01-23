@@ -51,7 +51,7 @@ public class UIIntroColorAnimation : MonoBehaviour {
             ( bR ? animR.keys[ animR.keys.Length - 1 ].time : 0.0f ),
             ( bG ? animG.keys[ animG.keys.Length - 1 ].time : 0.0f ),
             ( bB ? animB.keys[ animB.keys.Length - 1 ].time : 0.0f ),
-            ( bA ? animA.keys[ animB.keys.Length - 1 ].time : 0.0f )
+            ( bA ? animA.keys[ animA.keys.Length - 1 ].time : 0.0f )
         );
         GlobalState.wait( waitSec, () => {
             t_ += Time.deltaTime * timeScale_;

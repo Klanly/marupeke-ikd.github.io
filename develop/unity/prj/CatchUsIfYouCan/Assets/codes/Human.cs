@@ -38,12 +38,29 @@ public class Human : SphereSurfaceObject {
     private void Awake()
     {
         curHP_ = initHP_;
+        state_ = new Intro( this );
+    }
+
+    public void setGameStart()
+    {
+        bStarted_ = true;
+    }
+
+    public void setEnableCollide( bool isEnable )
+    {
+        bEnableCollide_ = isEnable;
+    }
+
+    public bool isEnableCollide()
+    {
+        return bEnableCollide_ && ( curHP_ > 0.0f );
     }
 
     public bool isLimitOfStamina()
     {
         return ( curHP_ <= 0.0f );
     }
+
     public void setClear()
     {
         bCleared_ = true;
@@ -134,74 +151,127 @@ public class Human : SphereSurfaceObject {
         innerUpdate();
     }
 
-    void normalRun()
-    {
-        // 上キーが押されていたらスピードを上げる
-        bool speedUp = Input.GetKey( KeyCode.UpArrow );
-        bool speedDown = Input.GetKey( KeyCode.DownArrow );
-        curSpeed_ = speed_ * (
-                speedUp
-                ? boostRate_
-                : ( speedDown ? downRate_ : 1.0f )
-            );
-        cont_.setSpeed( curSpeed_ );
-
-        // [Z]が押されていたらLRブースト
-        bool boost = Input.GetKey( KeyCode.Z );
-
-        // 左右キーが押されていたら進行方向に対して左右に少し曲がる
-        float lr = 0.0f;
-        if ( Input.GetKey( KeyCode.LeftArrow ) == true ) {
-            lr = -lrSpeed_ * Time.deltaTime * ( boost ? lrBoostRate_ : 1.0f );
-        } else if ( Input.GetKey( KeyCode.RightArrow ) == true ) {
-            lr = lrSpeed_ * Time.deltaTime * ( boost ? lrBoostRate_ : 1.0f );
-        }
-        var tangent = transform.forward * speed_ + transform.right * lr;
-        cont_.setDir( tangent );
-
-        // モーションを変更
-        animatior_.SetFloat( "speed", speedUp ? 5.0f : 3.0f );
-
-        // スタミナを減少
-        if ( speedUp == true ) {
-            curHP_ -= overRunStamina_;
-        } else {
-            curHP_ -= normalRunStamina_;
-        }
-        if ( bZeroStamina_ == false && curHP_ <= 0.0f ) {
-            curHP_ = 0.0f;
-            bZeroStamina_ = true;
-            if ( zeroStaminaCallback_ != null )
-                zeroStaminaCallback_();
-
-            // モーションを変更
-            setAction( ActionState.ActionState_Idle );
-        }
-    }
-
-    void explosioning()
-    {
-        cont_.setSpeed( curSpeed_ );
-    }
-
     override protected void innerUpdate()
     {
-        if ( bCleared_ == true ) {
-            base.innerUpdate();
-            return;
-        }
-
-        if ( bZeroStamina_ == true )
-            return;
-
-        if ( bExplosioning_ == false )
-            normalRun();
-        else
-            explosioning();
-
+        if ( state_ != null )
+            state_ = state_.update();
         base.innerUpdate();
     }
 
+    class StateBase : State
+    {
+        public StateBase( Human parent )
+        {
+            parent_ = parent;
+        }
+
+        protected Human parent_;
+    }
+
+    class Intro : StateBase
+    {
+        public Intro(Human parent) : base( parent ) {
+            parent_.animatior_.SetFloat( "speed", 3.0f );
+        }
+
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            if ( parent_.bStarted_ == true )
+                return new NormalRun( parent_ );
+            return this;
+        }
+    }
+
+    class NormalRun : StateBase {
+        public NormalRun(Human parent) : base( parent ) { }
+
+        // 内部初期化
+        override protected void innerInit()
+        {
+
+        }
+
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            if ( parent_.bCleared_ == true ) {
+                return new Clear( parent_ );
+            }
+
+            if ( parent_.bZeroStamina_ == true ) {
+                return new ZeroStamina( parent_ );
+            }
+
+            if ( parent_.bExplosioning_ == true ) {
+                explosioning();
+                return this;
+            }
+
+            // 上キーが押されていたらスピードを上げる
+            bool speedUp = Input.GetKey( KeyCode.UpArrow );
+            bool speedDown = Input.GetKey( KeyCode.DownArrow );
+            parent_.curSpeed_ = parent_.speed_ * (
+                    speedUp
+                    ? parent_.boostRate_
+                    : ( speedDown ? parent_.downRate_ : 1.0f )
+                );
+            parent_.cont_.setSpeed( parent_.curSpeed_ );
+
+            // [Z]が押されていたらLRブースト
+            bool boost = Input.GetKey( KeyCode.Z );
+
+            // 左右キーが押されていたら進行方向に対して左右に少し曲がる
+            float lr = 0.0f;
+            if ( Input.GetKey( KeyCode.LeftArrow ) == true ) {
+                lr = -parent_.lrSpeed_ * Time.deltaTime * ( boost ? parent_.lrBoostRate_ : 1.0f );
+            } else if ( Input.GetKey( KeyCode.RightArrow ) == true ) {
+                lr = parent_.lrSpeed_ * Time.deltaTime * ( boost ? parent_.lrBoostRate_ : 1.0f );
+            }
+            var tangent = parent_.transform.forward * parent_.speed_ + parent_.transform.right * lr;
+            parent_.cont_.setDir( tangent );
+
+            // モーションを変更
+            parent_.animatior_.SetFloat( "speed", speedUp ? 5.0f : 3.0f );
+
+            // スタミナを減少
+            if ( speedUp == true ) {
+                parent_.curHP_ -= parent_.overRunStamina_;
+            } else {
+                parent_.curHP_ -= parent_.normalRunStamina_;
+            }
+            if ( parent_.bZeroStamina_ == false && parent_.curHP_ <= 0.0f ) {
+                parent_.curHP_ = 0.0f;
+                parent_.bZeroStamina_ = true;
+                if ( parent_.zeroStaminaCallback_ != null )
+                    parent_.zeroStaminaCallback_();
+
+                // モーションを変更
+                parent_.setAction( ActionState.ActionState_Idle );
+            }
+
+            return this;
+        }
+
+        void explosioning()
+        {
+            parent_.cont_.setSpeed( parent_.curSpeed_ );
+        }
+    }
+
+    class Clear : StateBase
+    {
+        public Clear(Human parent) : base( parent ) { }
+    }
+
+    class ZeroStamina : StateBase
+    {
+        public ZeroStamina(Human parent) : base( parent ) { }
+    }
+
+    State state_;
+    bool bStarted_ = false;
+    bool bEnableCollide_ = true;
     bool bExplosioning_ = false;
     bool bZeroStamina_ = false;
     float curSpeed_ = 0.0f;
