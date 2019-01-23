@@ -52,6 +52,25 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     GameObject introGo_;
 
+    public enum Result
+    {
+        Clear,
+        GameOver
+    }
+
+    public System.Action<Result> ResultCallback { set { resultCallback_ = value; } }
+    System.Action<Result> resultCallback_;
+
+    public void setEmitEnemyNum( int num )
+    {
+        emitEnemyNum_ = num;
+    }
+
+    public void setBossLRSpeed( float speed )
+    {
+        bossLRSpeed_ = speed;
+    }
+
     // Use this for initialization
     void initialize () {
         field_ = Instantiate<SphereField>( fieldPrefab_ );
@@ -66,6 +85,7 @@ public class GameManager : MonoBehaviour {
         human_.setAction( Human.ActionState.ActionState_Run );
         human_.StaminaZeroCallback = () => {
             limitStaminaImage_.SetActive( true );
+            resultCallback_( Result.GameOver );
         };
 
         camera_.transform.parent = human_.transform;
@@ -137,8 +157,10 @@ public class GameManager : MonoBehaviour {
             // [Ready]
             // [Go!]
             float t = 0.0f;
-            GlobalState.start( () => {
-                p_.catachEnemies_.text = string.Format("Catach {0} Enemies !", p_.emitEnemyNum_ );
+            GlobalState.wait( 4.0f, () => {
+                return false;
+            } ).next( () => {
+                p_.catachEnemies_.text = string.Format("Catch {0} Enemies !", p_.emitEnemyNum_ );
                 p_.catachEnemies_.gameObject.SetActive( true );
             }, () => {
                 t += Time.deltaTime;
@@ -202,6 +224,7 @@ public class GameManager : MonoBehaviour {
                     var bossPos = SphereSurfUtil.randomPos( Random.value, Random.value );
                     var bossDir = SphereSurfUtil.randomPos( Random.value, Random.value );
                     boss.setup( p_.field_.getRadius(), bossPos, bossDir );
+                    boss.setLRSpeed( p_.bossLRSpeed_ );
                     boss.Human = p_.human_;
                     boss.CatchCallback = catchEnemy;
 
@@ -264,10 +287,15 @@ public class GameManager : MonoBehaviour {
                 t1 %= 360;
                 var q = Quaternion.AngleAxis( t1, Vector3.up );
                 var p = q * Vector3.Lerp( pos, posE, t0 );
+                if ( p_ == null || p_.camera_ == null ) {
+                    return false;
+                }
                 p_.camera_.transform.localPosition = p;
                 p_.camera_.transform.rotation = Quaternion.LookRotation( p_.human_.transform.position + lp - p_.camera_.transform.position, p_.human_.transform.up );
                 return true;
             } );
+
+            p_.resultCallback_( Result.Clear );
         }
 
         // 内部状態
@@ -279,4 +307,5 @@ public class GameManager : MonoBehaviour {
     Human human_;
     SphereField field_;
     State state_;
+    float bossLRSpeed_ = 65.0f;
 }

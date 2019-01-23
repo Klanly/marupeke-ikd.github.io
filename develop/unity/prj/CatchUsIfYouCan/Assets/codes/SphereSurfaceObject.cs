@@ -10,7 +10,7 @@ public class SphereSurfaceObject : MonoBehaviour {
     [SerializeField]
     protected float lrSpeed_ = 1.0f;
 
-    virtual public void setup(float r, Vector3 initPos, Vector3 initDir)
+    virtual public void setup(float r, Vector3 initPos, Vector3 initDir )
     {
         cont_.setRadius( r );
         cont_.setPosDirect( initPos.normalized * r );

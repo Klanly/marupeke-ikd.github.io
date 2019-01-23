@@ -267,6 +267,12 @@ public class Human : SphereSurfaceObject {
     class ZeroStamina : StateBase
     {
         public ZeroStamina(Human parent) : base( parent ) { }
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            parent_.cont_.setSpeed( 0.0f );
+            return this;
+        }
     }
 
     State state_;
