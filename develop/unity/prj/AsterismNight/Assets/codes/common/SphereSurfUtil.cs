@@ -13,7 +13,7 @@ public class SphereSurfUtil {
     static public Vector3 convPolerToPos( float latDeg, float longDeg )
     {
         latDeg = pingPong( -90.0f, 90.0f, latDeg ) * Mathf.Deg2Rad;
-        longDeg = pingPong( -180.0f, 180.0f, longDeg ) * Mathf.Deg2Rad;
+        longDeg = loop( -180.0f, 180.0f, longDeg ) * Mathf.Deg2Rad;
         float y = Mathf.Sin( latDeg );
         float r = Mathf.Cos( latDeg );
         float x = r * Mathf.Sin( longDeg );
@@ -45,6 +45,18 @@ public class SphereSurfUtil {
         float L = lv - l * t;
         int f = ( t % 2 );
         return ( 1 - f ) * ( min + L ) + f * ( max - L );
+    }
+
+    // 指定の間をループ
+    static public float loop( float min, float max, float val )
+    {
+        float lv = Mathf.Abs( val - min );
+        float l = max - min;
+        int t = ( int )( lv / l );
+        float L = lv - l * t;
+        if ( val >= min )
+            return min + ( L / l ) * ( max - min );
+        return min + ( 1.0f - L / l ) * ( max - min );
     }
 
     // 球面上のAからBへ向かう接線を算出

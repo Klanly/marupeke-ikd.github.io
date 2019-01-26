@@ -34,7 +34,6 @@ public class Table_asterism_ast : Table {
     }
 
     // 1レコードを格納
-    //  派生クラスで具体的な格納を行う
     protected override void storeData( Dictionary<string, Val> values )
     {
         var d = new Data();

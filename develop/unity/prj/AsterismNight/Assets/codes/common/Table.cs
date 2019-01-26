@@ -78,12 +78,21 @@ public class Table {
             storeData( dict_ );
         }
 
+        // データ格納後コール
+        postStore();
+
         return true;
     }
 
     // データ格納前コール
     //  派生クラスで必要に応じて使用
     protected virtual void preStore( int dataNum )
+    {
+    }
+
+    // データ格納後コール
+    //  派生クラスで必要に応じて使用
+    protected virtual void postStore()
     {
     }
 
