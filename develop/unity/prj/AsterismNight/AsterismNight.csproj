@@ -258,6 +258,7 @@
     <Compile Include="Assets\codes\common\UIIntroColorAnimation.cs" />
     <Compile Include="Assets\codes\common\UIIntroTextColorAnimation.cs" />
     <Compile Include="Assets\codes\GameManager.cs" />
+    <Compile Include="Assets\codes\ObjectViewer.cs" />
     <Compile Include="Assets\codes\Star.cs" />
     <Compile Include="Assets\codes\tables\Table_asterism_ast.cs" />
     <Compile Include="Assets\codes\tables\Table_asterism_line.cs" />

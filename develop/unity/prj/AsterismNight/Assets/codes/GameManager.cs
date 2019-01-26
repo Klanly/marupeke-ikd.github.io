@@ -47,10 +47,27 @@ public class GameManager : MonoBehaviour {
         public int astId_;
         public List<Star> stars_ = new List<Star>();
         public List<AstLine> lines_ = new List<AstLine>();
+        public GameObject root_ = null;
+        public Vector3 center_ = Vector3.zero;
+        public Quaternion lookQuaternion_ = Quaternion.identity;
+        bool bCalcCenter_ = false;
+
+        // センター位置を取得
+        public Vector3 getCenter()
+        {
+            if ( bCalcCenter_ == false ) {
+                lookAtAst();
+            }
+            return center_;
+        }
 
         // 星座の方向を向くQuaternionを取得
         public Quaternion lookAtAst()
         {
+            if ( bCalcCenter_ == true ) {
+                return lookQuaternion_;
+            }
+
             // 恒星のAABB原点を算出
             Vector3 min = new Vector3( float.MaxValue, float.MaxValue, float.MaxValue );
             Vector3 max = new Vector3( float.MinValue, float.MinValue, float.MinValue );
@@ -59,8 +76,22 @@ public class GameManager : MonoBehaviour {
                 min = Vector3.Min( min, pos );
                 max = Vector3.Max( max, pos );
             }
-            Vector3 center = ( min + max ) * 0.5f;
-            return Quaternion.LookRotation( center );
+            center_ = ( min + max ) * 0.5f;
+            lookQuaternion_ = Quaternion.LookRotation( center_ );
+            return lookQuaternion_;
+        }
+
+        // 恒星とラインの親をrootに
+        public void toRoot()
+        {
+            if ( root_ == null )
+                return;
+            foreach ( var star in stars_ ) {
+                star.transform.parent = root_.transform;
+            }
+            foreach ( var line in lines_ ) {
+                line.transform.parent = root_.transform;
+            }
         }
     }
 
@@ -99,6 +130,11 @@ public class GameManager : MonoBehaviour {
 
                 dataSet_.lines_.Add( obj );
             }
+
+            dataSet_.root_ = new GameObject( "root" );
+            dataSet_.root_.transform.parent = parent_.transform;
+            dataSet_.root_.transform.position = dataSet_.getCenter();
+            dataSet_.toRoot();
         }
 
         // 内部初期化
@@ -128,8 +164,14 @@ public class GameManager : MonoBehaviour {
         // 内部初期化
         override protected void innerInit()
         {
+            var center = Vector3.zero;
             start_ = Camera.main.transform.rotation;
             end_ = dataSet_.lookAtAst();
+
+            // TEST
+            var t = Instantiate<Star>( parent_.starUnitPrefab_ );
+            t.transform.localScale = Vector3.one * 2.0f;
+            t.transform.position = dataSet_.getCenter();
         }
 
         // 内部状態
@@ -140,7 +182,7 @@ public class GameManager : MonoBehaviour {
             var q = Lerps.Quaternion.easeInOut( start_, end_, t0 );
             Camera.main.transform.rotation = q;
             if ( t_ >= moveSec_ ) {
-                return null;
+                return new Gaming( parent_, dataSet_ );
             }
             return this;
         }
@@ -149,6 +191,31 @@ public class GameManager : MonoBehaviour {
         Quaternion start_, end_;
         float moveSec_ = 3.0f;
         float t_ = 0.0f;
+    }
+
+    // ゲーム中
+    //  星座を回転可能に
+    class Gaming : StateBase
+    {
+        public Gaming( GameManager parent, DataSet dataSet ) : base( parent ) {
+            dataSet_ = dataSet;
+        }
+
+        // 内部初期化
+        override protected void innerInit()
+        {
+            viewer_.setup( Camera.main.transform, dataSet_.root_ );
+        }
+
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            viewer_.update();
+            return this;
+        }
+
+        ObjectViewer viewer_ = new ObjectViewer();
+        DataSet dataSet_;
     }
 
     int preId_ = -1;
