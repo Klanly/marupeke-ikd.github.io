@@ -21,7 +21,7 @@ func main() {
 
 	flag.Parse()
 
-	*xlsxFileName = "practices.xlsx"
+	//	*xlsxFileName = "asterism.xlsx"
 
 	if *xlsxFileName == "" {
 		fmt.Printf("No input excel file.")
@@ -40,7 +40,7 @@ func main() {
 	// B1がTRUE、B2にRow、B3にCol値が入っているシートのみ有効
 	sheetNum := len(excel.Sheets)
 	for i := 0; i < sheetNum; i++ {
-		sheet := excel.Sheets[0]
+		sheet := excel.Sheets[i]
 		validate := sheet.Rows[0].Cells[1].Value
 		if validate != "1" {
 			continue
@@ -112,6 +112,8 @@ func main() {
 		file.WriteString(allData)
 		file.Close()
 
+		fmt.Printf(*outputTSVFileName + ": " + sheet.Name + ": success -> " + outputFileName + "\n")
+
 		// 指定プラットフォームのテーブルアクセスコードを生成
 		// ファイル名の文頭を大文字にする
 		accFileBaseName := *outputTSVFileName + "_" + sheet.Name + "_acc"
@@ -128,7 +130,6 @@ func main() {
 		}
 	}
 
-	fmt.Printf(*outputTSVFileName)
 }
 
 // 型名をチェック
