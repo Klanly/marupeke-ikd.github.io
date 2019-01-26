@@ -258,6 +258,7 @@
     <Compile Include="Assets\codes\common\UIIntroColorAnimation.cs" />
     <Compile Include="Assets\codes\common\UIIntroTextColorAnimation.cs" />
     <Compile Include="Assets\codes\GameManager.cs" />
+    <Compile Include="Assets\codes\ListUtil.cs" />
     <Compile Include="Assets\codes\ObjectViewer.cs" />
     <Compile Include="Assets\codes\Ranges.cs" />
     <Compile Include="Assets\codes\Star.cs" />

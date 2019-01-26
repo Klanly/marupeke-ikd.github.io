@@ -142,7 +142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius_: 50
   skyRadius_: 200
-  astId_: 33
+  astId_: 67
   starUnitPrefab_: {fileID: 114874026002387804, guid: e8bec31f5f9e8724eb3dce72ad8890de,
     type: 2}
   linePrefab_: {fileID: 114161951221181022, guid: a41d84e6942dac74ea11396d9b40ff4e,

@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     AstLine linePrefab_;
 
+    [SerializeField]
+    float curAngle_;
+
     // 天球
     class Sky
     {
@@ -30,6 +33,16 @@ public class GameManager : MonoBehaviour {
         public List< Asterism > asterisms_ = new List<Asterism>();  // 星座IDに対応した星座
     }
 
+    // 次の問題を出題
+    void notifyNextQuestion()
+    {
+        // データセット作成
+        dataSet_ = new DataSet();
+        dataSet_.astId_ = questionAstIds_[ curAnswerNum_ ];
+        dataSet_.radius_ = radius_;
+        nextState_ = new SetQuestion( this, dataSet_ );
+    }
+
     void Start () {
         // 天球を作成
         sky_ = new Sky();
@@ -39,15 +52,21 @@ public class GameManager : MonoBehaviour {
             sky_.asterisms_.Add( ast );
         }
 
-        // データセット作成
-        DataSet dataSet = new DataSet();
-        dataSet.astId_ = astId_;
-        dataSet.radius_ = radius_;
-        state_ = new SetQuestion( this, dataSet );
+        // 全89星座の出題順番
+        for ( int i = 1; i <= 89; ++i )
+            questionAstIds_.Add( i );
+        ListUtil.shuffle<int>( ref questionAstIds_, Random.Range( 0, 10000 ) );
+
+        notifyNextQuestion();
     }
 	
 	// Update is called once per frame
 	void Update () {
+
+        if ( nextState_ != null ) {
+            state_ = nextState_;
+            nextState_ = null;
+        }
 
         if ( state_ != null )
             state_ = state_.update();
@@ -55,6 +74,8 @@ public class GameManager : MonoBehaviour {
         if ( preId_ != astId_ ) {
             preId_ = astId_;
         }
+
+        curAngle_ = dataSet_.curAngle_;
     }
 
     // 星座を並べる
@@ -123,7 +144,22 @@ public class GameManager : MonoBehaviour {
         public Quaternion lookQuaternion_ = Quaternion.identity;
         public Vector3 aabbMin_ = Vector3.zero;
         public Vector3 aabbMax_ = Vector3.zero;
+        public Quaternion answerQ_ = Quaternion.identity;
+        public float curAngle_ = 0.0f;
+        public float answerAngle_ = 7.0f;
         bool bCalcCenter_ = false;
+
+        // ファイナライズ
+        public void finalize()
+        {
+            foreach ( var star in stars_ ) {
+                Destroy( star.gameObject );
+            }
+            foreach ( var line in lines_ ) {
+                Destroy( line.gameObject );
+            }
+            Destroy( root_ );
+        }
 
         // センター位置を取得
         public Vector3 getCenter()
@@ -187,6 +223,11 @@ public class GameManager : MonoBehaviour {
             dataSet_.root_.transform.parent = parent_.transform;
             dataSet_.root_.transform.position = dataSet_.getCenter();
             dataSet_.toRoot();
+
+            // 星座のルートをランダムに回転
+            dataSet_.answerQ_ = dataSet_.root_.transform.rotation;
+            var q = Quaternion.Euler( Random.Range( -180.0f, 180.0f ), Random.Range( -180.0f, 180.0f ), Random.Range( -180.0f, 180.0f ) );
+            dataSet_.root_.transform.rotation = q;
         }
 
         // 内部初期化
@@ -221,9 +262,9 @@ public class GameManager : MonoBehaviour {
             end_ = dataSet_.lookAtAst();
 
             // TEST
-            var t = Instantiate<Star>( parent_.starUnitPrefab_ );
-            t.transform.localScale = Vector3.one * 2.0f;
-            t.transform.position = dataSet_.getCenter();
+            // var t = Instantiate<Star>( parent_.starUnitPrefab_ );
+            // t.transform.localScale = Vector3.one * 2.0f;
+            // t.transform.position = dataSet_.getCenter();
         }
 
         // 内部状態
@@ -263,14 +304,93 @@ public class GameManager : MonoBehaviour {
         override protected State innerUpdate()
         {
             viewer_.update();
+
+            // rootの回転角度を監視
+            // 角度差が一定範囲以内に入ったら解答出来たとみなす
+            var q = dataSet_.root_.transform.rotation;
+            float ang = Quaternion.Angle( q, dataSet_.answerQ_ );
+            dataSet_.curAngle_ = ang;
+            if ( ang < dataSet_.answerAngle_ )
+                return new AnswerMove( parent_, dataSet_ );
             return this;
         }
 
         ObjectViewer viewer_ = new ObjectViewer();
         DataSet dataSet_;
+        Quaternion answerQ_ = Quaternion.identity;
+    }
+
+    // 解答移動
+    class AnswerMove : StateBase
+    {
+        public AnswerMove( GameManager parent, DataSet dataSet ) :base(parent) {
+            dataSet_ = dataSet;
+        }
+
+        // 内部初期化
+        override protected void innerInit()
+        {
+            startQ_ = dataSet_.root_.transform.rotation;
+        }
+
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            t_ += Time.deltaTime;
+            float t0 = t_ / moveSec_;
+            var q = Lerps.Quaternion.easeInOut( startQ_, dataSet_.answerQ_, t0 );
+            dataSet_.root_.transform.rotation = q;
+            float ang = Quaternion.Angle( q, dataSet_.answerQ_ );
+            dataSet_.curAngle_ = ang;
+            if ( t_ >= moveSec_ ) {
+                return new AnswerEffect( parent_, dataSet_ );
+            }
+            return this;
+        }
+
+        Quaternion startQ_;
+        DataSet dataSet_;
+        float t_ = 0.0f;
+        float moveSec_ = 2.0f;
+    }
+
+    // 解答演出
+    class AnswerEffect : StateBase
+    {
+        public AnswerEffect( GameManager parent, DataSet dataSet ) : base( parent ) {
+            dataSet_ = dataSet;
+        }
+
+        // 内部初期化
+        override protected void innerInit()
+        {
+        }
+
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            t_ += Time.deltaTime;
+            float t0 = t_ / waitSec_;
+            if ( t_ >= waitSec_ ) {
+                // マネージャに次の出題を通知
+                dataSet_.finalize();
+                parent_.curAnswerNum_++;
+                parent_.notifyNextQuestion();
+                return null;
+            }
+            return this;
+        }
+
+        DataSet dataSet_;
+        float t_ = 0.0f;
+        float waitSec_ = 3.0f;
     }
 
     int preId_ = -1;
     State state_;
+    State nextState_;
     Sky sky_ = new Sky();
+    DataSet dataSet_;
+    List<int> questionAstIds_ = new List<int>();
+    int curAnswerNum_ = 0;
 }
