@@ -247,6 +247,7 @@
     <Compile Include="Assets\codes\common\GlobalStateManager.cs" />
     <Compile Include="Assets\codes\common\ImageBillboarding.cs" />
     <Compile Include="Assets\codes\common\IntroAnimation.cs" />
+    <Compile Include="Assets\codes\common\Lerps.cs" />
     <Compile Include="Assets\codes\common\ResourceLoader.cs" />
     <Compile Include="Assets\codes\common\SimplePath.cs" />
     <Compile Include="Assets\codes\common\SphereSurfUtil.cs" />
