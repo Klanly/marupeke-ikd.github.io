@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour {
     float radius_ = 50.0f;
 
     [SerializeField]
+    float skyRadius_ = 200.0f;
+
+    [SerializeField]
     int astId_ = 1;
 
     [SerializeField]
@@ -16,9 +19,30 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     AstLine linePrefab_;
 
+    // 天球
+    class Sky
+    {
+        public class Asterism
+        {
+            public List<Star> stars_ = new List<Star>();        // 恒星
+            public List<AstLine> lines_ = new List<AstLine>();  // 星座間ライン
+        }
+        public List< Asterism > asterisms_ = new List<Asterism>();  // 星座IDに対応した星座
+    }
+
     void Start () {
+        // 天球を作成
+        sky_ = new Sky();
+        for ( int i = 1; i <= 89; ++i ) {
+            var ast = new Sky.Asterism();
+            createAsterism( i, skyRadius_, starUnitPrefab_, linePrefab_, ref ast.stars_, ref ast.lines_ );
+            sky_.asterisms_.Add( ast );
+        }
+
+        // データセット作成
         DataSet dataSet = new DataSet();
         dataSet.astId_ = astId_;
+        dataSet.radius_ = radius_;
         state_ = new SetQuestion( this, dataSet );
     }
 	
@@ -33,6 +57,36 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    // 星座を並べる
+    void createAsterism( int astId, float radius, Star starPrefab, AstLine linePrefab, ref List< Star > stars, ref List< AstLine > lines )
+    {
+        var d = AsterismDataUtil.getData( astId );
+
+        // 恒星
+        for ( int i = 0; i < d.stars_.Count; ++i ) {
+            var star = d.stars_[ i ];
+            var obj = Instantiate<Star>( starPrefab );
+            var pos = SphereSurfUtil.convPolerToPos( star.pos_.x, star.pos_.y );
+            obj.transform.position = pos * radius;
+            obj.setHipId( star.hipId_ );
+            obj.setPolerCoord( star.pos_.x, star.pos_.y );
+
+            stars.Add( obj );
+        }
+
+        // ライン
+        for ( int i = 0; i < d.lines_.Count; ++i ) {
+            var line = d.lines_[ i ];
+            var obj = Instantiate<AstLine>( linePrefab );
+            var spos = SphereSurfUtil.convPolerToPos( line.start_.x, line.start_.y );
+            var epos = SphereSurfUtil.convPolerToPos( line.end_.x, line.end_.y );
+            obj.setLine( spos * radius, epos * radius );
+
+            lines.Add( obj );
+        }
+    }
+
+
     class StateBase : State
     {
         public StateBase( GameManager parent )
@@ -45,6 +99,7 @@ public class GameManager : MonoBehaviour {
     class DataSet
     {
         public int astId_;
+        public float radius_;
         public List<Star> stars_ = new List<Star>();
         public List<AstLine> lines_ = new List<AstLine>();
         public GameObject root_ = null;
@@ -106,30 +161,7 @@ public class GameManager : MonoBehaviour {
         // 問題を作成する
         void createAsterism()
         {
-            var d = AsterismDataUtil.getData( dataSet_.astId_ );
-
-            // 恒星
-            for ( int i = 0; i < d.stars_.Count; ++i ) {
-                var star = d.stars_[ i ];
-                var obj = Instantiate<Star>( parent_.starUnitPrefab_ );
-                var pos = SphereSurfUtil.convPolerToPos( star.pos_.x, star.pos_.y );
-                obj.transform.position = pos * parent_.radius_;
-                obj.setHipId( star.hipId_ );
-                obj.setPolerCoord( star.pos_.x, star.pos_.y );
-
-                dataSet_.stars_.Add( obj );
-            }
-
-            // ライン
-            for ( int i = 0; i < d.lines_.Count; ++i ) {
-                var line = d.lines_[ i ];
-                var obj = Instantiate<AstLine>( parent_.linePrefab_ );
-                var spos = SphereSurfUtil.convPolerToPos( line.start_.x, line.start_.y );
-                var epos = SphereSurfUtil.convPolerToPos( line.end_.x, line.end_.y );
-                obj.setLine( spos * parent_.radius_, epos * parent_.radius_ );
-
-                dataSet_.lines_.Add( obj );
-            }
+            parent_.createAsterism( dataSet_.astId_, dataSet_.radius_, parent_.starUnitPrefab_, parent_.linePrefab_, ref dataSet_.stars_, ref dataSet_.lines_ );
 
             dataSet_.root_ = new GameObject( "root" );
             dataSet_.root_.transform.parent = parent_.transform;
@@ -204,7 +236,7 @@ public class GameManager : MonoBehaviour {
         // 内部初期化
         override protected void innerInit()
         {
-            viewer_.setup( Camera.main.transform, dataSet_.root_ );
+            viewer_.setup( Camera.main.transform, dataSet_.root_, 130.0f );
         }
 
         // 内部状態
@@ -220,4 +252,5 @@ public class GameManager : MonoBehaviour {
 
     int preId_ = -1;
     State state_;
+    Sky sky_ = new Sky();
 }
