@@ -17,6 +17,8 @@ public class AsterismDataUtil {
     {
         public Vector2 start_;     // 始点位置（極座標： lat. long）
         public Vector2 end_;       // 終点位置（極座標： lat. long）
+        public int startHipId_;    // 始点ヒッパルコスId
+        public int endHipId_;      // 終点ヒッパルコスId
     }
 
     public class Asterism
@@ -70,6 +72,8 @@ public class AsterismDataUtil {
             var end = posTable.getDataFromHipId( pair.endHipId_ );
             line.start_ = new Vector2( start.lat_, start.long_ );
             line.end_ = new Vector2( end.lat_, end.long_ );
+            line.startHipId_ = pair.startHipId_;
+            line.endHipId_ = pair.endHipId_;
             data.lines_.Add( line );
         }
 

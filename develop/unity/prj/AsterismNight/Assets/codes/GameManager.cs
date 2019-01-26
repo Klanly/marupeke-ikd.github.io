@@ -58,29 +58,45 @@ public class GameManager : MonoBehaviour {
     }
 
     // 星座を並べる
-    void createAsterism( int astId, float radius, Star starPrefab, AstLine linePrefab, ref List< Star > stars, ref List< AstLine > lines )
+    void createAsterism( int astId, float radius, Star starPrefab, AstLine linePrefab, ref List< Star > stars, ref List< AstLine > lines,  float randomRange = 0.0f )
     {
         var d = AsterismDataUtil.getData( astId );
 
+        // 恒星のAABB範囲を先に計算
+        List<Vector3> poses = new List<Vector3>();
+        for ( int i = 0; i < d.stars_.Count; ++i ) {
+            var star = d.stars_[ i ];
+            var pos = SphereSurfUtil.convPolerToPos( star.pos_.x, star.pos_.y );
+            poses.Add( pos );
+        }
+        Vector3 aabbMin = Vector3.zero;
+        Vector3 aabbMax = Vector3.zero;
+        Ranges.aabb3( poses, out aabbMin, out aabbMax );
+        float range = ( aabbMax - aabbMin ).magnitude * 0.5f * radius;
+
         // 恒星
+        var starPosDict = new Dictionary<int, Vector3>();
         for ( int i = 0; i < d.stars_.Count; ++i ) {
             var star = d.stars_[ i ];
             var obj = Instantiate<Star>( starPrefab );
             var pos = SphereSurfUtil.convPolerToPos( star.pos_.x, star.pos_.y );
-            obj.transform.position = pos * radius;
+            obj.transform.position = pos * ( radius + Random.Range( -range, range ) * randomRange );
             obj.setHipId( star.hipId_ );
             obj.setPolerCoord( star.pos_.x, star.pos_.y );
 
             stars.Add( obj );
+            starPosDict[ star.hipId_ ] = obj.transform.position;
         }
 
         // ライン
         for ( int i = 0; i < d.lines_.Count; ++i ) {
             var line = d.lines_[ i ];
             var obj = Instantiate<AstLine>( linePrefab );
-            var spos = SphereSurfUtil.convPolerToPos( line.start_.x, line.start_.y );
-            var epos = SphereSurfUtil.convPolerToPos( line.end_.x, line.end_.y );
-            obj.setLine( spos * radius, epos * radius );
+            var spos = starPosDict[ line.startHipId_ ];
+            var epos = starPosDict[ line.endHipId_ ];
+//            var spos = SphereSurfUtil.convPolerToPos( line.start_.x, line.start_.y );
+//            var epos = SphereSurfUtil.convPolerToPos( line.end_.x, line.end_.y );
+            obj.setLine( spos, epos );
 
             lines.Add( obj );
         }
@@ -105,6 +121,8 @@ public class GameManager : MonoBehaviour {
         public GameObject root_ = null;
         public Vector3 center_ = Vector3.zero;
         public Quaternion lookQuaternion_ = Quaternion.identity;
+        public Vector3 aabbMin_ = Vector3.zero;
+        public Vector3 aabbMax_ = Vector3.zero;
         bool bCalcCenter_ = false;
 
         // センター位置を取得
@@ -133,6 +151,8 @@ public class GameManager : MonoBehaviour {
             }
             center_ = ( min + max ) * 0.5f;
             lookQuaternion_ = Quaternion.LookRotation( center_ );
+            aabbMin_ = min;
+            aabbMax_ = max;
             return lookQuaternion_;
         }
 
@@ -161,7 +181,7 @@ public class GameManager : MonoBehaviour {
         // 問題を作成する
         void createAsterism()
         {
-            parent_.createAsterism( dataSet_.astId_, dataSet_.radius_, parent_.starUnitPrefab_, parent_.linePrefab_, ref dataSet_.stars_, ref dataSet_.lines_ );
+            parent_.createAsterism( dataSet_.astId_, dataSet_.radius_, parent_.starUnitPrefab_, parent_.linePrefab_, ref dataSet_.stars_, ref dataSet_.lines_, 1.0f );
 
             dataSet_.root_ = new GameObject( "root" );
             dataSet_.root_.transform.parent = parent_.transform;

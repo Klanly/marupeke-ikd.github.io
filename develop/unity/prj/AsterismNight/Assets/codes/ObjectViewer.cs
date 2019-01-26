@@ -80,6 +80,6 @@ public class ObjectViewer {
     Vector3 right_ = Vector3.right;
     Vector3 up_ = Vector3.up;
     Vector3 forward_ = Vector3.forward;
-    float rotScale_ = 1.0f;
+    float rotScale_ = 0.3f;
     float radius_ = 100.0f;
 }
