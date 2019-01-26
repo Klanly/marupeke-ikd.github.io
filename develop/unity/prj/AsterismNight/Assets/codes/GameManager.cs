@@ -260,6 +260,9 @@ public class GameManager : MonoBehaviour {
             var center = Vector3.zero;
             start_ = Camera.main.transform.rotation;
             end_ = dataSet_.lookAtAst();
+            startFov_ = Camera.main.fieldOfView;
+            float r = ( dataSet_.aabbMax_ - dataSet_.aabbMin_ ).magnitude * 0.5f;
+            endFov_ = 2.0f * Mathf.Asin( r / dataSet_.radius_ ) * Mathf.Rad2Deg;
 
             // TEST
             // var t = Instantiate<Star>( parent_.starUnitPrefab_ );
@@ -273,7 +276,9 @@ public class GameManager : MonoBehaviour {
             t_ += Time.deltaTime;
             float t0 = t_ / moveSec_;
             var q = Lerps.Quaternion.easeInOut( start_, end_, t0 );
+            var fov = Lerps.Float.easeInOut( startFov_, endFov_, t0 );
             Camera.main.transform.rotation = q;
+            Camera.main.fieldOfView = fov;
             if ( t_ >= moveSec_ ) {
                 return new Gaming( parent_, dataSet_ );
             }
@@ -284,6 +289,8 @@ public class GameManager : MonoBehaviour {
         Quaternion start_, end_;
         float moveSec_ = 3.0f;
         float t_ = 0.0f;
+        float startFov_ = 0.0f;
+        float endFov_ = 0.0f;
     }
 
     // ゲーム中
