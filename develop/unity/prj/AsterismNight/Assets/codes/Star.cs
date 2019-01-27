@@ -20,10 +20,27 @@ public class Star : MonoBehaviour {
     [SerializeField]
     GameObject particle_;
 
+    [SerializeField]
+    GameObject namePlateRoot_;
+
+    [SerializeField]
+    TextMesh namePlate_;
+
+
+    public void setName( string name )
+    {
+        namePlateRoot_.gameObject.SetActive( true );
+        namePlate_.text = name;
+    }
 
     public void setHipId( int hipId )
     {
         hipId_ = hipId;
+    }
+
+    public int getHipId()
+    {
+        return hipId_;
     }
 
     public void setPolerCoord( float lat, float longi )

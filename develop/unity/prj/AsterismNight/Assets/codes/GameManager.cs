@@ -277,6 +277,14 @@ public class GameManager : MonoBehaviour {
             dataSet_.root_.transform.position = dataSet_.getCenter();
             dataSet_.toRoot();
 
+            // 恒星名があれば表示
+            foreach ( var star in dataSet_.stars_ ) {
+                int hipId = star.getHipId();
+                string name = Table_asterism_star_hip.getInstance().getName( hipId );
+                if ( name != "" )
+                    star.setName( name );
+            }
+
             // 星座のルートをランダムに回転
             dataSet_.answerQ_ = dataSet_.root_.transform.rotation;
             var q = Quaternion.Euler( Random.Range( -180.0f, 180.0f ), Random.Range( -180.0f, 180.0f ), Random.Range( -180.0f, 180.0f ) );
@@ -361,7 +369,7 @@ public class GameManager : MonoBehaviour {
 
             // 情報を表示
             var desc = Instantiate<AsterismDesc>( parent_.descPrefab_ );
-            desc.transform.SetParent( parent_.canvas_.transform );
+            desc.transform.SetParent( parent_.canvas_.transform, false );
             desc.transform.localPosition = Vector3.zero;
             desc.transform.localScale = Vector3.one;
             desc.setup( dataSet_.astId_ );

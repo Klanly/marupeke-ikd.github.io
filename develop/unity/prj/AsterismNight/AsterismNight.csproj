@@ -277,6 +277,7 @@
     <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font5.shader" />
     <None Include="Assets\fonts\astname_eg.fnt" />
     <None Include="Assets\fonts\astname_jp.fnt" />
+    <None Include="Assets\fonts\starname_eg.fnt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
