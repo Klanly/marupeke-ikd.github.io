@@ -17,6 +17,10 @@ public class Star : MonoBehaviour {
     [SerializeField]
     MeshRenderer renderer_;
 
+    [SerializeField]
+    GameObject particle_;
+
+
     public void setHipId( int hipId )
     {
         hipId_ = hipId;
@@ -26,6 +30,11 @@ public class Star : MonoBehaviour {
     {
         lat_ = lat;
         longi_ = longi;
+    }
+
+    public void runParticle()
+    {
+        particle_.SetActive( true );
     }
 
     public void setColorScale( float scale )

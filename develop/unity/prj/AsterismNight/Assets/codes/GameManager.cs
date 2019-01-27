@@ -433,6 +433,9 @@ public class GameManager : MonoBehaviour {
         // 内部初期化
         override protected void innerInit()
         {
+            foreach( var star in dataSet_.stars_ ) {
+                star.runParticle();
+            }
         }
 
         // 内部状態
