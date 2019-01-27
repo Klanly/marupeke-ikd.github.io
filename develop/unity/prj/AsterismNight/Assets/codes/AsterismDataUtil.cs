@@ -11,6 +11,7 @@ public class AsterismDataUtil {
         public string name_;    // 名前（英語）
         public Vector2 pos_;       // 位置（極座標：lat, long)
         public float magnitude_;   // 見かけ等級
+        public Vector3 color_;      // 色
     }
 
     public class Line
@@ -61,6 +62,7 @@ public class AsterismDataUtil {
             star.magnitude_ = posData.magnitude_;
             star.name_ = starHipTable.getName( star.hipId_ );
             star.pos_ = new Vector2( posData.lat_, posData.long_ );
+            star.color_ = new Vector3( posData.r_, posData.g_, posData.b_ );
             data.stars_.Add( star );
         }
 

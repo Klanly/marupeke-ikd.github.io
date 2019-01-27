@@ -35,6 +35,7 @@ public class Table_asterism_star_pos : Table {
         public float bvColorIndex_;     // B-V色指数
         public float viColorIndex_;     // V-I色指数
         public string spectralClassification_;  // スペクトル分類
+        public float r_, g_, b_;        // 色
     }
 
     // データ格納前コール
@@ -63,6 +64,9 @@ public class Table_asterism_star_pos : Table {
         d.bvColorIndex_ = values[ "bvColorIndex" ].fVal_;
         d.viColorIndex_ = values[ "viColorIndex" ].fVal_;
         d.spectralClassification_ = values[ "spectralClassification" ].sVal_;
+        d.r_ = values[ "r" ].fVal_;
+        d.g_ = values[ "g" ].fVal_;
+        d.b_ = values[ "b" ].fVal_;
 
         data_[ dataNum_ ] = d;
         dict_[ d.hipId_ ] = d;

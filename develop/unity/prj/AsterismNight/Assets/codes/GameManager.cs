@@ -20,6 +20,12 @@ public class GameManager : MonoBehaviour {
     AstLine linePrefab_;
 
     [SerializeField]
+    AsterismDesc descPrefab_;
+
+    [SerializeField]
+    Canvas canvas_;
+
+    [SerializeField]
     float curAngle_;
 
     // 天球
@@ -34,11 +40,11 @@ public class GameManager : MonoBehaviour {
     }
 
     // 次の問題を出題
-    void notifyNextQuestion()
+    void notifyNextQuestion( int forceAstId = -1 )
     {
         // データセット作成
         dataSet_ = new DataSet();
-        dataSet_.astId_ = questionAstIds_[ curAnswerNum_ ];
+        dataSet_.astId_ = forceAstId >= 1 ? forceAstId : questionAstIds_[ curAnswerNum_ ];
         dataSet_.radius_ = radius_;
         nextState_ = new SetQuestion( this, dataSet_ );
     }
@@ -57,7 +63,7 @@ public class GameManager : MonoBehaviour {
             questionAstIds_.Add( i );
         ListUtil.shuffle<int>( ref questionAstIds_, Random.Range( 0, 10000 ) );
 
-        notifyNextQuestion();
+        notifyNextQuestion( astId_ );
     }
 	
 	// Update is called once per frame
@@ -104,6 +110,7 @@ public class GameManager : MonoBehaviour {
             obj.transform.position = pos * ( radius + Random.Range( -range, range ) * randomRange );
             obj.setHipId( star.hipId_ );
             obj.setPolerCoord( star.pos_.x, star.pos_.y );
+            obj.setColor( star.color_ );
 
             stars.Add( obj );
             starPosDict[ star.hipId_ ] = obj.transform.position;
@@ -147,6 +154,7 @@ public class GameManager : MonoBehaviour {
         public Quaternion answerQ_ = Quaternion.identity;
         public float curAngle_ = 0.0f;
         public float answerAngle_ = 7.0f;
+        public AsterismDesc desc_ = null;
         bool bCalcCenter_ = false;
 
         // ファイナライズ
@@ -158,6 +166,9 @@ public class GameManager : MonoBehaviour {
             foreach ( var line in lines_ ) {
                 Destroy( line.gameObject );
             }
+            desc_.fadeOut( () => {
+                Destroy( desc_.gameObject );
+            } );
             Destroy( root_ );
         }
 
@@ -203,6 +214,17 @@ public class GameManager : MonoBehaviour {
             foreach ( var line in lines_ ) {
                 line.transform.parent = root_.transform;
             }
+        }
+
+        // rootから各恒星までの最長距離を算出
+        public float calcStarDist()
+        {
+            float maxDist = -1.0f;
+            foreach ( var star in stars_ ) {
+                if ( star.transform.localPosition.magnitude > maxDist )
+                    maxDist = star.transform.localPosition.magnitude;
+            }
+            return maxDist;
         }
     }
 
@@ -261,7 +283,7 @@ public class GameManager : MonoBehaviour {
             start_ = Camera.main.transform.rotation;
             end_ = dataSet_.lookAtAst();
             startFov_ = Camera.main.fieldOfView;
-            float r = ( dataSet_.aabbMax_ - dataSet_.aabbMin_ ).magnitude * 0.5f;
+            float r = dataSet_.calcStarDist();
             endFov_ = 2.0f * Mathf.Asin( r / dataSet_.radius_ ) * Mathf.Rad2Deg;
 
             // TEST
@@ -305,6 +327,15 @@ public class GameManager : MonoBehaviour {
         override protected void innerInit()
         {
             viewer_.setup( Camera.main.transform, dataSet_.root_, 130.0f );
+
+            // 情報を表示
+            var desc = Instantiate<AsterismDesc>( parent_.descPrefab_ );
+            desc.transform.SetParent( parent_.canvas_.transform );
+            desc.transform.localPosition = Vector3.zero;
+            desc.transform.localScale = Vector3.one;
+            desc.setup( dataSet_.astId_ );
+
+            dataSet_.desc_ = desc;
         }
 
         // 内部状態

@@ -124,3 +124,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hipId_: 0
+  lat_: 0
+  longi_: 0
+  renderer_: {fileID: 23188039038506488}

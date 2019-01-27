@@ -14,6 +14,9 @@ public class Star : MonoBehaviour {
     [SerializeField]
     float longi_ = 0.0f;
 
+    [SerializeField]
+    MeshRenderer renderer_;
+
     public void setHipId( int hipId )
     {
         hipId_ = hipId;
@@ -23,6 +26,13 @@ public class Star : MonoBehaviour {
     {
         lat_ = lat;
         longi_ = longi;
+    }
+
+    public void setColor( Vector3 color )
+    {
+        var mat = renderer_.material;
+        mat.color = new Color( color.x, color.y, color.z );
+        renderer_.material = mat;
     }
 
 	// Use this for initialization
