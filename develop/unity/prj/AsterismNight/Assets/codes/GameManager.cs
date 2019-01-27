@@ -28,13 +28,19 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     float curAngle_;
 
+    [SerializeField]
+    SkyAsterismName skyAstNamePrefab_;
+
+
     // 天球
     class Sky
     {
+        // 天空上の星座
         public class Asterism
         {
             public List<Star> stars_ = new List<Star>();        // 恒星
             public List<AstLine> lines_ = new List<AstLine>();  // 星座間ライン
+            public SkyAsterismName skyAstName_;                 // 星座名
         }
         public List< Asterism > asterisms_ = new List<Asterism>();  // 星座IDに対応した星座
     }
@@ -52,6 +58,27 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    // 天球に星座名を刻印
+    void setSkyAsterismName( int astId )
+    {
+        var list = new List<Vector3>();
+        foreach( var star in sky_.asterisms_[ astId - 1 ].stars_ ) {
+            list.Add( star.transform.position );
+        }
+        Vector3 min = Vector3.zero, max = Vector3.zero;
+        Ranges.aabb3( list, out min, out max );
+        Vector3 pos = ( min + max ) * 0.5f;
+
+        var obj = Instantiate<SkyAsterismName>( skyAstNamePrefab_ );
+        obj.transform.position = pos;
+        Vector3 up = Camera.main.transform.up;
+        Vector3 forward = -pos;
+        obj.transform.rotation = Quaternion.LookRotation( forward, up );
+
+        obj.setup( astId );
+        sky_.asterisms_[ astId - 1 ].skyAstName_ = obj;
+    }
+
     // 次の問題を出題
     void notifyNextQuestion( int forceAstId = -1 )
     {
@@ -59,6 +86,7 @@ public class GameManager : MonoBehaviour {
         dataSet_ = new DataSet();
         dataSet_.astId_ = forceAstId >= 1 ? forceAstId : questionAstIds_[ curAnswerNum_ ];
         dataSet_.radius_ = radius_;
+        dataSet_.sky_ = sky_;
         nextState_ = new SetQuestion( this, dataSet_ );
     }
 
@@ -186,6 +214,7 @@ public class GameManager : MonoBehaviour {
         public float curAngle_ = 0.0f;
         public float answerAngle_ = 7.0f;
         public AsterismDesc desc_ = null;
+        public Sky sky_;
         bool bCalcCenter_ = false;
 
         // ファイナライズ
@@ -387,6 +416,7 @@ public class GameManager : MonoBehaviour {
             var q = dataSet_.root_.transform.rotation;
             float ang = Quaternion.Angle( q, dataSet_.answerQ_ );
             dataSet_.curAngle_ = ang;
+            dataSet_.desc_.setConcodanceRate( 1.0f - ang / 180.0f );
             if ( ang < dataSet_.answerAngle_ )
                 return new AnswerMove( parent_, dataSet_ );
             return this;
@@ -419,6 +449,7 @@ public class GameManager : MonoBehaviour {
             dataSet_.root_.transform.rotation = q;
             float ang = Quaternion.Angle( q, dataSet_.answerQ_ );
             dataSet_.curAngle_ = ang;
+            dataSet_.desc_.setConcodanceRate( 1.0f - ang / 180.0f );
             if ( t_ >= moveSec_ ) {
                 return new AnswerEffect( parent_, dataSet_ );
             }
@@ -454,6 +485,10 @@ public class GameManager : MonoBehaviour {
             if ( t_ >= waitSec_ ) {
                 // 解答した星座を色濃く表示
                 parent_.setSkyAsterisumAlpha( dataSet_.astId_, 1.0f, 1.0f );
+
+                // 解答した星座名を天球に刻印
+                parent_.setSkyAsterismName( dataSet_.astId_ );
+
                 // マネージャに次の出題を通知
                 dataSet_.finalize();
                 parent_.curAnswerNum_++;

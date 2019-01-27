@@ -10,6 +10,9 @@ public class AsterismDesc : MonoBehaviour {
     [SerializeField]
     UnityEngine.UI.Text nameEn_;
 
+    [SerializeField]
+    UnityEngine.UI.Text concodanceRate_;
+
     // 星座情報をセット
     public void setup( int astId )
     {
@@ -27,6 +30,12 @@ public class AsterismDesc : MonoBehaviour {
         state_ = new FadeOut( this );
     }
 
+    // 合致率を設定
+    public void setConcodanceRate( float rate )
+    {
+        concodanceRate_.text = string.Format( "{0:0.0}%", rate * 100.0f );
+    }
+
     // 透過度を変更
     void setAlpha( float alpha )
     {
@@ -34,6 +43,7 @@ public class AsterismDesc : MonoBehaviour {
         c.a = alpha;
         nameJp_.color = c;
         nameEn_.color = c;
+        concodanceRate_.color = c;
     }
 
     // Use this for initialization

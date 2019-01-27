@@ -262,6 +262,7 @@
     <Compile Include="Assets\codes\ListUtil.cs" />
     <Compile Include="Assets\codes\ObjectViewer.cs" />
     <Compile Include="Assets\codes\Ranges.cs" />
+    <Compile Include="Assets\codes\SkyAsterismName.cs" />
     <Compile Include="Assets\codes\Star.cs" />
     <Compile Include="Assets\codes\tables\Table_asterism_ast.cs" />
     <Compile Include="Assets\codes\tables\Table_asterism_line.cs" />
