@@ -10,7 +10,10 @@ public class AstLine : MonoBehaviour {
     [SerializeField]
     GameObject line_;
 
-    public void setLine( Vector3 start, Vector3 end )
+    [SerializeField]
+    MeshRenderer renderer_;
+
+    public void setLine( Vector3 start, Vector3 end, float diameterScale )
     {
         // Y軸はstart-endライン
         Vector3 y = ( end - start ).normalized;
@@ -30,11 +33,38 @@ public class AstLine : MonoBehaviour {
         var q = Quaternion.LookRotation( z, y );
         transform.localPosition = pos;
         rot_.transform.localRotation = q;
-        line_.transform.localScale = new Vector3( 1.0f, scale, 1.0f );
+        line_.transform.localScale = new Vector3( diameterScale, scale, diameterScale );
     }
 
-	// Use this for initialization
-	void Start () {
+    public void setColorScale(float scale)
+    {
+        colorScale_ = scale;
+        setColor( new Vector3( baseColor_.r, baseColor_.g, baseColor_.b ), alpha_ );
+    }
+
+    public void setColor(Vector3 color, float alpha)
+    {
+        baseColor_ = new Color( color.x, color.y, color.z, alpha );
+        alpha_ = alpha;
+        var mat = renderer_.material;
+        var c = baseColor_ * colorScale_;
+        c.a = alpha;
+        mat.color = c;
+        renderer_.material = mat;
+    }
+
+    public void setAlpha(float alpha)
+    {
+        alpha_ = alpha;
+        var mat = renderer_.material;
+        var color = mat.color;
+        color.a = alpha;
+        mat.color = color;
+        renderer_.material = mat;
+    }
+
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -42,4 +72,8 @@ public class AstLine : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    Color baseColor_;
+    float alpha_ = 1.0f;
+    float colorScale_ = 1.0f;
 }

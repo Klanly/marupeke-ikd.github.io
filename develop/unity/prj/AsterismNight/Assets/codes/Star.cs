@@ -28,15 +28,35 @@ public class Star : MonoBehaviour {
         longi_ = longi;
     }
 
-    public void setColor( Vector3 color )
+    public void setColorScale( float scale )
     {
+        colorScale_ = scale;
+        setColor( new Vector3( baseColor_.r, baseColor_.g, baseColor_.b ), alpha_ );
+    }
+
+    public void setColor( Vector3 color, float alpha )
+    {
+        baseColor_ = new Color( color.x, color.y, color.z, alpha );
+        alpha_ = alpha;
         var mat = renderer_.material;
-        mat.color = new Color( color.x, color.y, color.z );
+        var c = baseColor_ * colorScale_;
+        c.a = alpha;
+        mat.color = c;
         renderer_.material = mat;
     }
 
-	// Use this for initialization
-	void Start () {
+    public void setAlpha( float alpha )
+    {
+        alpha_ = alpha;
+        var mat = renderer_.material;
+        var color = mat.color;
+        color.a = alpha;
+        mat.color = color;
+        renderer_.material = mat;
+    }
+
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -44,4 +64,8 @@ public class Star : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    Color baseColor_;
+    float alpha_ = 1.0f;
+    float colorScale_ = 1.0f;
 }

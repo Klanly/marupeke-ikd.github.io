@@ -39,6 +39,19 @@ public class GameManager : MonoBehaviour {
         public List< Asterism > asterisms_ = new List<Asterism>();  // 星座IDに対応した星座
     }
 
+    // 天球の星座のα値とカラースケールを設定
+    void setSkyAsterisumAlpha( int astId, float alpha, float colorScale )
+    {
+        foreach( var star in sky_.asterisms_[ astId - 1 ].stars_ ) {
+            star.setAlpha( alpha );
+            star.setColorScale( colorScale );
+        }
+        foreach ( var line in sky_.asterisms_[ astId - 1 ].lines_ ) {
+            line.setAlpha( alpha );
+            line.setColorScale( colorScale );
+        }
+    }
+
     // 次の問題を出題
     void notifyNextQuestion( int forceAstId = -1 )
     {
@@ -54,7 +67,7 @@ public class GameManager : MonoBehaviour {
         sky_ = new Sky();
         for ( int i = 1; i <= 89; ++i ) {
             var ast = new Sky.Asterism();
-            createAsterism( i, skyRadius_, starUnitPrefab_, linePrefab_, ref ast.stars_, ref ast.lines_ );
+            createAsterism( i, skyRadius_, starUnitPrefab_, linePrefab_, ref ast.stars_, ref ast.lines_, false, 0.0f, 0.4f, 0.0f );
             sky_.asterisms_.Add( ast );
         }
 
@@ -85,7 +98,18 @@ public class GameManager : MonoBehaviour {
     }
 
     // 星座を並べる
-    void createAsterism( int astId, float radius, Star starPrefab, AstLine linePrefab, ref List< Star > stars, ref List< AstLine > lines,  float randomRange = 0.0f )
+    void createAsterism(
+        int astId,
+        float radius,
+        Star starPrefab,
+        AstLine linePrefab,
+        ref List< Star > stars,
+        ref List< AstLine > lines,
+        bool useAutoScale,
+        float alpha,
+        float colorScale,
+        float randomRange
+    )
     {
         var d = AsterismDataUtil.getData( astId );
 
@@ -99,7 +123,9 @@ public class GameManager : MonoBehaviour {
         Vector3 aabbMin = Vector3.zero;
         Vector3 aabbMax = Vector3.zero;
         Ranges.aabb3( poses, out aabbMin, out aabbMax );
-        float range = ( aabbMax - aabbMin ).magnitude * 0.5f * radius;
+        float diagoLen = ( aabbMax - aabbMin ).magnitude;
+        float range = diagoLen * 0.5f * radius;
+        float astRangeScale = ( useAutoScale ? 0.01f + 0.1f * range : 1.0f );
 
         // 恒星
         var starPosDict = new Dictionary<int, Vector3>();
@@ -107,16 +133,20 @@ public class GameManager : MonoBehaviour {
             var star = d.stars_[ i ];
             var obj = Instantiate<Star>( starPrefab );
             var pos = SphereSurfUtil.convPolerToPos( star.pos_.x, star.pos_.y );
-            obj.transform.position = pos * ( radius + Random.Range( -range, range ) * randomRange );
+            float R = radius + Random.Range( -range, range ) * randomRange; // 距離
+            obj.transform.position = pos * R;
+            var scale = obj.transform.localScale;
+            obj.transform.localScale = scale * ( R / radius ) * astRangeScale;
             obj.setHipId( star.hipId_ );
             obj.setPolerCoord( star.pos_.x, star.pos_.y );
-            obj.setColor( star.color_ );
+            obj.setColor( star.color_, alpha );
 
             stars.Add( obj );
             starPosDict[ star.hipId_ ] = obj.transform.position;
         }
 
         // ライン
+        Vector3 lineColor = new Vector3( 0.2f, 0.3f, 0.5f );
         for ( int i = 0; i < d.lines_.Count; ++i ) {
             var line = d.lines_[ i ];
             var obj = Instantiate<AstLine>( linePrefab );
@@ -124,7 +154,8 @@ public class GameManager : MonoBehaviour {
             var epos = starPosDict[ line.endHipId_ ];
 //            var spos = SphereSurfUtil.convPolerToPos( line.start_.x, line.start_.y );
 //            var epos = SphereSurfUtil.convPolerToPos( line.end_.x, line.end_.y );
-            obj.setLine( spos, epos );
+            obj.setLine( spos, epos, astRangeScale );
+            obj.setColor( lineColor, alpha * 0.6f );
 
             lines.Add( obj );
         }
@@ -239,7 +270,7 @@ public class GameManager : MonoBehaviour {
         // 問題を作成する
         void createAsterism()
         {
-            parent_.createAsterism( dataSet_.astId_, dataSet_.radius_, parent_.starUnitPrefab_, parent_.linePrefab_, ref dataSet_.stars_, ref dataSet_.lines_, 1.0f );
+            parent_.createAsterism( dataSet_.astId_, dataSet_.radius_, parent_.starUnitPrefab_, parent_.linePrefab_, ref dataSet_.stars_, ref dataSet_.lines_, true, 1.0f, 1.0f, 1.0f );
 
             dataSet_.root_ = new GameObject( "root" );
             dataSet_.root_.transform.parent = parent_.transform;
@@ -410,6 +441,8 @@ public class GameManager : MonoBehaviour {
             t_ += Time.deltaTime;
             float t0 = t_ / waitSec_;
             if ( t_ >= waitSec_ ) {
+                // 解答した星座を色濃く表示
+                parent_.setSkyAsterisumAlpha( dataSet_.astId_, 1.0f, 1.0f );
                 // マネージャに次の出題を通知
                 dataSet_.finalize();
                 parent_.curAnswerNum_++;
