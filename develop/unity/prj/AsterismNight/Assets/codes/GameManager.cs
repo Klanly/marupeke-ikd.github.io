@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour {
         sky_ = new Sky();
         for ( int i = 1; i <= 89; ++i ) {
             var ast = new Sky.Asterism();
-            createAsterism( i, skyRadius_, starUnitPrefab_, linePrefab_, ref ast.stars_, ref ast.lines_, false, 0.0f, 0.4f, 0.0f );
+            createAsterism( i, skyRadius_, starUnitPrefab_, linePrefab_, ref ast.stars_, ref ast.lines_, false, 0.0f, 0.7f, 0.0f );
             sky_.asterisms_.Add( ast );
         }
 
