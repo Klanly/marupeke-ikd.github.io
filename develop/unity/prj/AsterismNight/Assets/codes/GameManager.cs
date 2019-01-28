@@ -31,6 +31,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     SkyAsterismName skyAstNamePrefab_;
 
+    [SerializeField]
+    TitleManager titleManagerPrefab_;
+
 
     // 天球
     class Sky
@@ -104,7 +107,7 @@ public class GameManager : MonoBehaviour {
             questionAstIds_.Add( i );
         ListUtil.shuffle<int>( ref questionAstIds_, Random.Range( 0, 10000 ) );
 
-        notifyNextQuestion( astId_ );
+        state_ = new Title( this );
     }
 	
 	// Update is called once per frame
@@ -122,7 +125,8 @@ public class GameManager : MonoBehaviour {
             preId_ = astId_;
         }
 
-        curAngle_ = dataSet_.curAngle_;
+        if ( dataSet_ != null )
+            curAngle_ = dataSet_.curAngle_;
     }
 
     // 星座を並べる
@@ -187,16 +191,6 @@ public class GameManager : MonoBehaviour {
 
             lines.Add( obj );
         }
-    }
-
-
-    class StateBase : State
-    {
-        public StateBase( GameManager parent )
-        {
-            parent_ = parent;
-        }
-        protected GameManager parent_;
     }
 
     class DataSet
@@ -286,6 +280,41 @@ public class GameManager : MonoBehaviour {
             }
             return maxDist;
         }
+    }
+
+    class StateBase : State
+    {
+        public StateBase( GameManager parent )
+        {
+            parent_ = parent;
+        }
+        protected GameManager parent_;
+    }
+
+    class Title : StateBase
+    {
+        public Title(GameManager parent) : base( parent ) { }
+
+        protected override void innerInit()
+        {
+            title_ = Instantiate<TitleManager>( parent_.titleManagerPrefab_ );
+            title_.transform.localPosition = Vector3.zero;
+            title_.FinishCallback = ( mode ) => {
+                selectMode_ = mode;
+            };
+        }
+
+        protected override State innerUpdate()
+        {
+            if ( selectMode_ != TitleManager.Mode.None ) {
+                parent_.notifyNextQuestion();
+                Destroy( title_.gameObject );
+            }
+            return this;
+        }
+
+        TitleManager title_;
+        TitleManager.Mode selectMode_ = TitleManager.Mode.None;
     }
 
     // 問題をセットする
