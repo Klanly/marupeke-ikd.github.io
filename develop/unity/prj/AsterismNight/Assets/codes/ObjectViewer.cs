@@ -19,6 +19,12 @@ public class ObjectViewer {
         screenCenter_ = new Vector3( Screen.width * 0.5f, Screen.height * 0.5f, 0.0f );
     }
 
+    // アクティブ設定
+    public void setActive( bool isActive )
+    {
+        bActive_ = isActive;
+    }
+
     // マウス移動量に対する回転量係数を設定
     public void setRotScale( float rotScale )
     {
@@ -28,7 +34,7 @@ public class ObjectViewer {
     // 姿勢更新
     public void update()
     {
-        if ( target_ == null )
+        if ( target_ == null || bActive_ == false )
             return;
 
         if ( onDragging_ == false && Input.GetMouseButtonDown( 0 ) == true ) {
@@ -82,4 +88,5 @@ public class ObjectViewer {
     Vector3 forward_ = Vector3.forward;
     float rotScale_ = 0.3f;
     float radius_ = 100.0f;
+    bool bActive_ = true;
 }

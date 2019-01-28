@@ -20,6 +20,12 @@ public class GameManager : MonoBehaviour {
     AstLine linePrefab_;
 
     [SerializeField]
+    Star skyStarPrefab_;
+
+    [SerializeField]
+    AstLine skyLinePrefab_;
+
+    [SerializeField]
     AsterismDesc descPrefab_;
 
     [SerializeField]
@@ -90,6 +96,7 @@ public class GameManager : MonoBehaviour {
         dataSet_.astId_ = forceAstId >= 1 ? forceAstId : questionAstIds_[ curAnswerNum_ ];
         dataSet_.radius_ = radius_;
         dataSet_.sky_ = sky_;
+        dataSet_.selectMode_ = selectMode_;
         nextState_ = new SetQuestion( this, dataSet_ );
     }
 
@@ -98,7 +105,7 @@ public class GameManager : MonoBehaviour {
         sky_ = new Sky();
         for ( int i = 1; i <= 89; ++i ) {
             var ast = new Sky.Asterism();
-            createAsterism( i, skyRadius_, starUnitPrefab_, linePrefab_, ref ast.stars_, ref ast.lines_, false, 0.0f, 0.7f, 0.0f );
+            createAsterism( i, skyRadius_, skyStarPrefab_, skyLinePrefab_, ref ast.stars_, ref ast.lines_, false, 0.0f, 0.7f, 0.0f );
             sky_.asterisms_.Add( ast );
         }
 
@@ -209,6 +216,7 @@ public class GameManager : MonoBehaviour {
         public float answerAngle_ = 7.0f;
         public AsterismDesc desc_ = null;
         public Sky sky_;
+        public TitleManager.Mode selectMode_ = TitleManager.Mode.None;
         bool bCalcCenter_ = false;
 
         // ファイナライズ
@@ -300,13 +308,13 @@ public class GameManager : MonoBehaviour {
             title_ = Instantiate<TitleManager>( parent_.titleManagerPrefab_ );
             title_.transform.localPosition = Vector3.zero;
             title_.FinishCallback = ( mode ) => {
-                selectMode_ = mode;
+                parent_.selectMode_ = mode;
             };
         }
 
         protected override State innerUpdate()
         {
-            if ( selectMode_ != TitleManager.Mode.None ) {
+            if ( parent_.selectMode_ != TitleManager.Mode.None ) {
                 parent_.notifyNextQuestion();
                 Destroy( title_.gameObject );
             }
@@ -314,7 +322,6 @@ public class GameManager : MonoBehaviour {
         }
 
         TitleManager title_;
-        TitleManager.Mode selectMode_ = TitleManager.Mode.None;
     }
 
     // 問題をセットする
@@ -399,7 +406,10 @@ public class GameManager : MonoBehaviour {
             Camera.main.transform.rotation = q;
             Camera.main.fieldOfView = fov;
             if ( t_ >= moveSec_ ) {
-                return new Gaming( parent_, dataSet_ );
+                if ( dataSet_.selectMode_ == TitleManager.Mode.View )
+                    return new ViewMode( parent_, dataSet_ );
+                else
+                    return new Gaming( parent_, dataSet_ );
             }
             return this;
         }
@@ -424,6 +434,7 @@ public class GameManager : MonoBehaviour {
         override protected void innerInit()
         {
             viewer_.setup( Camera.main.transform, dataSet_.root_, 130.0f );
+            viewer_.setActive( true );
 
             // 情報を表示
             var desc = Instantiate<AsterismDesc>( parent_.descPrefab_ );
@@ -452,6 +463,50 @@ public class GameManager : MonoBehaviour {
         }
 
         ObjectViewer viewer_ = new ObjectViewer();
+        DataSet dataSet_;
+        Quaternion answerQ_ = Quaternion.identity;
+    }
+
+    // 閲覧モード中
+    //  勝手に解答していく
+    class ViewMode : StateBase
+    {
+        public ViewMode(GameManager parent, DataSet dataSet) : base( parent )
+        {
+            dataSet_ = dataSet;
+        }
+
+        // 内部初期化
+        override protected void innerInit()
+        {
+            // 情報を表示
+            var desc = Instantiate<AsterismDesc>( parent_.descPrefab_ );
+            desc.transform.SetParent( parent_.canvas_.transform, false );
+            desc.transform.localPosition = Vector3.zero;
+            desc.transform.localScale = Vector3.one;
+            desc.setup( dataSet_.astId_ );
+
+            dataSet_.desc_ = desc;
+
+            // 勝手に解答
+            var q = dataSet_.root_.transform.rotation;
+            GlobalState.time( 4.0f, (sec, t) => {
+                dataSet_.root_.transform.rotation = Lerps.Quaternion.easeInOut( q, dataSet_.answerQ_, t );
+                float ang = Quaternion.Angle( dataSet_.root_.transform.rotation, dataSet_.answerQ_ );
+                dataSet_.curAngle_ = ang;
+                dataSet_.desc_.setConcodanceRate( 1.0f - ang / 180.0f );
+                return true;
+            } ).finish(()=> {
+                parent_.nextState_ = new AnswerMove( parent_, dataSet_ );
+            } );
+        }
+
+        // 内部状態
+        override protected State innerUpdate()
+        {
+            return this;
+        }
+
         DataSet dataSet_;
         Quaternion answerQ_ = Quaternion.identity;
     }
@@ -539,4 +594,5 @@ public class GameManager : MonoBehaviour {
     DataSet dataSet_;
     List<int> questionAstIds_ = new List<int>();
     int curAnswerNum_ = 0;
+    TitleManager.Mode selectMode_ = TitleManager.Mode.None;
 }
