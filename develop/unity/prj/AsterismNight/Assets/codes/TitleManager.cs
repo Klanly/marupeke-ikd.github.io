@@ -14,7 +14,11 @@ public class TitleManager : MonoBehaviour {
     UnityEngine.UI.Button continueBtn_;
 
     [SerializeField]
-    UnityEngine.UI.Button viewBtn_;
+    UnityEngine.UI.Button autoBtn_;
+
+    [SerializeField]
+    UnityEngine.UI.Button endingBtn_;
+
 
 
     public enum Mode
@@ -22,7 +26,8 @@ public class TitleManager : MonoBehaviour {
         None,
         Start,
         Continue,
-        View
+        Auto,
+        Ending
     }
 
     public System.Action<Mode> FinishCallback { set { finishCallback_ = value; } }
@@ -36,8 +41,11 @@ public class TitleManager : MonoBehaviour {
         continueBtn_.onClick.AddListener( () => {
             selectMode_ = Mode.Continue;
         } );
-        viewBtn_.onClick.AddListener( () => {
-            selectMode_ = Mode.View;
+        autoBtn_.onClick.AddListener( () => {
+            selectMode_ = Mode.Auto;
+        } );
+        endingBtn_.onClick.AddListener( () => {
+            selectMode_ = Mode.Ending;
         } );
     }
 
@@ -72,7 +80,7 @@ public class TitleManager : MonoBehaviour {
         {
             manager_.startBtn_.enabled = false;
             manager_.continueBtn_.enabled = false;
-            manager_.viewBtn_.enabled = false;
+            manager_.autoBtn_.enabled = false;
             GlobalState.time( 2.0f, (sec, t) => {
                 manager_.group_.alpha = t;
                 return true;
@@ -104,7 +112,7 @@ public class TitleManager : MonoBehaviour {
         {
             manager_.startBtn_.enabled = true;
             manager_.continueBtn_.enabled = true;
-            manager_.viewBtn_.enabled = true;
+            manager_.autoBtn_.enabled = true;
         }
 
         protected override State innerUpdate()

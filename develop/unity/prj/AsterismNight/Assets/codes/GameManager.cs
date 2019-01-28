@@ -91,6 +91,12 @@ public class GameManager : MonoBehaviour {
     // 次の問題を出題
     void notifyNextQuestion( int forceAstId = -1 )
     {
+        if ( curAnswerNum_ >= 89 ) {
+            // 全て開けている
+            nextState_ = new Ending( this );
+            return;
+        }
+
         // データセット作成
         dataSet_ = new DataSet();
         dataSet_.astId_ = forceAstId >= 1 ? forceAstId : questionAstIds_[ curAnswerNum_ ];
@@ -116,9 +122,9 @@ public class GameManager : MonoBehaviour {
 
         state_ = new Title( this );
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
 
         if ( nextState_ != null ) {
             state_ = nextState_;
@@ -315,7 +321,16 @@ public class GameManager : MonoBehaviour {
         protected override State innerUpdate()
         {
             if ( parent_.selectMode_ != TitleManager.Mode.None ) {
-                parent_.notifyNextQuestion();
+                if ( parent_.selectMode_ == TitleManager.Mode.Ending ) {
+                    // 全ての星座名をオープンしエンディングへ
+                    for ( int i = 1; i <= 89; ++i ) {
+                        parent_.setSkyAsterisumAlpha( i, 1.0f, 1.0f );
+                        parent_.setSkyAsterismName( i );
+                    }
+                    parent_.nextState_ = new Ending( parent_ );
+                } else {
+                    parent_.notifyNextQuestion();
+                }
                 Destroy( title_.gameObject );
             }
             return this;
@@ -406,7 +421,7 @@ public class GameManager : MonoBehaviour {
             Camera.main.transform.rotation = q;
             Camera.main.fieldOfView = fov;
             if ( t_ >= moveSec_ ) {
-                if ( dataSet_.selectMode_ == TitleManager.Mode.View )
+                if ( dataSet_.selectMode_ == TitleManager.Mode.Auto )
                     return new ViewMode( parent_, dataSet_ );
                 else
                     return new Gaming( parent_, dataSet_ );
@@ -585,6 +600,34 @@ public class GameManager : MonoBehaviour {
         DataSet dataSet_;
         float t_ = 0.0f;
         float waitSec_ = 3.0f;
+    }
+
+    // エンディング
+    class Ending : StateBase
+    {
+        public Ending(GameManager parent ) : base( parent ) { }
+
+        protected override void innerInit()
+        {
+        }
+
+        protected override State innerUpdate()
+        {
+            latDeg_ += Time.deltaTime * 3.0f;
+            longDeg_ += Time.deltaTime * 5.0f;
+            lat_ = Mathf.Sin( latDeg_ * Mathf.Deg2Rad ) * 88.0f;
+            longi_ = Mathf.Cos( longDeg_ * Mathf.Deg2Rad ) * 180.0f + 180.0f;
+            var pos = SphereSurfUtil.convPolerToPos( lat_, longi_ );
+            Camera.main.transform.rotation = Quaternion.LookRotation( pos, Vector3.up );
+
+            return this;
+        }
+
+        float t_ = 0.0f;
+        float latDeg_ = 0.0f;
+        float longDeg_ = 0.0f;
+        float lat_ = 0.0f;
+        float longi_ = 0.0f;
     }
 
     int preId_ = -1;
