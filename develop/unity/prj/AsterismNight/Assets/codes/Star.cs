@@ -26,6 +26,9 @@ public class Star : MonoBehaviour {
     [SerializeField]
     TextMesh namePlate_;
 
+    [SerializeField]
+    SpriteRenderer brightRenderer_;
+
 
     public void setName( string name )
     {
@@ -69,6 +72,7 @@ public class Star : MonoBehaviour {
         c.a = alpha;
         mat.color = c;
         renderer_.material = mat;
+        brightRenderer_.color = c;
     }
 
     public void setAlpha( float alpha )

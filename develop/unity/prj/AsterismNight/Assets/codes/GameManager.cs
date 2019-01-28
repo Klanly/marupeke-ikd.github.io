@@ -404,6 +404,10 @@ public class GameManager : MonoBehaviour {
             startFov_ = Camera.main.fieldOfView;
             float r = dataSet_.calcStarDist();
             endFov_ = 2.0f * Mathf.Asin( r / dataSet_.radius_ ) * Mathf.Rad2Deg;
+            if ( startFov_ > 65.0f )
+                startFov_ = 65.0f;
+            if ( endFov_ < 25.0f )
+                endFov_ = 25.0f;
 
             // TEST
             // var t = Instantiate<Star>( parent_.starUnitPrefab_ );
@@ -574,32 +578,37 @@ public class GameManager : MonoBehaviour {
             foreach( var star in dataSet_.stars_ ) {
                 star.runParticle();
             }
+            GlobalState.wait( waitSec_, () => {
+                // 解答した星座を色濃く表示
+                parent_.setSkyAsterisumAlpha( dataSet_.astId_, 1.0f, 1.0f );
+                // 解答した星座名を天球に刻印
+                parent_.setSkyAsterismName( dataSet_.astId_ );
+                dataSet_.finalize();
+                return false;
+            } ).next( () => {
+                GlobalState.wait( 1.5f, () => {
+                    // マネージャに次の出題を通知
+                    parent_.curAnswerNum_++;
+                    parent_.notifyNextQuestion();
+                    bFinish_ = true;
+                    return false;
+                } );
+                return false;
+            } );
         }
 
         // 内部状態
         override protected State innerUpdate()
         {
-            t_ += Time.deltaTime;
-            float t0 = t_ / waitSec_;
-            if ( t_ >= waitSec_ ) {
-                // 解答した星座を色濃く表示
-                parent_.setSkyAsterisumAlpha( dataSet_.astId_, 1.0f, 1.0f );
-
-                // 解答した星座名を天球に刻印
-                parent_.setSkyAsterismName( dataSet_.astId_ );
-
-                // マネージャに次の出題を通知
-                dataSet_.finalize();
-                parent_.curAnswerNum_++;
-                parent_.notifyNextQuestion();
+            if ( bFinish_ == true ) {
                 return null;
             }
             return this;
         }
 
         DataSet dataSet_;
-        float t_ = 0.0f;
         float waitSec_ = 3.0f;
+        bool bFinish_ = false;
     }
 
     // エンディング
