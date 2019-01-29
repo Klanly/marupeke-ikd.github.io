@@ -115,6 +115,13 @@ public class GameManager : MonoBehaviour {
             sky_.asterisms_.Add( ast );
         }
 
+        // 天球のラインはすべて初期状態で非表示
+        foreach ( var ast in sky_.asterisms_ ) {
+            foreach ( var line in ast.lines_ ) {
+                line.gameObject.SetActive( false );
+            }
+        }
+
         // 全89星座の出題順番
         for ( int i = 1; i <= 89; ++i )
             questionAstIds_.Add( i );
@@ -327,6 +334,12 @@ public class GameManager : MonoBehaviour {
                         parent_.setSkyAsterisumAlpha( i, 1.0f, 1.0f );
                         parent_.setSkyAsterismName( i );
                     }
+                    // 天球のラインをすべてアクティブに
+                    foreach ( var ast in parent_.sky_.asterisms_ ) {
+                        foreach ( var line in ast.lines_ ) {
+                            line.gameObject.SetActive( true );
+                        }
+                    }
                     parent_.nextState_ = new Ending( parent_ );
                 } else {
                     parent_.notifyNextQuestion();
@@ -382,6 +395,11 @@ public class GameManager : MonoBehaviour {
                 var lq = line.getBackupRotation();
                 var ansLQ = line.getQuestionRotation();
                 line.transform.localRotation = Quaternion.Lerp( ansLQ, lq, t );
+            }
+
+            // 天球のラインを有効に
+            foreach ( var line in dataSet_.sky_.asterisms_[ dataSet_.astId_ - 1 ].lines_ ) {
+                line.gameObject.SetActive( true );
             }
         }
 
