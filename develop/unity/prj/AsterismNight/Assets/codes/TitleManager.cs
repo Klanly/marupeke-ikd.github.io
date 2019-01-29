@@ -52,6 +52,7 @@ public class TitleManager : MonoBehaviour {
     private void Awake()
     {
         group_.alpha = 0.0f;
+        cameraOpe_.setSpeedScales( 0.1f, 0.1f );
     }
 
     // Update is called once per frame
@@ -59,15 +60,8 @@ public class TitleManager : MonoBehaviour {
         if ( state_ != null )
             state_ = state_.update();
 
-        cameraMove();
+        cameraOpe_.update();
 	}
-
-    void cameraMove()
-    {
-        rotY_ += 0.1f;
-        rotY_ %= 360;
-        Camera.main.transform.rotation = Quaternion.Euler( 30.0f, rotY_, 0.0f );
-    }
 
     class FadeIn : State
     {
@@ -156,5 +150,5 @@ public class TitleManager : MonoBehaviour {
     State state_;
     System.Action<Mode> finishCallback_;
     Mode selectMode_ = Mode.None;
-    float rotY_ = 0.0f;
+    CameraOperator cameraOpe_ = new CameraOperator();
 }

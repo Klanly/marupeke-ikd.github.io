@@ -244,6 +244,7 @@
     <Compile Include="Assets\codes\AsterismDataUtil.cs" />
     <Compile Include="Assets\codes\AsterismDesc.cs" />
     <Compile Include="Assets\codes\AstLine.cs" />
+    <Compile Include="Assets\codes\CameraOperator.cs" />
     <Compile Include="Assets\codes\common\Bezier.cs" />
     <Compile Include="Assets\codes\common\GlobalStateManager.cs" />
     <Compile Include="Assets\codes\common\ImageBillboarding.cs" />
