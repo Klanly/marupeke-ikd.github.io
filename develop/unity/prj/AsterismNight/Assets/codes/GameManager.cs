@@ -44,6 +44,8 @@ public class GameManager : MonoBehaviour {
     // 天球
     class Sky
     {
+        public SkyAsterismName skyAstNamePrefab_;
+
         // 天空上の星座
         public class Asterism
         {
@@ -52,45 +54,123 @@ public class GameManager : MonoBehaviour {
             public SkyAsterismName skyAstName_;                 // 星座名
         }
         public List< Asterism > asterisms_ = new List<Asterism>();  // 星座IDに対応した星座
+
+        public void resetAll()
+        {
+            // 天球のラインはすべて初期状態で非表示
+            foreach ( var ast in asterisms_ ) {
+                foreach ( var line in ast.lines_ ) {
+                    line.gameObject.SetActive( false );
+                }
+                if ( ast.skyAstName_ != null )
+                    Destroy( ast.skyAstName_.gameObject );
+            }
+
+            // カラーはゼロで
+            for ( int i = 0; i < asterisms_.Count; ++i ) {
+                setSkyAsterisumAlpha( i + 1, 0.0f, 1.0f );
+            }
+        }
+
+        // 天球の星座のα値とカラースケールを設定
+        public void setSkyAsterisumAlpha(int astId, float alpha, float colorScale)
+        {
+            foreach ( var star in asterisms_[ astId - 1 ].stars_ ) {
+                star.setAlpha( alpha );
+                star.setColorScale( colorScale );
+            }
+            foreach ( var line in asterisms_[ astId - 1 ].lines_ ) {
+                line.setAlpha( alpha );
+                line.setColorScale( colorScale );
+            }
+        }
+
+        // 天球に星座名を刻印
+        public void setSkyAsterismName(int astId)
+        {
+            var list = new List<Vector3>();
+            foreach ( var star in asterisms_[ astId - 1 ].stars_ ) {
+                list.Add( star.transform.position );
+            }
+            Vector3 min = Vector3.zero, max = Vector3.zero;
+            Ranges.aabb3( list, out min, out max );
+            Vector3 pos = ( min + max ) * 0.5f;
+
+            var obj = Instantiate<SkyAsterismName>( skyAstNamePrefab_ );
+            obj.transform.position = pos;
+            Vector3 up = Camera.main.transform.up;
+            Vector3 forward = -pos;
+            obj.transform.rotation = Quaternion.LookRotation( forward, up );
+
+            obj.setup( astId );
+            asterisms_[ astId - 1 ].skyAstName_ = obj;
+        }
     }
 
-    // 天球の星座のα値とカラースケールを設定
-    void setSkyAsterisumAlpha( int astId, float alpha, float colorScale )
+    // セーブデータ読み込み
+    void load()
     {
-        foreach( var star in sky_.asterisms_[ astId - 1 ].stars_ ) {
-            star.setAlpha( alpha );
-            star.setColorScale( colorScale );
+        if ( PlayerPrefs.HasKey( "savedata" ) == false )
+            return;
+
+        var dataStr = PlayerPrefs.GetString( "savedata" );
+        var root = MiniJSON.Json.Deserialize( dataStr ) as Dictionary<string, object>;
+        if ( root != null ) {
+            if ( root.ContainsKey( "astIds" ) == true ) {
+                questionAstIds_.Clear();
+                var qL = root[ "astIds" ] as IList;
+                foreach ( var id in qL ) {
+                    questionAstIds_.Add( (int)(long)id );
+                }
+                curAnswerNum_ = (int)(long)root[ "curAnswerNum" ];
+            }
         }
-        foreach ( var line in sky_.asterisms_[ astId - 1 ].lines_ ) {
-            line.setAlpha( alpha );
-            line.setColorScale( colorScale );
+
+        // 解答した天球のラインや名前を表示
+        for ( int i = 0; i < curAnswerNum_; ++i ) {
+            int astId = questionAstIds_[ i ];
+            sky_.setSkyAsterismName( astId );
+            sky_.setSkyAsterisumAlpha( astId, 1.0f, 1.0f );
+            foreach ( var line in sky_.asterisms_[ astId - 1 ].lines_ ) {
+                line.gameObject.SetActive( true );
+            }
         }
     }
 
-    // 天球に星座名を刻印
-    void setSkyAsterismName( int astId )
+    // データセーブ
+    void save()
     {
-        var list = new List<Vector3>();
-        foreach( var star in sky_.asterisms_[ astId - 1 ].stars_ ) {
-            list.Add( star.transform.position );
-        }
-        Vector3 min = Vector3.zero, max = Vector3.zero;
-        Ranges.aabb3( list, out min, out max );
-        Vector3 pos = ( min + max ) * 0.5f;
+        var root = new Dictionary<string, object>();
+        root[ "astIds" ] = questionAstIds_.ToArray();
+        root[ "curAnswerNum" ] = curAnswerNum_;
+        var dataStr = MiniJSON.Json.Serialize( root );
+        PlayerPrefs.SetString( "savedata", dataStr );
+        PlayerPrefs.Save();
+    }
 
-        var obj = Instantiate<SkyAsterismName>( skyAstNamePrefab_ );
-        obj.transform.position = pos;
-        Vector3 up = Camera.main.transform.up;
-        Vector3 forward = -pos;
-        obj.transform.rotation = Quaternion.LookRotation( forward, up );
+    // 順番等リセット
+    void resetAll()
+    {
+        // 天球をリセット
+        sky_.resetAll();
 
-        obj.setup( astId );
-        sky_.asterisms_[ astId - 1 ].skyAstName_ = obj;
+        // 全89星座の出題順番
+        for ( int i = 1; i <= 89; ++i )
+            questionAstIds_.Add( i );
+        ListUtil.shuffle<int>( ref questionAstIds_, Random.Range( 0, 10000 ) );
+
+        curAnswerNum_ = 0;
+
+        // セーブデータを初期化
+        save();
     }
 
     // 次の問題を出題
     void notifyNextQuestion( int forceAstId = -1 )
     {
+        // 現状をセーブ
+        save();
+
         if ( curAnswerNum_ >= 89 ) {
             // 全て開けている
             nextState_ = new Ending( this );
@@ -109,6 +189,8 @@ public class GameManager : MonoBehaviour {
     void Start () {
         // 天球を作成
         sky_ = new Sky();
+        sky_.skyAstNamePrefab_ = skyAstNamePrefab_;
+
         for ( int i = 1; i <= 89; ++i ) {
             var ast = new Sky.Asterism();
             createAsterism( i, skyRadius_, skyStarPrefab_, skyLinePrefab_, ref ast.stars_, ref ast.lines_, false, 0.0f, 0.7f, 0.0f );
@@ -122,10 +204,16 @@ public class GameManager : MonoBehaviour {
             }
         }
 
-        // 全89星座の出題順番
-        for ( int i = 1; i <= 89; ++i )
-            questionAstIds_.Add( i );
-        ListUtil.shuffle<int>( ref questionAstIds_, Random.Range( 0, 10000 ) );
+        // データロード
+        //  データが無ければ初期化
+        if ( PlayerPrefs.HasKey( "savedata" ) == true ) {
+            load();
+        } else {
+            // 全89星座の出題順番
+            for ( int i = 1; i <= 89; ++i )
+                questionAstIds_.Add( i );
+            ListUtil.shuffle<int>( ref questionAstIds_, Random.Range( 0, 10000 ) );
+        }
 
         state_ = new Title( this );
     }
@@ -331,8 +419,8 @@ public class GameManager : MonoBehaviour {
                 if ( parent_.selectMode_ == TitleManager.Mode.Ending ) {
                     // 全ての星座名をオープンしエンディングへ
                     for ( int i = 1; i <= 89; ++i ) {
-                        parent_.setSkyAsterisumAlpha( i, 1.0f, 1.0f );
-                        parent_.setSkyAsterismName( i );
+                        parent_.sky_.setSkyAsterisumAlpha( i, 1.0f, 1.0f );
+                        parent_.sky_.setSkyAsterismName( i );
                     }
                     // 天球のラインをすべてアクティブに
                     foreach ( var ast in parent_.sky_.asterisms_ ) {
@@ -341,7 +429,12 @@ public class GameManager : MonoBehaviour {
                         }
                     }
                     parent_.nextState_ = new Ending( parent_ );
+                } else if ( parent_.selectMode_ == TitleManager.Mode.Continue ) {
+                    // 現在のデータで継続スタート
+                    parent_.notifyNextQuestion();
                 } else {
+                    // 最初から
+                    parent_.resetAll();
                     parent_.notifyNextQuestion();
                 }
                 Destroy( title_.gameObject );
@@ -639,9 +732,9 @@ public class GameManager : MonoBehaviour {
             }
             GlobalState.wait( waitSec_, () => {
                 // 解答した星座を色濃く表示
-                parent_.setSkyAsterisumAlpha( dataSet_.astId_, 1.0f, 1.0f );
+                dataSet_.sky_.setSkyAsterisumAlpha( dataSet_.astId_, 1.0f, 1.0f );
                 // 解答した星座名を天球に刻印
-                parent_.setSkyAsterismName( dataSet_.astId_ );
+                dataSet_.sky_.setSkyAsterismName( dataSet_.astId_ );
                 dataSet_.finalize();
                 return false;
             } ).next( () => {
