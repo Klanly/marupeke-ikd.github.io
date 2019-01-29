@@ -369,6 +369,20 @@ public class GameManager : MonoBehaviour {
             dataSet_.answerQ_ = dataSet_.root_.transform.rotation;
             var q = Quaternion.Euler( Random.Range( -180.0f, 180.0f ), Random.Range( -180.0f, 180.0f ), Random.Range( -180.0f, 180.0f ) );
             dataSet_.root_.transform.rotation = q;
+
+            float ang = Quaternion.Angle( q, dataSet_.answerQ_ );
+            dataSet_.curAngle_ = ang;
+            float t = 1.0f - ang / 180.0f;
+
+            // 星座線をランダムに回転
+            foreach ( var line in dataSet_.lines_ ) {
+                line.backupRotation();
+                line.transform.localRotation = Quaternion.Euler( Random.Range( -180.0f, 180.0f ), Random.Range( -180.0f, 180.0f ), Random.Range( -180.0f, 180.0f ) );
+                line.backupQuestionRotation();
+                var lq = line.getBackupRotation();
+                var ansLQ = line.getQuestionRotation();
+                line.transform.localRotation = Quaternion.Lerp( ansLQ, lq, t );
+            }
         }
 
         // 内部初期化
@@ -475,7 +489,17 @@ public class GameManager : MonoBehaviour {
             var q = dataSet_.root_.transform.rotation;
             float ang = Quaternion.Angle( q, dataSet_.answerQ_ );
             dataSet_.curAngle_ = ang;
+            float t = 1.0f - ang / 180.0f;
             dataSet_.desc_.setConcodanceRate( 1.0f - ang / 180.0f );
+
+            // 星座線の角度を更新
+            // 星座線をランダムに回転
+            foreach ( var line in dataSet_.lines_ ) {
+                var lq = line.getBackupRotation();
+                var ansLQ = line.getQuestionRotation();
+                line.transform.localRotation = Quaternion.Lerp( ansLQ, lq, t );
+            }
+
             if ( ang < dataSet_.answerAngle_ )
                 return new AnswerMove( parent_, dataSet_ );
             return this;
@@ -513,7 +537,16 @@ public class GameManager : MonoBehaviour {
                 dataSet_.root_.transform.rotation = Lerps.Quaternion.easeInOut( q, dataSet_.answerQ_, t );
                 float ang = Quaternion.Angle( dataSet_.root_.transform.rotation, dataSet_.answerQ_ );
                 dataSet_.curAngle_ = ang;
+                float t2 = 1.0f - ang / 180.0f;
                 dataSet_.desc_.setConcodanceRate( 1.0f - ang / 180.0f );
+
+                // 星座線の角度を更新
+                foreach ( var line in dataSet_.lines_ ) {
+                    var lq = line.getBackupRotation();
+                    var ansLQ = line.getQuestionRotation();
+                    line.transform.localRotation = Quaternion.Lerp( ansLQ, lq, t2 );
+                }
+
                 return true;
             } ).finish(()=> {
                 parent_.nextState_ = new AnswerMove( parent_, dataSet_ );
@@ -552,7 +585,15 @@ public class GameManager : MonoBehaviour {
             dataSet_.root_.transform.rotation = q;
             float ang = Quaternion.Angle( q, dataSet_.answerQ_ );
             dataSet_.curAngle_ = ang;
+            float t2 = 1.0f - ang / 180.0f;
             dataSet_.desc_.setConcodanceRate( 1.0f - ang / 180.0f );
+
+            foreach ( var line in dataSet_.lines_ ) {
+                var lq = line.getBackupRotation();
+                var ansLQ = line.getQuestionRotation();
+                line.transform.localRotation = Quaternion.Lerp( ansLQ, lq, t2 );
+            }
+
             if ( t_ >= moveSec_ ) {
                 return new AnswerEffect( parent_, dataSet_ );
             }

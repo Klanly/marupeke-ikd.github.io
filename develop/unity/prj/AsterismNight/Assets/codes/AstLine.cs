@@ -63,6 +63,26 @@ public class AstLine : MonoBehaviour {
         renderer_.material = mat;
     }
 
+    public void backupRotation()
+    {
+        backupRot_ = transform.localRotation;
+    }
+
+    public void backupQuestionRotation()
+    {
+        questionRot_ = transform.localRotation;
+    }
+
+    public Quaternion getBackupRotation()
+    {
+        return backupRot_;
+    }
+
+    public Quaternion getQuestionRotation()
+    {
+        return questionRot_;
+    }
+
     // Use this for initialization
     void Start () {
 		
@@ -76,4 +96,6 @@ public class AstLine : MonoBehaviour {
     Color baseColor_;
     float alpha_ = 1.0f;
     float colorScale_ = 1.0f;
+    Quaternion backupRot_ = Quaternion.identity;
+    Quaternion questionRot_ = Quaternion.identity;
 }
