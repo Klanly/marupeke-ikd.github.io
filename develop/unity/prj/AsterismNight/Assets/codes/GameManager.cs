@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
+    [SerializeField, Range( 0.1f, 10.0f )]
+    float timeScale_ = 1.0f;
+
     [SerializeField]
     float radius_ = 50.0f;
 
@@ -41,6 +44,14 @@ public class GameManager : MonoBehaviour {
     TitleManager titleManagerPrefab_;
 
 
+    private void OnValidate()
+    {
+        if ( timeScale_ <= 0.1f )
+            timeScale_ = 0.1f;
+
+        Time.timeScale = timeScale_;
+    }
+
     // 天球
     class Sky
     {
@@ -62,8 +73,11 @@ public class GameManager : MonoBehaviour {
                 foreach ( var line in ast.lines_ ) {
                     line.gameObject.SetActive( false );
                 }
-                if ( ast.skyAstName_ != null )
+                // 名前もリセット
+                if ( ast.skyAstName_ != null ) {
                     Destroy( ast.skyAstName_.gameObject );
+                    ast.skyAstName_ = null;
+                }
             }
 
             // カラーはゼロで
@@ -88,6 +102,9 @@ public class GameManager : MonoBehaviour {
         // 天球に星座名を刻印
         public void setSkyAsterismName(int astId)
         {
+            if ( asterisms_[ astId - 1 ].skyAstName_ != null )
+                return; // 既に刻印
+
             var list = new List<Vector3>();
             foreach ( var star in asterisms_[ astId - 1 ].stars_ ) {
                 list.Add( star.transform.position );
@@ -149,7 +166,7 @@ public class GameManager : MonoBehaviour {
     }
 
     // 順番等リセット
-    void resetAll()
+    void resetAll( bool resetSaveData = true )
     {
         // 天球をリセット
         sky_.resetAll();
@@ -162,7 +179,8 @@ public class GameManager : MonoBehaviour {
         curAnswerNum_ = 0;
 
         // セーブデータを初期化
-        save();
+        if ( resetSaveData == true )
+            save();
     }
 
     // 次の問題を出題
@@ -406,6 +424,7 @@ public class GameManager : MonoBehaviour {
 
         protected override void innerInit()
         {
+            parent_.selectMode_ = TitleManager.Mode.None;
             title_ = Instantiate<TitleManager>( parent_.titleManagerPrefab_ );
             title_.transform.localPosition = Vector3.zero;
             title_.FinishCallback = ( mode ) => {
@@ -429,12 +448,15 @@ public class GameManager : MonoBehaviour {
                         }
                     }
                     parent_.nextState_ = new Ending( parent_ );
-                } else if ( parent_.selectMode_ == TitleManager.Mode.Continue ) {
+                } else if ( 
+                    parent_.selectMode_ == TitleManager.Mode.Continue ||
+                    parent_.selectMode_ == TitleManager.Mode.Auto
+                ) {
                     // 現在のデータで継続スタート
                     parent_.notifyNextQuestion();
                 } else {
                     // 最初から
-                    parent_.resetAll();
+                    parent_.resetAll( true );
                     parent_.notifyNextQuestion();
                 }
                 Destroy( title_.gameObject );
@@ -770,17 +792,33 @@ public class GameManager : MonoBehaviour {
 
         protected override void innerInit()
         {
+            lat_ = Mathf.Sin( 0 ) * 88.0f;
+            longi_ = Mathf.Cos( 0 ) * 180.0f + 180.0f;
+            var camerQ = Camera.main.transform.rotation;
+            var initQ = Quaternion.LookRotation( SphereSurfUtil.convPolerToPos( lat_, longi_ ), Vector3.up );
+            GlobalState.time( 5.0f, (sec, t) => {
+                Camera.main.transform.rotation = Lerps.Quaternion.easeInOut( camerQ, initQ, t );
+                return true;
+            } ).next( () => {
+                latDeg_ += Time.deltaTime * 3.0f;
+                longDeg_ += Time.deltaTime * 5.0f;
+                lat_ = Mathf.Sin( latDeg_ * Mathf.Deg2Rad ) * 88.0f;
+                longi_ = Mathf.Cos( longDeg_ * Mathf.Deg2Rad ) * 180.0f + 180.0f;
+                var pos = SphereSurfUtil.convPolerToPos( lat_, longi_ );
+                Camera.main.transform.rotation = Quaternion.LookRotation( pos, Vector3.up );
+
+                if ( Input.GetMouseButtonDown( 0 ) == true ) {
+                    parent_.resetAll( false );
+                    parent_.load();
+                    parent_.nextState_ = new Title( parent_ );
+                    return false;
+                }
+                return true;
+            } );
         }
 
         protected override State innerUpdate()
         {
-            latDeg_ += Time.deltaTime * 3.0f;
-            longDeg_ += Time.deltaTime * 5.0f;
-            lat_ = Mathf.Sin( latDeg_ * Mathf.Deg2Rad ) * 88.0f;
-            longi_ = Mathf.Cos( longDeg_ * Mathf.Deg2Rad ) * 180.0f + 180.0f;
-            var pos = SphereSurfUtil.convPolerToPos( lat_, longi_ );
-            Camera.main.transform.rotation = Quaternion.LookRotation( pos, Vector3.up );
-
             return this;
         }
 
