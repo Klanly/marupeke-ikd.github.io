@@ -39,11 +39,13 @@ public class AsterismDesc : MonoBehaviour {
     // 透過度を変更
     void setAlpha( float alpha )
     {
-        Color c = Color.white;
-        c.a = alpha;
-        nameJp_.color = c;
-        nameEn_.color = c;
-        concodanceRate_.color = c;
+        if ( nameJp_ != null && nameEn_ != null ) {
+            Color c = Color.white;
+            c.a = alpha;
+            nameJp_.color = c;
+            nameEn_.color = c;
+            concodanceRate_.color = c;
+        }
     }
 
     // Use this for initialization

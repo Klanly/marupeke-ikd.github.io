@@ -46,6 +46,12 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     Clouds cloudsPrefab_;
 
+    [SerializeField]
+    UnityEngine.UI.Button toTitleBtn_;
+
+    [SerializeField]
+    CanvasGroup gameUIGroup_;
+
 
     private void OnValidate()
     {
@@ -226,6 +232,26 @@ public class GameManager : MonoBehaviour {
         nextState_ = new SetQuestion( this, dataSet_ );
     }
 
+    // GameUIを有効化
+    void enableGameUI( bool use )
+    {
+        if ( use == true ) {
+            toTitleBtn_.enabled = false;
+            GlobalState.time( 3.0f, (sec, t) => {
+                gameUIGroup_.alpha = t;
+                return true;
+            } ).finish(()=> {
+                toTitleBtn_.enabled = true;
+            } );
+        } else {
+            toTitleBtn_.enabled = false;
+            GlobalState.time( 1.0f, (sec, t) => {
+                gameUIGroup_.alpha = 1.0f - t;
+                return true;
+            } );
+        }
+    }
+
     void Start () {
         // 天球を作成
         sky_ = new Sky();
@@ -259,6 +285,18 @@ public class GameManager : MonoBehaviour {
                 questionAstIds_.Add( i );
             ListUtil.shuffle<int>( ref questionAstIds_, Random.Range( 0, 10000 ) );
         }
+
+        gameUIGroup_.alpha = 0.0f;
+
+        toTitleBtn_.onClick.AddListener( () => {
+            if ( dataSet_ != null ) {
+                dataSet_.finalize();
+            }
+            enableGameUI( false );
+            resetAll( false );
+            load();
+            nextState_ = new Title( this );
+        } );
 
         state_ = new Title( this );
     }
@@ -381,15 +419,19 @@ public class GameManager : MonoBehaviour {
         public void finalize()
         {
             foreach ( var star in stars_ ) {
-                Destroy( star.gameObject );
+                if ( star != null )
+                    Destroy( star.gameObject );
             }
             foreach ( var line in lines_ ) {
-                Destroy( line.gameObject );
+                if ( line != null )
+                    Destroy( line.gameObject );
             }
             desc_.fadeOut( () => {
-                Destroy( desc_.gameObject );
+                if ( desc_ != null )
+                    Destroy( desc_.gameObject );
             } );
-            Destroy( root_ );
+            if ( root_ != null )
+                Destroy( root_ );
         }
 
         // センター位置を取得
@@ -463,12 +505,20 @@ public class GameManager : MonoBehaviour {
 
         protected override void innerInit()
         {
+            parent_.toTitleBtn_.gameObject.SetActive( false );
+
             parent_.selectMode_ = TitleManager.Mode.None;
             title_ = Instantiate<TitleManager>( parent_.titleManagerPrefab_ );
             title_.transform.localPosition = Vector3.zero;
             title_.FinishCallback = ( mode ) => {
                 parent_.selectMode_ = mode;
             };
+
+            float fov = Camera.main.fieldOfView;
+            GlobalState.time( 1.0f, (sec, t) => {
+                Camera.main.fieldOfView = Lerps.Float.easeInOut( fov, 60.0f, t );
+                return true;
+            } );
         }
 
         protected override State innerUpdate()
@@ -489,16 +539,20 @@ public class GameManager : MonoBehaviour {
                         ast.clouds_.setAlpha( 0.0f );
                     }
                     parent_.nextState_ = new Ending( parent_ );
-                } else if ( 
-                    parent_.selectMode_ == TitleManager.Mode.Continue ||
-                    parent_.selectMode_ == TitleManager.Mode.Auto
-                ) {
-                    // 現在のデータで継続スタート
-                    parent_.notifyNextQuestion();
                 } else {
-                    // 最初から
-                    parent_.resetAll( true );
-                    parent_.notifyNextQuestion();
+                    if (
+                        parent_.selectMode_ == TitleManager.Mode.Continue ||
+                        parent_.selectMode_ == TitleManager.Mode.Auto
+                    ) {
+                        // 現在のデータで継続スタート
+                        parent_.notifyNextQuestion();
+                    } else {
+                        // 最初から
+                        parent_.resetAll( true );
+                        parent_.notifyNextQuestion();
+                    }
+                    parent_.toTitleBtn_.gameObject.SetActive( true );
+                    parent_.enableGameUI( true );
                 }
                 Destroy( title_.gameObject );
             }
@@ -562,6 +616,7 @@ public class GameManager : MonoBehaviour {
         // 内部初期化
         override protected void innerInit()
         {
+            parent_.toTitleBtn_.enabled = false;
             createAsterism();
             next_ = new Intro_CameraToAst( parent_, dataSet_ );
         }
@@ -653,6 +708,8 @@ public class GameManager : MonoBehaviour {
             desc.setup( dataSet_.astId_ );
 
             dataSet_.desc_ = desc;
+
+            parent_.toTitleBtn_.enabled = true;
         }
 
         // 内部状態
@@ -709,7 +766,12 @@ public class GameManager : MonoBehaviour {
 
             // 勝手に解答
             var q = dataSet_.root_.transform.rotation;
+            bool bCancel = false;
             GlobalState.time( 4.0f, (sec, t) => {
+                if ( dataSet_ == null || dataSet_.root_ == null ) {
+                    bCancel = true;
+                    return false;
+                }
                 dataSet_.root_.transform.rotation = Lerps.Quaternion.easeInOut( q, dataSet_.answerQ_, t );
                 float ang = Quaternion.Angle( dataSet_.root_.transform.rotation, dataSet_.answerQ_ );
                 dataSet_.curAngle_ = ang;
@@ -725,8 +787,11 @@ public class GameManager : MonoBehaviour {
 
                 return true;
             } ).finish(()=> {
-                parent_.nextState_ = new AnswerMove( parent_, dataSet_ );
+                if ( bCancel == false )
+                    parent_.nextState_ = new AnswerMove( parent_, dataSet_ );
             } );
+
+            parent_.toTitleBtn_.enabled = true;
         }
 
         // 内部状態
@@ -750,6 +815,7 @@ public class GameManager : MonoBehaviour {
         override protected void innerInit()
         {
             startQ_ = dataSet_.root_.transform.rotation;
+            parent_.toTitleBtn_.enabled = false;
         }
 
         // 内部状態
@@ -836,6 +902,8 @@ public class GameManager : MonoBehaviour {
 
         protected override void innerInit()
         {
+            parent_.toTitleBtn_.gameObject.SetActive( false );
+
             lat_ = Mathf.Sin( 0 ) * 88.0f;
             longi_ = Mathf.Cos( 0 ) * 180.0f + 180.0f;
             var camerQ = Camera.main.transform.rotation;
