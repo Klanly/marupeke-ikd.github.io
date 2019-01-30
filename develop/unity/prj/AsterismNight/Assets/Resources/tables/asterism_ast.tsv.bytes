@@ -1,0 +1,93 @@
+7
+89
+astId	shortName	name	jpName	longHour	longMinute	lat
+int	string	string	string	int	int	int
+1	And	Andromeda	アンドロメダ	0	40	38
+2	Ant	Antlia	ポンプ	10	0	-35
+3	Aps	Apus	ふうちょう	16	0	-76
+4	Aql	Aquila	わし	19	30	2
+5	Aqr	Aquarius	みずがめ	22	20	-13
+6	Ara	Ara	さいだん	17	10	-55
+7	Ari	Aries	おひつじ	2	30	20
+8	Aur	Auriga	ぎょしゃ	6	0	42
+9	Boo	Bootes	うしかい	14	35	30
+10	Cae	Caelum	ちょうこくぐ	4	50	-38
+11	Cam	Camelopardalis	きりん	5	40	70
+12	Cap	Capricornus	やぎ	20	50	-20
+13	Car	Carina	りゅうこつ	8	40	-62
+14	Cas	Cassiopeia	カシオペヤ	1	0	60
+15	Cen	Centaurus	ケンタウルス	13	20	-47
+16	Cep	Cepheus	ケフェウス	22	0	70
+17	Cet	Cetus	くじら	1	45	-12
+18	Cha	Chamaeleon	カメレオン	10	40	-78
+19	Cir	Circinus	コンパス	14	50	-63
+20	CMa	Canis Major	おおいぬ	6	40	-24
+21	CMi	Canis Minor	こいぬ	7	30	6
+22	Cnc	Cancer	かに	8	30	20
+23	Col	Columba	はと	5	40	-34
+24	Com	Coma Berenices	かみのけ	12	40	23
+25	CrA	Corona Australis	みなみのかんむり	18	30	-41
+26	CrB	Corona Borealis	かんむり	15	40	30
+27	Crt	Crater	コップ	11	20	-15
+28	Cru	Crux	みなみじゅうじ	12	20	-60
+29	Crv	Corvus	からす	12	20	-18
+30	CVn	Canes Venatici	りょうけん	13	0	40
+31	Cyg	Cygnus	はくちょう	20	30	43
+32	Del	Delphinus	いるか	20	40	12
+33	Dor	Dorado	かじき	5	0	-60
+34	Dra	Draco	りゅう	17	0	60
+35	Equ	Equuleus	こうま	21	10	6
+36	Eri	Eridanus	エリダヌス	3	50	-30
+37	For	Fornax	ろ	2	30	-33
+38	Gem	Gemini	ふたご	7	0	22
+39	Gru	Grus	つる	22	20	-47
+40	Her	Hercules	ヘルクレス	17	10	27
+41	Hor	Horologium	とけい	3	20	-52
+42	Hya	Hydra	うみへび	10	30	-20
+43	Hyi	Hydrus	みずへび	2	40	-70
+44	Ind	Indus	インディアン	21	20	-58
+45	Lac	Lacerta	とかげ	22	25	43
+46	Leo	Leo	しし	10	30	15
+47	Lep	Lepus	うさぎ	5	25	-20
+48	Lib	Libra	てんびん	15	10	-14
+49	LMi	Leo Minor	こじし	10	20	33
+50	Lup	Lupus	おおかみ	15	0	-40
+51	Lyn	Lynx	やまねこ	7	50	45
+52	Lyr	Lyra	こと	18	45	36
+53	Men	Mensa	テーブルさん	5	40	-77
+54	Mic	Microscopium	けんびきょう	20	50	-37
+55	Mon	Monoceros	いっかくじゅう	7	0	-3
+56	Mus	Musca	はえ	12	30	-70
+57	Nor	Norma	じょうぎ	16	0	-50
+58	Oct	Octans	はちぶんぎ	21	0	-87
+59	Oph	Ophiuchus	へびつかい	17	10	-5
+60	Ori	Orion	オリオン	5	20	3
+61	Pav	Pavo	くじゃく	19	10	-65
+62	Peg	Pegasus	ペガスス	22	30	17
+63	Per	Perseus	ペルセウス	3	20	42
+64	Phe	Phoenix	ほうおう	1	0	-48
+65	Pic	Pictor	がか	5	30	-52
+66	PsA	Piscis Austrinus	みなみのうお	22	10	-32
+67	Psc	Pisces	うお	0	20	10
+68	Pup	Puppis	とも	7	40	-32
+69	Pyx	Pyxis	らしんばん	8	50	-28
+70	Ret	Reticulum	レチクル	3	50	-63
+71	Scl	Sculptor	ちょうこくしつ	0	30	-35
+72	Sco	Scorpius	さそり	16	30	-26
+73	Sct	Scutum	たて	18	35	-10
+74	Ser	Serpens(Caput)	へび(頭)	15	35	10
+75	Ser	Serpens(Cauda)	へび(尾)	18	0	-5
+76	Sex	Sextans	ろくぶんぎ	10	10	-1
+77	Sge	Sagitta	や	19	40	18
+78	Sgr	Sagittarius	いて	19	0	-25
+79	Tau	Taurus	おうし	4	30	18
+80	Tel	Telescopium	ぼうえんきょう	19	0	-52
+81	TrA	Triangulum Australe	みなみのさんかく	15	40	-65
+82	Tri	Triangulum	さんかく	2	0	32
+83	Tuc	Tucana	きょしちょう	23	45	-68
+84	UMa	Ursa Major	おおぐま	11	0	58
+85	UMi	Ursa Minor	こぐま	15	40	78
+86	Vel	Vela	ほ	9	30	-45
+87	Vir	Virgo	おとめ	13	20	-2
+88	Vol	Volans	とびうお	7	40	-69
+89	Vul	Vulpecula	こぎつね	20	10	25

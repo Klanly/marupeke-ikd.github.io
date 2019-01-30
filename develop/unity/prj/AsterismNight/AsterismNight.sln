@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsterismNight", "AsterismNight.csproj", "{8BD74D99-EA61-DAA9-B073-F7F64E6FD8AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsterismNight.Editor.Plugins", "AsterismNight.Editor.Plugins.csproj", "{B80986C2-5008-D79E-AF19-1111B8D2EBB7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8BD74D99-EA61-DAA9-B073-F7F64E6FD8AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BD74D99-EA61-DAA9-B073-F7F64E6FD8AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BD74D99-EA61-DAA9-B073-F7F64E6FD8AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD74D99-EA61-DAA9-B073-F7F64E6FD8AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B80986C2-5008-D79E-AF19-1111B8D2EBB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B80986C2-5008-D79E-AF19-1111B8D2EBB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B80986C2-5008-D79E-AF19-1111B8D2EBB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B80986C2-5008-D79E-AF19-1111B8D2EBB7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

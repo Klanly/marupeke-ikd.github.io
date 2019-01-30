@@ -60,6 +60,20 @@ public class SphereSurfUtil {
         return Vector3.Cross( Vx, a ).normalized;
     }
 
+    // 球面上のAから指定方向へ指定距離だけ進んだ面上位置Bを算出
+    // a   : 球面上の点座標。半径は正規化される。
+    // dir : aからの移動方向ベクトル。接線でなくてもOK
+    // dist: 半径1の球面上を移動する長さ(-2pi～2pi)。任意半径の場合は実際の移動距離を半径で割ってdistに与える
+    static public Vector3 calcMovePos( Vector3 a, Vector3 dir, float dist )
+    {
+        var rotV = Vector3.Cross( a, dir );
+        if ( rotV.magnitude <= 0.00001f )
+            return a.normalized;    // dirがaと平行（±中心に向かうベクトル）だった
+        float deg = dist * Mathf.Rad2Deg;
+        var q = Quaternion.AngleAxis( deg, rotV );
+        return q * a.normalized;
+    }
+
     // 球面上の角度（デグリー角）を算出
     //  center: 角度を計る頂点
     //  p0    : centerから伸びる線分の端点0
@@ -94,6 +108,10 @@ public class SphereSurfUtil {
     }
 
     // 球面三角形補間（ベクトル）
+    //  p0, p1, p2: 球面上の3点
+    //  pos       : 三角形内の点座標
+    //  v0, v1, v2: p0, p1, p2それぞれの点での値
+    //  戻り値    : 補間値
     static public Vector3 triInterpolateV3(
         Vector3 p0, Vector3 p1, Vector3 p2, Vector3 pos,
         Vector3 v0, Vector3 v1, Vector3 v2
@@ -102,5 +120,18 @@ public class SphereSurfUtil {
         float S1 = SphereSurfUtil.calcArea( 1.0f, pos, p0, p2 );
         float S2 = SphereSurfUtil.calcArea( 1.0f, pos, p0, p1 );
         return ( v0 * S0 + v1 * S1 + v2 * S2 ) / ( S0 + S1 + S2 );
+    }
+
+    // 球面均一ランダム点を算出
+    //  r0, r1: 0～1の一様乱数値
+    static public Vector3 randomPos( float r0, float r1 )
+    {
+        float th = Mathf.Acos( Mathf.Clamp( 1.0f - 2.0f * r0, -1.0f, 1.0f ) );
+        float a = r1 * Mathf.PI * 2.0f;
+        float r = Mathf.Sin( th );
+        float x = Mathf.Cos( th );
+        float y = r * Mathf.Sin( a );
+        float z = r * Mathf.Cos( a );
+        return new Vector3( x, y, z );
     }
 }
