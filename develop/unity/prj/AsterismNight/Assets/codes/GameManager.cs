@@ -43,6 +43,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     TitleManager titleManagerPrefab_;
 
+    [SerializeField]
+    Clouds cloudsPrefab_;
+
 
     private void OnValidate()
     {
@@ -56,6 +59,8 @@ public class GameManager : MonoBehaviour {
     class Sky
     {
         public SkyAsterismName skyAstNamePrefab_;
+        public Clouds cloudsPrefab_;
+        public float radius_;
 
         // 天空上の星座
         public class Asterism
@@ -63,6 +68,9 @@ public class GameManager : MonoBehaviour {
             public List<Star> stars_ = new List<Star>();        // 恒星
             public List<AstLine> lines_ = new List<AstLine>();  // 星座間ライン
             public SkyAsterismName skyAstName_;                 // 星座名
+            public Clouds clouds_;                             // 雲
+            public float radius_;                               // 星座半径
+            public Vector3 center_;                             // 星座中心位置
         }
         public List< Asterism > asterisms_ = new List<Asterism>();  // 星座IDに対応した星座
 
@@ -78,6 +86,8 @@ public class GameManager : MonoBehaviour {
                     Destroy( ast.skyAstName_.gameObject );
                     ast.skyAstName_ = null;
                 }
+                // 雲を復帰
+                ast.clouds_.setAlpha( -1.0f );
             }
 
             // カラーはゼロで
@@ -122,6 +132,15 @@ public class GameManager : MonoBehaviour {
             obj.setup( astId );
             asterisms_[ astId - 1 ].skyAstName_ = obj;
         }
+
+        // 雲を作成
+        public void createCloud( int astId )
+        {
+            var obj = Instantiate<Clouds>( cloudsPrefab_ );
+            obj.create( asterisms_[ astId - 1 ].radius_ * radius_ );
+            obj.transform.position = asterisms_[ astId - 1 ].center_ * radius_;
+            asterisms_[ astId - 1 ].clouds_ = obj;
+        }
     }
 
     // セーブデータ読み込み
@@ -144,6 +163,7 @@ public class GameManager : MonoBehaviour {
         }
 
         // 解答した天球のラインや名前を表示
+        // 雲は消去
         for ( int i = 0; i < curAnswerNum_; ++i ) {
             int astId = questionAstIds_[ i ];
             sky_.setSkyAsterismName( astId );
@@ -151,6 +171,7 @@ public class GameManager : MonoBehaviour {
             foreach ( var line in sky_.asterisms_[ astId - 1 ].lines_ ) {
                 line.gameObject.SetActive( true );
             }
+            sky_.asterisms_[ astId - 1 ].clouds_.setAlpha( 0.0f );
         }
     }
 
@@ -172,6 +193,7 @@ public class GameManager : MonoBehaviour {
         sky_.resetAll();
 
         // 全89星座の出題順番
+        questionAstIds_.Clear();
         for ( int i = 1; i <= 89; ++i )
             questionAstIds_.Add( i );
         ListUtil.shuffle<int>( ref questionAstIds_, Random.Range( 0, 10000 ) );
@@ -208,11 +230,16 @@ public class GameManager : MonoBehaviour {
         // 天球を作成
         sky_ = new Sky();
         sky_.skyAstNamePrefab_ = skyAstNamePrefab_;
+        sky_.cloudsPrefab_ = cloudsPrefab_;
+        sky_.radius_ = skyRadius_;
 
         for ( int i = 1; i <= 89; ++i ) {
             var ast = new Sky.Asterism();
-            createAsterism( i, skyRadius_, skyStarPrefab_, skyLinePrefab_, ref ast.stars_, ref ast.lines_, false, 0.0f, 0.7f, 0.0f );
+            var aabb = createAsterism( i, skyRadius_, skyStarPrefab_, skyLinePrefab_, ref ast.stars_, ref ast.lines_, false, 0.0f, 0.7f, 0.0f );
+            ast.radius_ = ( aabb.max_ - aabb.min_ ).magnitude * 0.5f;
+            ast.center_ = ( aabb.min_ + aabb.max_ ) * 0.5f;
             sky_.asterisms_.Add( ast );
+            sky_.createCloud( i );
         }
 
         // 天球のラインはすべて初期状態で非表示
@@ -255,8 +282,14 @@ public class GameManager : MonoBehaviour {
             curAngle_ = dataSet_.curAngle_;
     }
 
+    class AABB
+    {
+        public Vector3 min_;
+        public Vector3 max_;
+    }
+
     // 星座を並べる
-    void createAsterism(
+    AABB createAsterism(
         int astId,
         float radius,
         Star starPrefab,
@@ -278,12 +311,16 @@ public class GameManager : MonoBehaviour {
             var pos = SphereSurfUtil.convPolerToPos( star.pos_.x, star.pos_.y );
             poses.Add( pos );
         }
+
+        var aabb = new AABB();
         Vector3 aabbMin = Vector3.zero;
         Vector3 aabbMax = Vector3.zero;
         Ranges.aabb3( poses, out aabbMin, out aabbMax );
         float diagoLen = ( aabbMax - aabbMin ).magnitude;
         float range = diagoLen * 0.5f * radius;
         float astRangeScale = ( useAutoScale ? 0.01f + 0.1f * range : 1.0f );
+        aabb.min_ = aabbMin;
+        aabb.max_ = aabbMax;
 
         // 恒星
         var starPosDict = new Dictionary<int, Vector3>();
@@ -317,6 +354,8 @@ public class GameManager : MonoBehaviour {
 
             lines.Add( obj );
         }
+
+        return aabb;
     }
 
     class DataSet
@@ -446,6 +485,8 @@ public class GameManager : MonoBehaviour {
                         foreach ( var line in ast.lines_ ) {
                             line.gameObject.SetActive( true );
                         }
+                        // 雲は消去
+                        ast.clouds_.setAlpha( 0.0f );
                     }
                     parent_.nextState_ = new Ending( parent_ );
                 } else if ( 
@@ -560,6 +601,8 @@ public class GameManager : MonoBehaviour {
             // var t = Instantiate<Star>( parent_.starUnitPrefab_ );
             // t.transform.localScale = Vector3.one * 2.0f;
             // t.transform.position = dataSet_.getCenter();
+
+            dataSet_.sky_.asterisms_[ dataSet_.astId_ - 1 ].clouds_.setAlpha( 0.5f );
         }
 
         // 内部状態
@@ -769,6 +812,7 @@ public class GameManager : MonoBehaviour {
                 } );
                 return false;
             } );
+            dataSet_.sky_.asterisms_[ dataSet_.astId_ - 1 ].clouds_.remove( 2.0f, false );
         }
 
         // 内部状態
