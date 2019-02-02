@@ -97,7 +97,7 @@ public class GlobalState : GlobalStateBase
     // 間を置く
     static public GlobalState wait( float waitSec, System.Func< bool > action )
     {
-        float t = 0;
+        float t = 0.0f;
         var state = new GlobalState(
             () => {
                 t += Time.deltaTime;
@@ -108,6 +108,25 @@ public class GlobalState : GlobalStateBase
             () => {
                 start( action );
             }
+        );
+        GlobalStateUpdater.getInstance().add( state );
+        return state;
+    }
+
+    // 指定時間だけループ
+    static public GlobalState time( float sec, System.Func< float, float, bool > action )
+    {
+        float curSec = 0.0f;
+        var state = new GlobalState(
+            () => {
+                curSec += Time.deltaTime;
+                if ( curSec >= sec ) {
+                    action( sec, 1.0f );
+                    return false;
+                }
+                return action( curSec, curSec / sec );
+            },
+            null
         );
         GlobalStateUpdater.getInstance().add( state );
         return state;
