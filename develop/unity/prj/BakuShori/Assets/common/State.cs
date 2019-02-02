@@ -9,25 +9,27 @@ public class State {
     bool bInit_ = false;
 
     // 初期化
-    public void init()
+    public State init()
     {
-        innerInit();
+        return innerInit();
     }
 
     // 状態更新
     public State update()
     {
         if ( bInit_ == false ) {
-            init();
+            nextState_ = init();
             bInit_ = true;
+            if ( nextState_ != null )
+                return nextState_;
         }
         return innerUpdate();
     }
 
     // 内部初期化
-    virtual protected void innerInit()
+    virtual protected State innerInit()
     {
-
+        return null;
     }
 
     // 内部状態
@@ -35,4 +37,6 @@ public class State {
     {
         return null;
     }
+
+    State nextState_ = null;
 }

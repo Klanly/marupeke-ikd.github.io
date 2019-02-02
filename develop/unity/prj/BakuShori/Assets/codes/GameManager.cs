@@ -8,15 +8,43 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     GimicLayoutGenerator generator_ = null;
 
-	// Use this for initialization
 	void Start () {
-        BombBox bombBox;
-        LayoutSpec spec = new LayoutSpec();
-        generator_.create( spec, out bombBox );
+        state_ = new Setup( this );
     }
 	
-	// Update is called once per frame
 	void Update () {
-		
+        if ( state_ != null )
+            state_ = state_.update();
 	}
+
+    class DataSet
+    {
+        public BombBox bombBox_;
+        public LayoutSpec spec_ = new LayoutSpec();
+    }
+
+    class StateBase : State
+    {
+        public StateBase( GameManager parent )
+        {
+            parent_ = parent;
+        }
+        protected GameManager parent_;
+    }
+
+    class Setup : StateBase
+    {
+        public Setup(GameManager parent) : base( parent ) {
+        }
+
+        protected override State innerInit()
+        {
+            // データ生成
+            parent_.generator_.create( parent_.dataSet_.spec_, out parent_.dataSet_.bombBox_ );
+            return null;
+        }
+    }
+
+    DataSet dataSet_ = new DataSet();
+    State state_;
 }
