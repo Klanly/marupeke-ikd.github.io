@@ -254,7 +254,10 @@
     <Compile Include="Assets\codes\GimicLayoutGenerator.cs" />
     <Compile Include="Assets\codes\GimicScrew.cs" />
     <Compile Include="Assets\codes\LayoutSpec.cs" />
-    <Compile Include="Assets\codes\Trap.cs" />
+    <Compile Include="Assets\codes\TrapFactory.cs" />
+    <Compile Include="Assets\codes\Traps\ScrewTrap.cs" />
+    <Compile Include="Assets\codes\Traps\ScrewTrapAnswer.cs" />
+    <Compile Include="Assets\codes\Traps\Trap.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

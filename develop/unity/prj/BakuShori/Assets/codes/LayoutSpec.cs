@@ -22,4 +22,5 @@ public class LayoutSpec {
     public List<GimicFactory.GimicType> gimicTypes_;    // ギミックの種類を指定
 
     public int seed_ = -1;
+    public int trapSeed_ = 100;
 }

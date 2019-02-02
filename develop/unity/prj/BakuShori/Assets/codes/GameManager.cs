@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
     [SerializeField]
-    GimicLayoutGenerator generator_;
+    GimicLayoutGenerator generator_ = null;
 
 	// Use this for initialization
 	void Start () {

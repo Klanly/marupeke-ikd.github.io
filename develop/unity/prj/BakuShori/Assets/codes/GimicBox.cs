@@ -8,6 +8,11 @@ using UnityEngine;
 
 public class GimicBox : Entity {
 
+    void Awake()
+    {
+        ObjectType = EObjectType.GimicBox;
+    }
+
     // ギミックを登録
     public bool setGimic( Gimic gimic )
     {
@@ -18,11 +23,19 @@ public class GimicBox : Entity {
         return true;
     }
 
+    // 蓋トラップを登録
+    public void setTrap( Trap trap )
+    {
+        trap_ = trap;
+    }
+
     // 蓋の答えを取得
     public Answer getTrapAnswer()
     {
-        if ( trap_ == null )
+        if ( trap_ == null ) {
+            Debug.LogAssertion( "GimicBox: error: no trap exist." );
             return null;
+        }
         return trap_.getAnswer();
     }
 

@@ -9,9 +9,18 @@ using UnityEngine;
 
 public class Trap : MonoBehaviour {
 
+    // セットアップ指示
+    public virtual void setup( int randomNumber )
+    {
+
+    }
+
     // 答えを取得
     public Answer getAnswer()
     {
+        if ( answer_ == null )
+            Debug.LogWarning( "Trap: warning: no answer." );
+
         return answer_;
     }
 
@@ -25,5 +34,5 @@ public class Trap : MonoBehaviour {
 		
 	}
 
-    Answer answer_;
+    protected Answer answer_;
 }

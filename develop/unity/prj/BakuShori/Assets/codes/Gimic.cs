@@ -32,5 +32,5 @@ public class Gimic : Entity {
 		
 	}
 
-    Answer answer_;
+    Answer answer_ = null;
 }

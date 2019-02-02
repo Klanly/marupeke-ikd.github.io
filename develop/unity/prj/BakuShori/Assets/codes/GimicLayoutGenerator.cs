@@ -24,16 +24,22 @@ public class GimicLayoutGenerator : MonoBehaviour {
         outBombBox = null;
 
         var bombBox = bombBoxFactory_.create( spec );
-        if ( bombBox == null )
+        if ( bombBox == null ) {
+            Debug.LogAssertion( "Failed to create BombBox." );
             return false;
+        }
 
         var gimicBoxes = gimicBoxFactory_.create( spec );
-        if ( gimicBoxes == null )
+        if ( gimicBoxes == null ) {
+            Debug.LogAssertion( "Failed to create GimicBox." );
             return false;
+        }
 
         var gimics = gimicFactory_.create( spec );
-        if ( gimics == null || gimics.Count != gimicBoxes.Count )
+        if ( gimics == null || gimics.Count != gimicBoxes.Count ) {
+            Debug.LogAssertion( "Failed to create Gimic." );
             return false;
+        }
 
         // BombBoxに最初のギミックボックスの答えを登録
         var answer = gimicBoxes[ 0 ].getTrapAnswer();
