@@ -244,6 +244,7 @@
     <Compile Include="Assets\codes\Answer.cs" />
     <Compile Include="Assets\codes\BombBox.cs" />
     <Compile Include="Assets\codes\BombBoxFactory.cs" />
+    <Compile Include="Assets\codes\CameraOperator.cs" />
     <Compile Include="Assets\codes\common\Bezier.cs" />
     <Compile Include="Assets\codes\common\GlobalStateManager.cs" />
     <Compile Include="Assets\codes\common\ImageBillboarding.cs" />
@@ -271,6 +272,7 @@
     <Compile Include="Assets\codes\Gimics\NineNumberBtnGimic.cs" />
     <Compile Include="Assets\codes\Gimics\NineNumberBtnGimicAnswer.cs" />
     <Compile Include="Assets\codes\GimicScrew.cs" />
+    <Compile Include="Assets\codes\HandlerOperator.cs" />
     <Compile Include="Assets\codes\LayoutSpec.cs" />
     <Compile Include="Assets\codes\TrapFactory.cs" />
     <Compile Include="Assets\codes\Traps\ScrewTrap.cs" />

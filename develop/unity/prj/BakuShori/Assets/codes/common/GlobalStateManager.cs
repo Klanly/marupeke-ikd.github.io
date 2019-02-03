@@ -8,6 +8,7 @@ public class GlobalStateManager : MonoBehaviour {
     private void Update()
     {
         updater_.update();
+        stateNum_ = updater_.getStateNum();
     }
 
     public void setUpdater(GlobalStateUpdater updater)
@@ -16,6 +17,7 @@ public class GlobalStateManager : MonoBehaviour {
     }
 
     GlobalStateUpdater updater_;
+    int stateNum_ = 0;
 }
 
 
@@ -49,6 +51,12 @@ public class GlobalStateUpdater
                 }
             }
         }
+    }
+
+    // 更新中のステート数を取得
+    public int getStateNum()
+    {
+        return list_.Count;
     }
 
     static GlobalStateUpdater instance_ = new GlobalStateUpdater();

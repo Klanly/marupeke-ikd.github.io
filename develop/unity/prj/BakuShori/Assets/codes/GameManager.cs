@@ -8,8 +8,12 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     GimicLayoutGenerator generator_ = null;
 
+    [SerializeField]
+    HandlerOperator handler_;
+
 	void Start () {
         state_ = new Setup( this );
+        handler_.setActive( true );
     }
 	
 	void Update () {
