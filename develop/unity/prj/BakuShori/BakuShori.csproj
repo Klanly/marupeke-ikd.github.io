@@ -264,6 +264,7 @@
     <Compile Include="Assets\codes\GameManager.cs" />
     <Compile Include="Assets\codes\GimicBox.cs" />
     <Compile Include="Assets\codes\GimicBoxAnswer.cs" />
+    <Compile Include="Assets\codes\GimicBoxCover.cs" />
     <Compile Include="Assets\codes\GimicBoxFactory.cs" />
     <Compile Include="Assets\codes\GimicFactory.cs" />
     <Compile Include="Assets\codes\GimicLayoutGenerator.cs" />
