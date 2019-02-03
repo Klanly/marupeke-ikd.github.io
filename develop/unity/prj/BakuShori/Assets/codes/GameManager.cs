@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour {
     {
         public BombBox bombBox_;
         public LayoutSpec spec_ = new LayoutSpec();
+        public GimicSpec gimicSpec_ = new GimicSpec();
     }
 
     class StateBase : State
@@ -40,7 +41,7 @@ public class GameManager : MonoBehaviour {
         protected override State innerInit()
         {
             // データ生成
-            parent_.generator_.create( parent_.dataSet_.spec_, out parent_.dataSet_.bombBox_ );
+            parent_.generator_.create( parent_.dataSet_.spec_, parent_.dataSet_.gimicSpec_, out parent_.dataSet_.bombBox_ );
             return null;
         }
     }

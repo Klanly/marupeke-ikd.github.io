@@ -25,19 +25,22 @@ public class ScrewTrap : Trap {
         Right = 1
     }
     // セットアップ指示
-    public override void setup( int randomNumber )
+    public override void setup( int randomNumber, bool forGimicBox )
     {
         rotate_ = (Rotate)( randomNumber % 2 );
         rotNum_ = ( randomNumber % 3 ) + 1;
-        createAnswer( randomNumber );
+        createAnswer( randomNumber, forGimicBox );
     }
 
     // 答え作成
-    void createAnswer( int randomNumber )
+    void createAnswer( int randomNumber, bool forGimicBox)
     {
         var obj =Instantiate<ScrewTrapAnswer>( answerPrefab_ );
         obj.setAnswer( randomNumber, rotate_, rotNum_ );
         answer_ = obj;
+
+        if ( forGimicBox == true )
+            answer_.setChildrenListSize( 1 );
     }
 
     // Use this for initialization

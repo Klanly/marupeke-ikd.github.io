@@ -18,11 +18,8 @@ public class BombBox : Entity {
     override public bool setEntity( int index, Entity entity )
     {
         // BombBoxはAnswer以外は登録できない
-        if (
-            entity.ObjectType != EObjectType.GimicAnswer &&
-            entity.ObjectType != EObjectType.GimicBoxAnswer &&
-            entity.ObjectType != EObjectType.ScrewAnswer
-        ) {
+        if ( entity.isAnswer() == false )
+        {
             return false;
         }
         return base.setEntity( index, entity );
@@ -32,6 +29,17 @@ public class BombBox : Entity {
     public List<GimicScrew> getGimicScrewes()
     {
         return gimicScrews_;
+    }
+
+    // 箱を形成
+    public void buildBox()
+    {
+        // 自分の直下にあるアンサー群は自分の子に
+        foreach( var e in childrenEntities_ ) {
+            if ( e != null && e.isAnswer() == true ) {
+                e.transform.parent = transform;
+            }
+        }
     }
 
     List<GimicScrew> gimicScrews_ = new List<GimicScrew>();

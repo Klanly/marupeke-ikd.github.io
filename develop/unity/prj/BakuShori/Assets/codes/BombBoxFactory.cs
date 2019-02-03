@@ -20,6 +20,7 @@ public class BombBoxFactory : MonoBehaviour {
         if ( id >= bombBoxPrefabs_.Length )
             return null;
         var obj = Instantiate<BombBox>( bombBoxPrefabs_[ id ] );
+        obj.setChildrenListSize( spec.bombBoxEntityStockNum_ );
         return obj;
     }
 }

@@ -10,7 +10,7 @@ using UnityEngine;
 public class Trap : MonoBehaviour {
 
     // セットアップ指示
-    public virtual void setup( int randomNumber )
+    public virtual void setup( int randomNumber, bool forGimicBox )
     {
 
     }

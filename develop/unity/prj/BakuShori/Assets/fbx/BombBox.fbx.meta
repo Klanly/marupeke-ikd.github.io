@@ -1,0 +1,356 @@
+fileFormatVersion: 2
+guid: 3bfee07ea133bf040aa27f368473d916
+timeCreated: 1549147333
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: BlueLine
+    100002: BlueLineCut
+    100004: Bomb
+    100006: //RootNode
+    100008: BombBox
+    100010: BombBoxFront
+    100012: BombLine1
+    100014: BombLine2
+    100016: CenterBase
+    100018: CenterTimer
+    100020: CoverBackLB
+    100022: CoverBackLT
+    100024: CoverBackRB
+    100026: CoverBackRT
+    100028: CoverFrontLB
+    100030: CoverFrontLT
+    100032: CoverFrontRB
+    100034: CoverFrontRT
+    100036: CoverLeftB
+    100038: CoverLeftT
+    100040: CoverRightB
+    100042: CoverRightT
+    100044: CoverTopL
+    100046: CoverTopR
+    100048: RedLine
+    100050: RedLineCut
+    100052: Ans_B01
+    100054: Ans_B02
+    100056: Ans_B03
+    100058: Ans_B04
+    100060: Ans_F01
+    100062: Ans_F02
+    100064: Ans_F03
+    100066: Ans_L01
+    100068: Ans_L02
+    100070: Ans_R01
+    100072: Ans_R02
+    100074: GBBackLB
+    100076: GBBackLT
+    100078: GBBackRB
+    100080: GBBackRT
+    100082: GBFromtLT
+    100084: GBFrontLB
+    100086: GBFrontRB
+    100088: GBFrontRT
+    100090: GBLeftB
+    100092: GBLeftT
+    100094: GBRightB
+    100096: GBRightT
+    100098: GBTopL
+    100100: GBTopR
+    100102: Lines
+    400000: BlueLine
+    400002: BlueLineCut
+    400004: Bomb
+    400006: //RootNode
+    400008: BombBox
+    400010: BombBoxFront
+    400012: BombLine1
+    400014: BombLine2
+    400016: CenterBase
+    400018: CenterTimer
+    400020: CoverBackLB
+    400022: CoverBackLT
+    400024: CoverBackRB
+    400026: CoverBackRT
+    400028: CoverFrontLB
+    400030: CoverFrontLT
+    400032: CoverFrontRB
+    400034: CoverFrontRT
+    400036: CoverLeftB
+    400038: CoverLeftT
+    400040: CoverRightB
+    400042: CoverRightT
+    400044: CoverTopL
+    400046: CoverTopR
+    400048: RedLine
+    400050: RedLineCut
+    400052: Ans_B01
+    400054: Ans_B02
+    400056: Ans_B03
+    400058: Ans_B04
+    400060: Ans_F01
+    400062: Ans_F02
+    400064: Ans_F03
+    400066: Ans_L01
+    400068: Ans_L02
+    400070: Ans_R01
+    400072: Ans_R02
+    400074: GBBackLB
+    400076: GBBackLT
+    400078: GBBackRB
+    400080: GBBackRT
+    400082: GBFromtLT
+    400084: GBFrontLB
+    400086: GBFrontRB
+    400088: GBFrontRT
+    400090: GBLeftB
+    400092: GBLeftT
+    400094: GBRightB
+    400096: GBRightT
+    400098: GBTopL
+    400100: GBTopR
+    400102: Lines
+    2100000: CenterBase
+    2100002: RedBlueCodePole
+    2100004: Bomb
+    2100006: BombLine2
+    2100008: BombLine1
+    2100010: CenterTimerFrame
+    2100012: CenterTimerDisplay
+    2100014: RedLine
+    2100016: BlueLine
+    2100018: BombBoxFrame
+    2100020: BonbBoxCorner
+    2100022: BombBoxEdge
+    2100024: TimerDisply
+    2100026: BombBoxInner
+    2100028: Cover
+    2300000: BlueLine
+    2300002: BlueLineCut
+    2300004: Bomb
+    2300006: BombBox
+    2300008: BombBoxFront
+    2300010: BombLine1
+    2300012: BombLine2
+    2300014: CenterBase
+    2300016: CenterTimer
+    2300018: CoverBackLB
+    2300020: CoverBackLT
+    2300022: CoverBackRB
+    2300024: CoverBackRT
+    2300026: CoverFrontLB
+    2300028: CoverFrontLT
+    2300030: CoverFrontRB
+    2300032: CoverFrontRT
+    2300034: CoverLeftB
+    2300036: CoverLeftT
+    2300038: CoverRightB
+    2300040: CoverRightT
+    2300042: CoverTopL
+    2300044: CoverTopR
+    2300046: RedLine
+    2300048: RedLineCut
+    3300000: BlueLine
+    3300002: BlueLineCut
+    3300004: Bomb
+    3300006: BombBox
+    3300008: BombBoxFront
+    3300010: BombLine1
+    3300012: BombLine2
+    3300014: CenterBase
+    3300016: CenterTimer
+    3300018: CoverBackLB
+    3300020: CoverBackLT
+    3300022: CoverBackRB
+    3300024: CoverBackRT
+    3300026: CoverFrontLB
+    3300028: CoverFrontLT
+    3300030: CoverFrontRB
+    3300032: CoverFrontRT
+    3300034: CoverLeftB
+    3300036: CoverLeftT
+    3300038: CoverRightB
+    3300040: CoverRightT
+    3300042: CoverTopL
+    3300044: CoverTopR
+    3300046: RedLine
+    3300048: RedLineCut
+    4300000: CenterBase
+    4300002: Bomb
+    4300004: BombLine2
+    4300006: BombLine1
+    4300008: CenterTimer
+    4300010: RedLine
+    4300012: RedLineCut
+    4300014: BlueLine
+    4300016: BlueLineCut
+    4300018: BombBox
+    4300020: BombBoxFront
+    4300022: CoverBackRT
+    4300024: CoverBackRB
+    4300026: CoverBackLT
+    4300028: CoverBackLB
+    4300030: CoverLeftT
+    4300032: CoverLeftB
+    4300034: CoverTopR
+    4300036: CoverTopL
+    4300038: CoverRightT
+    4300040: CoverRightB
+    4300042: CoverFrontRT
+    4300044: CoverFrontRB
+    4300046: CoverFrontLB
+    4300048: CoverFrontLT
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BlueLine
+    second: {fileID: 2100000, guid: 668369e5bd107214582242435371af5f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bomb
+    second: {fileID: 2100000, guid: 7691b2308f1482944894d20789dd79d0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BombBoxEdge
+    second: {fileID: 2100000, guid: 6e4a0d865f0a6b34289e547ace5f3102, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BombBoxFrame
+    second: {fileID: 2100000, guid: 11cf31162e6b2d14f99e740c9dcd250b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BombBoxInner
+    second: {fileID: 2100000, guid: 283d5d707b547a84ebc12eb483f2206d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BombLine1
+    second: {fileID: 2100000, guid: be8092657e782fe4c8dab1e9abe87cda, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BombLine2
+    second: {fileID: 2100000, guid: db8bbaa1f89e1c149a835bd0eb41fcef, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BonbBoxCorner
+    second: {fileID: 2100000, guid: f71b26e3a2b304148888d796a3b5d022, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CenterBase
+    second: {fileID: 2100000, guid: 3cf3c956d19ed5448a7f5f81d717b25f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CenterTimerDisplay
+    second: {fileID: 2100000, guid: c155bdd9022060a42ae99905a2b69abf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CenterTimerFrame
+    second: {fileID: 2100000, guid: 8fc0e314d18a75d499d12206cd7384ce, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cover
+    second: {fileID: 2100000, guid: 1cf6c6d0d9972e34788821eea8052264, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RedBlueCodePole
+    second: {fileID: 2100000, guid: 62febb2df04be284e96980345c99f7f7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RedLine
+    second: {fileID: 2100000, guid: a5419957a692bb44a9c50e9ed30d5ded, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TimerDisply
+    second: {fileID: 2100000, guid: 88c0aa52fb20ff14ca2530c8f9c7d7ed, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 1
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

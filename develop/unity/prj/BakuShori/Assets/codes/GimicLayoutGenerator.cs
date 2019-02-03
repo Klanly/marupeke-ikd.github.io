@@ -19,7 +19,7 @@ public class GimicLayoutGenerator : MonoBehaviour {
     GimicFactory gimicFactory_;
 
     // ギミック配置作成
-    public bool create( LayoutSpec spec, out BombBox outBombBox )
+    public bool create( LayoutSpec spec, GimicSpec gimicSpec, out BombBox outBombBox )
     {
         outBombBox = null;
 
@@ -35,7 +35,7 @@ public class GimicLayoutGenerator : MonoBehaviour {
             return false;
         }
 
-        var gimics = gimicFactory_.create( spec );
+        var gimics = gimicFactory_.create( spec, gimicSpec );
         if ( gimics == null || gimics.Count != gimicBoxes.Count ) {
             Debug.LogAssertion( "Failed to create Gimic." );
             return false;
@@ -43,8 +43,10 @@ public class GimicLayoutGenerator : MonoBehaviour {
 
         // BombBoxに最初のギミックボックスの答えを登録
         var answer = gimicBoxes[ 0 ].getTrapAnswer();
-        if ( answer == null )
+        if ( answer == null ) {
+            Debug.LogAssertion( "GimicLayoutGenerator: error: no answer in GimicBox." );
             return false;
+        }
         bombBox.setEntity( answer );
         answer.setEntity( gimicBoxes[ 0 ] );        // 対応するギミックボックスを答えの下に
         gimicBoxes[ 0 ].setGimic( gimics[ 0 ] );    // ギミックボックスにギミックを登録
@@ -52,8 +54,10 @@ public class GimicLayoutGenerator : MonoBehaviour {
         for ( int i = 1; i < gimicBoxes.Count; ++i ) {
             // i番目のギミックボックスの答えを全ストックのどこかに設定
             var stocks = bombBox.getEmptyStocks( true );
-            if ( stocks.Count == 0 )
+            if ( stocks.Count == 0 ) {
+                Debug.LogAssertion( "GimicLayoutGenerator: error: no stock under BombBox." );
                 return false;
+            }
             answer = gimicBoxes[ i ].getTrapAnswer();
             var stock = stocks[ Random.Range( 0, stocks.Count ) ];
             stock.setEntity( answer );
@@ -70,9 +74,15 @@ public class GimicLayoutGenerator : MonoBehaviour {
         for ( int i = 0; i < gimics.Count; ++i ) {
             // i番目のギミックのアンサーが登録可能なストックを列挙
             var stocks = gimicBoxes[ i ].getParentAndTheOtherEmptyStocks();
-            if ( stocks.Count == 0 )
+            if ( stocks.Count == 0 ) {
+                Debug.LogAssertion( "GimicLayoutGenerator: error: no stock for Answer under BombBox." );
                 return false;
+            }
             answer = gimics[ i ].getAnswer();
+            if ( answer == null ) {
+                Debug.LogAssertion( "GimicLayoutGenerator: error: Gimic has no Answer." );
+                return false;
+            }
             var stock = stocks[ Random.Range( 0, stocks.Count ) ];
             stock.setEntity( answer );
         }
@@ -81,8 +91,10 @@ public class GimicLayoutGenerator : MonoBehaviour {
         {
             var screws = bombBox.getGimicScrewes();
             var stocks = bombBox.getEmptyStocks( true );
-            if ( stocks.Count < screws.Count )
+            if ( stocks.Count < screws.Count ) {
+                Debug.LogAssertion( "GimicLayoutGenerator: error: no stock for ScrewAnswer on BombBox." );
                 return false;
+            }
             for ( int i = 0; i < screws.Count; ++i ) {
                 answer = screws[ i ].getAnswer();
                 var stock = stocks[ Random.Range( 0, stocks.Count ) ];
@@ -91,6 +103,7 @@ public class GimicLayoutGenerator : MonoBehaviour {
             }
         }
 
+        bombBox.buildBox();
         outBombBox = bombBox;
 
         return true;

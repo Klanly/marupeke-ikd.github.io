@@ -13,6 +13,11 @@ public class GimicBox : Entity {
         ObjectType = EObjectType.GimicBox;
     }
 
+    virtual public void setup( LayoutSpec spec, int randomNumber )
+    {
+        setChildrenListSize( spec.gimcBoxEntityStockNum_ );
+    }
+
     // ギミックを登録
     public bool setGimic( Gimic gimic )
     {

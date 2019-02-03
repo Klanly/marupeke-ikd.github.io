@@ -35,6 +35,15 @@ public class Entity : MonoBehaviour {
     public EObjectType ObjectType { set { objectType_ = value; } get { return objectType_; } }
     public int Index { set { index_ = value; } get { return index_; } }
 
+    // 答え？
+    public bool isAnswer()
+    {
+        return 
+            ObjectType == EObjectType.GimicAnswer ||
+            ObjectType == EObjectType.GimicBoxAnswer ||
+            ObjectType == EObjectType.ScrewAnswer;
+    }
+
     // 子Entityリストのサイズを設定
     virtual public bool setChildrenListSize( int size )
     {
@@ -61,6 +70,7 @@ public class Entity : MonoBehaviour {
         if ( index >= childrenEntities_.Count )
             return false;
         childrenEntities_[ index ] = entity;
+            entity.parent_ = this;
         return true;
     }
 
@@ -130,7 +140,7 @@ public class Entity : MonoBehaviour {
                 stock.Parent = this;
                 stock.Index = i;
                 list.Add( stock );
-
+            } else {
                 if ( isRecursive == true )
                     childrenEntities_[ i ].getInnerEmptyStocks( ref list, isRecursive, ignore );
             }

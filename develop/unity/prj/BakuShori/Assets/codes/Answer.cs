@@ -13,7 +13,7 @@ public class Answer : Entity {
         // 1個以外は設定不可
         if ( size != 1 )
             return false;
-        return true;
+        return base.setChildrenListSize( size );
     }
 
 

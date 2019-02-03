@@ -15,16 +15,16 @@ public class GimicFactory : MonoBehaviour {
     }
 
     // 生成
-    public List<Gimic> create(LayoutSpec spec)
+    public List<Gimic> create(LayoutSpec spec, GimicSpec gimicSpec )
     {
         if ( gimicPrefabs_.Length < ( int )GimicType.TypeNum )
             return null;
 
+        var r = new System.Random( spec.gimicSeed_ );
         List<GimicType> typeList = spec.gimicTypes_;
         if ( spec.gimicRandomType_ == true ) {
             if ( spec.gimicNum_ == 0 )
                 return null;
-            var r = new System.Random( spec.seed_ );
             typeList = new List<GimicType>();
             for ( int i = 0; i < spec.gimicNum_; ++i ) {
                 typeList.Add( ( GimicType )( r.Next() % ( int )GimicType.TypeNum ) );
@@ -35,7 +35,9 @@ public class GimicFactory : MonoBehaviour {
 
         var list = new List<Gimic>();
         for ( int i = 0; i < spec.gimicNum_; ++i ) {
-            list.Add( Instantiate<Gimic>( gimicPrefabs_[ ( int )typeList[ i ] ] ) );
+            var obj = Instantiate<Gimic>( gimicPrefabs_[ ( int )typeList[ i ] ] );
+            obj.setParam( r.Next(), gimicSpec );
+            list.Add( obj );
         }
         return list;
     }

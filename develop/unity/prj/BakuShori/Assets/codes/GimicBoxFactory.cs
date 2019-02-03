@@ -43,16 +43,19 @@ public class GimicBoxFactory : MonoBehaviour {
         }
 
         var trapRand = new System.Random( spec.trapSeed_ );
+        var boxRand = new System.Random( spec.gimicBoxSeed_ );
         var list = new List<GimicBox>();
         for ( int i = 0; i < spec.gimicBoxNum_; ++i ) {
+            // ギミックボックス作成
             var obj = Instantiate<GimicBox>( gimicBoxPrefabs_[ ( int )typeList[ i ] ] );
+            obj.setup( spec, boxRand.Next() );
             // トラップをアタッチ
             var trap = trapFactory_.create( spec );
             if ( trap == null ) {
                 Debug.LogAssertion( "GimicFactory: error: no trap was created." );
                 return null;
             }
-            trap.setup( trapRand.Next() );
+            trap.setup( trapRand.Next(), true );
             obj.setTrap( trap );
             list.Add( obj );
         }

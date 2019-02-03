@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BakuShori", "BakuShori.csproj", "{AC51F416-1FEE-CA06-B35D-563A4002FCB0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BakuShori.Editor.Plugins", "BakuShori.Editor.Plugins.csproj", "{6DAC4DBB-0700-8B73-9694-9A02536811B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{AC51F416-1FEE-CA06-B35D-563A4002FCB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC51F416-1FEE-CA06-B35D-563A4002FCB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC51F416-1FEE-CA06-B35D-563A4002FCB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DAC4DBB-0700-8B73-9694-9A02536811B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DAC4DBB-0700-8B73-9694-9A02536811B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DAC4DBB-0700-8B73-9694-9A02536811B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DAC4DBB-0700-8B73-9694-9A02536811B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
