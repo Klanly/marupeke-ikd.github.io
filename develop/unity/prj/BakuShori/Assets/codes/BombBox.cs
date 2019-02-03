@@ -9,6 +9,9 @@ using UnityEngine;
 
 public class BombBox : Entity {
 
+    [SerializeField]
+    BombBoxModel bombBoxModel_;
+
     void Awake()
     {
         ObjectType = EObjectType.BombBox;
@@ -40,6 +43,13 @@ public class BombBox : Entity {
                 e.transform.parent = transform;
             }
         }
+    }
+
+    private void Start()
+    {
+        int num = bombBoxModel_.getGimicBoxPlaceNum();
+        for ( int i = 0; i < num; ++i )
+           bombBoxModel_.openCover( i );
     }
 
     List<GimicScrew> gimicScrews_ = new List<GimicScrew>();

@@ -24,6 +24,7 @@ public class HandlerOperator : MonoBehaviour {
         rotateState_ = rotateIdle;
         moveState_ = moveIdle;
         standUpState_ = sit;
+        operateState_ = operate;
     }
 
     void Update()
@@ -33,6 +34,7 @@ public class HandlerOperator : MonoBehaviour {
             return;
         updateMouseMoveDef();
 
+        operateState_();
         standUpState_();
         moveState_();
         rotateState_();
@@ -198,9 +200,32 @@ public class HandlerOperator : MonoBehaviour {
 
     }
 
+    // 操作
+    void operate()
+    {
+        // 左クリックでレイを飛ばす
+        if ( Input.GetMouseButtonDown( 0 ) == true ) {
+            ray();
+        }
+    }
+
+    void ray()
+    {
+        Ray mouseRay = Camera.main.ScreenPointToRay( Input.mousePosition );
+        RaycastHit hit;
+        if ( Physics.Raycast( mouseRay, out hit, 10.0f ) == true ) {
+            // 対象が持っているOnActionをコール
+            var onAction = hit.collider.GetComponent<OnAction>();
+            if ( onAction == null )
+                return;
+            onAction.onAction( gameObject, "hit" );
+        }
+    }
+
     System.Action rotateState_;
     System.Action moveState_;
     System.Action standUpState_;
+    System.Action operateState_;
 
     bool bActive_ = false;
     Vector3 cursorMoveDef_ = Vector3.zero;

@@ -244,6 +244,8 @@
     <Compile Include="Assets\codes\Answer.cs" />
     <Compile Include="Assets\codes\BombBox.cs" />
     <Compile Include="Assets\codes\BombBoxFactory.cs" />
+    <Compile Include="Assets\codes\BombBoxModel.cs" />
+    <Compile Include="Assets\codes\BombTimer.cs" />
     <Compile Include="Assets\codes\CameraOperator.cs" />
     <Compile Include="Assets\codes\common\Bezier.cs" />
     <Compile Include="Assets\codes\common\GlobalStateManager.cs" />
@@ -275,6 +277,7 @@
     <Compile Include="Assets\codes\GimicScrew.cs" />
     <Compile Include="Assets\codes\HandlerOperator.cs" />
     <Compile Include="Assets\codes\LayoutSpec.cs" />
+    <Compile Include="Assets\codes\OnAction.cs" />
     <Compile Include="Assets\codes\TrapFactory.cs" />
     <Compile Include="Assets\codes\Traps\ScrewTrap.cs" />
     <Compile Include="Assets\codes\Traps\ScrewTrapAnswer.cs" />
@@ -287,6 +290,7 @@
     <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font4.shader" />
     <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font5.shader" />
     <None Include="Assets\fonts\tegaki01_64.fnt" />
+    <None Include="Assets\fonts\timer_64.fnt" />
     <None Include="Assets\shaders\standerdWithCullOff.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
