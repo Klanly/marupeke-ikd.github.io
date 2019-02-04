@@ -44,6 +44,12 @@ public class Entity : MonoBehaviour {
             ObjectType == EObjectType.ScrewAnswer;
     }
 
+    // ギミック？
+    public bool isGimic()
+    {
+        return ObjectType == EObjectType.Gimic;
+    }
+
     // 子Entityリストのサイズを設定
     virtual public bool setChildrenListSize( int size )
     {
@@ -64,9 +70,17 @@ public class Entity : MonoBehaviour {
         return true;
     }
 
+    // 子Entityの数を取得
+    public int getChildrenListSize()
+    {
+        return childrenEntities_.Count;
+    }
+
     // Entityを登録
     virtual public bool setEntity( int index, Entity entity )
     {
+        if ( entity.ObjectType == EObjectType.Empty )
+            Debug.Assert( false );
         if ( index >= childrenEntities_.Count )
             return false;
         childrenEntities_[ index ] = entity;

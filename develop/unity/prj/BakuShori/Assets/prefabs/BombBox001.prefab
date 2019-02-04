@@ -677,7 +677,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1778036991319466
 GameObject:
   m_ObjectHideFlags: 1
@@ -812,7 +812,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1870265865415728
 GameObject:
   m_ObjectHideFlags: 1
@@ -3117,10 +3117,37 @@ MonoBehaviour:
   - {fileID: 114708394470722572}
   - {fileID: 114105404572491994}
   - {fileID: 114910644247828168}
+  gimicBoxPoses_:
+  - {fileID: 1849059834522856}
+  - {fileID: 1852029532120414}
+  - {fileID: 1517179383280838}
+  - {fileID: 1321679684972182}
+  - {fileID: 1966183393726306}
+  - {fileID: 1092972107256668}
+  - {fileID: 1146750274581040}
+  - {fileID: 1046670414287264}
+  - {fileID: 1215150470917100}
+  - {fileID: 1718862191406828}
+  - {fileID: 1152742516301182}
+  - {fileID: 1726427378689534}
+  - {fileID: 1518754167494870}
+  - {fileID: 1836495279506228}
   redLine_: {fileID: 114318230525695764}
   redLineCut_: {fileID: 1292921268721706}
   blueLine_: {fileID: 114658712827542312}
   blueLineCut_: {fileID: 1068875232558876}
+  bombBoxAnswerNodes_:
+  - {fileID: 1059242585588456}
+  - {fileID: 1305046559144844}
+  - {fileID: 1681775800879714}
+  - {fileID: 1094256388955074}
+  - {fileID: 1740081234007716}
+  - {fileID: 1184300097501828}
+  - {fileID: 1409115898063448}
+  - {fileID: 1333320328690060}
+  - {fileID: 1171541947543314}
+  - {fileID: 1689425646598962}
+  - {fileID: 1619374826764368}
 --- !u!114 &114528864782929274
 MonoBehaviour:
   m_ObjectHideFlags: 1

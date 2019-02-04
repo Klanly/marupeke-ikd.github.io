@@ -11,6 +11,7 @@ public class NineNumberBtnGimicAnswer : Answer {
 
     public void setup( List<NineNumberBtnGimic.Number> numbers )
     {
+        ObjectType = EObjectType.GimicAnswer;
         string numStr = "";
         foreach ( var n in numbers ) {
             numStr += string.Format( "<color=#{1}>{0}</color>", n.number_, NineNumberBtnGimic.getColorStr( n.fontColor_) );

@@ -8,6 +8,9 @@ public class BombBoxModel : MonoBehaviour {
     GimicBoxCover[] covers_;
 
     [SerializeField]
+    GameObject[] gimicBoxPoses_;
+
+    [SerializeField]
     OnAction redLine_;
 
     [SerializeField]
@@ -18,6 +21,9 @@ public class BombBoxModel : MonoBehaviour {
 
     [SerializeField]
     GameObject blueLineCut_;
+
+    [SerializeField]
+    GameObject[] bombBoxAnswerNodes_;
 
     enum CutLine
     {
@@ -40,8 +46,24 @@ public class BombBoxModel : MonoBehaviour {
         return true;
     }
 
-	// Use this for initialization
-	void Start () {
+    // ギミックを格納できるGBのTransformを取得
+    public Transform getGimicBoxTrans( int id )
+    {
+        if ( id >= gimicBoxPoses_.Length )
+            return null;
+        return gimicBoxPoses_[ id ].transform;
+    }
+
+    // BombBox表面のAnswerノードを取得
+    public GameObject getBombBoxAnswerNode( int id )
+    {
+        if ( id >= bombBoxAnswerNodes_.Length )
+            return null;
+        return bombBoxAnswerNodes_[ id ];
+    }
+
+    // Use this for initialization
+    void Start () {
         redLineCut_.SetActive( false );
         blueLineCut_.SetActive( false );
 

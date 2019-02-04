@@ -21,7 +21,7 @@ public class GimicBox : Entity {
     // ギミックを登録
     public bool setGimic( Gimic gimic )
     {
-        if ( gimic != null || childrenEntities_[ 0 ] != null )
+        if ( gimic == null || childrenEntities_[ 0 ] != null )
             return false;   // 既に登録されている
         gimic_ = gimic;
         setEntity( 0, gimic );  // 0番に登録
@@ -32,6 +32,7 @@ public class GimicBox : Entity {
     public void setTrap( Trap trap )
     {
         trap_ = trap;
+        trap_.getAnswer().Index = Index;
     }
 
     // 蓋の答えを取得

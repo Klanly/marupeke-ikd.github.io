@@ -34,15 +34,78 @@ public class BombBox : Entity {
         return gimicScrews_;
     }
 
+    // 箱の連携関係をダンプ
+    public void dumpBox()
+    {
+        string str = "";
+        dumpBox( this, ref str, 0, 0 );
+        Debug.Log( str );
+    }
+
+    // 箱の連携関係をダンプ
+    void dumpBox( Entity e, ref string str, int index, int indent )
+    {
+        System.Func<string> indentStr = () => {
+            string s = "";
+            for ( int i = 0; i < indent; ++i ) {
+                s += " ";
+            }
+            return s;
+        };
+        str += indentStr() + index + ": ";
+        if ( e == null ) {
+            str += "null\n";
+            return;
+        }
+        str += e.ObjectType.ToString() + e.Index + "\n";
+        for ( int i = 0; i < getChildrenListSize(); ++i ) {
+            dumpBox( e.getEntity( i ), ref str, i, indent + 4 );
+        }
+    }
+
     // 箱を形成
     public void buildBox()
     {
-        // 自分の直下にあるアンサー群は自分の子に
+        int ansIdx = 0;
         foreach( var e in childrenEntities_ ) {
-            if ( e != null && e.isAnswer() == true ) {
-                e.transform.parent = transform;
+            if ( e == null )
+                continue;
+
+            // 自分の直下にあるアンサー群はANSノードへ
+            if ( e.isAnswer() == true ) {
+                var ansNode = bombBoxModel_.getBombBoxAnswerNode( ansIdx );
+                e.transform.parent = ansNode.transform;
+                e.transform.localPosition = Vector3.zero;
+                ansIdx++;
+
+                // アンサーノードの下をトラバースしてギミックボックス及び
+                // ギミックを設置
+                build( e );
             }
         }
+    }
+
+    // Entity以下を形成
+    public void build( Entity e )
+    {
+        if ( e == null )
+            return;
+
+        if ( e.isGimic() == true ) {
+            // ギミックを設置
+            var gbNode = bombBoxModel_.getGimicBoxTrans( e.Index );
+            e.transform.parent = gbNode.transform;
+            e.transform.localPosition = Vector3.zero;
+        }
+
+        int childNum = e.getChildrenListSize();
+        for ( int i = 0; i < childNum; ++i ) {
+            var c = e.getEntity( i );
+            if ( c == null )
+                continue;
+            build( c );
+        }
+
     }
 
     private void Start()

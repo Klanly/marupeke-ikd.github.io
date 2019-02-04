@@ -49,6 +49,7 @@ public class GimicBoxFactory : MonoBehaviour {
             // ギミックボックス作成
             var obj = Instantiate<GimicBox>( gimicBoxPrefabs_[ ( int )typeList[ i ] ] );
             obj.setup( spec, boxRand.Next() );
+            obj.Index = i;
             // トラップをアタッチ
             var trap = trapFactory_.create( spec );
             if ( trap == null ) {

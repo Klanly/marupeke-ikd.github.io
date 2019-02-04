@@ -37,6 +37,8 @@ public class GimicFactory : MonoBehaviour {
         for ( int i = 0; i < spec.gimicNum_; ++i ) {
             var obj = Instantiate<Gimic>( gimicPrefabs_[ ( int )typeList[ i ] ] );
             obj.setParam( r.Next(), gimicSpec );
+            if ( obj.ObjectType == Entity.EObjectType.Empty )
+                obj.ObjectType = Entity.EObjectType.Gimic;
             list.Add( obj );
         }
         return list;
