@@ -8,6 +8,12 @@ using UnityEngine;
 
 public class GimicBox : Entity {
 
+    // 蓋開け成功コールバック
+    public System.Action SuccessCallback { set { successCallback_ = value; } }
+
+    // 蓋開け失敗コールバック
+    public System.Action FailureCallback { set { failureCallback_ = value; } }
+
     void Awake()
     {
         ObjectType = EObjectType.GimicBox;
@@ -33,6 +39,18 @@ public class GimicBox : Entity {
     {
         trap_ = trap;
         trap_.getAnswer().Index = Index;
+        trap_.SuccessCallback = () => {
+            successCallback_();
+        };
+        trap_.FailureCallback = () => {
+            failureCallback_();
+        };
+    }
+
+    // 蓋トラップを取得
+    public Trap getTrap()
+    {
+        return trap_;
     }
 
     // 蓋の答えを取得
@@ -69,4 +87,6 @@ public class GimicBox : Entity {
 
     Trap trap_;
     Gimic gimic_;
+    System.Action successCallback_;
+    System.Action failureCallback_;
 }

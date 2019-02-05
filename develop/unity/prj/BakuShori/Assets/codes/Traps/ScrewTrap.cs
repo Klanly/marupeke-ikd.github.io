@@ -19,6 +19,9 @@ public class ScrewTrap : Trap {
     [SerializeField]
     ScrewTrapAnswer answerPrefab_;
 
+    [SerializeField]
+    OnAction onAction_;
+
     public enum Rotate : int
     {
         Left = 0,
@@ -45,13 +48,14 @@ public class ScrewTrap : Trap {
 
     // Use this for initialization
     void Start () {
-		
+        // ネジがクリックされたら回転イベントへ
+        onAction_.ActionCallback = ( obj, eventStr ) => {
+            successCallback_();
+        };
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
-
-
 }

@@ -9,6 +9,12 @@ using UnityEngine;
 
 public class Trap : MonoBehaviour {
 
+    // 成功コールバック
+    public System.Action SuccessCallback { set { successCallback_ = value; } }
+
+    // 失敗コールバック
+    public System.Action FailureCallback { set { failureCallback_ = value; } }
+
     // セットアップ指示
     public virtual void setup( int randomNumber, bool forGimicBox )
     {
@@ -35,4 +41,6 @@ public class Trap : MonoBehaviour {
 	}
 
     protected Answer answer_;
+    protected System.Action successCallback_;
+    protected System.Action failureCallback_;
 }

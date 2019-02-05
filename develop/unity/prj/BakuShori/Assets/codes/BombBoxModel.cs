@@ -14,6 +14,9 @@ public class BombBoxModel : MonoBehaviour {
     GameObject[] gimicBoxPoses_;
 
     [SerializeField]
+    GameObject[] trapPoses_;
+
+    [SerializeField]
     OnAction redLine_;
 
     [SerializeField]
@@ -74,6 +77,14 @@ public class BombBoxModel : MonoBehaviour {
         if ( answerId >= covers_[ gimicBoxId ].getAnswerNodeNum() )
             return null;
         return covers_[ gimicBoxId ].getAnswerPos( answerId );
+    }
+
+    // ギミックボックスのトラップノードを取得
+    public GameObject getTrapTrans( int gimicBoxId )
+    {
+        if ( gimicBoxId >= trapPoses_.Length )
+            return null;
+        return trapPoses_[ gimicBoxId ];
     }
 
     // BombBox表面のAnswerノードを取得

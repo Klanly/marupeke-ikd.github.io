@@ -122,6 +122,24 @@ public class BombBox : Entity {
                     var ansTO = ans.gameObject.AddComponent<TransObserver>();
                     ansTO.setTarget( node.transform );
                 }
+
+                // 蓋の表面にトラップをセット
+                // 蓋との親子関係は作らず
+                // 蓋の姿勢を常に監視するようにする（ダサい… orz）
+                var trapPos = bombBoxModel_.getTrapTrans( gimicBox.Index );
+                if ( trapPos == null ) {
+                    Debug.Assert( false );                    
+                } else {
+                    var trap = gimicBox.getTrap();
+                    var to = trap.gameObject.AddComponent<TransObserver>();
+                    to.setTarget( trapPos.transform );
+                }
+
+                // ギミックボックスの蓋開けに成功したら
+                // 蓋開けモーション再生
+                gimicBox.SuccessCallback = () => {
+                    bombBoxModel_.openCover( gimicBox.Index );
+                };
             }
         }
 
