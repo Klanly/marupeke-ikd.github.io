@@ -13,6 +13,9 @@ public class GimicBoxCover : MonoBehaviour {
     [SerializeField]
     GameObject[] ansPoses_;
 
+    [SerializeField]
+    GameObject numberNode_;
+
     enum Rot
     {
         PX, PY, PZ, MX, MY, MZ
@@ -50,6 +53,12 @@ public class GimicBoxCover : MonoBehaviour {
         if ( id >= ansPoses_.Length )
             return null;
         return ansPoses_[ id ];
+    }
+
+    // ナンバー位置を取得
+    public GameObject getNumberNode()
+    {
+        return numberNode_;
     }
 
 	// Use this for initialization

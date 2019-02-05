@@ -137,10 +137,11 @@ public class BombBox : Entity {
 
     private void Start()
     {
+/*
         int num = bombBoxModel_.getGimicBoxPlaceNum();
         for ( int i = 0; i < num; ++i )
            bombBoxModel_.openCover( i );
-    }
+*/    }
 
     List<GimicScrew> gimicScrews_ = new List<GimicScrew>();
 }

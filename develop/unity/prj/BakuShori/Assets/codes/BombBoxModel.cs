@@ -8,6 +8,9 @@ public class BombBoxModel : MonoBehaviour {
     GimicBoxCover[] covers_;
 
     [SerializeField]
+    GameObject[] coverNumberPoses_;
+
+    [SerializeField]
     GameObject[] gimicBoxPoses_;
 
     [SerializeField]
@@ -24,6 +27,9 @@ public class BombBoxModel : MonoBehaviour {
 
     [SerializeField]
     GameObject[] bombBoxAnswerNodes_;
+
+    [SerializeField]
+    TextMesh coverNumberPrefab_;
 
     enum CutLine
     {
@@ -90,6 +96,16 @@ public class BombBoxModel : MonoBehaviour {
         blueLine_.ActionCallback = (obj, eventName) => {
             cutRB( CutLine.Blue );
         };
+
+        // 蓋の表面にナンバーを刻印
+        for ( int i = 0; i < coverNumberPoses_.Length; ++i ) {
+            var cn = Instantiate<TextMesh>( coverNumberPrefab_ );
+            var pos = coverNumberPoses_[ i ];
+            var to = cn.gameObject.AddComponent<TransObserver>();
+            to.setTarget( pos.transform );
+            cn.transform.parent = transform;
+            cn.text = string.Format( "{0}", i + 1 );
+        }
     }
 
     // Update is called once per frame
