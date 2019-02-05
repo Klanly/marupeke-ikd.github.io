@@ -104,7 +104,7 @@ public class BombBoxModel : MonoBehaviour {
             var to = cn.gameObject.AddComponent<TransObserver>();
             to.setTarget( pos.transform );
             cn.transform.parent = transform;
-            cn.text = string.Format( "{0}", i + 1 );
+            cn.text = string.Format( "{0}", i );
         }
     }
 

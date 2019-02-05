@@ -5,6 +5,9 @@ using UnityEngine;
 // ネジギミックアンサー
 public class ScrewTrapAnswer : Answer {
 
+    [SerializeField]
+    TextMesh text_;
+
     private void Awake()
     {
         ObjectType = EObjectType.ScrewAnswer;    
@@ -19,11 +22,11 @@ public class ScrewTrapAnswer : Answer {
 
     // Use this for initialization
     void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        text_.text = string.Format( "{0} {1}{2}", Index, rotate_ == ScrewTrap.Rotate.Left ? "L" : "R", rotNum_ );
+    }
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
 
