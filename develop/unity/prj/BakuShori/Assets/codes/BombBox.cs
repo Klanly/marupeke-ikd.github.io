@@ -96,6 +96,32 @@ public class BombBox : Entity {
             var gbNode = bombBoxModel_.getGimicBoxTrans( e.Index );
             e.transform.parent = gbNode.transform;
             e.transform.localPosition = Vector3.zero;
+            // gbNodeの位置に対応してギミックを回転（ダサい…orz）
+            // y軸-90度
+            var q = Quaternion.Euler( 0.0f, -90.0f, 0.0f ) * e.transform.localRotation;
+            e.transform.localRotation = q;
+        }
+        else if ( e.isGimicBox() == true ) {
+            // ギミックボックスの子に所属しているアンサーを
+            // ギミックボックス内に設定
+            var gimicBox = e as GimicBox;
+            if ( gimicBox != null ) {
+                var answers = gimicBox.getAnswres();
+                for ( int i = 0; i < answers.Count; ++i ) {
+                    var ans = answers[ i ];
+                    var node = bombBoxModel_.getGimicBoxAnswerTrans( gimicBox.Index, i );
+                    if ( node == null ) {
+                        Debug.Assert( false );
+                        continue;
+                    }
+
+                    // 蓋にスケールが入っていて回転で歪んでしまうので
+                    // 蓋との親子関係は作らず
+                    // 蓋の姿勢を常に監視するようにする（ダサい… orz）
+                    var ansTO = ans.gameObject.AddComponent<TransObserver>();
+                    ansTO.setTarget( node.transform );
+                }
+            }
         }
 
         int childNum = e.getChildrenListSize();

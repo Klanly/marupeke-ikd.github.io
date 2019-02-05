@@ -50,6 +50,12 @@ public class Entity : MonoBehaviour {
         return ObjectType == EObjectType.Gimic;
     }
 
+    // ギミックボックス？
+    public bool isGimicBox()
+    {
+        return ObjectType == EObjectType.GimicBox;
+    }
+
     // 子Entityリストのサイズを設定
     virtual public bool setChildrenListSize( int size )
     {

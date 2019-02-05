@@ -278,6 +278,7 @@
     <Compile Include="Assets\codes\HandlerOperator.cs" />
     <Compile Include="Assets\codes\LayoutSpec.cs" />
     <Compile Include="Assets\codes\OnAction.cs" />
+    <Compile Include="Assets\codes\TransObserver.cs" />
     <Compile Include="Assets\codes\TrapFactory.cs" />
     <Compile Include="Assets\codes\Traps\ScrewTrap.cs" />
     <Compile Include="Assets\codes\Traps\ScrewTrapAnswer.cs" />

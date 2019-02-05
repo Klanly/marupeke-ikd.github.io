@@ -10,6 +10,9 @@ public class GimicBoxCover : MonoBehaviour {
     [SerializeField]
     Rot rot_ = Rot.MX;
 
+    [SerializeField]
+    GameObject[] ansPoses_;
+
     enum Rot
     {
         PX, PY, PZ, MX, MY, MZ
@@ -33,6 +36,20 @@ public class GimicBoxCover : MonoBehaviour {
             transform.localRotation = Quaternion.Euler( r );
             return true;
         } );
+    }
+
+    // アンサー位置の数を取得
+    public int getAnswerNodeNum()
+    {
+        return ansPoses_.Length;
+    }
+
+    // アンサー位置を取得
+    public GameObject getAnswerPos( int id )
+    {
+        if ( id >= ansPoses_.Length )
+            return null;
+        return ansPoses_[ id ];
     }
 
 	// Use this for initialization

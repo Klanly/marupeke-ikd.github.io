@@ -45,6 +45,18 @@ public class GimicBox : Entity {
         return trap_.getAnswer();
     }
 
+    // 子に所属しているアンサーを取得
+    public List<Answer> getAnswres()
+    {
+        var list = new List<Answer>();
+        foreach ( var e in childrenEntities_ ) {
+            var ans = e as Answer;
+            if ( ans != null )
+                list.Add( ans );
+        }
+        return list;
+    }
+
     // Use this for initialization
     void Start () {
 		

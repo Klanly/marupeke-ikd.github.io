@@ -31,6 +31,12 @@ public class BombBoxModel : MonoBehaviour {
         Blue
     }
 
+    [System.Serializable]
+    public class AnswerNodes
+    {
+        public GameObject[] nodes_;
+    }
+
     // ギミックを格納できる場所の数を取得
     public int getGimicBoxPlaceNum()
     {
@@ -52,6 +58,16 @@ public class BombBoxModel : MonoBehaviour {
         if ( id >= gimicBoxPoses_.Length )
             return null;
         return gimicBoxPoses_[ id ].transform;
+    }
+
+    // ギミックボックスのAnswerノードを取得
+    public GameObject getGimicBoxAnswerTrans( int gimicBoxId, int answerId )
+    {
+        if ( gimicBoxId >= covers_.Length )
+            return null;
+        if ( answerId >= covers_[ gimicBoxId ].getAnswerNodeNum() )
+            return null;
+        return covers_[ gimicBoxId ].getAnswerPos( answerId );
     }
 
     // BombBox表面のAnswerノードを取得
