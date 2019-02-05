@@ -76,6 +76,7 @@ public class BombBox : Entity {
                 var ansNode = bombBoxModel_.getBombBoxAnswerNode( ansIdx );
                 e.transform.parent = ansNode.transform;
                 e.transform.localPosition = Vector3.zero;
+                e.transform.localRotation = Quaternion.identity;
                 ansIdx++;
 
                 // アンサーノードの下をトラバースしてギミックボックス及び
