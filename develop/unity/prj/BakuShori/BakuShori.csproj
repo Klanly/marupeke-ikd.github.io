@@ -248,6 +248,7 @@
     <Compile Include="Assets\codes\BombTimer.cs" />
     <Compile Include="Assets\codes\CameraOperator.cs" />
     <Compile Include="Assets\codes\common\Bezier.cs" />
+    <Compile Include="Assets\codes\common\CollideUtil.cs" />
     <Compile Include="Assets\codes\common\GlobalStateManager.cs" />
     <Compile Include="Assets\codes\common\ImageBillboarding.cs" />
     <Compile Include="Assets\codes\common\IntroAnimation.cs" />

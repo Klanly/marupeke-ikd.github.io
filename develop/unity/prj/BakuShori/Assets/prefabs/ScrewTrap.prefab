@@ -171,6 +171,7 @@ MonoBehaviour:
   answerPrefab_: {fileID: 114541201360004572, guid: cdf9ec5b535ee8c418729cbdde3668f3,
     type: 2}
   onAction_: {fileID: 114455584751788370}
+  screwModel_: {fileID: 1488741364734114}
 --- !u!135 &135645617644567170
 SphereCollider:
   m_ObjectHideFlags: 1

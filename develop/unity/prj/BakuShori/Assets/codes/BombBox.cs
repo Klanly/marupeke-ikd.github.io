@@ -17,6 +17,12 @@ public class BombBox : Entity {
         ObjectType = EObjectType.BombBox;
     }
 
+    // 箱爆発
+    void explosion()
+    {
+        Debug.Log( "Explosion!!!" );
+    }
+
     // Entityを登録
     override public bool setEntity( int index, Entity entity )
     {
@@ -139,6 +145,12 @@ public class BombBox : Entity {
                 // 蓋開けモーション再生
                 gimicBox.SuccessCallback = () => {
                     bombBoxModel_.openCover( gimicBox.Index );
+                };
+
+                // ギミックボックスの蓋開けに失敗したら
+                // 爆発
+                gimicBox.FailureCallback = () => {
+                    explosion();
                 };
             }
         }
