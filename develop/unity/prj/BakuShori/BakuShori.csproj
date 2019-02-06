@@ -286,6 +286,7 @@
     <Compile Include="Assets\codes\Traps\ScrewTrap.cs" />
     <Compile Include="Assets\codes\Traps\ScrewTrapAnswer.cs" />
     <Compile Include="Assets\codes\Traps\Trap.cs" />
+    <Compile Include="Assets\codes\UIFader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Plugins\BitmapFontImporter\Shaders\BFILogic.cginc" />

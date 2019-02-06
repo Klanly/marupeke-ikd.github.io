@@ -22,6 +22,24 @@ public class BombBox : Entity {
         ObjectType = EObjectType.BombBox;
     }
 
+    // フロントパネル開いた？
+    public bool isOpenFrontPanel()
+    {
+        return bombBoxModel_.isOpenFrontPanel();
+    }
+
+    // タイマーを急激に減少
+    public void advanceTimer( System.Action notifyZero )
+    {
+        bombBoxModel_.advanceTimer( notifyZero );
+    }
+
+    // タイマーを停止
+    public void stopTimer()
+    {
+        bombBoxModel_.stopTimer();
+    }
+
     // ギミック解除成功
     void gimicSuccess()
     {

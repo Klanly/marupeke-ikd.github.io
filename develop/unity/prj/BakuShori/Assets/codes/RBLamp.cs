@@ -65,6 +65,9 @@ public class RBLamp : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         int sec = ( int )timer_.getSec();
+        if ( sec < 0.0f )
+            return;
+
         int e = sec % 10;
         if ( blueTiming_[ e ] == 1 ) {
             blueLamp_.material = blueMat_;

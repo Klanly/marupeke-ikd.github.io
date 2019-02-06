@@ -43,6 +43,9 @@ public class BombBoxModel : MonoBehaviour {
     [SerializeField]
     RBLamp rbLamp_;
 
+    [SerializeField]
+    BombTimer[] bombTimers_;
+
     // RBカット通知コールバック
     public System.Action<CutLine, int> CutRBCallback { set { cutRBCallback_ = value; } }
 
@@ -56,6 +59,29 @@ public class BombBoxModel : MonoBehaviour {
     public class AnswerNodes
     {
         public GameObject[] nodes_;
+    }
+
+    // フロントパネル開いた？
+    public bool isOpenFrontPanel()
+    {
+        return bOpenFrontPanel_;
+    }
+
+    // タイマーを急激に減少
+    public void advanceTimer(System.Action notifyZero)
+    {
+        foreach ( var t in bombTimers_ ) {
+            t.advanceTimer( notifyZero );
+            notifyZero = null;
+        }
+    }
+
+    // タイマーをストップ
+    public void stopTimer()
+    {
+        foreach ( var t in bombTimers_ ) {
+            t.stopTimer();
+        }
     }
 
     // 全面パネルをオープン
@@ -73,6 +99,8 @@ public class BombBoxModel : MonoBehaviour {
             frontPanel_.transform.localRotation = q;
             return true;
         });
+
+        bOpenFrontPanel_ = true;
     }
 
     // ギミックを格納できる場所の数を取得
@@ -179,6 +207,7 @@ public class BombBoxModel : MonoBehaviour {
         }
     }
 
+    bool bOpenFrontPanel_ = false;
     bool bCutBlue_ = false;
     bool bCutRed_ = false;
     System.Action<CutLine, int> cutRBCallback_;

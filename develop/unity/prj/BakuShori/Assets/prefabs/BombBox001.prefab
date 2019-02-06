@@ -4353,6 +4353,9 @@ MonoBehaviour:
   frontPanel_: {fileID: 1766522790078554}
   bDebugOpenFrontPanel_: 0
   rbLamp_: {fileID: 114708566069864434}
+  bombTimers_:
+  - {fileID: 114879240465724742}
+  - {fileID: 114302897659846920}
 --- !u!114 &114528864782929274
 MonoBehaviour:
   m_ObjectHideFlags: 1
