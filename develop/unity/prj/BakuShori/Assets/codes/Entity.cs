@@ -33,7 +33,7 @@ public class Entity : MonoBehaviour {
     }
 
     public EObjectType ObjectType { set { objectType_ = value; } get { return objectType_; } }
-    public int Index { set { index_ = value; } get { return index_; } }
+    virtual public int Index { set { index_ = value; } get { return index_; } }
 
     // 答え？
     public bool isAnswer()
@@ -177,6 +177,6 @@ public class Entity : MonoBehaviour {
 
     EObjectType objectType_;
     protected List<Entity> childrenEntities_ = new List<Entity>();
-    int index_ = 0;
+    protected int index_ = 0;
     Entity parent_;
 }

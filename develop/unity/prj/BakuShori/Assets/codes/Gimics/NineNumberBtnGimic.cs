@@ -13,6 +13,25 @@ public class NineNumberBtnGimic : Gimic {
     [SerializeField]
     NineNumberBtnGimicAnswer answerPrefab_;
 
+    [SerializeField]
+    OnAction[] buttons_;
+
+    [SerializeField]
+    TextMesh[] buttonTexts_;
+
+    [SerializeField]
+    MeshRenderer[] buttonBGs_;
+
+    override public int Index {
+        set {
+            index_ = value;
+            answer_.Index = index_;
+        }
+        get {
+            return index_;
+        }
+    }
+
     public enum EColor : int
     {
         Red = 0,
@@ -48,13 +67,69 @@ public class NineNumberBtnGimic : Gimic {
             }
         }
 
-        // ボタン作成
-        createButtons( digit_ );
+        // ボタンナンバー列作成
+        createButtons( randomNumber, digit_ );
+        resetButtonSet( 0 );
 
         // アンサー作成
         gimicAnswer_ = Instantiate<NineNumberBtnGimicAnswer>( answerPrefab_ );
-        gimicAnswer_.setup( answerNumbers_ );
+        gimicAnswer_.setup( Index, answerNumbers_ );
         answer_ = gimicAnswer_;
+
+        // ボタンアクション登録
+        for ( int i = 0; i < buttons_.Length; ++i ) {
+            int e = i;
+            buttons_[ i ].ActionCallback = ( caller, eventStr ) => {
+                if ( curDigit_ >= digit_ )
+                    return;
+
+                // 押されたボタンのナンバー
+                var number = buttonNumbers_[ curDigit_ ][ e ];
+                var ans = answerNumbers_[ curDigit_ ];
+                if ( 
+                    ans.number_ != number.number_ ||
+                    ans.fontColor_ != number.fontColor_ ||
+                    ans.bgColor_ != number.bgColor_
+                ) {
+                    // 不正解
+                    failureCallback_();
+                    return;
+                }
+
+                // 正解
+                // 押されたボタンの押し下げ動作
+                var pos = buttons_[ e ].transform.localPosition;
+                float z = pos.z;
+                GlobalState.time( 0.25f, (sec, t) => {
+                    var p = pos;
+                    p.z = Mathf.Lerp( z, 0.0f, t );
+                    buttons_[ e ].transform.localPosition = p;
+                    return true;
+                } ).nextTime( 0.25f, (sec, t) => {
+                    var p = pos;
+                    p.z = Mathf.Lerp( 0.0f, z, t );
+                    buttons_[ e ].transform.localPosition = p;
+                    return true;
+                }).finish( () => {
+                    resetButtonSet( curDigit_ );
+                } );
+            
+                //  最後のボタンだったらギミック解除
+                if ( curDigit_ + 1 == digit_ ) {
+                    diactiveGimic();
+                }
+
+                // 次のボタンへ
+                curDigit_++;
+            };
+        }
+    }
+
+    // ギミック解除
+    void diactiveGimic()
+    {
+        // ランプの色を青色に
+        Debug.Log( "NineNumberGimic was diacgived !" );
     }
 
     // 色番号を取得
@@ -68,6 +143,24 @@ public class NineNumberBtnGimic : Gimic {
             case EColor.White:  return "EDEDED";
         }
         return "000000";
+    }
+
+    // 色を取得
+    static public Color getColor( EColor color )
+    {
+        switch ( color ) {
+            case EColor.Red:
+                return new Color( ( int )0xD2 / 255.0f, ( int )0x3C / 255.0f, ( int )0x1A / 255.0f );
+            case EColor.Green:
+                return new Color( ( int )0x5B / 255.0f, ( int )0xD2 / 255.0f, ( int )0x1A / 255.0f );
+            case EColor.Blue:
+                return new Color( ( int )0x1A / 255.0f, ( int )0x7D / 255.0f, ( int )0xD2 / 255.0f );
+            case EColor.Yellow:
+                return new Color( ( int )0xD0 / 255.0f, ( int )0xD2 / 255.0f, ( int )0x1A / 255.0f );
+            case EColor.White:
+                return new Color( ( int )0xED / 255.0f, ( int )0xED / 255.0f, ( int )0xED / 255.0f );
+        }
+        return Color.black;
     }
 
     // ボタン作成
@@ -84,6 +177,24 @@ public class NineNumberBtnGimic : Gimic {
         return number;
     }
 
+    // ボタンセットを変更
+    void resetButtonSet( int digit )
+    {
+        if ( digit >= digit_ )
+            return;
+        var numbers = buttonNumbers_[ digit ];
+        for ( int i = 0; i < numbers.Count; ++i ) {
+            var n = numbers[ i ];
+            buttonTexts_[ i ].text = string.Format( "<color=#{0}>{1}</color>", getColorStr( n.fontColor_ ), n.number_ );
+
+            // ボタン背景
+            var mat = buttonBGs_[ i ].materials[ 1 ];
+            var bg = getColor( n.bgColor_ );
+            mat.color = bg;
+            buttonBGs_[ i ].materials[ 1 ] = mat;
+        }
+    }
+
     // 同じボタンがある？
     bool isSame( Number me, List< Number > numbers )
     {
@@ -97,7 +208,7 @@ public class NineNumberBtnGimic : Gimic {
     }
 
     // 問題ボタン列作成
-    void createButtons( int digit )
+    void createButtons( int seed, int digit )
     {
         for ( int d = 0; d < digit; ++d ) {
             var list = new List<Number>();
@@ -111,7 +222,8 @@ public class NineNumberBtnGimic : Gimic {
                     }
                 }
             }
-            buttons_.Add( list );
+            ListUtil.shuffle<Number>( ref list );
+            buttonNumbers_.Add( list );
         }
     }
 
@@ -127,7 +239,8 @@ public class NineNumberBtnGimic : Gimic {
 
     System.Random random_;
     List<Number> answerNumbers_;
-    List< List<Number> > buttons_ = new List<List<Number>>();
+    List< List<Number> > buttonNumbers_ = new List<List<Number>>();
     NineNumberBtnGimicAnswer gimicAnswer_;
     int digit_;
+    int curDigit_ = 0;
 }

@@ -140,6 +140,25 @@ public class GlobalState : GlobalStateBase
         return state;
     }
 
+    // 指定時間だけループ
+    public GlobalState nextTime( float sec, System.Func<float, float, bool> action )
+    {
+        float curSec = 0.0f;
+        var state = new GlobalState(
+            () => {
+                curSec += Time.deltaTime;
+                if ( curSec >= sec ) {
+                    action( sec, 1.0f );
+                    return false;
+                }
+                return action( curSec, curSec / sec );
+            },
+            null
+        );
+        GlobalStateUpdater.getInstance().add( state );
+        return state;
+    }
+
     // 次のステートを登録
     public GlobalState next( System.Func< bool > action, System.Action post = null )
     {

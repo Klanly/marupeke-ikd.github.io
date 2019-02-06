@@ -107,6 +107,12 @@ public class BombBox : Entity {
             // y軸-90度
             var q = Quaternion.Euler( 0.0f, -90.0f, 0.0f ) * e.transform.localRotation;
             e.transform.localRotation = q;
+
+            // ギミック解除に失敗したら爆発
+            var gimic = e as Gimic;
+            gimic.FailureCallback = () => {
+                explosion();
+            };
         }
         else if ( e.isGimicBox() == true ) {
             // ギミックボックスの子に所属しているアンサーを

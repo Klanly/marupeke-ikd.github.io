@@ -9,6 +9,9 @@ using UnityEngine;
 
 public class Gimic : Entity {
 
+    // 失敗コールバック
+    public System.Action FailureCallback { set { failureCallback_ = value; } }
+
     // パラメータを設定
     virtual public void setParam( int randomNumber, GimicSpec gimicSpec )
     {
@@ -39,4 +42,5 @@ public class Gimic : Entity {
 	}
 
     protected Answer answer_ = null;
+    protected System.Action failureCallback_;
 }

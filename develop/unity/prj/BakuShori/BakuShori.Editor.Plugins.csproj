@@ -308,6 +308,7 @@
     <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font3.shader" />
     <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font4.shader" />
     <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font5.shader" />
+    <None Include="Assets\fonts\number_gimic_bg.fnt" />
     <None Include="Assets\fonts\tegaki01_64.fnt" />
     <None Include="Assets\fonts\timer_64.fnt" />
     <None Include="Assets\shaders\standerdWithCullOff.shader" />
