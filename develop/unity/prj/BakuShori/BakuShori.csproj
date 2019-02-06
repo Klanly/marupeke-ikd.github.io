@@ -266,6 +266,7 @@
     <Compile Include="Assets\codes\common\UIIntroTextColorAnimation.cs" />
     <Compile Include="Assets\codes\Entity.cs" />
     <Compile Include="Assets\codes\GameManager.cs" />
+    <Compile Include="Assets\codes\GameStateManager.cs" />
     <Compile Include="Assets\codes\GimicBox.cs" />
     <Compile Include="Assets\codes\GimicBoxAnswer.cs" />
     <Compile Include="Assets\codes\GimicBoxCover.cs" />

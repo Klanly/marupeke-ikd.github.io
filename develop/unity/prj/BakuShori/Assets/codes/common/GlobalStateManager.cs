@@ -5,6 +5,11 @@ using UnityEngine;
 // どこでも使えるステート管理人
 
 public class GlobalStateManager : MonoBehaviour {
+    private void Awake()
+    {
+        DontDestroyOnLoad( this );
+    }
+
     private void Update()
     {
         updater_.update();

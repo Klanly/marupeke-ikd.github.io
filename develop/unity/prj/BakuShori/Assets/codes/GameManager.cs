@@ -26,6 +26,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     UIFader fader_;
 
+    [SerializeField]
+    bool bUseRandomSeed_ = true;
+
     // ゲーム終了
     public System.Action AllFinishCallback { set { allFinishCallback_ = value; } }
 
@@ -33,6 +36,8 @@ public class GameManager : MonoBehaviour {
     {
         if ( allFinishCallback_ != null )
             allFinishCallback_();
+
+        UnityEngine.SceneManagement.SceneManager.LoadScene( "main" );
     }
 
     private void Awake()
@@ -86,6 +91,12 @@ public class GameManager : MonoBehaviour {
         protected override State innerInit()
         {
             // データ生成
+            if ( parent_.bUseRandomSeed_ == true ) {
+                parent_.dataSet_.spec_.seed_ = Random.Range( 0, 10000 );
+                parent_.dataSet_.spec_.gimicBoxSeed_ = Random.Range( 0, 10000 );
+                parent_.dataSet_.spec_.gimicSeed_ = Random.Range( 0, 10000 );
+                parent_.dataSet_.spec_.trapSeed_ = Random.Range( 0, 10000 );
+            }
             parent_.generator_.create( parent_.dataSet_.spec_, parent_.dataSet_.gimicSpec_, out parent_.dataSet_.bombBox_ );
 
             // 成功を受ける
