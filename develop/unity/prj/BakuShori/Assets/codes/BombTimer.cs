@@ -7,6 +7,9 @@ public class BombTimer : MonoBehaviour {
     [SerializeField]
     TextMesh text_;
 
+    [SerializeField]
+    float sec_ = 180.0f;
+
     public void startTimer( int sec )
     {
         setTime( sec );
@@ -18,6 +21,13 @@ public class BombTimer : MonoBehaviour {
     {
         return sec_;
     }
+
+    // タイムゼロ時に通知
+    public void setNotifyZero( System.Action notifyZero )
+    {
+        notifyZero_ = notifyZero;
+    }
+
     // タイマーを急激に減少
     public void advanceTimer( System.Action notifyZero )
     {
@@ -60,7 +70,6 @@ public class BombTimer : MonoBehaviour {
     }
 
     bool bTimer_ = true;
-    float sec_ = 180.0f;
     float speed_ = 1.0f;
     System.Action notifyZero_;
 }

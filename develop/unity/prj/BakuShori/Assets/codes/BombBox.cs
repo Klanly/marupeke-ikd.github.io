@@ -146,6 +146,11 @@ public class BombBox : Entity {
                 explosion();
             }
         };
+
+        // タイムオーバー時に失敗を受ける
+        bombBoxModel_.getTimer().setNotifyZero( () => {
+            explosion();
+        });
     }
 
     // Entity以下を形成

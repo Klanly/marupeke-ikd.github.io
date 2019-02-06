@@ -61,6 +61,13 @@ public class BombBoxModel : MonoBehaviour {
         public GameObject[] nodes_;
     }
 
+    // タイマー取得
+    public BombTimer getTimer()
+    {
+        // 最初の渡す
+        return bombTimers_[ 0 ]; 
+    }
+
     // フロントパネル開いた？
     public bool isOpenFrontPanel()
     {
