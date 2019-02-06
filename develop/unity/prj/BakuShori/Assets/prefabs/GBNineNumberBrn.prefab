@@ -2367,6 +2367,9 @@ MonoBehaviour:
   - {fileID: 23223185094282324}
   - {fileID: 23561791252322984}
   - {fileID: 23506776815334208}
+  redLamp_: {fileID: 23651610252845238}
+  greenLamp_: {fileID: 23450886142112300}
+  offMaterial_: {fileID: 2100000, guid: 16844a1c938b033428857a93d182440c, type: 2}
 --- !u!114 &114940568469499548
 MonoBehaviour:
   m_ObjectHideFlags: 1

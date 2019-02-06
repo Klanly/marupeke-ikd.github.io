@@ -33,7 +33,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1583035158759068}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -53,3 +53,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   answerPrefab_: {fileID: 114478467641920712, guid: 335bdcdcd156815489d0d2eb7c8ef31d,
     type: 2}
+  buttons_: []
+  buttonTexts_: []
+  buttonBGs_: []
+  redLamp_: {fileID: 0}
+  greenLamp_: {fileID: 0}
+  offMaterial_: {fileID: 2100000, guid: 16844a1c938b033428857a93d182440c, type: 2}

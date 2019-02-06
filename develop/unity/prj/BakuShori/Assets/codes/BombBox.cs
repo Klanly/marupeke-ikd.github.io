@@ -17,6 +17,16 @@ public class BombBox : Entity {
         ObjectType = EObjectType.BombBox;
     }
 
+    // ギミック解除成功
+    void gimicSuccess()
+    {
+        successGimicCount_++;
+        if ( successGimicCount_ == gimicCount_ ) {
+            // フロントオープン
+            Debug.Log( "Open front !" );
+        }
+    }
+
     // 箱爆発
     void explosion()
     {
@@ -108,11 +118,18 @@ public class BombBox : Entity {
             var q = Quaternion.Euler( 0.0f, -90.0f, 0.0f ) * e.transform.localRotation;
             e.transform.localRotation = q;
 
-            // ギミック解除に失敗したら爆発
             var gimic = e as Gimic;
+            // ギミック解除に成功したら成功カウントアップ
+            gimic.SuccessCallback = () => {
+                gimicSuccess();
+            };
+
+            // ギミック解除に失敗したら爆発
             gimic.FailureCallback = () => {
                 explosion();
             };
+
+            gimicCount_++;
         }
         else if ( e.isGimicBox() == true ) {
             // ギミックボックスの子に所属しているアンサーを
@@ -180,4 +197,6 @@ public class BombBox : Entity {
 */    }
 
     List<GimicScrew> gimicScrews_ = new List<GimicScrew>();
+    int gimicCount_ = 0;
+    int successGimicCount_ = 0;
 }

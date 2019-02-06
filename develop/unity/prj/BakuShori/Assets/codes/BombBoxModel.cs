@@ -34,6 +34,13 @@ public class BombBoxModel : MonoBehaviour {
     [SerializeField]
     TextMesh coverNumberPrefab_;
 
+    [SerializeField]
+    GameObject frontPanel_;
+
+    [SerializeField]
+    bool bDebugOpenFrontPanel_;
+
+
     enum CutLine
     {
         Red,
@@ -44,6 +51,23 @@ public class BombBoxModel : MonoBehaviour {
     public class AnswerNodes
     {
         public GameObject[] nodes_;
+    }
+
+    // 全面パネルをオープン
+    public void openFrontPanel()
+    {
+        var startPos = frontPanel_.transform.localPosition;
+        var endPos = new Vector3( -0.02447f, -0.013f, 0.0f );
+        var startQ = frontPanel_.transform.localRotation;
+        var endQ = Quaternion.Euler( 30.69f, -90.0f, 0.0f );
+
+        GlobalState.time( 0.75f, (sec, t) => {
+            var p = Vector3.Lerp( startPos, endPos, t );
+            var q = Quaternion.Lerp( startQ, endQ, t );
+            frontPanel_.transform.localPosition = p;
+            frontPanel_.transform.localRotation = q;
+            return true;
+        });
     }
 
     // ギミックを格納できる場所の数を取得
@@ -121,7 +145,10 @@ public class BombBoxModel : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-		
+		if ( bDebugOpenFrontPanel_ == true ) {
+            bDebugOpenFrontPanel_ = false;
+            openFrontPanel();
+        }
 	}
 
     // 赤青ラインカット

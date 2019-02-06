@@ -22,6 +22,18 @@ public class NineNumberBtnGimic : Gimic {
     [SerializeField]
     MeshRenderer[] buttonBGs_;
 
+    [SerializeField]
+    MeshRenderer redLamp_;
+
+    [SerializeField]
+    MeshRenderer greenLamp_;
+
+    [SerializeField]
+    Material offMaterial_;
+
+    [SerializeField]
+    bool debugDiactive_ = false;
+
     override public int Index {
         set {
             index_ = value;
@@ -129,6 +141,9 @@ public class NineNumberBtnGimic : Gimic {
     void diactiveGimic()
     {
         // ランプの色を青色に
+        greenLamp_.material = greenLampMat_;
+        redLamp_.material = offMaterial_;
+        successCallback_();
         Debug.Log( "NineNumberGimic was diacgived !" );
     }
 
@@ -229,12 +244,18 @@ public class NineNumberBtnGimic : Gimic {
 
     // Use this for initialization
     void Start () {
-		
-	}
+        // Greenランプをオフに
+        greenLampMat_ = greenLamp_.material;
+        greenLamp_.material = offMaterial_;
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if ( debugDiactive_ == true ) {
+            debugDiactive_ = false;
+            diactiveGimic();
+        }
 	}
 
     System.Random random_;
@@ -243,4 +264,5 @@ public class NineNumberBtnGimic : Gimic {
     NineNumberBtnGimicAnswer gimicAnswer_;
     int digit_;
     int curDigit_ = 0;
+    Material greenLampMat_;
 }

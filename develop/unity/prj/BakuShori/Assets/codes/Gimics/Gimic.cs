@@ -9,6 +9,9 @@ using UnityEngine;
 
 public class Gimic : Entity {
 
+    // 成功コールバック
+    public System.Action SuccessCallback { set { successCallback_ = value; } }
+
     // 失敗コールバック
     public System.Action FailureCallback { set { failureCallback_ = value; } }
 
@@ -43,4 +46,5 @@ public class Gimic : Entity {
 
     protected Answer answer_ = null;
     protected System.Action failureCallback_;
+    protected System.Action successCallback_;
 }
