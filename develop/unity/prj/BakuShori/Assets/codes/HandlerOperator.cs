@@ -5,6 +5,13 @@ using UnityEngine;
 // 爆弾処理者操作
 public class HandlerOperator : MonoBehaviour {
 
+    [SerializeField]
+    float rangeX_ = 1.0f;
+
+    [SerializeField]
+    float rangeZ_ = 1.5f;
+
+    
     // オペレータアクティブ
     public void setActive( bool isActive )
     {
@@ -32,6 +39,9 @@ public class HandlerOperator : MonoBehaviour {
 
         if ( bActive_ == false )
             return;
+
+        prePos_ = transform.position;
+
         updateMouseMoveDef();
 
         operateState_();
@@ -44,6 +54,10 @@ public class HandlerOperator : MonoBehaviour {
 
     void updatePose()
     {
+        var pos = transform.position;
+        if ( Mathf.Abs( pos.x ) < rangeX_ && Mathf.Abs( pos.z ) < rangeZ_ ) {
+            transform.position = prePos_;
+        }
     }
 
     void moveIdle()
@@ -237,4 +251,6 @@ public class HandlerOperator : MonoBehaviour {
     float standUpHeight_ = 2.5f;
     float rotX_ = 0.0f;
     float rotY_ = 0.0f;
+
+    Vector3 prePos_ = Vector3.zero;
 }

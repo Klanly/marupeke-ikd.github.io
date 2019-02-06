@@ -35,6 +35,11 @@ public class GameManager : MonoBehaviour {
             allFinishCallback_();
     }
 
+    private void Awake()
+    {
+        fader_.gameObject.SetActive( true );
+    }
+
     void Start () {
         state_ = new Setup( this );
         handler_.setActive( true );
