@@ -40,8 +40,13 @@ public class BombBoxModel : MonoBehaviour {
     [SerializeField]
     bool bDebugOpenFrontPanel_;
 
+    [SerializeField]
+    RBLamp rbLamp_;
 
-    enum CutLine
+    // RBカット通知コールバック
+    public System.Action<CutLine, int> CutRBCallback { set { cutRBCallback_ = value; } }
+
+    public enum CutLine
     {
         Red,
         Blue
@@ -119,6 +124,12 @@ public class BombBoxModel : MonoBehaviour {
         return bombBoxAnswerNodes_[ id ];
     }
 
+    // 赤青ランプを取得
+    public RBLamp getRBLamp()
+    {
+        return rbLamp_;
+    }
+
     // Use this for initialization
     void Start () {
         redLineCut_.SetActive( false );
@@ -155,12 +166,20 @@ public class BombBoxModel : MonoBehaviour {
     void cutRB( CutLine color )
     {
         // カットされた方を切れたモデルに変更
-        if ( color == CutLine.Blue ) {
+        if ( bCutBlue_ == false && color == CutLine.Blue ) {
             blueLine_.gameObject.SetActive( false );
             blueLineCut_.SetActive( true );
-        } else {
+            bCutBlue_ = true;
+            cutRBCallback_( color, rbLamp_.getCurTiming( color ) );
+        } else if ( bCutRed_ == false && color == CutLine.Red ) {
             redLine_.gameObject.SetActive( false );
             redLineCut_.SetActive( true );
+            bCutRed_ = true;
+            cutRBCallback_( color, rbLamp_.getCurTiming( color ) );
         }
     }
+
+    bool bCutBlue_ = false;
+    bool bCutRed_ = false;
+    System.Action<CutLine, int> cutRBCallback_;
 }

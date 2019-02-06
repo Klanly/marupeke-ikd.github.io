@@ -108,7 +108,7 @@ public class GimicLayoutGenerator : MonoBehaviour {
         }
 
         bombBox.dumpBox();
-        bombBox.buildBox();
+        bombBox.buildBox( spec.seed_ );
         outBombBox = bombBox;
 
         return true;

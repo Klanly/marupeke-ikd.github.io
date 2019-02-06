@@ -12,6 +12,11 @@ public class BombBox : Entity {
     [SerializeField]
     BombBoxModel bombBoxModel_;
 
+    // 完全成功コールバック
+    public System.Action AllDiactiveDoneCallback { set { allDiactiveDoneCallback_ = value; } }
+
+    // 失敗コールバック
+    public System.Action FailureCallback { set { failureCallback_ = value; } }
     void Awake()
     {
         ObjectType = EObjectType.BombBox;
@@ -23,6 +28,7 @@ public class BombBox : Entity {
         successGimicCount_++;
         if ( successGimicCount_ == gimicCount_ ) {
             // フロントオープン
+            bombBoxModel_.openFrontPanel();
             Debug.Log( "Open front !" );
         }
     }
@@ -31,6 +37,7 @@ public class BombBox : Entity {
     void explosion()
     {
         Debug.Log( "Explosion!!!" );
+        failureCallback_();
     }
 
     // Entityを登録
@@ -80,7 +87,7 @@ public class BombBox : Entity {
     }
 
     // 箱を形成
-    public void buildBox()
+    public void buildBox( int randomNumber )
     {
         int ansIdx = 0;
         foreach( var e in childrenEntities_ ) {
@@ -100,6 +107,27 @@ public class BombBox : Entity {
                 build( e );
             }
         }
+
+        // 赤青ランプ設定
+        bombBoxModel_.getRBLamp().setup( randomNumber );
+
+        // 赤青ラインを切った時の結果を受ける
+        bombBoxModel_.CutRBCallback = (color, res) => {
+            if ( res == 1 ) {
+                // 成功
+                if ( color == BombBoxModel.CutLine.Red )
+                    bSuccessRedLineCut_ = true;
+                else if ( color == BombBoxModel.CutLine.Blue )
+                    bSuccessBlueLineCut_ = true;
+                if ( bSuccessRedLineCut_ == true && bSuccessBlueLineCut_ == true ) {
+                    // 爆弾箱解除成功！
+                    allDiactiveDoneCallback_();
+                }
+            } else if ( res == 0 ) {
+                // 失敗
+                explosion();
+            }
+        };
     }
 
     // Entity以下を形成
@@ -199,4 +227,8 @@ public class BombBox : Entity {
     List<GimicScrew> gimicScrews_ = new List<GimicScrew>();
     int gimicCount_ = 0;
     int successGimicCount_ = 0;
+    bool bSuccessRedLineCut_ = false;
+    bool bSuccessBlueLineCut_ = false;
+    System.Action allDiactiveDoneCallback_;
+    System.Action failureCallback_;
 }

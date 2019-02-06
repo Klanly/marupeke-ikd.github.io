@@ -14,6 +14,11 @@ public class BombTimer : MonoBehaviour {
         sec_ = sec;
     }
 
+    public float getSec()
+    {
+        return sec_;
+    }
+
     void setTime( int sec )
     {
         if ( sec < 0 )
