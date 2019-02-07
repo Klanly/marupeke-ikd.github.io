@@ -26,7 +26,7 @@ public class TrapFactory : MonoBehaviour {
         if ( trapPrefabs_.Length < (int)TrapType.TypeNum )
             return null;
 
-        if ( spec.gimicBoxNum_ == 0 )
+        if ( spec.gimicNum_ == 0 )
             return null;
 
         return Instantiate<Trap>( trapPrefabs_[ random_.Next() % (int)TrapType.TypeNum ] );

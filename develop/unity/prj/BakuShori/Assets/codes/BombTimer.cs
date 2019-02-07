@@ -10,6 +10,12 @@ public class BombTimer : MonoBehaviour {
     [SerializeField]
     float sec_ = 180.0f;
 
+    // 残り時間を設定
+    public void setRemainTime( int remainSec )
+    {
+        sec_ = remainSec;
+    }
+
     public void startTimer( int sec )
     {
         setTime( sec );

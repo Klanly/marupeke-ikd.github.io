@@ -27,13 +27,13 @@ public class GimicBoxFactory : MonoBehaviour {
 
         List<GimicBoxFactory.BoxType> typeList = spec.gimicBoxTypes_;
         if ( spec.gimicBoxRandomType_ == true ) {
-            if ( spec.gimicBoxNum_ == 0 ) {
-                Debug.LogAssertion( "GimicFactory: error: lack of GimicBox num in spec." );
+            if ( spec.gimicNum_ == 0 ) {
+                Debug.LogAssertion( "GimicFactory: error: lack of Gimic num in spec." );
                 return null;
             }
             var r = new System.Random( spec.seed_ );
             typeList = new List<BoxType>();
-            for ( int i = 0; i < spec.gimicBoxNum_; ++i ) {
+            for ( int i = 0; i < spec.gimicNum_; ++i ) {
                 typeList.Add( ( BoxType )( r.Next() % ( int )BoxType.TypeNum ) );
             }
         }
@@ -45,7 +45,7 @@ public class GimicBoxFactory : MonoBehaviour {
         var trapRand = new System.Random( spec.trapSeed_ );
         var boxRand = new System.Random( spec.gimicBoxSeed_ );
         var list = new List<GimicBox>();
-        for ( int i = 0; i < spec.gimicBoxNum_; ++i ) {
+        for ( int i = 0; i < spec.gimicNum_; ++i ) {
             // ギミックボックス作成
             var obj = Instantiate<GimicBox>( gimicBoxPrefabs_[ ( int )typeList[ i ] ] );
             // アタッチトラップ

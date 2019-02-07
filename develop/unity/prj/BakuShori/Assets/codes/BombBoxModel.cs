@@ -183,6 +183,15 @@ public class BombBoxModel : MonoBehaviour {
         return rbLamp_;
     }
 
+    // 残り時間を設定
+    public void setRemainTime(int remainSec)
+    {
+        foreach( var t in bombTimers_ ) {
+            t.setRemainTime( remainSec );
+        }
+    }
+
+
     // Use this for initialization
     void Start () {
         redLineCut_.SetActive( false );

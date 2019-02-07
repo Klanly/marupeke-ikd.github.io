@@ -22,6 +22,12 @@ public class BombBox : Entity {
         ObjectType = EObjectType.BombBox;
     }
 
+    // 残り時間を設定
+    public void setRemainTime( int remainSec )
+    {
+        bombBoxModel_.setRemainTime( remainSec );
+    }
+
     // ギミックボックスに登録できるストック数を取得
     public int getGimicBoxStockNum( int gimicBoxId )
     {
