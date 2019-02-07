@@ -169,10 +169,7 @@ public class BombBox : Entity {
             var gbNode = bombBoxModel_.getGimicBoxTrans( e.Index );
             e.transform.parent = gbNode.transform;
             e.transform.localPosition = Vector3.zero;
-            // gbNodeの位置に対応してギミックを回転（ダサい…orz）
-            // y軸-90度
-            var q = Quaternion.Euler( 0.0f, -90.0f, 0.0f ) * e.transform.localRotation;
-            e.transform.localRotation = q;
+            e.transform.localRotation = Quaternion.identity;
 
             var gimic = e as Gimic;
             // ギミック解除に成功したら成功カウントアップ
