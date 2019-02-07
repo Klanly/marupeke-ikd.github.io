@@ -34,16 +34,6 @@ public class NineNumberBtnGimic : Gimic {
     [SerializeField]
     bool debugDiactive_ = false;
 
-    override public int Index {
-        set {
-            index_ = value;
-            answer_.Index = index_;
-        }
-        get {
-            return index_;
-        }
-    }
-
     public enum EColor : int
     {
         Red = 0,

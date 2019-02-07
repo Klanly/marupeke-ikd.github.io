@@ -22,6 +22,12 @@ public class BombBox : Entity {
         ObjectType = EObjectType.BombBox;
     }
 
+    // ギミックボックスに登録できるストック数を取得
+    public int getGimicBoxStockNum( int gimicBoxId )
+    {
+        return bombBoxModel_.getGimicBoxAnswerNum( gimicBoxId ) + 1;
+    }
+
     // フロントパネル開いた？
     public bool isOpenFrontPanel()
     {
@@ -75,6 +81,12 @@ public class BombBox : Entity {
         return gimicScrews_;
     }
 
+    // ギミックボックス数を取得
+    public int getGimicBoxPlaceNum()
+    {
+        return bombBoxModel_.getGimicBoxPlaceNum();
+    }
+
     // 箱の連携関係をダンプ
     public void dumpBox()
     {
@@ -99,7 +111,7 @@ public class BombBox : Entity {
             return;
         }
         str += e.ObjectType.ToString() + e.Index + "\n";
-        for ( int i = 0; i < getChildrenListSize(); ++i ) {
+        for ( int i = 0; i < e.getChildrenListSize(); ++i ) {
             dumpBox( e.getEntity( i ), ref str, i, indent + 4 );
         }
     }

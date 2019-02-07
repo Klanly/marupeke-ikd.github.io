@@ -41,7 +41,21 @@ public class GimicLayoutGenerator : MonoBehaviour {
             return false;
         }
 
+        // ギミックボックスインデックスを乱数化
+        var gimicBoxIdx = new List<int>();
+        for ( int i = 0; i < bombBox.getGimicBoxPlaceNum(); ++i ) {
+            gimicBoxIdx.Add( i );
+        }
+        ListUtil.shuffle( ref gimicBoxIdx, spec.seed_ );
+
+        // ギミックボックスに格納可能なストック数を初期化
+        for ( int i = 1; i < gimicBoxes.Count; ++i ) {
+            gimicBoxes[ i ].Index = gimicBoxIdx[ i ];
+            gimicBoxes[ i ].setChildrenListSize( bombBox.getGimicBoxStockNum( gimicBoxIdx[ i ] ) );
+        }
+
         // BombBoxに最初のギミックボックスの答えを登録
+        gimicBoxes[ 0 ].Index = gimicBoxIdx[ 0 ];
         var answer = gimicBoxes[ 0 ].getTrapAnswer();
         if ( answer == null ) {
             Debug.LogAssertion( "GimicLayoutGenerator: error: no answer in GimicBox." );
@@ -51,9 +65,9 @@ public class GimicLayoutGenerator : MonoBehaviour {
         answer.setEntity( gimicBoxes[ 0 ] );        // 対応するギミックボックスを答えの下に
         answer.Index = gimicBoxes[ 0 ].Index;
         gimicBoxes[ 0 ].setGimic( gimics[ 0 ] );    // ギミックボックスにギミックを登録
-        gimics[ 0 ].Index = gimicBoxes[ 0 ].Index;
 
         for ( int i = 1; i < gimicBoxes.Count; ++i ) {
+            gimicBoxes[ i ].Index = gimicBoxIdx[ i ];
             // i番目のギミックボックスの答えを全ストックのどこかに設定
             var stocks = bombBox.getEmptyStocks( true );
             if ( stocks.Count == 0 ) {
@@ -61,7 +75,6 @@ public class GimicLayoutGenerator : MonoBehaviour {
                 return false;
             }
             answer = gimicBoxes[ i ].getTrapAnswer();
-            answer.Index = i;
             var stock = stocks[ Random.Range( 0, stocks.Count ) ];
             stock.setEntity( answer );
 
@@ -70,7 +83,6 @@ public class GimicLayoutGenerator : MonoBehaviour {
 
             // ギミックボックスにギミックをセット
             gimicBoxes[ i ].setGimic( gimics[ i ] );
-            gimics[ i ].Index = i;
         }
 
         // ギミックのアンサーを設定

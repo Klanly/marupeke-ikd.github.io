@@ -116,6 +116,14 @@ public class BombBoxModel : MonoBehaviour {
         return covers_.Length;
     }
 
+    // ギミックボックスのストック可能アンサー数を取得
+    public int getGimicBoxAnswerNum( int gimicBoxId )
+    {
+        if ( gimicBoxId >= covers_.Length )
+            return 0;
+        return covers_[ gimicBoxId ].getAnswerNodeNum();
+    }
+
     // 蓋をオープン
     public bool openCover( int id )
     {

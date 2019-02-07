@@ -15,6 +15,16 @@ public class Gimic : Entity {
     // 失敗コールバック
     public System.Action FailureCallback { set { failureCallback_ = value; } }
 
+    override public int Index {
+        set {
+            index_ = value;
+            answer_.Index = index_;
+        }
+        get {
+            return index_;
+        }
+    }
+
     // パラメータを設定
     virtual public void setParam( int randomNumber, GimicSpec gimicSpec )
     {
