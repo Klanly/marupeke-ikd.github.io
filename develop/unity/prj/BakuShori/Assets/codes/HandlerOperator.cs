@@ -19,11 +19,19 @@ public class HandlerOperator : MonoBehaviour {
     }
 
     // マウスカーソル移動量を更新
-    void updateMouseMoveDef()
+    void updateMouseState()
     {
         cursorMoveDef_ = Input.mousePosition - preCursorPos_;
         preCursorPos_ = Input.mousePosition;
         bCursorMove_ = cursorMoveDef_.magnitude > 0.00001f;
+
+        if ( Input.GetMouseButtonDown( 1 ) == true )
+            cursorClicPos_ = Input.mousePosition;
+
+        if ( Input.GetMouseButton( 1 ) == true )
+            cursorOffset_ = Input.mousePosition - cursorClicPos_;
+        else
+            cursorOffset_ = Vector3.zero;
     }
 
     void Start()
@@ -42,7 +50,7 @@ public class HandlerOperator : MonoBehaviour {
 
         prePos_ = transform.position;
 
-        updateMouseMoveDef();
+        updateMouseState();
 
         operateState_();
         standUpState_();
@@ -81,11 +89,12 @@ public class HandlerOperator : MonoBehaviour {
             z -= moveSpeed_;
         }
 
-        float dragSpeed = 0.5f;
-        if ( bRightOn && cursorMoveDef_.x < 0.0f ) {
+        float rate = Mathf.Clamp( Mathf.Abs( cursorOffset_.x ), 0.0f, 80.0f ) / 80.0f;
+        float dragSpeed = 0.5f * rate;
+        if ( bRightOn && cursorOffset_.x < -5.0f ) {
             x -= moveSpeed_ * dragSpeed;
         }
-        if ( bRightOn && cursorMoveDef_.x > 0.0f ) {
+        if ( bRightOn && cursorOffset_.x > 5.0f ) {
             x += moveSpeed_ * dragSpeed;
         }
         if ( Mathf.Abs( x ) >= 0.0001f || Mathf.Abs( z ) >= 0.0001f ) {
@@ -242,7 +251,9 @@ public class HandlerOperator : MonoBehaviour {
     System.Action operateState_;
 
     bool bActive_ = false;
+    Vector3 cursorClicPos_ = Vector3.zero;
     Vector3 cursorMoveDef_ = Vector3.zero;
+    Vector3 cursorOffset_ = Vector3.zero;
     Vector3 preCursorPos_ = Vector3.zero;
     bool bCursorMove_ = false;
     float xRotSpeed_ = 0.2f;

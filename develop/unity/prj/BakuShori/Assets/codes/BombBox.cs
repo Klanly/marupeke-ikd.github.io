@@ -22,6 +22,18 @@ public class BombBox : Entity {
         ObjectType = EObjectType.BombBox;
     }
 
+    // 残り時間を設定
+    public void setRemainTime( int remainSec )
+    {
+        bombBoxModel_.setRemainTime( remainSec );
+    }
+
+    // ギミックボックスに登録できるストック数を取得
+    public int getGimicBoxStockNum( int gimicBoxId )
+    {
+        return bombBoxModel_.getGimicBoxAnswerNum( gimicBoxId ) + 1;
+    }
+
     // フロントパネル開いた？
     public bool isOpenFrontPanel()
     {
@@ -75,6 +87,12 @@ public class BombBox : Entity {
         return gimicScrews_;
     }
 
+    // ギミックボックス数を取得
+    public int getGimicBoxPlaceNum()
+    {
+        return bombBoxModel_.getGimicBoxPlaceNum();
+    }
+
     // 箱の連携関係をダンプ
     public void dumpBox()
     {
@@ -99,7 +117,7 @@ public class BombBox : Entity {
             return;
         }
         str += e.ObjectType.ToString() + e.Index + "\n";
-        for ( int i = 0; i < getChildrenListSize(); ++i ) {
+        for ( int i = 0; i < e.getChildrenListSize(); ++i ) {
             dumpBox( e.getEntity( i ), ref str, i, indent + 4 );
         }
     }
@@ -107,6 +125,11 @@ public class BombBox : Entity {
     // 箱を形成
     public void buildBox( int randomNumber )
     {
+        var randomIdx = new List<int>();
+        for ( int i = 0; i < bombBoxModel_.getBombBoxAnswerNodeNum(); ++i ) {
+            randomIdx.Add( i );
+        }
+        ListUtil.shuffle( ref randomIdx, randomNumber );
         int ansIdx = 0;
         foreach( var e in childrenEntities_ ) {
             if ( e == null )
@@ -114,7 +137,7 @@ public class BombBox : Entity {
 
             // 自分の直下にあるアンサー群はANSノードへ
             if ( e.isAnswer() == true ) {
-                var ansNode = bombBoxModel_.getBombBoxAnswerNode( ansIdx );
+                var ansNode = bombBoxModel_.getBombBoxAnswerNode( randomIdx[ ansIdx ] );
                 e.transform.parent = ansNode.transform;
                 e.transform.localPosition = Vector3.zero;
                 e.transform.localRotation = Quaternion.identity;
@@ -164,10 +187,7 @@ public class BombBox : Entity {
             var gbNode = bombBoxModel_.getGimicBoxTrans( e.Index );
             e.transform.parent = gbNode.transform;
             e.transform.localPosition = Vector3.zero;
-            // gbNodeの位置に対応してギミックを回転（ダサい…orz）
-            // y軸-90度
-            var q = Quaternion.Euler( 0.0f, -90.0f, 0.0f ) * e.transform.localRotation;
-            e.transform.localRotation = q;
+            e.transform.localRotation = Quaternion.identity;
 
             var gimic = e as Gimic;
             // ギミック解除に成功したら成功カウントアップ
@@ -187,6 +207,8 @@ public class BombBox : Entity {
             // ギミックボックス内に設定
             var gimicBox = e as GimicBox;
             if ( gimicBox != null ) {
+                gimicBox.transform.parent = transform;
+
                 var answers = gimicBox.getAnswres();
                 for ( int i = 0; i < answers.Count; ++i ) {
                     var ans = answers[ i ];
@@ -201,6 +223,7 @@ public class BombBox : Entity {
                     // 蓋の姿勢を常に監視するようにする（ダサい… orz）
                     var ansTO = ans.gameObject.AddComponent<TransObserver>();
                     ansTO.setTarget( node.transform );
+                    ansTO.transform.parent = transform;
                 }
 
                 // 蓋の表面にトラップをセット
@@ -213,6 +236,7 @@ public class BombBox : Entity {
                     var trap = gimicBox.getTrap();
                     var to = trap.gameObject.AddComponent<TransObserver>();
                     to.setTarget( trapPos.transform );
+                    to.transform.parent = transform;
                 }
 
                 // ギミックボックスの蓋開けに成功したら

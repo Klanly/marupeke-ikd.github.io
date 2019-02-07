@@ -11,7 +11,6 @@ public class LayoutSpec {
     public int bombBoxScrewNum = 2;
 
     // GimicBox
-    public int gimicBoxNum_ = 4;
     public int gimcBoxEntityStockNum_ = 3;
     public bool gimicBoxRandomType_ = true;         // ランダムに生成
     public List<GimicBoxFactory.BoxType> gimicBoxTypes_;    // ギミックボックスの種類を指定

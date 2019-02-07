@@ -94,6 +94,10 @@ public class BombBoxModel : MonoBehaviour {
     // 全面パネルをオープン
     public void openFrontPanel()
     {
+        // 赤青ラインを有効に
+        redLine_.gameObject.SetActive( true );
+        blueLine_.gameObject.SetActive( true );
+
         var startPos = frontPanel_.transform.localPosition;
         var endPos = new Vector3( -0.02447f, -0.013f, 0.0f );
         var startQ = frontPanel_.transform.localRotation;
@@ -114,6 +118,14 @@ public class BombBoxModel : MonoBehaviour {
     public int getGimicBoxPlaceNum()
     {
         return covers_.Length;
+    }
+
+    // ギミックボックスのストック可能アンサー数を取得
+    public int getGimicBoxAnswerNum( int gimicBoxId )
+    {
+        if ( gimicBoxId >= covers_.Length )
+            return 0;
+        return covers_[ gimicBoxId ].getAnswerNodeNum();
     }
 
     // 蓋をオープン
@@ -159,16 +171,33 @@ public class BombBoxModel : MonoBehaviour {
         return bombBoxAnswerNodes_[ id ];
     }
 
+    // BombBox表面のAnswerノード数を取得
+    public int getBombBoxAnswerNodeNum()
+    {
+        return bombBoxAnswerNodes_.Length;
+    }
+
     // 赤青ランプを取得
     public RBLamp getRBLamp()
     {
         return rbLamp_;
     }
 
+    // 残り時間を設定
+    public void setRemainTime(int remainSec)
+    {
+        foreach( var t in bombTimers_ ) {
+            t.setRemainTime( remainSec );
+        }
+    }
+
+
     // Use this for initialization
     void Start () {
         redLineCut_.SetActive( false );
         blueLineCut_.SetActive( false );
+        redLine_.gameObject.SetActive( false );
+        blueLine_.gameObject.SetActive( false );
 
         // 赤青ラインカットイベント
         redLine_.ActionCallback = (obj, eventName) => {

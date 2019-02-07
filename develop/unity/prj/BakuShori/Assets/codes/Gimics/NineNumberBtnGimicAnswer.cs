@@ -44,7 +44,6 @@ public class NineNumberBtnGimicAnswer : Answer {
     void setGimicIdText( int gimicId )
     {
         string s = "";
-        var idx = gimicId;
         for ( int i = 0; i < 5; ++i ) {
             s = ( gimicId % 2 == 0 ? "_" : "■" ) + " " + s;
             gimicId >>= 1;

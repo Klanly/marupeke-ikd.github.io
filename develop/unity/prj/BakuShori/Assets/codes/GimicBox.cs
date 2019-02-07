@@ -14,14 +14,25 @@ public class GimicBox : Entity {
     // 蓋開け失敗コールバック
     public System.Action FailureCallback { set { failureCallback_ = value; } }
 
+    override public int Index {
+        set {
+            index_ = value;
+            trap_.getAnswer().Index = index_;
+        }
+        get {
+            return index_;
+        }
+    }
+
     void Awake()
     {
         ObjectType = EObjectType.GimicBox;
     }
 
-    virtual public void setup( LayoutSpec spec, int randomNumber )
+    virtual public void setup( LayoutSpec spec, int randomNumber, Trap trap )
     {
         setChildrenListSize( spec.gimcBoxEntityStockNum_ );
+        setTrap( trap );
     }
 
     // ギミックを登録
@@ -30,17 +41,22 @@ public class GimicBox : Entity {
         if ( gimic == null || childrenEntities_[ 0 ] != null )
             return false;   // 既に登録されている
         gimic_ = gimic;
+        gimic_.Index = index_;
         setEntity( 0, gimic );  // 0番に登録
+
+        // 蓋が閉じている時はギミックをOFFに
+        gimic_.gameObject.SetActive( false );
         return true;
     }
 
     // 蓋トラップを登録
-    public void setTrap( Trap trap )
+    void setTrap( Trap trap )
     {
         trap_ = trap;
         trap_.getAnswer().Index = Index;
         trap_.SuccessCallback = () => {
             successCallback_();
+            gimic_.gameObject.SetActive( true );
         };
         trap_.FailureCallback = () => {
             failureCallback_();

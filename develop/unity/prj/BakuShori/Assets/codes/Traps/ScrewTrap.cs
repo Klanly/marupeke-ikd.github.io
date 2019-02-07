@@ -153,13 +153,13 @@ public class ScrewTrap : Trap {
                 return new Failure( parent_ );
             }
 
-            Quaternion q = Quaternion.AngleAxis( deg, parent_.transform.up ) * curQ_;
+            Quaternion q = Quaternion.AngleAxis( deg, Vector3.back ) * curQ_;
             if ( Mathf.Abs( deg ) >= 10.0f ) {
                 // 基線を更新
                 curDeg_ += deg;
                 curBaseDir_ = dir;
                 curQ_ = q;
-                Debug.Log( "curDeg: " + successRotMin_ + " < " + curDeg_ + " < " + successRotMax_ );
+                Debug.Log( "curDeg: " + successRotMin_ + " < " + curDeg_ + " < " + successRotMax_ + ": " + parent_.transform.up.ToString() );
             }
             parent_.screwModel_.transform.localRotation = q;
             return this;

@@ -281,6 +281,7 @@
     <Compile Include="Assets\codes\HandlerOperator.cs" />
     <Compile Include="Assets\codes\LayoutSpec.cs" />
     <Compile Include="Assets\codes\OnAction.cs" />
+    <Compile Include="Assets\codes\Parameters.cs" />
     <Compile Include="Assets\codes\RBLamp.cs" />
     <Compile Include="Assets\codes\TransObserver.cs" />
     <Compile Include="Assets\codes\TrapFactory.cs" />
