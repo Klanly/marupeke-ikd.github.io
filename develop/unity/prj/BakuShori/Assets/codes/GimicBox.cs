@@ -43,6 +43,9 @@ public class GimicBox : Entity {
         gimic_ = gimic;
         gimic_.Index = index_;
         setEntity( 0, gimic );  // 0番に登録
+
+        // 蓋が閉じている時はギミックをOFFに
+        gimic_.gameObject.SetActive( false );
         return true;
     }
 
@@ -53,6 +56,7 @@ public class GimicBox : Entity {
         trap_.getAnswer().Index = Index;
         trap_.SuccessCallback = () => {
             successCallback_();
+            gimic_.gameObject.SetActive( true );
         };
         trap_.FailureCallback = () => {
             failureCallback_();

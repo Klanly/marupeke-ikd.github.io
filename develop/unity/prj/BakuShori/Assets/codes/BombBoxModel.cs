@@ -94,6 +94,10 @@ public class BombBoxModel : MonoBehaviour {
     // 全面パネルをオープン
     public void openFrontPanel()
     {
+        // 赤青ラインを有効に
+        redLine_.gameObject.SetActive( true );
+        blueLine_.gameObject.SetActive( true );
+
         var startPos = frontPanel_.transform.localPosition;
         var endPos = new Vector3( -0.02447f, -0.013f, 0.0f );
         var startQ = frontPanel_.transform.localRotation;
@@ -183,6 +187,8 @@ public class BombBoxModel : MonoBehaviour {
     void Start () {
         redLineCut_.SetActive( false );
         blueLineCut_.SetActive( false );
+        redLine_.gameObject.SetActive( false );
+        blueLine_.gameObject.SetActive( false );
 
         // 赤青ラインカットイベント
         redLine_.ActionCallback = (obj, eventName) => {
