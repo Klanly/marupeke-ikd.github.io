@@ -98,6 +98,7 @@ public class GameManager : MonoBehaviour {
                 parent_.dataSet_.spec_.trapSeed_ = Random.Range( 0, 10000 );
             }
             parent_.generator_.create( parent_.dataSet_.spec_, parent_.dataSet_.gimicSpec_, out parent_.dataSet_.bombBox_ );
+            parent_.dataSet_.bombBox_.transform.parent = parent_.transform;
 
             // 成功を受ける
             parent_.dataSet_.bombBox_.AllDiactiveDoneCallback = () => {

@@ -107,6 +107,11 @@ public class BombBox : Entity {
     // 箱を形成
     public void buildBox( int randomNumber )
     {
+        var randomIdx = new List<int>();
+        for ( int i = 0; i < bombBoxModel_.getBombBoxAnswerNodeNum(); ++i ) {
+            randomIdx.Add( i );
+        }
+        ListUtil.shuffle( ref randomIdx, randomNumber );
         int ansIdx = 0;
         foreach( var e in childrenEntities_ ) {
             if ( e == null )
@@ -114,7 +119,7 @@ public class BombBox : Entity {
 
             // 自分の直下にあるアンサー群はANSノードへ
             if ( e.isAnswer() == true ) {
-                var ansNode = bombBoxModel_.getBombBoxAnswerNode( ansIdx );
+                var ansNode = bombBoxModel_.getBombBoxAnswerNode( randomIdx[ ansIdx ] );
                 e.transform.parent = ansNode.transform;
                 e.transform.localPosition = Vector3.zero;
                 e.transform.localRotation = Quaternion.identity;
@@ -187,6 +192,8 @@ public class BombBox : Entity {
             // ギミックボックス内に設定
             var gimicBox = e as GimicBox;
             if ( gimicBox != null ) {
+                gimicBox.transform.parent = transform;
+
                 var answers = gimicBox.getAnswres();
                 for ( int i = 0; i < answers.Count; ++i ) {
                     var ans = answers[ i ];
@@ -201,6 +208,7 @@ public class BombBox : Entity {
                     // 蓋の姿勢を常に監視するようにする（ダサい… orz）
                     var ansTO = ans.gameObject.AddComponent<TransObserver>();
                     ansTO.setTarget( node.transform );
+                    ansTO.transform.parent = transform;
                 }
 
                 // 蓋の表面にトラップをセット
@@ -213,6 +221,7 @@ public class BombBox : Entity {
                     var trap = gimicBox.getTrap();
                     var to = trap.gameObject.AddComponent<TransObserver>();
                     to.setTarget( trapPos.transform );
+                    to.transform.parent = transform;
                 }
 
                 // ギミックボックスの蓋開けに成功したら

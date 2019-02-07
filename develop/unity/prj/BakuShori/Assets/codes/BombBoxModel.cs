@@ -159,6 +159,12 @@ public class BombBoxModel : MonoBehaviour {
         return bombBoxAnswerNodes_[ id ];
     }
 
+    // BombBox表面のAnswerノード数を取得
+    public int getBombBoxAnswerNodeNum()
+    {
+        return bombBoxAnswerNodes_.Length;
+    }
+
     // 赤青ランプを取得
     public RBLamp getRBLamp()
     {
