@@ -1,0 +1,325 @@
+fileFormatVersion: 2
+guid: 0ea906da786e6dc43822fd2a54d9fb35
+timeCreated: 1549909047
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Aichi Ken
+    100002: Akita Ken
+    100004: Aomori Ken
+    100006: Chiba Ken
+    100008: Ehime Ken
+    100010: Fukui Ken
+    100012: Fukuoka Ken
+    100014: Fukushima Ken
+    100016: Gifu Ken
+    100018: Gunma Ken
+    100020: Hiroshima Ken
+    100022: Hokkai Do
+    100024: Hyogo Ken
+    100026: Ibaraki Ken
+    100028: Ishikawa Ken
+    100030: Iwate Ken
+    100032: //RootNode
+    100034: Kagawa Ken
+    100036: Kagoshima Ken
+    100038: Kanagawa Ken
+    100040: Kochi Ken
+    100042: Kumamoto Ken
+    100044: Kyoto Fu
+    100046: Mie Ken
+    100048: Miyagi Ken
+    100050: Miyazaki Ken
+    100052: Nagano Ken
+    100054: Nagasaki Ken
+    100056: Nara Ken
+    100058: Niigata Ken
+    100060: Oita Ken
+    100062: Okayama Ken
+    100064: Okinawa Ken
+    100066: Osaka Fu
+    100068: Saga Ken
+    100070: Saitama Ken
+    100072: Shiga Ken
+    100074: Shimane Ken
+    100076: Shizuoka Ken
+    100078: Tochigi Ken
+    100080: Tokushima Ken
+    100082: Tokyo To
+    100084: Tottori Ken
+    100086: Toyama Ken
+    100088: Wakayama Ken
+    100090: Yamagata Ken
+    100092: Yamaguchi Ken
+    100094: Yamanashi Ken
+    400000: Aichi Ken
+    400002: Akita Ken
+    400004: Aomori Ken
+    400006: Chiba Ken
+    400008: Ehime Ken
+    400010: Fukui Ken
+    400012: Fukuoka Ken
+    400014: Fukushima Ken
+    400016: Gifu Ken
+    400018: Gunma Ken
+    400020: Hiroshima Ken
+    400022: Hokkai Do
+    400024: Hyogo Ken
+    400026: Ibaraki Ken
+    400028: Ishikawa Ken
+    400030: Iwate Ken
+    400032: //RootNode
+    400034: Kagawa Ken
+    400036: Kagoshima Ken
+    400038: Kanagawa Ken
+    400040: Kochi Ken
+    400042: Kumamoto Ken
+    400044: Kyoto Fu
+    400046: Mie Ken
+    400048: Miyagi Ken
+    400050: Miyazaki Ken
+    400052: Nagano Ken
+    400054: Nagasaki Ken
+    400056: Nara Ken
+    400058: Niigata Ken
+    400060: Oita Ken
+    400062: Okayama Ken
+    400064: Okinawa Ken
+    400066: Osaka Fu
+    400068: Saga Ken
+    400070: Saitama Ken
+    400072: Shiga Ken
+    400074: Shimane Ken
+    400076: Shizuoka Ken
+    400078: Tochigi Ken
+    400080: Tokushima Ken
+    400082: Tokyo To
+    400084: Tottori Ken
+    400086: Toyama Ken
+    400088: Wakayama Ken
+    400090: Yamagata Ken
+    400092: Yamaguchi Ken
+    400094: Yamanashi Ken
+    2100000: No Name
+    2300000: Aichi Ken
+    2300002: Akita Ken
+    2300004: Aomori Ken
+    2300006: Chiba Ken
+    2300008: Ehime Ken
+    2300010: Fukui Ken
+    2300012: Fukuoka Ken
+    2300014: Fukushima Ken
+    2300016: Gifu Ken
+    2300018: Gunma Ken
+    2300020: Hiroshima Ken
+    2300022: Hokkai Do
+    2300024: Hyogo Ken
+    2300026: Ibaraki Ken
+    2300028: Ishikawa Ken
+    2300030: Iwate Ken
+    2300032: Kagawa Ken
+    2300034: Kagoshima Ken
+    2300036: Kanagawa Ken
+    2300038: Kochi Ken
+    2300040: Kumamoto Ken
+    2300042: Kyoto Fu
+    2300044: Mie Ken
+    2300046: Miyagi Ken
+    2300048: Miyazaki Ken
+    2300050: Nagano Ken
+    2300052: Nagasaki Ken
+    2300054: Nara Ken
+    2300056: Niigata Ken
+    2300058: Oita Ken
+    2300060: Okayama Ken
+    2300062: Okinawa Ken
+    2300064: Osaka Fu
+    2300066: Saga Ken
+    2300068: Saitama Ken
+    2300070: Shiga Ken
+    2300072: Shimane Ken
+    2300074: Shizuoka Ken
+    2300076: Tochigi Ken
+    2300078: Tokushima Ken
+    2300080: Tokyo To
+    2300082: Tottori Ken
+    2300084: Toyama Ken
+    2300086: Wakayama Ken
+    2300088: Yamagata Ken
+    2300090: Yamaguchi Ken
+    2300092: Yamanashi Ken
+    3300000: Aichi Ken
+    3300002: Akita Ken
+    3300004: Aomori Ken
+    3300006: Chiba Ken
+    3300008: Ehime Ken
+    3300010: Fukui Ken
+    3300012: Fukuoka Ken
+    3300014: Fukushima Ken
+    3300016: Gifu Ken
+    3300018: Gunma Ken
+    3300020: Hiroshima Ken
+    3300022: Hokkai Do
+    3300024: Hyogo Ken
+    3300026: Ibaraki Ken
+    3300028: Ishikawa Ken
+    3300030: Iwate Ken
+    3300032: Kagawa Ken
+    3300034: Kagoshima Ken
+    3300036: Kanagawa Ken
+    3300038: Kochi Ken
+    3300040: Kumamoto Ken
+    3300042: Kyoto Fu
+    3300044: Mie Ken
+    3300046: Miyagi Ken
+    3300048: Miyazaki Ken
+    3300050: Nagano Ken
+    3300052: Nagasaki Ken
+    3300054: Nara Ken
+    3300056: Niigata Ken
+    3300058: Oita Ken
+    3300060: Okayama Ken
+    3300062: Okinawa Ken
+    3300064: Osaka Fu
+    3300066: Saga Ken
+    3300068: Saitama Ken
+    3300070: Shiga Ken
+    3300072: Shimane Ken
+    3300074: Shizuoka Ken
+    3300076: Tochigi Ken
+    3300078: Tokushima Ken
+    3300080: Tokyo To
+    3300082: Tottori Ken
+    3300084: Toyama Ken
+    3300086: Wakayama Ken
+    3300088: Yamagata Ken
+    3300090: Yamaguchi Ken
+    3300092: Yamanashi Ken
+    4300000: Nagasaki Ken
+    4300002: Hokkai Do
+    4300004: Yamanashi Ken
+    4300006: Yamaguchi Ken
+    4300008: Yamagata Ken
+    4300010: Wakayama Ken
+    4300012: Toyama Ken
+    4300014: Tottori Ken
+    4300016: Tokyo To
+    4300018: Tokushima Ken
+    4300020: Tochigi Ken
+    4300022: Shizuoka Ken
+    4300024: Shimane Ken
+    4300026: Shiga Ken
+    4300028: Saitama Ken
+    4300030: Saga Ken
+    4300032: Osaka Fu
+    4300034: Okinawa Ken
+    4300036: Okayama Ken
+    4300038: Oita Ken
+    4300040: Niigata Ken
+    4300042: Nara Ken
+    4300044: Nagano Ken
+    4300046: Miyazaki Ken
+    4300048: Miyagi Ken
+    4300050: Mie Ken
+    4300052: Kyoto Fu
+    4300054: Kumamoto Ken
+    4300056: Kochi Ken
+    4300058: Kanagawa Ken
+    4300060: Kagoshima Ken
+    4300062: Kagawa Ken
+    4300064: Iwate Ken
+    4300066: Ishikawa Ken
+    4300068: Ibaraki Ken
+    4300070: Hyogo Ken
+    4300072: Hiroshima Ken
+    4300074: Gunma Ken
+    4300076: Gifu Ken
+    4300078: Fukushima Ken
+    4300080: Fukuoka Ken
+    4300082: Fukui Ken
+    4300084: Ehime Ken
+    4300086: Chiba Ken
+    4300088: Aomori Ken
+    4300090: Akita Ken
+    4300092: Aichi Ken
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
