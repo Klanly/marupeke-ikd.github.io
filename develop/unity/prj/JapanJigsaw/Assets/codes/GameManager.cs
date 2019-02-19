@@ -7,6 +7,12 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     GameObject pieceRoot_;
 
+    [SerializeField]
+    bool bStop_ = false;
+
+    [SerializeField]
+    bool bEasyMode_ = false;
+
     void Start() {
         pieces_ = pieceRoot_.gameObject.GetComponentsInChildren<Piece>();
 
@@ -15,6 +21,9 @@ public class GameManager : MonoBehaviour {
     }
 
     void Update() {
+        if ( bStop_ == true )
+            return;
+
         if ( state_ != null )
             state_ = state_.update();
         if ( cameraState_ != null )
@@ -113,7 +122,8 @@ public class GameManager : MonoBehaviour {
                 var offsetPos = Randoms.Vec3.valueCenterXZ() * 20.0f;
                 GlobalState.time( Random.Range( 1.0f, 1.3f ), (sec, t) => {
                     p.transform.localPosition = Lerps.Vec3.easeOutStrong( initPos, offsetPos, t );
-                    p.transform.localRotation = Quaternion.Euler( 0.0f, rot * t, 0.0f ) * curQ;
+                    if ( parent_.bEasyMode_ == false )
+                        p.transform.localRotation = Quaternion.Euler( 0.0f, rot * t, 0.0f ) * curQ;
                     return true;
                 } ).finish( () => {
                     count_--;

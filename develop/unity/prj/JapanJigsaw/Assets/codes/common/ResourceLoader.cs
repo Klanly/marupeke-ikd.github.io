@@ -23,7 +23,10 @@ using UnityEngine;
 
 public class ResourceLoader {
     private static ResourceLoader instance_ = new ResourceLoader();
-    private ResourceLoader() { }
+    private ResourceLoader() {
+        GameObject updater = new GameObject();
+        updater.AddComponent<ResurceLoaderUpdater>();
+    }
     public static ResourceLoader getInstance()
     {
         return instance_;

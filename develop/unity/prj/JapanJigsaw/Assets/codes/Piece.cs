@@ -11,6 +11,8 @@ public class Piece : MonoBehaviour {
         var len = ( transform.localPosition - answerPos_ ).magnitude;
         var ang = Quaternion.Angle( transform.localRotation, answerRot_ );
         Debug.Log( "len: " + len + ", ang: " + ang );
+        if ( len <= 0.07f && ang <= 5.0 )
+            return true;
         return false;
     }
 

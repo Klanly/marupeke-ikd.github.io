@@ -252,6 +252,7 @@
     <Compile Include="Assets\codes\common\OnCollideCallback.cs" />
     <Compile Include="Assets\codes\common\Randoms.cs" />
     <Compile Include="Assets\codes\common\ResourceLoader.cs" />
+    <Compile Include="Assets\codes\common\ResurceLoaderUpdater.cs" />
     <Compile Include="Assets\codes\common\SimplePath.cs" />
     <Compile Include="Assets\codes\common\SphereSurfUtil.cs" />
     <Compile Include="Assets\codes\common\State.cs" />
@@ -261,6 +262,7 @@
     <Compile Include="Assets\codes\common\UIIntroColorAnimation.cs" />
     <Compile Include="Assets\codes\common\UIIntroTextColorAnimation.cs" />
     <Compile Include="Assets\codes\GameManager.cs" />
+    <Compile Include="Assets\codes\JapanLine.cs" />
     <Compile Include="Assets\codes\Piece.cs" />
   </ItemGroup>
   <ItemGroup>
