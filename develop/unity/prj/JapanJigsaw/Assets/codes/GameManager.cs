@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour {
     bool bStop_ = false;
 
     [SerializeField]
-    bool bEasyMode_ = false;
+    Mode mode_ = Mode.Easy;
 
     [SerializeField]
     TextMesh prefNameText_;
@@ -22,56 +22,70 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     UnityEngine.UI.Text remainText_;
 
+    [SerializeField]
+    UnityEngine.UI.Text nextPrefText_;
+
+    class PrefData
+    {
+        public PrefData( string name, int isCoast )
+        {
+            name_ = name;
+            isCoast_ = ( isCoast > 0 ? true : false );
+        }
+        public string name_;
+        public bool isCoast_;
+    }
     private void Awake()
     {
-        prefNames_ = new Dictionary< string, string > {
-            {"Aichi Ken", "愛知県" },
-            {"Akita Ken", "秋田県" },
-            {"Aomori Ken", "青森県" },
-            {"Chiba Ken", "千葉県" },
-            {"Ehime Ken", "愛媛県" },
-            {"Fukui Ken", "福井県" },
-            {"Fukuoka Ken", "福岡県" },
-            {"Fukushima Ken", "福島県" },
-            {"Gifu Ken", "岐阜県" },
-            {"Gunma Ken", "群馬県" },
-            {"Hiroshima Ken", "広島県" },
-            {"Hokkai Do", "北海道" },
-            {"Hyogo Ken", "兵庫県" },
-            {"Ibaraki Ken", "茨城県" },
-            {"Ishikawa Ken", "石川県" },
-            {"Iwate Ken", "岩手県" },
-            {"Kagawa Ken", "香川県" },
-            {"Kagoshima Ken", "鹿児島県" },
-            {"Kanagawa Ken", "神奈川県" },
-            {"Kochi Ken", "高知県" },
-            {"Kumamoto Ken", "熊本県" },
-            {"Kyoto Fu", "京都府" },
-            {"Mie Ken", "三重県" },
-            {"Miyagi Ken", "宮城県" },
-            {"Miyazaki Ken", "宮崎県" },
-            {"Nagano Ken", "長野県" },
-            {"Nagasaki Ken", "長崎県" },
-            {"Nara Ken", "奈良県" },
-            {"Niigata Ken", "新潟県" },
-            {"Oita Ken", "大分県" },
-            {"Okayama Ken", "岡山県" },
-            {"Okinawa Ken", "沖縄県" },
-            {"Osaka Fu", "大阪府" },
-            {"Saga Ken", "佐賀県" },
-            {"Saitama Ken", "埼玉県" },
-            {"Shiga Ken", "滋賀県" },
-            {"Shimane Ken", "島根県" },
-            {"Shizuoka Ken", "静岡県" },
-            {"Tochigi Ken", "栃木県" },
-            {"Tokushima Ken", "徳島県" },
-            {"Tokyo To", "東京都" },
-            {"Tottori Ken", "鳥取県" },
-            {"Toyama Ken", "富山県" },
-            {"Wakayama Ken", "和歌山県" },
-            {"Yamagata Ken", "山形県" },
-            {"Yamaguchi Ken", "山口県" },
-            {"Yamanashi Ken", "山梨県" },
+        prefNames_ = new Dictionary< string, PrefData> {
+            {"Aichi Ken", new PrefData( "愛知県", 1 ) },
+            {"Akita Ken", new PrefData( "秋田県", 1 ) },
+            {"Aomori Ken", new PrefData( "青森県", 1 ) },
+            {"Chiba Ken", new PrefData( "千葉県", 1 ) },
+            {"Ehime Ken", new PrefData( "愛媛県", 1 ) },
+            {"Fukui Ken", new PrefData( "福井県", 1 ) },
+            {"Fukuoka Ken", new PrefData( "福岡県", 1 ) },
+            {"Fukushima Ken", new PrefData( "福島県", 1 ) },
+            {"Gifu Ken", new PrefData( "岐阜県", 0 ) },
+            {"Gunma Ken", new PrefData( "群馬県", 0 ) },
+            {"Hiroshima Ken", new PrefData( "広島県", 1 ) },
+            {"Hokkai Do", new PrefData( "北海道", 1 ) },
+            {"Hyogo Ken", new PrefData( "兵庫県", 1 ) },
+            {"Ibaraki Ken", new PrefData( "茨城県", 1 ) },
+            {"Ishikawa Ken", new PrefData( "石川県", 1 ) },
+            {"Iwate Ken", new PrefData( "岩手県", 1 ) },
+            {"Kagawa Ken", new PrefData( "香川県", 1 ) },
+            {"Kagoshima Ken", new PrefData( "鹿児島県", 1 ) },
+            {"Kanagawa Ken", new PrefData( "神奈川県", 1 ) },
+            {"Kochi Ken", new PrefData( "高知県", 1 ) },
+            {"Kumamoto Ken", new PrefData( "熊本県", 1 ) },
+            {"Kyoto Fu", new PrefData( "京都府", 1 ) },
+            {"Mie Ken", new PrefData( "三重県", 1 ) },
+            {"Miyagi Ken", new PrefData( "宮城県", 1 ) },
+            {"Miyazaki Ken", new PrefData( "宮崎県", 1 ) },
+            {"Nagano Ken", new PrefData( "長野県", 0 ) },
+            {"Nagasaki Ken", new PrefData( "長崎県", 1 ) },
+            {"Nara Ken", new PrefData( "奈良県", 0 ) },
+            {"Niigata Ken", new PrefData( "新潟県", 1 ) },
+            {"Oita Ken", new PrefData( "大分県", 1 ) },
+            {"Okayama Ken", new PrefData( "岡山県", 1 ) },
+            {"Okinawa Ken", new PrefData( "沖縄県", 1 ) },
+            {"Osaka Fu", new PrefData( "大阪府", 1 ) },
+            {"Saga Ken", new PrefData( "佐賀県", 1 ) },
+            {"Saitama Ken", new PrefData( "埼玉県", 0 ) },
+            {"Shiga Ken", new PrefData( "滋賀県", 0 ) },
+            {"Shimane Ken", new PrefData( "島根県", 1 ) },
+            {"Shizuoka Ken", new PrefData( "静岡県", 1 ) },
+            {"Tochigi Ken", new PrefData( "栃木県", 0 ) },
+            {"Tokushima Ken", new PrefData( "徳島県", 1 ) },
+            {"Tokyo To", new PrefData( "東京都", 1 ) },
+            {"Tottori Ken", new PrefData( "鳥取県", 1 ) },
+            {"Toyama Ken", new PrefData( "富山県", 1 ) },
+            {"Wakayama Ken", new PrefData( "和歌山県", 1 ) },
+            {"Yamagata Ken", new PrefData( "山形県", 1 ) },
+            {"Yamaguchi Ken", new PrefData( "山口県", 1 ) },
+            {"Yamanashi Ken", new PrefData( "山梨県", 0 ) },
+
         };
     }
 
@@ -80,9 +94,34 @@ public class GameManager : MonoBehaviour {
 
         pieces_ = pieceRoot_.gameObject.GetComponentsInChildren<Piece>();
         foreach( var p in pieces_ ) {
-            p.setName( prefNames_[ p.name ] );
+            p.setName( prefNames_[ p.name ].name_ );
         }
         remainPieceNum_ += pieces_.Length;
+
+        nextPrefText_.gameObject.SetActive( false );
+
+        // ハードモード時の選択ピース列を作成
+        if ( mode_ == Mode.Hard ) {
+            nextPrefText_.gameObject.SetActive( true );
+            nextPrefText_.text = "";
+
+            var coastPrefs = new List<string>();
+            var innerPrefs = new List<string>();
+            foreach ( var p in prefNames_ ) {
+                if ( p.Value.isCoast_ == true ) {
+                    coastPrefs.Add( p.Value.name_ );
+                } else {
+                    innerPrefs.Add( p.Value.name_ );
+                }
+            }
+            ListUtil.shuffle( ref coastPrefs, Random.Range( 0, 1000 ) );
+            ListUtil.shuffle( ref innerPrefs, Random.Range( 0, 1000 ) );
+            foreach ( var s in coastPrefs )
+                selectPrefs_.Add( s );
+            foreach ( var s in innerPrefs )
+                selectPrefs_.Add( s );
+        }
+
         updateRemain();
 
         state_ = new Shuffle( this );
@@ -102,6 +141,12 @@ public class GameManager : MonoBehaviour {
     void updateRemain()
     {
         remainText_.text = string.Format( "{0}/{1}", remainPieceNum_, pieces_.Length );
+        if ( mode_ == Mode.Hard ) {
+            if ( curSelectPref_ >= selectPrefs_.Count )
+                nextPrefText_.text = "Finish !";
+            else
+                nextPrefText_.text = "Next : " + selectPrefs_[ curSelectPref_ ];
+        }
     }
 
     class BaseState : State
@@ -203,10 +248,12 @@ public class GameManager : MonoBehaviour {
                 var curQ = p.transform.localRotation;
                 var initPos = p.transform.localPosition;
                 var offsetPos = Randoms.Vec3.valueCenterXZ() * 14.0f;
+                float xAngle = 180.0f * ( parent_.mode_ == Mode.Normal ? 0.0f : Random.Range( 0, 2 ) );
                 GlobalState.time( Random.Range( 1.0f, 1.3f ), (sec, t) => {
                     p.transform.localPosition = Lerps.Vec3.easeOutStrong( initPos, offsetPos, t );
-                    if ( parent_.bEasyMode_ == false )
-                        p.transform.localRotation = Quaternion.Euler( 180.0f, rot * t, 0.0f ) * curQ;
+                    if ( parent_.mode_ != Mode.Easy ) {
+                        p.transform.localRotation = Quaternion.Euler( xAngle * t, rot * t, 0.0f ) * curQ;
+                    }
                     return true;
                 } ).finish( () => {
                     count_--;
@@ -245,24 +292,77 @@ public class GameManager : MonoBehaviour {
         }
         protected override State innerUpdate()
         {
-            // 左クリックでレイを飛ばしピース上だったら摘まむ
             if ( Input.GetMouseButtonDown( 0 ) == true ) {
-                Ray mouseRay = Camera.main.ScreenPointToRay( Input.mousePosition );
-                RaycastHit hit;
-                // Rayが衝突したかどうか
-                if ( Physics.Raycast( mouseRay, out hit ) == true ) {
-                    var onCollide = hit.collider.transform.GetComponent<OnCollideCallback>();
-                    if ( onCollide != null ) {
-                        // 親がpiece
-                        var pickUpPiece = onCollide.transform.parent.gameObject.GetComponent<Piece>();
-                        if ( pickUpPiece != null ) {
-                            return new PickUpPiece( parent_, pickUpPiece );
-                        }
-                    }
+                var pickUpPiece = checkPickUp();
+                if ( pickUpPiece != null ) {
+                    return new PickUpPiece( parent_, pickUpPiece );
+                }
+            }
+            else if ( Input.GetKeyDown( KeyCode.Q ) == true ) {
+                var pickUpPiece = checkPickUp();
+                if ( pickUpPiece != null ) {
+                    return new TurnBackPiece( parent_, pickUpPiece );
                 }
             }
             return this;
         }
+
+        Piece checkPickUp()
+        {
+            // 左クリックでレイを飛ばしピース上だったら摘まむ
+            Ray mouseRay = Camera.main.ScreenPointToRay( Input.mousePosition );
+            RaycastHit hit;
+            // Rayが衝突したらピースをピックアップ
+            if ( Physics.Raycast( mouseRay, out hit ) == true ) {
+                var onCollide = hit.collider.transform.GetComponent<OnCollideCallback>();
+                if ( onCollide != null ) {
+                    // 親がpiece
+                    return onCollide.transform.parent.gameObject.GetComponent<Piece>();
+                }
+            } else if ( parent_.mode_ == GameManager.Mode.Hard ) {
+                // 裏面のピースも検索
+                Ray invRay = new Ray( mouseRay.origin + 100.0f * mouseRay.direction, -mouseRay.direction );
+                // Rayが衝突したらピースをピックアップ
+                if ( Physics.Raycast( invRay, out hit ) == true ) {
+                    var onCollide = hit.collider.transform.GetComponent<OnCollideCallback>();
+                    if ( onCollide != null ) {
+                        // 親がpiece
+                        return onCollide.transform.parent.gameObject.GetComponent<Piece>();
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
+    // ピースを裏返す
+    class TurnBackPiece : BaseState
+    {
+        public TurnBackPiece(GameManager parent, Piece pickUpPiece) : base( parent )
+        {
+            pickUpPiece_ = pickUpPiece;
+        }
+        protected override State innerInit()
+        {
+            var initQ = pickUpPiece_.transform.localRotation;
+            var endQ = Quaternion.Euler( 0.0f, 0.0f, 180.0f ) * initQ;
+            float interval = 0.5f;
+            float height = 3.0f;
+            var initPos = pickUpPiece_.transform.localPosition;
+            GlobalState.time( interval, (sec, t) => {
+                float y = 4.0f * height * sec / interval * ( 1.0f - sec / interval );
+                var offset = new Vector3( 0.0f, y, 0.0f );
+                pickUpPiece_.transform.localPosition = initPos + offset;
+                pickUpPiece_.transform.localRotation = Lerps.Quaternion.easeOut( initQ, endQ, t );
+                return true;
+            } ).finish( () => {
+                pickUpPiece_.transform.localRotation = endQ;
+                setNextState( new Idle( parent_ ) );
+            } );
+            return this;
+        }
+
+        Piece pickUpPiece_;
     }
 
     class PickUpPiece : BaseState
@@ -282,20 +382,30 @@ public class GameManager : MonoBehaviour {
         protected override State innerInit()
         {
             // 名前プレート表示
-            parent_.prefNameText_.gameObject.SetActive( true );
-            parent_.prefNameText_.text = pickUpPiece_.getName();
+            if ( parent_.mode_ != Mode.Hard ) {
+                parent_.prefNameText_.gameObject.SetActive( true );
+                parent_.prefNameText_.text = pickUpPiece_.getName();
+            }
             return null;
         }
         protected override State innerUpdate()
         {
             // 左クリックを離した時にピースが定位置にあればハメる
             // そうでなければピースを離す
+            // ハードモードの場合は現在の都道府県と一致している時だけ有効に
             if ( Input.GetMouseButtonUp( 0 ) == true ) {
-                if ( pickUpPiece_.isStayPosition() == true ) {
+                bool validatePiece = true;
+                if ( parent_.mode_ == Mode.Hard ) {
+                    if ( parent_.selectPrefs_[ parent_.curSelectPref_ ] != pickUpPiece_.getName() )
+                        validatePiece = false;
+                }
+                if ( validatePiece == true && pickUpPiece_.isStayPosition() == true ) {
                     pickUpPiece_.stay();
 
                     // 残りピースが無くなったら完成！
                     parent_.remainPieceNum_--;
+                    if ( parent_.mode_ == Mode.Hard )
+                        parent_.curSelectPref_++;
                     parent_.updateRemain();
                     if ( parent_.remainPieceNum_ == 0 ) {
                         return new Complete( parent_ );
@@ -352,11 +462,20 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    enum Mode
+    {
+        Easy,
+        Normal,
+        Hard,
+    }
+
     State state_;
     State cameraState_;
     Piece[] pieces_;
     System.Action gameStartCallback_;
     bool bPickingUpPiece_ = false;
-    Dictionary<string, string> prefNames_;
+    Dictionary<string, PrefData> prefNames_;
     int remainPieceNum_ = 0;
+    List<string> selectPrefs_ = new List<string>();
+    int curSelectPref_ = 0;
 }

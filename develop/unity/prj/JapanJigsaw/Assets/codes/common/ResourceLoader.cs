@@ -24,7 +24,7 @@ using UnityEngine;
 public class ResourceLoader {
     private static ResourceLoader instance_ = new ResourceLoader();
     private ResourceLoader() {
-        GameObject updater = new GameObject();
+        GameObject updater = new GameObject( "ResourceLoaderUpdater" );
         updater.AddComponent<ResurceLoaderUpdater>();
     }
     public static ResourceLoader getInstance()

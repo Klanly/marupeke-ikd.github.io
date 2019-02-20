@@ -23,7 +23,13 @@ public class State {
             if ( nextState_ != null )
                 return nextState_;
         }
-        return innerUpdate();
+        State res = innerUpdate();
+        return ( nextState_ == null ? res : nextState_ );
+    }
+
+    protected void setNextState( State nextState )
+    {
+        nextState_ = nextState;
     }
 
     // 内部初期化

@@ -101,6 +101,12 @@ public class Lerps {
             return UnityEngine.Quaternion.Lerp( s, e, Float.easeInOut01( t ) );
         }
 
+        // EaseOut
+        public static UnityEngine.Quaternion easeOut(UnityEngine.Quaternion s, UnityEngine.Quaternion e, float t)
+        {
+            return UnityEngine.Quaternion.Lerp( s, e, Float.easeOut01( t ) );
+        }
+
         // EaseIn
         public static UnityEngine.Quaternion easeIn(UnityEngine.Quaternion s, UnityEngine.Quaternion e, float t)
         {
