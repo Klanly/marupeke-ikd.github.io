@@ -87,7 +87,7 @@ public class JapanLine : MonoBehaviour {
         GL.MultMatrix( mtx );
 
         GL.Begin( GL.LINES );
-        GL.Color( color_ );
+        GL.Color( Color.gray );
 
         if ( lineIndex > points.Count / 2 )
             lineIndex = points.Count / 2;
