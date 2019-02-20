@@ -261,6 +261,7 @@
     <Compile Include="Assets\codes\common\UIIntroAnimation.cs" />
     <Compile Include="Assets\codes\common\UIIntroColorAnimation.cs" />
     <Compile Include="Assets\codes\common\UIIntroTextColorAnimation.cs" />
+    <Compile Include="Assets\codes\ControllerDesc.cs" />
     <Compile Include="Assets\codes\GameManager.cs" />
     <Compile Include="Assets\codes\JapanLine.cs" />
     <Compile Include="Assets\codes\Piece.cs" />

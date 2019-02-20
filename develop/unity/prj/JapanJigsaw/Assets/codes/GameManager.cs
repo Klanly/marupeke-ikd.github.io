@@ -25,6 +25,30 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     UnityEngine.UI.Text nextPrefText_;
 
+    [SerializeField]
+    UnityEngine.UI.Button retireBtn_;
+
+    [SerializeField]
+    GameObject titleUIs_;
+
+    [SerializeField]
+    GameObject ingameUIs_;
+
+    [SerializeField]
+    UnityEngine.UI.Button easyBtn_;
+
+    [SerializeField]
+    UnityEngine.UI.Button normalBtn_;
+
+    [SerializeField]
+    UnityEngine.UI.Button hardBtn_;
+
+    [SerializeField]
+    UnityEngine.UI.Image compImage_;
+
+    [SerializeField]
+    UnityEngine.UI.Button toCompBtn_;
+
     class PrefData
     {
         public PrefData( string name, int isCoast )
@@ -87,45 +111,37 @@ public class GameManager : MonoBehaviour {
             {"Yamanashi Ken", new PrefData( "山梨県", 0 ) },
 
         };
-    }
 
-    void Start() {
         prefNameText_.gameObject.SetActive( false );
 
         pieces_ = pieceRoot_.gameObject.GetComponentsInChildren<Piece>();
-        foreach( var p in pieces_ ) {
+        foreach ( var p in pieces_ ) {
             p.setName( prefNames_[ p.name ].name_ );
         }
+
         remainPieceNum_ += pieces_.Length;
-
         nextPrefText_.gameObject.SetActive( false );
-
-        // ハードモード時の選択ピース列を作成
-        if ( mode_ == Mode.Hard ) {
-            nextPrefText_.gameObject.SetActive( true );
-            nextPrefText_.text = "";
-
-            var coastPrefs = new List<string>();
-            var innerPrefs = new List<string>();
-            foreach ( var p in prefNames_ ) {
-                if ( p.Value.isCoast_ == true ) {
-                    coastPrefs.Add( p.Value.name_ );
-                } else {
-                    innerPrefs.Add( p.Value.name_ );
-                }
-            }
-            ListUtil.shuffle( ref coastPrefs, Random.Range( 0, 1000 ) );
-            ListUtil.shuffle( ref innerPrefs, Random.Range( 0, 1000 ) );
-            foreach ( var s in coastPrefs )
-                selectPrefs_.Add( s );
-            foreach ( var s in innerPrefs )
-                selectPrefs_.Add( s );
-        }
 
         updateRemain();
 
-        state_ = new Shuffle( this );
-        cameraState_ = new CameraInitWait( this );
+        // リタイア時振る舞い
+        retireBtn_.onClick.AddListener( () => {
+            retire();
+        } );
+
+        toCompBtn_.onClick.AddListener( () => {
+            toComp();
+        } );
+
+        retireBtn_.gameObject.SetActive( false );
+
+        ingameUIs_.gameObject.SetActive( false );
+
+        compImage_.gameObject.SetActive( false );
+    }
+
+    void Start() {
+        state_ = new Title( this );
     }
 
     void Update() {
@@ -149,6 +165,31 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    // リタイア
+    void retire()
+    {
+        retireBtn_.gameObject.SetActive( false );
+        foreach( var p in pieces_ ) {
+            p.stay( () => {
+                p.reset();
+            } );
+        }
+        GlobalState.time( 1.0f, (sec, t) => {
+            return true;
+        } ).finish(()=> {
+            state_ = new Title( this );
+        } );
+    }
+
+    // 完成へ
+    void toComp()
+    {
+        foreach ( var p in pieces_ ) {
+            p.stay();
+        }
+        state_ = new Complete( this );
+    }
+
     class BaseState : State
     {
         public BaseState(GameManager parent)
@@ -156,6 +197,101 @@ public class GameManager : MonoBehaviour {
             parent_ = parent;
         }
         protected GameManager parent_;
+    }
+
+    class Title : BaseState
+    {
+        public Title( GameManager parent ) : base( parent ) { }
+        protected override State innerInit()
+        {
+            // 難易度ボタン
+             parent_.easyBtn_.onClick.AddListener( () => {
+                 parent_.mode_ = Mode.Easy;
+                 resetAllBtn();
+                 setNextState( new Setup( parent_ ) );
+            } );
+            parent_.normalBtn_.onClick.AddListener( () => {
+                parent_.mode_ = Mode.Normal;
+                resetAllBtn();
+                setNextState( new Setup( parent_ ) );
+            } );
+            parent_.hardBtn_.onClick.AddListener( () => {
+                parent_.mode_ = Mode.Hard;
+                resetAllBtn();
+                setNextState( new Setup( parent_ ) );
+            } );
+
+            parent_.timer_.stop();
+            parent_.timer_.clear();
+            parent_.ingameUIs_.gameObject.SetActive( false );
+            parent_.titleUIs_.gameObject.SetActive( true );
+            parent_.compImage_.gameObject.SetActive( false );
+            return null;
+        }
+        private void resetAllBtn()
+        {
+            parent_.easyBtn_.onClick.RemoveAllListeners();
+            parent_.normalBtn_.onClick.RemoveAllListeners();
+            parent_.hardBtn_.onClick.RemoveAllListeners();
+            parent_.titleUIs_.gameObject.SetActive( false );
+        }
+
+        protected override State innerUpdate()
+        {
+            return this;
+        }
+    }
+
+    class Setup : BaseState
+    {
+        public Setup( GameManager parent ) : base( parent )
+        {
+
+        }
+
+        protected override State innerInit()
+        {
+            parent_.remainPieceNum_ = parent_.pieces_.Length;
+            parent_.nextPrefText_.gameObject.SetActive( false );
+            parent_.retireBtn_.gameObject.SetActive( true );
+            parent_.ingameUIs_.gameObject.SetActive( true );
+            var text_ = parent_.retireBtn_.GetComponentInChildren<UnityEngine.UI.Text>();
+            text_.text = "リタイア";
+
+            foreach ( var p in parent_.pieces_ ) {
+                p.reset();
+            }
+
+            parent_.cameraState_ = new CameraInitWait( parent_ );
+
+            // ハードモード時の選択ピース列を作成
+            if ( parent_.mode_ == Mode.Hard ) {
+                parent_.nextPrefText_.gameObject.SetActive( true );
+                parent_.nextPrefText_.text = "";
+
+                var coastPrefs = new List<string>();
+                var innerPrefs = new List<string>();
+                foreach ( var p in parent_.prefNames_ ) {
+                    if ( p.Value.isCoast_ == true ) {
+                        coastPrefs.Add( p.Value.name_ );
+                    } else {
+                        innerPrefs.Add( p.Value.name_ );
+                    }
+                }
+                parent_.selectPrefs_.Clear();
+                ListUtil.shuffle( ref coastPrefs, Random.Range( 0, 1000 ) );
+                ListUtil.shuffle( ref innerPrefs, Random.Range( 0, 1000 ) );
+                foreach ( var s in coastPrefs )
+                    parent_.selectPrefs_.Add( s );
+                foreach ( var s in innerPrefs )
+                    parent_.selectPrefs_.Add( s );
+
+                parent_.curSelectPref_ = 0;
+            }
+            parent_.updateRemain();
+
+            return new Shuffle( parent_ );
+        }
     }
 
     class CameraInitWait : BaseState
@@ -319,7 +455,7 @@ public class GameManager : MonoBehaviour {
                     // 親がpiece
                     return onCollide.transform.parent.gameObject.GetComponent<Piece>();
                 }
-            } else if ( parent_.mode_ == GameManager.Mode.Hard ) {
+            } else {
                 // 裏面のピースも検索
                 Ray invRay = new Ray( mouseRay.origin + 100.0f * mouseRay.direction, -mouseRay.direction );
                 // Rayが衝突したらピースをピックアップ
@@ -458,7 +594,21 @@ public class GameManager : MonoBehaviour {
         protected override State innerInit()
         {
             parent_.timer_.stop();
+            parent_.compImage_.gameObject.SetActive( true );
+            parent_.compImage_.color = Color.clear;
+            var text_ = parent_.retireBtn_.GetComponentInChildren<UnityEngine.UI.Text>();
+            text_.text = "タイトルへ";
+
+            GlobalState.time( 1.2f, (sec, t) => {
+                parent_.compImage_.color = Color.Lerp( Color.clear, Color.white, t );
+                return true;
+            } );
             return null;
+        }
+
+        protected override State innerUpdate()
+        {
+            return this;
         }
     }
 

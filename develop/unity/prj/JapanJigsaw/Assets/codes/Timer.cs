@@ -20,10 +20,11 @@ public class Timer : MonoBehaviour {
     public void clear()
     {
         curSec_ = 0.0f;
+        timeText_.text = string.Format( "{0:00}:{1:00}:{2:00}", ( int )( curSec_ / 60.0f ), ( int )( curSec_ % 60 ), ( int )( ( curSec_ * 100.0f ) % 100 ) );
     }
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
