@@ -16,6 +16,12 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     TextMesh prefNameText_;
 
+    [SerializeField]
+    Timer timer_;
+
+    [SerializeField]
+    UnityEngine.UI.Text remainText_;
+
     private void Awake()
     {
         prefNames_ = new Dictionary< string, string > {
@@ -76,6 +82,9 @@ public class GameManager : MonoBehaviour {
         foreach( var p in pieces_ ) {
             p.setName( prefNames_[ p.name ] );
         }
+        remainPieceNum_ += pieces_.Length;
+        updateRemain();
+
         state_ = new Shuffle( this );
         cameraState_ = new CameraInitWait( this );
     }
@@ -88,6 +97,11 @@ public class GameManager : MonoBehaviour {
             state_ = state_.update();
         if ( cameraState_ != null )
             cameraState_ = cameraState_.update();
+    }
+
+    void updateRemain()
+    {
+        remainText_.text = string.Format( "{0}/{1}", remainPieceNum_, pieces_.Length );
     }
 
     class BaseState : State
@@ -132,7 +146,7 @@ public class GameManager : MonoBehaviour {
                 CollideUtil.colPosRayPlane( out colPos, mouseRay.origin, mouseRay.direction, Vector3.zero, Vector3.up );
                 var forward = ( colPos - Camera.main.transform.position ).normalized;
                 var pos = Camera.main.transform.position;
-                if ( ( forward + pos ).y >= 1.0f + speedUnit ) {
+                if ( ( forward + pos ).y >= 0.1f + speedUnit ) {
                     Camera.main.transform.position = pos + forward * speedUnit;
                 }
             } else if ( Input.GetKey( KeyCode.S ) == true || roll.y < 0.0f ) {
@@ -175,6 +189,7 @@ public class GameManager : MonoBehaviour {
         Vector3 clickPos_;
     }
 
+    // ピースをシャッフル
     class Shuffle : BaseState
     {
         public Shuffle(GameManager parent) : base( parent ) { }
@@ -191,7 +206,7 @@ public class GameManager : MonoBehaviour {
                 GlobalState.time( Random.Range( 1.0f, 1.3f ), (sec, t) => {
                     p.transform.localPosition = Lerps.Vec3.easeOutStrong( initPos, offsetPos, t );
                     if ( parent_.bEasyMode_ == false )
-                        p.transform.localRotation = Quaternion.Euler( 0.0f, rot * t, 0.0f ) * curQ;
+                        p.transform.localRotation = Quaternion.Euler( 180.0f, rot * t, 0.0f ) * curQ;
                     return true;
                 } ).finish( () => {
                     count_--;
@@ -217,6 +232,7 @@ public class GameManager : MonoBehaviour {
         {
             if ( parent_.gameStartCallback_ != null )
                 parent_.gameStartCallback_();
+            parent_.timer_.start();
             return new Idle( parent_ );
         }
     }
@@ -277,6 +293,13 @@ public class GameManager : MonoBehaviour {
             if ( Input.GetMouseButtonUp( 0 ) == true ) {
                 if ( pickUpPiece_.isStayPosition() == true ) {
                     pickUpPiece_.stay();
+
+                    // 残りピースが無くなったら完成！
+                    parent_.remainPieceNum_--;
+                    parent_.updateRemain();
+                    if ( parent_.remainPieceNum_ == 0 ) {
+                        return new Complete( parent_ );
+                    }
                 }
                 return new Idle( parent_ );
             }
@@ -290,16 +313,21 @@ public class GameManager : MonoBehaviour {
                 parent_.prefNameText_.transform.position = colPos + offset_ + Vector3.up * 0.02f;
 
                 // [A][D]キー押し下げで左右回転
-                float rotUnit = 1.0f;
                 if ( Input.GetKey( KeyCode.A ) == true ) {
-                    var q = Quaternion.Euler( 0.0f, -rotUnit, 0.0f );
+                    rotT_ += Time.deltaTime;
+                    rotT_ = Mathf.Clamp01( rotT_ );
+                    var q = Quaternion.Euler( 0.0f, -Lerps.Float.linear( rotUnitS_, rotUnitE_, rotT_ ), 0.0f );
                     var curQ = pickUpPiece_.transform.localRotation;
                     pickUpPiece_.transform.localRotation = q * curQ;
                 }
                 else if ( Input.GetKey( KeyCode.D ) == true ) {
-                    var q = Quaternion.Euler( 0.0f, rotUnit, 0.0f );
+                    rotT_ += Time.deltaTime;
+                    rotT_ = Mathf.Clamp01( rotT_ );
+                    var q = Quaternion.Euler( 0.0f, Lerps.Float.linear( rotUnitS_, rotUnitE_, rotT_ ), 0.0f );
                     var curQ = pickUpPiece_.transform.localRotation;
                     pickUpPiece_.transform.localRotation = q * curQ;
+                } else {
+                    rotT_ = 0.0f;
                 }
             }
             return this;
@@ -307,6 +335,21 @@ public class GameManager : MonoBehaviour {
 
         Piece pickUpPiece_;
         Vector3 offset_ = Vector3.zero;
+        float rotUnitS_ = 0.5f;
+        float rotUnitE_ = 5.0f;
+        float rotT_ = 0.0f;
+    }
+
+    class Complete : BaseState
+    {
+        public Complete(GameManager parent) : base( parent ) {
+        }
+
+        protected override State innerInit()
+        {
+            parent_.timer_.stop();
+            return null;
+        }
     }
 
     State state_;
@@ -315,4 +358,5 @@ public class GameManager : MonoBehaviour {
     System.Action gameStartCallback_;
     bool bPickingUpPiece_ = false;
     Dictionary<string, string> prefNames_;
+    int remainPieceNum_ = 0;
 }

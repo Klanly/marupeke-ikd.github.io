@@ -31,14 +31,23 @@ public class Piece : MonoBehaviour {
     // ピースを嵌める
     public void stay()
     {
-        transform.localPosition = answerPos_;
-        transform.localRotation = answerRot_;
         Destroy( onCollideCallback_.gameObject );   // コライダーを消して無効に
 
-        MeshRenderer renderer = GetComponent<MeshRenderer>();
-        var mat = renderer.material;
-        mat.color = new Color( 164 / 255.0f, 233 / 255.0f, 154 / 255.0f );
-        renderer.material = mat;
+        var curPos = transform.localPosition;
+        var curQ = transform.localRotation;
+        GlobalState.time( 0.15f, (sec, t) => {
+            transform.localPosition = Lerps.Vec3.easeIn( curPos, answerPos_, t );
+            transform.localRotation = Lerps.Quaternion.easeIn( curQ, answerRot_, t );
+            return true;
+        } ).finish( () => {
+            transform.localPosition = answerPos_;
+            transform.localRotation = answerRot_;
+            MeshRenderer renderer = GetComponent<MeshRenderer>();
+            var mat = renderer.material;
+            mat.color = new Color( 164 / 255.0f, 233 / 255.0f, 154 / 255.0f );
+            renderer.material = mat;
+        } );
+
     }
 
     private void Awake()

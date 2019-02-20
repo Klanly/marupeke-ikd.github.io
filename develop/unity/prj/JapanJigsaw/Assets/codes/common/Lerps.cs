@@ -33,11 +33,22 @@ public class Lerps {
             return t * ( 2.0f - t );
         }
 
-        // EaseOut(0-1)
+        // EaseOutStrong(0-1)
         public static float easeOut01Strong(float t)
         {
-            float t2 = t * t;
-            return easeOut01( t2 );
+            return easeOut01( t * t );
+        }
+
+        // EaseIn(0-1)
+        public static float easeIn01(float t)
+        {
+            return t * t;
+        }
+
+        // EaseInStrong(0-1)
+        public static float easeIn01Strong(float t)
+        {
+            return easeIn01( t * t );
         }
     }
 
@@ -62,10 +73,16 @@ public class Lerps {
             return linear( s, e, Float.easeOut01( t ) );
         }
 
-        // EaseOut
+        // EaseOutStrong
         public static Vector3 easeOutStrong(Vector3 s, Vector3 e, float t)
         {
             return linear( s, e, Float.easeOut01Strong( t ) );
+        }
+
+        // EaseIn
+        public static Vector3 easeIn(Vector3 s, Vector3 e, float t)
+        {
+            return linear( s, e, Float.easeIn01( t ) );
         }
     }
 
@@ -82,6 +99,12 @@ public class Lerps {
         public static UnityEngine.Quaternion easeInOut(UnityEngine.Quaternion s, UnityEngine.Quaternion e, float t)
         {
             return UnityEngine.Quaternion.Lerp( s, e, Float.easeInOut01( t ) );
+        }
+
+        // EaseIn
+        public static UnityEngine.Quaternion easeIn(UnityEngine.Quaternion s, UnityEngine.Quaternion e, float t)
+        {
+            return UnityEngine.Quaternion.Lerp( s, e, Float.easeIn01( t ) );
         }
     }
 }

@@ -264,6 +264,7 @@
     <Compile Include="Assets\codes\GameManager.cs" />
     <Compile Include="Assets\codes\JapanLine.cs" />
     <Compile Include="Assets\codes\Piece.cs" />
+    <Compile Include="Assets\codes\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\prefname.fnt" />
