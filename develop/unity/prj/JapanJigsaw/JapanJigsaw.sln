@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JapanJigsaw", "JapanJigsaw.csproj", "{EFEAA955-CE94-DE1C-9484-212650961921}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JapanJigsaw.Editor.Plugins", "JapanJigsaw.Editor.Plugins.csproj", "{9F29B17B-A475-D314-E524-F89951DD1DAE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EFEAA955-CE94-DE1C-9484-212650961921}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFEAA955-CE94-DE1C-9484-212650961921}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFEAA955-CE94-DE1C-9484-212650961921}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFEAA955-CE94-DE1C-9484-212650961921}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F29B17B-A475-D314-E524-F89951DD1DAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F29B17B-A475-D314-E524-F89951DD1DAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F29B17B-A475-D314-E524-F89951DD1DAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F29B17B-A475-D314-E524-F89951DD1DAE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
