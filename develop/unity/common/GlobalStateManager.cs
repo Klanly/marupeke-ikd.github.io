@@ -5,9 +5,15 @@ using UnityEngine;
 // どこでも使えるステート管理人
 
 public class GlobalStateManager : MonoBehaviour {
+    private void Awake()
+    {
+        DontDestroyOnLoad( this );
+    }
+
     private void Update()
     {
         updater_.update();
+        stateNum_ = updater_.getStateNum();
     }
 
     public void setUpdater(GlobalStateUpdater updater)
@@ -16,6 +22,7 @@ public class GlobalStateManager : MonoBehaviour {
     }
 
     GlobalStateUpdater updater_;
+    int stateNum_ = 0;
 }
 
 
@@ -49,6 +56,12 @@ public class GlobalStateUpdater
                 }
             }
         }
+    }
+
+    // 更新中のステート数を取得
+    public int getStateNum()
+    {
+        return list_.Count;
     }
 
     static GlobalStateUpdater instance_ = new GlobalStateUpdater();
@@ -115,6 +128,25 @@ public class GlobalState : GlobalStateBase
 
     // 指定時間だけループ
     static public GlobalState time( float sec, System.Func< float, float, bool > action )
+    {
+        float curSec = 0.0f;
+        var state = new GlobalState(
+            () => {
+                curSec += Time.deltaTime;
+                if ( curSec >= sec ) {
+                    action( sec, 1.0f );
+                    return false;
+                }
+                return action( curSec, curSec / sec );
+            },
+            null
+        );
+        GlobalStateUpdater.getInstance().add( state );
+        return state;
+    }
+
+    // 指定時間だけループ
+    public GlobalState nextTime( float sec, System.Func<float, float, bool> action )
     {
         float curSec = 0.0f;
         var state = new GlobalState(

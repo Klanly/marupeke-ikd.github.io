@@ -26,6 +26,30 @@ public class Lerps {
         {
             return t * t * ( 3.0f - 2.0f * t );
         }
+
+        // EaseOut(0-1)
+        public static float easeOut01(float t)
+        {
+            return t * ( 2.0f - t );
+        }
+
+        // EaseOutStrong(0-1)
+        public static float easeOut01Strong(float t)
+        {
+            return easeOut01( t * t );
+        }
+
+        // EaseIn(0-1)
+        public static float easeIn01(float t)
+        {
+            return t * t;
+        }
+
+        // EaseInStrong(0-1)
+        public static float easeIn01Strong(float t)
+        {
+            return easeIn01( t * t );
+        }
     }
 
     // Vector3
@@ -42,6 +66,24 @@ public class Lerps {
         {
             return linear( s, e, Float.easeInOut01( t ) );
         }
+
+        // EaseOut
+        public static Vector3 easeOut( Vector3 s, Vector3 e, float t)
+        {
+            return linear( s, e, Float.easeOut01( t ) );
+        }
+
+        // EaseOutStrong
+        public static Vector3 easeOutStrong(Vector3 s, Vector3 e, float t)
+        {
+            return linear( s, e, Float.easeOut01Strong( t ) );
+        }
+
+        // EaseIn
+        public static Vector3 easeIn(Vector3 s, Vector3 e, float t)
+        {
+            return linear( s, e, Float.easeIn01( t ) );
+        }
     }
 
     // Quaternion
@@ -57,6 +99,18 @@ public class Lerps {
         public static UnityEngine.Quaternion easeInOut(UnityEngine.Quaternion s, UnityEngine.Quaternion e, float t)
         {
             return UnityEngine.Quaternion.Lerp( s, e, Float.easeInOut01( t ) );
+        }
+
+        // EaseOut
+        public static UnityEngine.Quaternion easeOut(UnityEngine.Quaternion s, UnityEngine.Quaternion e, float t)
+        {
+            return UnityEngine.Quaternion.Lerp( s, e, Float.easeOut01( t ) );
+        }
+
+        // EaseIn
+        public static UnityEngine.Quaternion easeIn(UnityEngine.Quaternion s, UnityEngine.Quaternion e, float t)
+        {
+            return UnityEngine.Quaternion.Lerp( s, e, Float.easeIn01( t ) );
         }
     }
 }
