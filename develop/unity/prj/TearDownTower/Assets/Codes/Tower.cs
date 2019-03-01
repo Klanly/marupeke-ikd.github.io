@@ -46,6 +46,9 @@ public class Tower : MonoBehaviour {
 
 	// 指定位置のブロックをインサート
 	public void insertBlock( int colIdx, int rowIdx ) {
+		if ( bAllowInsert_ == false )
+			return;
+
 		if ( rowIdx >= blockCols_[ colIdx ].Count )
 			return;
 		var srcBlock = blockCols_[ colIdx ][ rowIdx ];
@@ -144,26 +147,36 @@ public class Tower : MonoBehaviour {
 
 		// 揃ったラインのブロックを削除
 		int baseR = 0;
+		float destroyTime = 1.0f;
+		float destroyLastTime = 1.2f;
+		int orderLineNum = orderTopRowIndices[ orderTopRowIndices.Count - 1 ] + 1;
+		int destroyBlockNum = orderLineNum * param_.colNum_;
+		int destroyBlockIdx = 0;
 		for ( int e = 0; e < orderTopRowIndices.Count; ++e ) {
 			int topR = orderTopRowIndices[ e ];
 			for ( int r = baseR; r < topR + 1; ++r ) {
 				for ( int c = 0; c < param_.colNum_; ++c ) {
 					var block = blockCols_[ c ][ r ];
-					Destroy( block.gameObject );
+					block.destroy( Lerps.Float.linear( destroyTime, destroyLastTime, (float)destroyBlockIdx / destroyBlockNum ) );
+					destroyBlockIdx++;
 				}
 			}
 			baseR = topR + 1;
 		}
-		// 詰める
-		int orderLineNum = orderTopRowIndices[ orderTopRowIndices.Count - 1 ] + 1;
-		for ( int c = 0; c < param_.colNum_; ++c ) {
-			for ( int r = orderLineNum; r < blockCols_[ c ].Count; ++r ) {
-				var pos = blockCols_[ c ][ r ].transform.localPosition;
-				pos.y -= blockCols_[ c ][ r ].getHeight() * orderLineNum;
-				blockCols_[ c ][ r ].transform.localPosition = pos;
+
+		// 削除演出中はインサート禁止
+		bAllowInsert_ = false;
+		GlobalState.wait( destroyLastTime, () => {
+			// 詰める
+			for ( int c = 0; c < param_.colNum_; ++c ) {
+				for ( int r = orderLineNum; r < blockCols_[ c ].Count; ++r ) {
+					blockCols_[ c ][ r ].moveDown( orderLineNum );
+				}
+				blockCols_[ c ].RemoveRange( 0, orderLineNum );
 			}
-			blockCols_[ c ].RemoveRange( 0, orderLineNum );
-		}
+			bAllowInsert_ = true;
+			return false;
+		} );
 	}
 
 	private void Awake() {
@@ -255,4 +268,5 @@ public class Tower : MonoBehaviour {
 	Color[] colors_;
 	List< List< FrameBlock > > blockCols_ = new List< List< FrameBlock > >();
 	System.Action allBlockDeletedCallback_;
+	bool bAllowInsert_ = true;
 }

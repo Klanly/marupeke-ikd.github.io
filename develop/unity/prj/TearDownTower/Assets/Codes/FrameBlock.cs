@@ -13,6 +13,9 @@ public class FrameBlock : MonoBehaviour {
 	[SerializeField]
 	float blockWidth_;
 
+	[SerializeField]
+	GameObject brokenParticle_;
+
 	public void setFrameColor(Color color) {
 		frameColor_ = color;
 		var mat = renderer_.materials[ 1 ];
@@ -70,6 +73,41 @@ public class FrameBlock : MonoBehaviour {
 			transform.localPosition = pos;
 			return true;
 		} );
+	}
+
+	// 指定段数分下げる
+	public void moveDown( int num ) {
+		DeltaLerp.Float.easeIn( -getHeight() * num, 0.35f, (_sec, _t, _dt, _delta) => {
+			if ( this == null )
+				return false;
+			var pos = transform.localPosition;
+			pos.y += _delta;
+			transform.localPosition = pos;
+			return true;
+		} );
+	}
+
+	// 破壊する
+	public void destroy( float sec ) {
+		GlobalState.time( sec, (_, _t) => {
+			Color c = Color.Lerp( frameColor_, Color.white, _t );
+			setFrameColor( c );
+			c = Color.Lerp( bodyColor_, Color.white, _t );
+			setBodyColor( c );
+			return true;
+		} ).finish(()=> {
+			brokenParticle_.SetActive( true );
+			brokenParticle_.transform.parent = null;    // FraemBlockから独立
+			Destroy( gameObject );
+			GlobalState.wait( 2.0f, () => {
+				Destroy( brokenParticle_.gameObject );
+				return false;
+			} );
+		} );
+	}
+
+	private void Awake() {
+		brokenParticle_.SetActive( false );
 	}
 
 	// Use this for initialization

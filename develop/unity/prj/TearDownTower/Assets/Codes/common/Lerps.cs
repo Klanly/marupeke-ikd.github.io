@@ -12,7 +12,7 @@ public class Lerps {
         // 線形補間
         public static float linear( float s, float e, float t )
         {
-            return s * ( e - s ) * t;
+            return s + ( e - s ) * t;
         }
 
         // EaseInOut
