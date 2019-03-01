@@ -67,9 +67,7 @@ public class Tower : MonoBehaviour {
 
 		for ( int i = rowIdx + 1; i < blockCols_[ colIdx ].Count; ++i ) {
 			var b = blockCols_[ colIdx ][ i ];
-			var pos = b.transform.localPosition;
-			pos.y += block.getHeight();
-			b.transform.localPosition = pos;
+			b.moveUp();
 		}
 
 		// 揃っているかチェック

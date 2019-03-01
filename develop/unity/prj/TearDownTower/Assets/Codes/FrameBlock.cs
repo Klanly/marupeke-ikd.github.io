@@ -60,8 +60,20 @@ public class FrameBlock : MonoBehaviour {
 		return bTop_;
 	}
 
-    // Use this for initialization
-    void Start () {
+	// 1段上げる
+	public void moveUp() {
+		DeltaLerp.Float.easeOutOver( getHeight(), 0.35f, 0.25f, (_sec, _t, _dt, _delta) => {
+			if ( this == null )
+				return false;
+			var pos = transform.localPosition;
+			pos.y += _delta;
+			transform.localPosition = pos;
+			return true;
+		} );
+	}
+
+	// Use this for initialization
+	void Start () {
 		
 	}
 	
