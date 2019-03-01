@@ -76,8 +76,8 @@ public class FrameBlock : MonoBehaviour {
 	}
 
 	// 指定段数分下げる
-	public void moveDown( int num ) {
-		DeltaLerp.Float.easeIn( -getHeight() * num, 0.35f, (_sec, _t, _dt, _delta) => {
+	public void moveDown( int num, float fallDownSec ) {
+		DeltaLerp.Float.easeIn( -getHeight() * num, fallDownSec, (_sec, _t, _dt, _delta) => {
 			if ( this == null )
 				return false;
 			var pos = transform.localPosition;

@@ -18,7 +18,10 @@ public class Tower : MonoBehaviour {
 		public float innerRadius_ = -1.0f;
 		public float blockWidth_ = 2.236f;
 		public float blockHeight_ = 1.618f;
-    }
+		public float brokenWaitSec_ = 0.1f;
+		public float brokenIntervalSec_ = 0.1f;
+		public float blockFallSec_ = 0.2f;
+	}
 
 	// 全部消したコールバック
 	public System.Action AllBlockDeletedCallback { set { allBlockDeletedCallback_ = value; } }
@@ -147,8 +150,8 @@ public class Tower : MonoBehaviour {
 
 		// 揃ったラインのブロックを削除
 		int baseR = 0;
-		float destroyTime = 1.0f;
-		float destroyLastTime = 1.2f;
+		float destroyTime = param_.brokenWaitSec_;
+		float destroyLastTime = destroyTime + param_.brokenWaitSec_;
 		int orderLineNum = orderTopRowIndices[ orderTopRowIndices.Count - 1 ] + 1;
 		int destroyBlockNum = orderLineNum * param_.colNum_;
 		int destroyBlockIdx = 0;
@@ -170,7 +173,7 @@ public class Tower : MonoBehaviour {
 			// 詰める
 			for ( int c = 0; c < param_.colNum_; ++c ) {
 				for ( int r = orderLineNum; r < blockCols_[ c ].Count; ++r ) {
-					blockCols_[ c ][ r ].moveDown( orderLineNum );
+					blockCols_[ c ][ r ].moveDown( orderLineNum, param_.blockFallSec_ );
 				}
 				blockCols_[ c ].RemoveRange( 0, orderLineNum );
 			}
