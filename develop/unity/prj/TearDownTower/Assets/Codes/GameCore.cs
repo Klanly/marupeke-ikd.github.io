@@ -13,6 +13,9 @@ public class GameCore : MonoBehaviour {
 	[SerializeField]
 	Player player_;
 
+	[SerializeField]
+	TorusMesh playerSlideLine_;
+
 	public class Param {
 		public Tower.Param towerParam_ = new Tower.Param();
 		public Player.Param playerParam_ = new Player.Param();
@@ -26,7 +29,11 @@ public class GameCore : MonoBehaviour {
 		tower_.setup( param.towerParam_ );
 		tower_.gameObject.SetActive( false );
 
+		// プレイヤー
 		player_.setup( param.playerParam_, tower_ );
+
+		// プレイヤー通路パイプ
+		playerSlideLine_.InnerRadius = player_.Radius - playerSlideLine_.TubeRadius;
 
 		state_ = new Intro( this );
 	}

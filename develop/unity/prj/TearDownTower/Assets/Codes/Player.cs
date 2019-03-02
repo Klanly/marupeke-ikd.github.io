@@ -7,8 +7,23 @@ public class Player : MonoBehaviour {
 	[SerializeField]
 	float radius_;
 
+	[SerializeField]
+	Camera camera_;
+
+	[SerializeField]
+	GameObject playerModel_;
+
+	[SerializeField]
+	ParticleSystem particle_L;
+
+	[SerializeField]
+	ParticleSystem particle_R;
+
+	public float Radius { get { return radius_; } }
 
 	public class Param {
+		public float cameraRefDist_ = 4.0f;
+		public float radius_ = 7.0f;
 		public float transSec_ = 0.25f;
 	}
 
@@ -17,7 +32,16 @@ public class Player : MonoBehaviour {
 		unitDeg_ = 360.0f / tower.getParam().colNum_;
 		unitRad_ = unitDeg_ * Mathf.Deg2Rad;
 		param_ = param;
+		radius_ = param.radius_;
 		blockHeight_ = tower.getParam().blockHeight_;
+
+		// プレイヤー位置
+		playerModel_.transform.localPosition = new Vector3( 0.0f, 0.0f, -radius_ );
+
+		// カメラ位置
+		var cpos = camera_.transform.position;
+		camera_.transform.position = cpos.normalized * ( radius_ + param.cameraRefDist_ );
+
 		state_ = new Active( this );
 	}
 
@@ -50,6 +74,7 @@ public class Player : MonoBehaviour {
 						parent_.transform.localRotation = end;
 						bMovingLR_ = false;
 					} );
+					parent_.particle_R.Play();
 				} else if ( Input.GetKeyDown( KeyCode.RightArrow ) == true ) {
 					bMovingLR_ = true;
 					curPosIdx_ = ( curPosIdx_ + 1 ) % parent_.tower_.getColNum();
@@ -62,6 +87,7 @@ public class Player : MonoBehaviour {
 						parent_.transform.localRotation = end;
 						bMovingLR_ = false;
 					} );
+					parent_.particle_L.Play();
 				}
 			}
 			// 上下キーでタワーの上下に移動
