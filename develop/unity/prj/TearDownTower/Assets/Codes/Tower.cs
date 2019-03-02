@@ -106,10 +106,10 @@ public class Tower : MonoBehaviour {
 	}
 
 	// 揃っているかチェック
-	void checkGroupOrder() {
+	bool checkGroupOrder() {
 		updateCurMaxHeight();   // 高さ更新
 
-		List<int> orderTopRowIndices = new List<int>();	// 揃ったグループの高さ
+		int orderTopRowIndex = -1;	// 揃ったグループの高さ
 
 		bool bNoneOrder = false;
 		for ( int r = 0; r < curMaxHeight_; ++r ) {
@@ -142,33 +142,31 @@ public class Tower : MonoBehaviour {
 				break;
 
 			// 揃っている！
-			orderTopRowIndices.Add( r );
+			orderTopRowIndex = r;
+			break;
 		}
 
-		if ( orderTopRowIndices.Count == 0 )
-			return;
-
-		// 揃ったラインのブロックを削除
-		int baseR = 0;
-		float destroyTime = param_.brokenWaitSec_;
-		float destroyLastTime = destroyTime + param_.brokenWaitSec_;
-		int orderLineNum = orderTopRowIndices[ orderTopRowIndices.Count - 1 ] + 1;
-		int destroyBlockNum = orderLineNum * param_.colNum_;
-		int destroyBlockIdx = 0;
-		for ( int e = 0; e < orderTopRowIndices.Count; ++e ) {
-			int topR = orderTopRowIndices[ e ];
-			for ( int r = baseR; r < topR + 1; ++r ) {
-				for ( int c = 0; c < param_.colNum_; ++c ) {
-					var block = blockCols_[ c ][ r ];
-					block.destroy( Lerps.Float.linear( destroyTime, destroyLastTime, (float)destroyBlockIdx / destroyBlockNum ) );
-					destroyBlockIdx++;
-				}
-			}
-			baseR = topR + 1;
+		if ( orderTopRowIndex == -1 ) {
+			return false;     // 揃っていないので終了
 		}
 
 		// 削除演出中はインサート禁止
 		bAllowInsert_ = false;
+
+		// 揃ったラインのブロックを削除
+		float destroyTime = param_.brokenWaitSec_;
+		float destroyLastTime = destroyTime + param_.brokenWaitSec_;
+		int orderLineNum = orderTopRowIndex + 1;
+		int destroyBlockNum = orderLineNum * param_.colNum_;
+		int destroyBlockIdx = 0;
+		for ( int r = 0; r < orderLineNum; ++r ) {
+			for ( int c = 0; c < param_.colNum_; ++c ) {
+				var block = blockCols_[ c ][ r ];
+				block.destroy( Lerps.Float.linear( destroyTime, destroyLastTime, ( float )destroyBlockIdx / destroyBlockNum ) );
+				destroyBlockIdx++;
+			}
+		}
+
 		GlobalState.wait( destroyLastTime, () => {
 			// 詰める
 			for ( int c = 0; c < param_.colNum_; ++c ) {
@@ -177,9 +175,17 @@ public class Tower : MonoBehaviour {
 				}
 				blockCols_[ c ].RemoveRange( 0, orderLineNum );
 			}
-			bAllowInsert_ = true;
+			// 演出終了
+			//  さらに上のグループが揃っていたら連鎖演出
+			GlobalState.wait( param_.blockFallSec_, () => {
+				if ( checkGroupOrder() == false )
+					bAllowInsert_ = true;   // 自分の演出が最後なのでインサートを許可
+				return false;
+			} );
 			return false;
 		} );
+
+		return true;
 	}
 
 	private void Awake() {
