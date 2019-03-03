@@ -9,6 +9,9 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour {
 
+	[SerializeField]
+	UnityEngine.UI.Text scoreText_;
+
 	public void breakBlocks( int colNum, int rowNum, int chainCount ) {
 		var curScore = score_.getAim();
 		score_.setAim( curScore + colNum * rowNum * blockScore_ * chainCount );
@@ -16,6 +19,10 @@ public class ScoreManager : MonoBehaviour {
 
 	private void Awake() {
 		score_ = new MoveValueLong( 0, 1.0f );
+		scoreText_.text = "0";
+		score_.Value = (_score) => {
+			scoreText_.text = string.Format( "{0:#,0}", _score );
+		};
 	}
 
 	// Use this for initialization

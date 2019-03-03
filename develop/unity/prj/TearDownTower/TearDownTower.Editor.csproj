@@ -287,6 +287,10 @@
       <Project>{A164A9D9-25E9-8C37-51A7-288EC49406B5}</Project>
       <Name>TearDownTower</Name>
     </ProjectReference>
+    <ProjectReference Include="TearDownTower.Editor.Plugins.csproj">
+      <Project>{D93B1E9C-FEE0-EE32-CAA2-FAF7A941AFBF}</Project>
+      <Name>TearDownTower.Editor.Plugins</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\PostProcessing\Editor\Attributes\PostProcessingModelEditorAttribute.cs" />
@@ -326,6 +330,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Detonator Explosion Framework\Resources\Detonator\Textures\HeatDistort.shader" />
+    <None Include="Assets\Font\score.fnt" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Examples\Font1\font1.fnt" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Examples\Font2\font2.fnt" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Examples\font3\font3.fnt" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\BFILogic.cginc" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font2.shader" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font3.shader" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font4.shader" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font5.shader" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\HistogramCompute.compute" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\HistogramRender.shader" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\ParadeRender.shader" />
