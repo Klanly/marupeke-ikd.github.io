@@ -26,8 +26,12 @@ public class Tower : MonoBehaviour {
 	// 全部消したコールバック
 	public System.Action AllBlockDeletedCallback { set { allBlockDeletedCallback_ = value; } }
 
-    // タワーを設定
-    public void setup( Param param )
+	// ブロックを崩したコールバック
+	//  colNum, rowNum, chainCount
+	public System.Action< int, int, int > BreakBlocksCallback { set { breakBlocksCallback_ = value; } }
+
+	// タワーを設定
+	public void setup( Param param )
     {
         param_ = param;
 	}
@@ -77,7 +81,7 @@ public class Tower : MonoBehaviour {
 		}
 
 		// 揃っているかチェック
-		checkGroupOrder();
+		checkGroupOrder( 0 );
 
 		// 最大高を更新
 		updateCurMaxHeight();
@@ -106,7 +110,7 @@ public class Tower : MonoBehaviour {
 	}
 
 	// 揃っているかチェック
-	bool checkGroupOrder() {
+	bool checkGroupOrder( int chainCount ) {
 		updateCurMaxHeight();   // 高さ更新
 
 		int orderTopRowIndex = -1;	// 揃ったグループの高さ
@@ -150,6 +154,10 @@ public class Tower : MonoBehaviour {
 			return false;     // 揃っていないので終了
 		}
 
+		// 揃っている！//
+
+		chainCount++;
+
 		// 削除演出中はインサート禁止
 		bAllowInsert_ = false;
 
@@ -178,12 +186,16 @@ public class Tower : MonoBehaviour {
 			// 演出終了
 			//  さらに上のグループが揃っていたら連鎖演出
 			GlobalState.wait( param_.blockFallSec_, () => {
-				if ( checkGroupOrder() == false )
+				if ( checkGroupOrder( chainCount ) == false )
 					bAllowInsert_ = true;   // 自分の演出が最後なのでインサートを許可
 				return false;
 			} );
 			return false;
 		} );
+
+		// ブロック破壊通知
+		if ( breakBlocksCallback_ != null )
+			breakBlocksCallback_( param_.colNum_, orderTopRowIndex + 1, chainCount );
 
 		return true;
 	}
@@ -277,5 +289,6 @@ public class Tower : MonoBehaviour {
 	Color[] colors_;
 	List< List< FrameBlock > > blockCols_ = new List< List< FrameBlock > >();
 	System.Action allBlockDeletedCallback_;
+	System.Action<int, int, int> breakBlocksCallback_;
 	bool bAllowInsert_ = true;
 }

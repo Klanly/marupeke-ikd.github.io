@@ -19,6 +19,9 @@ public class Player : MonoBehaviour {
 	[SerializeField]
 	ParticleSystem particle_R;
 
+	[SerializeField]
+	GameObject detonate_;
+
 	public float Radius { get { return radius_; } }
 
 	public class Param {
@@ -43,6 +46,12 @@ public class Player : MonoBehaviour {
 		camera_.transform.position = cpos.normalized * ( radius_ + param.cameraRefDist_ );
 
 		state_ = new Active( this );
+	}
+
+	// プレイヤー破壊
+	public void destroy() {
+		bDestroyed_ = true;
+		state_ = new PlayerDestroy( this );
 	}
 
 	// Use this for initialization
@@ -135,6 +144,17 @@ public class Player : MonoBehaviour {
 		int curPosIdx_ = 0;
 	}
 
+	class PlayerDestroy : State<Player> {
+		public PlayerDestroy( Player parent ) : base( parent ) {
+		}
+		protected override State innerInit() {
+			parent_.detonate_.transform.parent = null;
+			parent_.detonate_.SetActive( true );
+			parent_.playerModel_.gameObject.SetActive( false );
+			return null;
+		}
+	}
+
 	State state_;
 	Tower tower_;
 	Param param_;
@@ -142,4 +162,5 @@ public class Player : MonoBehaviour {
 	float unitDeg_;
 	float rad_;
 	float blockHeight_;
+	bool bDestroyed_ = false;
 }

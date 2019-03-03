@@ -74,7 +74,7 @@ public class DeltaLerp {
 					curSec += dt;
 					t = curSec / sec;
 				}
-				bool res = deltaCallback( preSec, t, dt, calcDelta( preSec, dt ) );
+				bool res = deltaCallback( curSec, t, dt, calcDelta( preSec, dt ) );
 				preSec = curSec;
 				if ( res == false || bFinish == true ) {
 					if ( finishCallback != null )
@@ -299,13 +299,71 @@ public class DeltaLerp {
 
 		System.Func< bool > innerUpdate_;
 	}
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+
+	public class Long : Result {
+		protected Long(System.Func<bool> innerUpdate) {
+			innerUpdate_ = innerUpdate;
+		}
+
+		// 経過時刻更新と補間計算のテンプレート
+		static bool updateTime(ref float preSec, float sec, System.Func<float, float, float, long, bool> deltaCallback, System.Action finishCallback, System.Func<float, float, long> calcDelta) {
+			float dt = Time.deltaTime;
+			float t = 0.0f;
+			bool bFinish = false;
+			float curSec = preSec;
+			if ( curSec + dt >= sec ) {
+				dt = sec - curSec;
+				curSec = sec;
+				t = 1.0f;
+				bFinish = true;
+			} else {
+				curSec += dt;
+				t = curSec / sec;
+			}
+			bool res = deltaCallback( curSec, t, dt, calcDelta( preSec, dt ) );
+			preSec = curSec;
+			if ( res == false || bFinish == true ) {
+				if ( finishCallback != null )
+					finishCallback();
+				return false;
+			}
+			return true;    // 継続
+		}
+
+		// 線形補間
+		//  len: 補間の長さ
+		//  sec: 補間時間（秒）
+		//  deltaCallback< sec, t, dt, delta >
+		//   sec  : 経過秒
+		//   t    : 経過補間係数（0～1）
+		//   dt   : 前回からの差分時間
+		//   delta: 差分値
+		static public Result linear(long len, float sec, System.Func<float, float, float, long, bool> deltaCallback, System.Action finishCallback = null) {
+			float area = 0.0f;
+			float dt = 0.0f;
+			long curLen = 0;
+			return Float.linear( 1.0f, sec, (_sec, _t, _dt, _delta) => {
+				area += _delta;
+				dt += _dt;
+				if ( _sec == sec ) {
+					// ラスト更新
+					deltaCallback( _sec, 1.0f, dt, len - curLen );
+					return false;
+				}
+				long def = ( long )( len * area );
+				if ( def != 0 ) {
+					curLen += def;
+					deltaCallback( _sec, _t, dt, def );
+					area = 0.0f;
+					dt = 0.0f;
+				}
+				return true;
+			},
+			finishCallback
+			);
+		}
+
+		System.Func<bool> innerUpdate_;
 	}
 }
