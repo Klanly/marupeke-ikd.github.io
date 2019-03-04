@@ -10,10 +10,13 @@ public class GameManager : MonoBehaviour {
 	[SerializeField]
 	ScoreManager scoreManager_;
 
+	[SerializeField]
+	int initLevel_ = 1;
+
 	// セットアップ
 	public void setup( GameCore.Param coreParam ) {
 		core_ = Instantiate<GameCore>( corePrefab_ );
-		core_.setup( coreParam, scoreManager_ );
+		core_.setup( coreParam, scoreManager_, initLevel_ );
 	}
 
 	// Use this for initialization
@@ -21,7 +24,6 @@ public class GameManager : MonoBehaviour {
 		var coreParam = new GameCore.Param();
 		var towerParam = new Tower.Param();
 		coreParam.playerParam_.transSec_ = 0.1f;
-		coreParam.towerParam_ = towerParam;
 		setup( coreParam );
 	}
 	

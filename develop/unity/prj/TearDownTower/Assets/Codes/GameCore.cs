@@ -26,23 +26,18 @@ public class GameCore : MonoBehaviour {
 	ScoreManager scoreManager_;
 
 	public class Param {
-		public Tower.Param towerParam_ = new Tower.Param();
+		public TowerParameterTable towerParamTable_ = new TowerParameterTable();
 		public Player.Param playerParam_ = new Player.Param();
-		public float electricNeedleSpeed_ = 20.0f;		// 最遠位置から最近位置に辿り着くまでの秒数
+		public float blockWidth_ = 2.236f;
+		public float blockHeight_ = 1.618f;
 	}
 
-	public void setup( Param param, ScoreManager scoreManager ) {
+	public void setup( Param param, ScoreManager scoreManager, int initLevel ) {
 		param_ = param;
 		scoreManager_ = scoreManager;
 
-		tower_ = Instantiate<Tower>( towerPrefab_ );
-		tower_.transform.parent = root_.transform;
-		tower_.transform.localPosition = Vector3.zero;
-		tower_.setup( param.towerParam_ );
-		tower_.gameObject.SetActive( false );
-
 		// プレイヤー
-		player_.setup( param.playerParam_, tower_ );
+		player_.setup( param.playerParam_ );
 
 		// プレイヤー通路パイプ
 		playerSlideLine_.InnerRadius = player_.Radius - playerSlideLine_.TubeRadius;
@@ -56,7 +51,7 @@ public class GameCore : MonoBehaviour {
 
 		setElectricPos( 0.0f );
 
-		state_ = new Intro( this );
+		state_ = new CreateTower(this, initLevel );
 	}
 
 	// 電気ニードル位置を設定
@@ -82,6 +77,33 @@ public class GameCore : MonoBehaviour {
 		// setElectricPos( curElectricRate_ );
 	}
 
+	class CreateTower : State<GameCore> {
+		public CreateTower( GameCore parent, int stageIdx ) : base( parent ) {
+			stageIdx_ = stageIdx;
+		}
+		protected override State innerInit() {
+			if ( parent_.tower_ != null ) {
+				Destroy( parent_.tower_.gameObject );
+				parent_.tower_ = null;
+			}
+			Tower.Param towerParam_ = parent_.param_.towerParamTable_.getParam( stageIdx_ );
+			parent_.tower_ = Instantiate<Tower>( parent_.towerPrefab_ );
+			parent_.tower_.transform.parent = parent_.root_.transform;
+			parent_.tower_.transform.localPosition = Vector3.zero;
+			parent_.tower_.setup( towerParam_ );
+			parent_.tower_.gameObject.SetActive( false );
+
+			// プレイヤーへ
+			parent_.player_.reset( parent_.tower_, parent_.param_.blockHeight_ );
+
+			return base.innerInit();
+		}
+		protected override State innerUpdate() {
+			return new Intro( parent_ );
+		}
+	int stageIdx_ = 0;
+	}
+
 	class Intro : State< GameCore > {
 		public Intro( GameCore parent ) : base( parent ) {
 		}
@@ -97,6 +119,7 @@ public class GameCore : MonoBehaviour {
 		protected override State innerInit() {
 			parent_.tower_.gameObject.SetActive( true );
 			parent_.tower_.start();
+			electricNeedleSpeed_ = parent_.tower_.getElectricNeedleSpeed();
 
 			// ブロックグループを破壊した時の各種処理
 			parent_.tower_.BreakBlocksCallback = ( colNum, rowNum, chainCount ) => {
@@ -117,7 +140,7 @@ public class GameCore : MonoBehaviour {
 			curNeedleSec_ += Time.deltaTime;
 
 			// 電気ニードル進行
-			float rate = curNeedleSec_ / parent_.param_.electricNeedleSpeed_;
+			float rate = curNeedleSec_ / electricNeedleSpeed_;
 			parent_.setElectricPos( rate );
 
 			// rate >= 1.0fでゲームオーバー
@@ -141,6 +164,7 @@ public class GameCore : MonoBehaviour {
 		}
 
 		float curNeedleSec_ = 0.0f;
+		float electricNeedleSpeed_ = 1.0f;
 	}
 
 	class TowerClear : State< GameCore > {

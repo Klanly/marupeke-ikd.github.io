@@ -227,6 +227,7 @@ MonoBehaviour:
   corePrefab_: {fileID: 114606620984086154, guid: 177a655536e372340bc837ed5377031c,
     type: 2}
   scoreManager_: {fileID: 1228579991}
+  initLevel_: 15
 --- !u!4 &231872520
 Transform:
   m_ObjectHideFlags: 0

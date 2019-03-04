@@ -30,13 +30,10 @@ public class Player : MonoBehaviour {
 		public float transSec_ = 0.25f;
 	}
 
-	public void setup( Param param, Tower tower ) {
-		tower_ = tower;
-		unitDeg_ = 360.0f / tower.getParam().colNum_;
-		unitRad_ = unitDeg_ * Mathf.Deg2Rad;
+	// 初期設定
+	public void setup( Param param ) {
 		param_ = param;
 		radius_ = param.radius_;
-		blockHeight_ = tower.getParam().blockHeight_;
 
 		// プレイヤー位置
 		playerModel_.transform.localPosition = new Vector3( 0.0f, 0.0f, -radius_ );
@@ -44,6 +41,14 @@ public class Player : MonoBehaviour {
 		// カメラ位置
 		var cpos = camera_.transform.position;
 		camera_.transform.position = cpos.normalized * ( radius_ + param.cameraRefDist_ );
+	}
+
+	// タワーを設定
+	public void reset( Tower tower, float blockHeight ) {
+		tower_ = tower;
+		unitDeg_ = 360.0f / tower.getParam().colNum_;
+		unitRad_ = unitDeg_ * Mathf.Deg2Rad;
+		blockHeight_ = blockHeight;
 
 		state_ = new Active( this );
 	}

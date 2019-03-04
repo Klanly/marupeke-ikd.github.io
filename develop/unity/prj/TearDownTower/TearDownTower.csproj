@@ -269,6 +269,7 @@
     <Compile Include="Assets\Codes\Test\CircleTest.cs" />
     <Compile Include="Assets\Codes\Test\MoveValueTest.cs" />
     <Compile Include="Assets\Codes\Tower.cs" />
+    <Compile Include="Assets\Codes\TowerParameterTable.cs" />
     <Compile Include="Assets\Detonator Explosion Framework\Sample Supporting Emitters\DetonatorSprayHelper.cs" />
     <Compile Include="Assets\Detonator Explosion Framework\System\Detonator.cs" />
     <Compile Include="Assets\Detonator Explosion Framework\System\DetonatorBurstEmitter.cs" />

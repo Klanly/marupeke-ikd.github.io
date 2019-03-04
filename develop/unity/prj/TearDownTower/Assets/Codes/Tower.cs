@@ -11,16 +11,16 @@ public class Tower : MonoBehaviour {
 	GameObject root_;
 
     public class Param {
+		public int level_ = 1;
         public int colNum_ = 12;
-		public int minStackNum = 2;
-		public int maxStackNum = 4;
+		public int minStackNum_ = 2;
+		public int maxStackNum_ = 4;
 		public int groupNum_ = 8;
 		public float innerRadius_ = -1.0f;
-		public float blockWidth_ = 2.236f;
-		public float blockHeight_ = 1.618f;
 		public float brokenWaitSec_ = 0.1f;
 		public float brokenIntervalSec_ = 0.1f;
 		public float blockFallSec_ = 0.2f;
+		public float electricNeedleSpeed_ = 20.0f;      // 最遠位置から最近位置に辿り着くまでの秒数
 	}
 
 	// 全部消したコールバック
@@ -29,6 +29,11 @@ public class Tower : MonoBehaviour {
 	// ブロックを崩したコールバック
 	//  colNum, rowNum, chainCount
 	public System.Action< int, int, int > BreakBlocksCallback { set { breakBlocksCallback_ = value; } }
+
+	// 電気針の移動速度を取得
+	public float getElectricNeedleSpeed() {
+		return param_.electricNeedleSpeed_;
+	}
 
 	// タワーを設定
 	public void setup( Param param )
@@ -82,16 +87,6 @@ public class Tower : MonoBehaviour {
 
 		// 揃っているかチェック
 		checkGroupOrder( 0 );
-
-		// 最大高を更新
-		updateCurMaxHeight();
-
-		// 全部消した？
-		if ( curMaxHeight_ == 0 ) {
-			if ( allBlockDeletedCallback_ != null )
-				allBlockDeletedCallback_();
-			allBlockDeletedCallback_ = null;
-		}
 	}
 
 	// タワー開始
@@ -183,6 +178,17 @@ public class Tower : MonoBehaviour {
 				}
 				blockCols_[ c ].RemoveRange( 0, orderLineNum );
 			}
+
+			// 最大高を更新
+			updateCurMaxHeight();
+
+			// 全部消した？
+			if ( curMaxHeight_ == 0 ) {
+				if ( allBlockDeletedCallback_ != null )
+					allBlockDeletedCallback_();
+				allBlockDeletedCallback_ = null;
+			}
+
 			// 演出終了
 			//  さらに上のグループが揃っていたら連鎖演出
 			GlobalState.wait( param_.blockFallSec_, () => {
@@ -236,7 +242,7 @@ public class Tower : MonoBehaviour {
 			// 各列のサイズを決定
 			var groupHeights = new List<int>();
 			for ( int i = 0; i < parent_.param_.groupNum_; ++i ) {
-				groupHeights.Add( Random.Range( parent_.param_.minStackNum, parent_.param_.maxStackNum + 1 ) );
+				groupHeights.Add( Random.Range( parent_.param_.minStackNum_, parent_.param_.maxStackNum_ + 1 ) );
 			}
 
 			// 列リスト初期化
@@ -250,6 +256,20 @@ public class Tower : MonoBehaviour {
 				int num = groupHeights[ g ];
 				float deg = 360.0f / param.colNum_;
 				float rad = deg * Mathf.Deg2Rad;
+				// 各列の積載ブロック数を決定
+				// もし全列が同じ数だったら振り直し
+				int[] cnums = new int[ param.colNum_ ];
+				while ( true ) {
+					cnums[ 0 ] = Random.Range( 1, num + 1 );
+					bool bDefferent = false;
+					for ( int c = 1; c < param.colNum_; ++c ) {
+						cnums[ c ] = Random.Range( 1, num + 1 );
+						if ( cnums[ 0 ] != cnums[ c ] )
+							bDefferent = true;
+					}
+					if ( bDefferent == true )
+						break;
+				}
 				for ( int c = 0; c < param.colNum_; ++c ) {
 					int cnum = Random.Range( 1, num + 1 );
 					for ( int e = 0; e < cnum; ++e ) {
