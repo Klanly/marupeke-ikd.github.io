@@ -32,9 +32,10 @@ public class GameCore : MonoBehaviour {
 		public float blockHeight_ = 1.618f;
 	}
 
-	public void setup( Param param, ScoreManager scoreManager, int initLevel ) {
+	public void setup( Param param, ScoreManager scoreManager, StageTextEffect stageTextEffect, int initLevel ) {
 		param_ = param;
 		scoreManager_ = scoreManager;
+		stageTextEffect_ = stageTextEffect;
 
 		// プレイヤー
 		player_.setup( param.playerParam_ );
@@ -96,7 +97,10 @@ public class GameCore : MonoBehaviour {
 			// プレイヤーへ
 			parent_.player_.reset( parent_.tower_, parent_.param_.blockHeight_ );
 
-			return base.innerInit();
+			// ステージ演出
+			parent_.stageTextEffect_.reset( stageIdx_ );
+
+			return null;
 		}
 		protected override State innerUpdate() {
 			return new Intro( parent_ );
@@ -195,4 +199,5 @@ public class GameCore : MonoBehaviour {
 	Param param_;
 	Tower tower_;
 	ElectricNeedle[] electricNeedles_ = new ElectricNeedle[2];
+	StageTextEffect stageTextEffect_;
 }

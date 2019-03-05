@@ -13,10 +13,13 @@ public class GameManager : MonoBehaviour {
 	[SerializeField]
 	int initLevel_ = 1;
 
+	[SerializeField]
+	StageTextEffect stageTextEffect_;
+
 	// セットアップ
 	public void setup( GameCore.Param coreParam ) {
 		core_ = Instantiate<GameCore>( corePrefab_ );
-		core_.setup( coreParam, scoreManager_, initLevel_ );
+		core_.setup( coreParam, scoreManager_, stageTextEffect_, initLevel_ );
 	}
 
 	// Use this for initialization

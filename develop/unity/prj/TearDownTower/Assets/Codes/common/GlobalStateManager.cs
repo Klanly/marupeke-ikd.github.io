@@ -148,24 +148,37 @@ public class GlobalState : GlobalStateBase
     // 指定時間だけループ
     public GlobalState nextTime( float sec, System.Func<float, float, bool> action )
     {
-        float curSec = 0.0f;
-        var state = new GlobalState(
-            () => {
-                curSec += Time.deltaTime;
-                if ( curSec >= sec ) {
-                    action( sec, 1.0f );
-                    return false;
-                }
-                return action( curSec, curSec / sec );
-            },
-            null
-        );
-        GlobalStateUpdater.getInstance().add( state );
-        return state;
+		float curSec = 0.0f;
+		nextState_ = new GlobalState(
+			() => {
+				curSec += Time.deltaTime;
+				if ( curSec >= sec ) {
+					action( sec, 1.0f );
+					return false;
+				}
+				return action( curSec, curSec / sec );
+			},
+			null
+		);
+		nextState_.preState_ = this;
+        return nextState_;
     }
 
-    // 次のステートを登録
-    public GlobalState next( System.Func< bool > action, System.Action post = null )
+	// 1フレーム
+	public GlobalState oneFrame(System.Action action) {
+		nextState_ = new GlobalState(
+			() => {
+				action();
+				return false;
+			},
+			null
+		);
+		nextState_.preState_ = this;
+		return nextState_;
+	}
+
+	// 次のステートを登録
+	public GlobalState next( System.Func< bool > action, System.Action post = null )
     {
         nextState_ = new GlobalState( action, post );
         nextState_.preState_ = this;

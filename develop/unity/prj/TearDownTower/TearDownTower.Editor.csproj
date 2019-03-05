@@ -330,6 +330,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Detonator Explosion Framework\Resources\Detonator\Textures\HeatDistort.shader" />
+    <None Include="Assets\Font\YesevaOne.fnt" />
     <None Include="Assets\Font\score.fnt" />
     <None Include="Assets\Plugins\BitmapFontImporter\Examples\Font1\font1.fnt" />
     <None Include="Assets\Plugins\BitmapFontImporter\Examples\Font2\font2.fnt" />
