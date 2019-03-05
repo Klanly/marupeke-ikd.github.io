@@ -40,7 +40,7 @@ public class Player : MonoBehaviour {
 
 		// カメラ位置
 		var cpos = camera_.transform.position;
-		camera_.transform.position = cpos.normalized * ( radius_ + param.cameraRefDist_ );
+		camera_.transform.position = cpos.normalized * ( radius_ + param_.cameraRefDist_ );
 	}
 
 	// タワーを設定
@@ -50,7 +50,7 @@ public class Player : MonoBehaviour {
 		unitRad_ = unitDeg_ * Mathf.Deg2Rad;
 		blockHeight_ = blockHeight;
 
-		state_ = new Active( this );
+		state_ = new PlayerPositionInit( this );
 	}
 
 	// プレイヤー破壊
@@ -69,6 +69,37 @@ public class Player : MonoBehaviour {
 			state_ = state_.update();
 	}
 
+	// プレイヤー位置を初期化
+	void resetPlayerPos( System.Action posFinishCallback ) {
+
+		// カメラ位置
+		var cpos = camera_.transform.position;
+		camera_.transform.position = cpos.normalized * ( radius_ + param_.cameraRefDist_ );
+
+		var initQ = Quaternion.identity;
+		var q = transform.localRotation;
+		GlobalState.time( 0.75f, (sec, t) => {
+			// プレイヤー位置（回転位置）
+			transform.localRotation = Lerps.Quaternion.easeOut( q, initQ, t );
+			return true;
+		} ).finish(()=> {
+			curPosIdx_ = 0;
+			if ( posFinishCallback != null )
+				posFinishCallback();
+		} );
+	}
+
+	class PlayerPositionInit : State<Player> {
+		public PlayerPositionInit(Player parent) : base( parent ) {
+		}
+		protected override State innerInit() {
+			parent_.resetPlayerPos( () => {
+				setNextState( new Active( parent_ ) );
+			} );
+			return this;
+		}
+	}
+
 	class Active : State<Player> {
 		public Active( Player parent ) : base( parent ) {
 		}
@@ -78,7 +109,7 @@ public class Player : MonoBehaviour {
 			if ( bMovingLR_ == false ) {
 				if ( Input.GetKeyDown( KeyCode.LeftArrow ) == true ) {
 					bMovingLR_ = true;
-					curPosIdx_ = ( curPosIdx_ + parent_.tower_.getColNum() - 1 ) % parent_.tower_.getColNum();
+					parent_.curPosIdx_ = ( parent_.curPosIdx_ + parent_.tower_.getColNum() - 1 ) % parent_.tower_.getColNum();
 					var init = parent_.transform.localRotation;
 					var end = Quaternion.Euler( 0.0f, parent_.unitDeg_, 0.0f ) * init;
 					GlobalState.time( parent_.param_.transSec_, (sec, t) => {
@@ -91,7 +122,7 @@ public class Player : MonoBehaviour {
 					parent_.particle_R.Play();
 				} else if ( Input.GetKeyDown( KeyCode.RightArrow ) == true ) {
 					bMovingLR_ = true;
-					curPosIdx_ = ( curPosIdx_ + 1 ) % parent_.tower_.getColNum();
+					parent_.curPosIdx_ = ( parent_.curPosIdx_ + 1 ) % parent_.tower_.getColNum();
 					var init = parent_.transform.localRotation;
 					var end = Quaternion.Euler( 0.0f, -parent_.unitDeg_, 0.0f ) * init;
 					GlobalState.time( parent_.param_.transSec_, (sec, t) => {
@@ -138,7 +169,7 @@ public class Player : MonoBehaviour {
 			}
 			// [z]で(curPosIdx_, curHeightPos_)ブロックへ弾発射
 			if ( Input.GetKeyDown( KeyCode.Z ) == true ) {
-				parent_.tower_.insertBlock( curPosIdx_, curHeightPos_ );
+				parent_.tower_.insertBlock( parent_.curPosIdx_, curHeightPos_ );
 			}
 			return this;
 		}
@@ -146,7 +177,6 @@ public class Player : MonoBehaviour {
 		bool bMovingLR_ = false;
 		bool bMovingUD_ = false;
 		int curHeightPos_ = 0;
-		int curPosIdx_ = 0;
 	}
 
 	class PlayerDestroy : State<Player> {
@@ -168,4 +198,5 @@ public class Player : MonoBehaviour {
 	float rad_;
 	float blockHeight_;
 	bool bDestroyed_ = false;
+	int curPosIdx_ = 0;
 }

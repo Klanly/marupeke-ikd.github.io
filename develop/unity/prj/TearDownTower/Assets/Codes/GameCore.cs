@@ -172,10 +172,9 @@ public class GameCore : MonoBehaviour {
 		}
 		protected override State innerInit() {
 			Debug.Log( "Tower clear!" );
-			return null;
-		}
-		protected override State innerUpdate() {
-			return this;
+
+			// 次のタワーへ
+			return new CreateTower( parent_, parent_.tower_.getParam().level_ + 1 );
 		}
 	}
 
