@@ -3,8 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TowerParameterTable : Table {
-	public TowerParameterTable() {
+	public static TowerParameterTable getInstance() {
+		return instance_;
+	}
+	TowerParameterTable() {
 		create( "Table/towerparameter_data.tsv" );
+	}
+
+	// データ数を取得
+	public int getParamNum() {
+		return params_.Length;
 	}
 
 	// データ格納前コール
@@ -39,6 +47,7 @@ public class TowerParameterTable : Table {
 		return params_[ towerLevel - 1 ];
 	}
 
+	static TowerParameterTable instance_ = new TowerParameterTable();
 	Tower.Param[] params_;
 	int dataIndex_ = 0;
 }

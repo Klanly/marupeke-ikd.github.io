@@ -11,8 +11,14 @@ public class StageTextEffect : MonoBehaviour {
 	TextMesh levelText_;
 
 	public void reset( int level ) {
-		text_.text = string.Format( "Tower {0:00}", level );
 		level_ = level;
+		int maxLevel = TowerParameterTable.getInstance().getParamNum();
+		bFinalLevel_ = ( level_ == maxLevel );
+		if ( bFinalLevel_ == true )
+			text_.text = string.Format( "Final Tower" );
+		else
+			text_.text = string.Format( "Tower {0:00}", level );
+
 		state_ = new Intro( this );
 	}
 
@@ -77,4 +83,5 @@ public class StageTextEffect : MonoBehaviour {
 	Color towerNumberColor_;
 	Color levelTextColor_;
 	bool bFirstLevel_ = true;
+	bool bFinalLevel_ = false;
 }

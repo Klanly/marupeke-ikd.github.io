@@ -26,7 +26,6 @@ public class GameCore : MonoBehaviour {
 	ScoreManager scoreManager_;
 
 	public class Param {
-		public TowerParameterTable towerParamTable_ = new TowerParameterTable();
 		public Player.Param playerParam_ = new Player.Param();
 		public float blockWidth_ = 2.236f;
 		public float blockHeight_ = 1.618f;
@@ -87,7 +86,7 @@ public class GameCore : MonoBehaviour {
 				Destroy( parent_.tower_.gameObject );
 				parent_.tower_ = null;
 			}
-			Tower.Param towerParam_ = parent_.param_.towerParamTable_.getParam( stageIdx_ );
+			Tower.Param towerParam_ = TowerParameterTable.getInstance().getParam( stageIdx_ );
 			parent_.tower_ = Instantiate<Tower>( parent_.towerPrefab_ );
 			parent_.tower_.transform.parent = parent_.root_.transform;
 			parent_.tower_.transform.localPosition = Vector3.zero;
