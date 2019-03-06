@@ -32,10 +32,12 @@ public class GameManager : MonoBehaviour {
 	class Title : State< GameManager > {
 		public Title(GameManager parent) : base( parent ) { }
 		protected override State innerInit() {
+			SoundAccessor.getInstance().stopBGM();
 			title_ = Instantiate<TitleManager>( parent_.titlePrefab_ );
 			title_.transform.position = Vector3.zero;
-			title_.setup( parent_.fader_ );
-			title_.FinishCallback = () => {
+			title_.setup( parent_.fader_, parent_.initLevel_ );
+			title_.FinishCallback = ( selectStageIdx ) => {
+				parent_.initLevel_ = selectStageIdx;
 				setNextState( new GameIntro( parent_ ) );
 				Destroy( title_.gameObject );
 			};

@@ -28,6 +28,7 @@ public class GameCore : MonoBehaviour {
 	[SerializeField]
 	ScoreManager scoreManagerPrefab_;
 
+
 	public System.Action AllFinishCallback { set { allFinishCallback_ = value; } }
 
 	public class Param {
@@ -61,7 +62,10 @@ public class GameCore : MonoBehaviour {
 
 		setElectricPos( 0.0f );
 
-		state_ = new CreateTower(this, initLevel );
+		if ( initLevel > TowerParameterTable.getInstance().getParamNum() )
+			state_ = new Ending( this );
+		else
+			state_ = new CreateTower(this, initLevel );
 	}
 
 	// 電気ニードル位置を設定
@@ -230,8 +234,20 @@ public class GameCore : MonoBehaviour {
 		public Ending(GameCore parent) : base( parent ) {
 		}
 		protected override State innerInit() {
-			parent_.player_.destroy();
-			Debug.Log( "Game Over..." );
+			Debug.Log( "Ending!" );
+			GlobalState.wait( 3.0f, () => {
+				parent_.stageTextEffect_.hideLevelFrame();
+				SoundAccessor.getInstance().playBGM( "Ending" );
+				parent_.stageTextEffect_.getCongratulation().gameObject.SetActive( true );
+				GlobalState.wait( 10.0f, () => {
+					return false;
+				} ).oneFrame( () => {
+					parent_.fader_.to( 1.0f, 2.0f, () => {
+						parent_.allFinish();
+					} );
+				} );
+				return false;
+			} );
 			return null;
 		}
 		protected override State innerUpdate() {

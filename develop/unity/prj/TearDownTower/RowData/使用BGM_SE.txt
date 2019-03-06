@@ -4,6 +4,7 @@ Polygonic_Artifact.mp3	Polygonic Artifact	MAKOOTO
 Dark_Survival_2.mp3	Dark Survival	MAKOOTO
 BurningRed.mp3	バーニングレッド	かずち
 SmashCrow.mp3	スマッシュクロー	かずち
+Fnf_Knight.mp3	騎士のファンファーレ	音楽素材グラネタ
 
 ● SE
 shoot1.mp3	シューティング１	無料効果音で遊ぼう！

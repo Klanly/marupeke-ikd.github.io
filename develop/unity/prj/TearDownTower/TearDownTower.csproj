@@ -259,6 +259,7 @@
     <Compile Include="Assets\Codes\common\UIIntroAnimation.cs" />
     <Compile Include="Assets\Codes\common\UIIntroColorAnimation.cs" />
     <Compile Include="Assets\Codes\common\UIIntroTextColorAnimation.cs" />
+    <Compile Include="Assets\Codes\Congratulations.cs" />
     <Compile Include="Assets\Codes\Electric.cs" />
     <Compile Include="Assets\Codes\ElectricNeedle.cs" />
     <Compile Include="Assets\Codes\Fader.cs" />
