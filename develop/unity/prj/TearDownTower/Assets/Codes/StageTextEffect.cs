@@ -10,6 +10,9 @@ public class StageTextEffect : MonoBehaviour {
 	[SerializeField]
 	TextMesh levelText_;
 
+	[SerializeField]
+	GameOver gameOver_;
+
 	public void reset( int level ) {
 		level_ = level;
 		int maxLevel = TowerParameterTable.getInstance().getParamNum();
@@ -20,6 +23,10 @@ public class StageTextEffect : MonoBehaviour {
 			text_.text = string.Format( "Tower {0:00}", level );
 
 		state_ = new Intro( this );
+	}
+
+	public GameOver getGameOver() {
+		return gameOver_;
 	}
 
 	private void Awake() {

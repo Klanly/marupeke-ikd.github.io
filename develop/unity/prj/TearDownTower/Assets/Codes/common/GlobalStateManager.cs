@@ -164,6 +164,20 @@ public class GlobalState : GlobalStateBase
         return nextState_;
     }
 
+	// 待つ
+	public GlobalState wait( float sec ) {
+		float curSec = 0.0f;
+		nextState_ = new GlobalState(
+			() => {
+				curSec += Time.deltaTime;
+				return ( curSec < sec );
+			},
+			null
+		);
+		nextState_.preState_ = this;
+		return nextState_;
+	}
+
 	// 1フレーム
 	public GlobalState oneFrame(System.Action action) {
 		nextState_ = new GlobalState(

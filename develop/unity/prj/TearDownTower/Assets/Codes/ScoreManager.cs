@@ -12,6 +12,10 @@ public class ScoreManager : MonoBehaviour {
 	[SerializeField]
 	UnityEngine.UI.Text scoreText_;
 
+	public void setActive( bool isActive ) {
+		scoreText_.gameObject.SetActive( isActive );
+	}
+
 	public void breakBlocks( int colNum, int rowNum, int chainCount ) {
 		var curScore = score_.getAim();
 		score_.setAim( curScore + colNum * rowNum * blockScore_ * chainCount );

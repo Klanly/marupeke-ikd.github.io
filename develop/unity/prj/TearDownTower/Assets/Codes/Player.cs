@@ -72,15 +72,14 @@ public class Player : MonoBehaviour {
 	// プレイヤー位置を初期化
 	void resetPlayerPos( System.Action posFinishCallback ) {
 
-		// カメラ位置
-		var cpos = camera_.transform.position;
-		camera_.transform.position = cpos.normalized * ( radius_ + param_.cameraRefDist_ );
-
 		var initQ = Quaternion.identity;
 		var q = transform.localRotation;
+		var initPos = new Vector3( 0.0f, 0.0f, 0.0f );
+		var pos = transform.localPosition;
 		GlobalState.time( 0.75f, (sec, t) => {
 			// プレイヤー位置（回転位置）
 			transform.localRotation = Lerps.Quaternion.easeOut( q, initQ, t );
+			transform.localPosition = Lerps.Vec3.easeOut( pos, initPos, t );
 			return true;
 		} ).finish(()=> {
 			curPosIdx_ = 0;
@@ -170,6 +169,7 @@ public class Player : MonoBehaviour {
 			// [z]で(curPosIdx_, curHeightPos_)ブロックへ弾発射
 			if ( Input.GetKeyDown( KeyCode.Z ) == true ) {
 				parent_.tower_.insertBlock( parent_.curPosIdx_, curHeightPos_ );
+				SoundAccessor.getInstance().playSE( "SE_Shoot01" );
 			}
 			return this;
 		}
@@ -186,6 +186,8 @@ public class Player : MonoBehaviour {
 			parent_.detonate_.transform.parent = null;
 			parent_.detonate_.SetActive( true );
 			parent_.playerModel_.gameObject.SetActive( false );
+
+			SoundAccessor.getInstance().playSE( "SE_Explosion01" );
 			return null;
 		}
 	}

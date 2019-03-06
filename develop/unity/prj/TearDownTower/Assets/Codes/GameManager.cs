@@ -8,32 +8,70 @@ public class GameManager : MonoBehaviour {
 	GameCore corePrefab_;
 
 	[SerializeField]
-	ScoreManager scoreManager_;
+	TitleManager titlePrefab_;
 
+	[SerializeField]
+	Fader fader_;
+	
 	[SerializeField]
 	int initLevel_ = 1;
 
-	[SerializeField]
-	StageTextEffect stageTextEffect_;
-
-	// セットアップ
-	public void setup( GameCore.Param coreParam ) {
-		core_ = Instantiate<GameCore>( corePrefab_ );
-		core_.setup( coreParam, scoreManager_, stageTextEffect_, initLevel_ );
-	}
 
 	// Use this for initialization
 	void Start () {
-		var coreParam = new GameCore.Param();
-		var towerParam = new Tower.Param();
-		coreParam.playerParam_.transSec_ = 0.1f;
-		setup( coreParam );
+		state_ = new Title( this );
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if ( state_ != null ) {
+			state_ = state_.update();
+		}
 	}
 
-	GameCore core_;
+	class Title : State< GameManager > {
+		public Title(GameManager parent) : base( parent ) { }
+		protected override State innerInit() {
+			title_ = Instantiate<TitleManager>( parent_.titlePrefab_ );
+			title_.transform.position = Vector3.zero;
+			title_.setup( parent_.fader_ );
+			title_.FinishCallback = () => {
+				setNextState( new GameIntro( parent_ ) );
+				Destroy( title_.gameObject );
+			};
+			return this;
+		}
+		TitleManager title_;
+	}
+
+	class GameIntro : State< GameManager > {
+		public GameIntro(GameManager parent) : base( parent ) { }
+		protected override State innerInit() {
+			var coreParam = new GameCore.Param();
+			coreParam.playerParam_.transSec_ = 0.1f;
+			core_ = Instantiate<GameCore>( parent_.corePrefab_ );
+			core_.setup( coreParam, parent_.initLevel_, parent_.fader_ );
+
+			parent_.fader_.to( 0.0f, 0.75f );
+
+			return new GameIdle( parent_, core_ );
+		}
+		GameCore core_;
+	}
+
+	class GameIdle : State<GameManager> {
+		public GameIdle(GameManager parent, GameCore core ) : base( parent ) {
+			core_ = core;
+		}
+		protected override State innerInit() {
+			core_.AllFinishCallback = () => {
+				setNextState( new Title( parent_ ) );
+				Destroy( core_.gameObject );
+			};
+			return this;
+		}
+		GameCore core_;
+	}
+
+	State state_;
 }

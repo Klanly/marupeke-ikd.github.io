@@ -36,6 +36,7 @@ public class TowerParameterTable : Table {
 		param.brokenIntervalSec_ = values[ "brokenIntervalSec" ].fVal_;
 		param.blockFallSec_ = values[ "blockFallSec" ].fVal_;
 		param.electricNeedleSpeed_ = values[ "electricNeedleSpeed" ].fVal_;
+		param.bgm_ = values[ "bgm" ].sVal_;
 		params_[ dataIndex_ ] = param;
 		dataIndex_++;
 	}

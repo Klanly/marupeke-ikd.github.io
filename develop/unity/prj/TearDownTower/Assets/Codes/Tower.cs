@@ -21,6 +21,7 @@ public class Tower : MonoBehaviour {
 		public float brokenIntervalSec_ = 0.1f;
 		public float blockFallSec_ = 0.2f;
 		public float electricNeedleSpeed_ = 20.0f;      // 最遠位置から最近位置に辿り着くまでの秒数
+		public string bgm_;			// BGM
 	}
 
 	// 全部消したコールバック
@@ -189,6 +190,10 @@ public class Tower : MonoBehaviour {
 				allBlockDeletedCallback_ = null;
 			}
 
+			// ドスン！の音
+			if ( curMaxHeight_ > 0 )
+				SoundAccessor.getInstance().playSE( "SE_BreakDown", 0.15f );
+
 			// 演出終了
 			//  さらに上のグループが揃っていたら連鎖演出
 			GlobalState.wait( param_.blockFallSec_, () => {
@@ -203,6 +208,10 @@ public class Tower : MonoBehaviour {
 		if ( breakBlocksCallback_ != null )
 			breakBlocksCallback_( param_.colNum_, orderTopRowIndex + 1, chainCount );
 
+		// 破壊SE
+		//  弱いので2つ重ねる
+		SoundAccessor.getInstance().playSE( "SE_Break01" );
+		SoundAccessor.getInstance().playSE( "SE_Break02" );
 		return true;
 	}
 
@@ -271,7 +280,7 @@ public class Tower : MonoBehaviour {
 						break;
 				}
 				for ( int c = 0; c < param.colNum_; ++c ) {
-					int cnum = Random.Range( 1, num + 1 );
+					int cnum = cnums[ c ];
 					for ( int e = 0; e < cnum; ++e ) {
 						int hp = parent_.blockCols_[ c ].Count;
 						var block = Instantiate<FrameBlock>( parent_.blockPrefab_ );
@@ -295,6 +304,9 @@ public class Tower : MonoBehaviour {
 
 			// 最大高を更新
 			parent_.updateCurMaxHeight();
+
+			// セット音
+			SoundAccessor.getInstance().playSE( "SE_TowerSet" );
 			return null;
 		}
 	}

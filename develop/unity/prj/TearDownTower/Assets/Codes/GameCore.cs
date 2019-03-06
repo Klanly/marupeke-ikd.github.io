@@ -23,7 +23,12 @@ public class GameCore : MonoBehaviour {
 	float curElectricRate_ = 0.0f;
 
 	[SerializeField]
-	ScoreManager scoreManager_;
+	StageTextEffect stageTextEffectPrefab_;
+
+	[SerializeField]
+	ScoreManager scoreManagerPrefab_;
+
+	public System.Action AllFinishCallback { set { allFinishCallback_ = value; } }
 
 	public class Param {
 		public Player.Param playerParam_ = new Player.Param();
@@ -31,10 +36,15 @@ public class GameCore : MonoBehaviour {
 		public float blockHeight_ = 1.618f;
 	}
 
-	public void setup( Param param, ScoreManager scoreManager, StageTextEffect stageTextEffect, int initLevel ) {
+	public void setup( Param param, int initLevel, Fader fader ) {
+		fader_ = fader;
 		param_ = param;
-		scoreManager_ = scoreManager;
-		stageTextEffect_ = stageTextEffect;
+		scoreManager_ = Instantiate< ScoreManager >( scoreManagerPrefab_);
+		stageTextEffect_ = Instantiate< StageTextEffect >( stageTextEffectPrefab_ );
+		gameOver_ = stageTextEffect_.getGameOver();
+
+		scoreManager_.transform.parent = transform;
+		stageTextEffect_.transform.parent = transform;
 
 		// プレイヤー
 		player_.setup( param.playerParam_ );
@@ -64,6 +74,10 @@ public class GameCore : MonoBehaviour {
 		curElectricRate_ = rate;
 		electricNeedles_[ 0 ].setRot( -90.0f * ( 1.0f + rate * 0.97f ) );
 		electricNeedles_[ 1 ].setRot( 90.0f * ( 1.0f + rate * 0.97f ) );
+	}
+
+	void allFinish() {
+		allFinishCallback_();
 	}
 
 	// Use this for initialization
@@ -136,6 +150,9 @@ public class GameCore : MonoBehaviour {
 			parent_.tower_.AllBlockDeletedCallback = () => {
 				setNextState( new TowerClear( parent_ ) );
 			};
+
+			// BGMスタート
+			SoundAccessor.getInstance().playBGM( parent_.tower_.getParam().bgm_ );
 			return null;
 		}
 		protected override State innerUpdate() {
@@ -148,7 +165,7 @@ public class GameCore : MonoBehaviour {
 
 			// rate >= 1.0fでゲームオーバー
 			if ( rate >= 1.0f )
-				return new GameOver( parent_ );
+				return new GameOverState( parent_ );
 
 			return this;
 		}
@@ -176,13 +193,41 @@ public class GameCore : MonoBehaviour {
 		protected override State innerInit() {
 			Debug.Log( "Tower clear!" );
 
+			// 最後のタワーだったらエンディングへ
+			if ( parent_.tower_.getParam().level_ == TowerParameterTable.getInstance().getParamNum() ) {
+				return new Ending( parent_ );
+			}
+
 			// 次のタワーへ
 			return new CreateTower( parent_, parent_.tower_.getParam().level_ + 1 );
 		}
 	}
 
-	class GameOver : State< GameCore > {
-		public GameOver(GameCore parent) : base( parent ) {
+	class GameOverState : State< GameCore > {
+		public GameOverState(GameCore parent) : base( parent ) {
+		}
+		protected override State innerInit() {
+			Debug.Log( "Game Over..." );
+
+			// BGMストップ
+			SoundAccessor.getInstance().stopBGM();
+
+			parent_.player_.destroy();
+
+			GlobalState.wait( 1.0f, () => {
+				parent_.gameOver_.gameObject.SetActive( true );
+				return false;
+			} ).wait( 5.0f ).oneFrame(()=> {
+				parent_.fader_.to( 1.0f, 2.0f, () => {
+					parent_.allFinish();
+				} );
+			} );
+			return this;
+		}
+	}
+
+	class Ending : State< GameCore > {
+		public Ending(GameCore parent) : base( parent ) {
 		}
 		protected override State innerInit() {
 			parent_.player_.destroy();
@@ -196,7 +241,11 @@ public class GameCore : MonoBehaviour {
 
 	State state_;
 	Param param_;
+	Fader fader_;
 	Tower tower_;
 	ElectricNeedle[] electricNeedles_ = new ElectricNeedle[2];
 	StageTextEffect stageTextEffect_;
+	ScoreManager scoreManager_;
+	GameOver gameOver_;
+	System.Action allFinishCallback_;
 }

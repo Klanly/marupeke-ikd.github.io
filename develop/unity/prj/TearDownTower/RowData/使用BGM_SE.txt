@@ -1,0 +1,13 @@
+● BGM
+heavymachine.mp3	ヘヴィ・マシーン	shimtone
+Polygonic_Artifact.mp3	Polygonic Artifact	MAKOOTO
+Dark_Survival_2.mp3	Dark Survival	MAKOOTO
+BurningRed.mp3	バーニングレッド	かずち
+SmashCrow.mp3	スマッシュクロー	かずち
+
+● SE
+shoot1.mp3	シューティング１	無料効果音で遊ぼう！
+Break01.mp3	衝突・衝撃（鉄）06	On-Jin
+Break02.mp3	銃火器・大砲07	On-Jin
+BreakDown01_modify.mp3	衝突・衝撃（鉄）05	On-Jin
+TowerSet.wav	雷04	魔王魂

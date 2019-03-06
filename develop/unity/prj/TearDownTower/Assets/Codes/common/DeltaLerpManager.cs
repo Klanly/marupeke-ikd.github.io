@@ -366,4 +366,57 @@ public class DeltaLerp {
 
 		System.Func<bool> innerUpdate_;
 	}
+
+
+	public class Clr : Result {
+		protected Clr(System.Func<bool> innerUpdate) {
+			innerUpdate_ = innerUpdate;
+		}
+
+		// 経過時刻更新と補間計算のテンプレート
+		static bool updateTime(ref float preSec, float sec, System.Func<float, float, float, Color, bool> deltaCallback, System.Action finishCallback, System.Func<float, float, Color> calcDelta) {
+			float dt = Time.deltaTime;
+			float t = 0.0f;
+			bool bFinish = false;
+			float curSec = preSec;
+			if ( curSec + dt >= sec ) {
+				dt = sec - curSec;
+				curSec = sec;
+				t = 1.0f;
+				bFinish = true;
+			} else {
+				curSec += dt;
+				t = curSec / sec;
+			}
+			bool res = deltaCallback( curSec, t, dt, calcDelta( preSec, dt ) );
+			preSec = curSec;
+			if ( res == false || bFinish == true ) {
+				if ( finishCallback != null )
+					finishCallback();
+				return false;
+			}
+			return true;    // 継続
+		}
+
+		// 線形補間
+		//  len: 補間の長さ
+		//  sec: 補間時間（秒）
+		//  deltaCallback< sec, t, dt, delta >
+		//   sec  : 経過秒
+		//   t    : 経過補間係数（0～1）
+		//   dt   : 前回からの差分時間
+		//   delta: 差分値
+		static public Result linear(Color len, float sec, System.Func<float, float, float, Color, bool> deltaCallback, System.Action finishCallback = null) {
+			float preSec = 0.0f;
+			var res = new Clr( () => {
+				return updateTime( ref preSec, sec, deltaCallback, finishCallback, (_, _dt) => {
+					return len / sec * _dt;
+				} );
+			} );
+			DeltaLerpUpdater.getInstance().add( res );
+			return res;
+		}
+
+		System.Func<bool> innerUpdate_;
+	}
 }

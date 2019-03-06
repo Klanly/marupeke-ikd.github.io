@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// 移動する値
+// 移動する値(Long型)
 //
 //  aimに向かうように値が動的に移動していきます
 //  値移動中にsetAimメソッドに値を連続で設定すると移動量が合成されますが、最終的にはエイム値に辿り着きます。
