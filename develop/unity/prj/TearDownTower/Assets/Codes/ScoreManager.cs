@@ -40,7 +40,7 @@ public class ScoreManager : MonoBehaviour {
 	}
 
 	private void OnGUI() {
-		GUI.Label( new Rect( 0, 50, 300, 60 ), "score: " + score_.getCurVal() );
+		// GUI.Label( new Rect( 0, 50, 300, 60 ), "score: " + score_.getCurVal() );
 	}
 
 	MoveValueLong score_;
