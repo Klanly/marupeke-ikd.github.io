@@ -93,6 +93,10 @@ public class DeltaLerp {
 		//   dt   : 前回からの差分時間
 		//   delta: 差分値
 		static public Result linear( float len, float sec, System.Func<float, float, float, float, bool> deltaCallback, System.Action finishCallback = null ) {
+			if ( sec == 0.0f ) {
+				deltaCallback( 0.0f, 1.0f, 0.0f, len );
+				return null;
+			}
 			float preSec = 0.0f;
 			var res = new Float( () => {
 				return updateTime( ref preSec, len, sec, deltaCallback, finishCallback, (_, _dt) => {
@@ -407,6 +411,10 @@ public class DeltaLerp {
 		//   dt   : 前回からの差分時間
 		//   delta: 差分値
 		static public Result linear(Color len, float sec, System.Func<float, float, float, Color, bool> deltaCallback, System.Action finishCallback = null) {
+			if ( sec <= 0.0f ) {
+				deltaCallback( 0.0f, 1.0f, 0.0f, len );
+				return null;
+			}
 			float preSec = 0.0f;
 			var res = new Clr( () => {
 				return updateTime( ref preSec, sec, deltaCallback, finishCallback, (_, _dt) => {

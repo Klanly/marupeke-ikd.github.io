@@ -235,6 +235,7 @@
     <Compile Include="Assets\codes\common\Bezier.cs" />
     <Compile Include="Assets\codes\common\CollideUtil.cs" />
     <Compile Include="Assets\codes\common\DeltaLerpManager.cs" />
+    <Compile Include="Assets\codes\common\Fader.cs" />
     <Compile Include="Assets\codes\common\GlobalStateManager.cs" />
     <Compile Include="Assets\codes\common\ImageBillboarding.cs" />
     <Compile Include="Assets\codes\common\IntroAnimation.cs" />
@@ -245,6 +246,7 @@
     <Compile Include="Assets\codes\common\mesh\GLLineTrail.cs" />
     <Compile Include="Assets\codes\common\mesh\TorusMesh.cs" />
     <Compile Include="Assets\codes\common\MiniJSON.cs" />
+    <Compile Include="Assets\codes\common\MoveValueColor.cs" />
     <Compile Include="Assets\codes\common\MoveValueFloat.cs" />
     <Compile Include="Assets\codes\common\MoveValueLong.cs" />
     <Compile Include="Assets\codes\common\OnCollideCallback.cs" />

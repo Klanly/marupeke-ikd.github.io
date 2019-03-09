@@ -14,6 +14,9 @@ public class Test : MonoBehaviour {
 		GlobalState.parallel( states.ToArray() ).finish( () => {
 			Debug.Log( "Finish All" );
 		} );
+
+		FaderManager.Fader.setColor( Color.red, 0.0f );
+		FaderManager.Fader.to( 1.0f, 3.0f );
 	}
 	
 	// Update is called once per frame
