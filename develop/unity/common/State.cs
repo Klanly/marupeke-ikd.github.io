@@ -46,3 +46,11 @@ public class State {
 
     State nextState_ = null;
 }
+
+// 親保持サブステート
+public class State<T> : State {
+	public State(T parent) {
+		parent_ = parent;
+	}
+	protected T parent_;
+}
