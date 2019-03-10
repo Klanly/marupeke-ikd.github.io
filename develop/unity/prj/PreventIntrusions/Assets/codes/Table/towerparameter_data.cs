@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class C:\IKDDocs2\Programs\git_marupeke_io\develop\unity\prj\PreventIntrusions\RowData\Table\towerparameter_data : Table {
-	public static C:\IKDDocs2\Programs\git_marupeke_io\develop\unity\prj\PreventIntrusions\RowData\Table\towerparameter_data getInstance() {
+public class Towerparameter_data : Table {
+	public static Towerparameter_data getInstance() {
 		return instance_;
 	}
-	C:\IKDDocs2\Programs\git_marupeke_io\develop\unity\prj\PreventIntrusions\RowData\Table\towerparameter_data() {
-		create( "Table/C:\IKDDocs2\Programs\git_marupeke_io\develop\unity\prj\PreventIntrusions\RowData\Table\towerparameter_data" );
+	Towerparameter_data() {
+		create( "Table/towerparameter_data" );
 	}
 
 	// 1レコードを格納
@@ -62,7 +62,7 @@ public class C:\IKDDocs2\Programs\git_marupeke_io\develop\unity\prj\PreventIntru
 		public string bgm_;
 
 	}
-	static C:\IKDDocs2\Programs\git_marupeke_io\develop\unity\prj\PreventIntrusions\RowData\Table\towerparameter_data instance_ = new C:\IKDDocs2\Programs\git_marupeke_io\develop\unity\prj\PreventIntrusions\RowData\Table\towerparameter_data();
+	static Towerparameter_data instance_ = new Towerparameter_data();
 	Dictionary< string, Param > params_ = new Dictionary<string, Param>();
 	List<Param> paramList_ = new List<Param>();
 }

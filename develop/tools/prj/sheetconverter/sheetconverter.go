@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"unicode"
@@ -26,8 +27,13 @@ func main() {
 		os.Exit(-1)
 	}
 	if *outputTSVFileName == "" {
-		*outputTSVFileName = strings.Split(*xlsxFileName, ".")[0]
+		_, fileName := filepath.Split(*xlsxFileName)
+		*outputTSVFileName = strings.Split(fileName, ".")[0]
+		fmt.Println("No set outputTSVFileName fileName: " + fileName)
+	} else {
+		*outputTSVFileName = strings.Split(*outputTSVFileName, ".")[0]
 	}
+
 	excel, err := xlsx.OpenFile(*xlsxFileName)
 	if err != nil {
 		fmt.Printf(err.Error())
