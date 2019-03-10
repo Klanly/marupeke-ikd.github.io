@@ -262,6 +262,7 @@
     <Compile Include="Assets\codes\common\UIIntroColorAnimation.cs" />
     <Compile Include="Assets\codes\common\UIIntroTextColorAnimation.cs" />
     <Compile Include="Assets\codes\Test.cs" />
+    <Compile Include="Assets\codes\Towerparameter_data.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

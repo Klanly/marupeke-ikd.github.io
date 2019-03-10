@@ -17,6 +17,8 @@ public class Test : MonoBehaviour {
 
 		FaderManager.Fader.setColor( Color.red, 0.0f );
 		FaderManager.Fader.to( 1.0f, 3.0f );
+
+		var param = Towerparameter_data.getInstance().getParamFromIndex( 0 );
 	}
 	
 	// Update is called once per frame
