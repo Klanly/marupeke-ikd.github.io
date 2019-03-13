@@ -261,8 +261,13 @@
     <Compile Include="Assets\codes\common\UIIntroAnimation.cs" />
     <Compile Include="Assets\codes\common\UIIntroColorAnimation.cs" />
     <Compile Include="Assets\codes\common\UIIntroTextColorAnimation.cs" />
+    <Compile Include="Assets\codes\EndingManager.cs" />
+    <Compile Include="Assets\codes\GameManager.cs" />
+    <Compile Include="Assets\codes\GameOverManager.cs" />
+    <Compile Include="Assets\codes\StageManager.cs" />
     <Compile Include="Assets\codes\Table\towerparameter_data.cs" />
     <Compile Include="Assets\codes\Test.cs" />
+    <Compile Include="Assets\codes\TitleManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
