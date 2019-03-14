@@ -232,6 +232,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\codes\Barricade.cs" />
     <Compile Include="Assets\codes\common\Bezier.cs" />
     <Compile Include="Assets\codes\common\CollideUtil.cs" />
     <Compile Include="Assets\codes\common\DeltaLerpManager.cs" />
@@ -262,8 +263,11 @@
     <Compile Include="Assets\codes\common\UIIntroColorAnimation.cs" />
     <Compile Include="Assets\codes\common\UIIntroTextColorAnimation.cs" />
     <Compile Include="Assets\codes\EndingManager.cs" />
+    <Compile Include="Assets\codes\Field.cs" />
+    <Compile Include="Assets\codes\FieldPlate.cs" />
     <Compile Include="Assets\codes\GameManager.cs" />
     <Compile Include="Assets\codes\GameOverManager.cs" />
+    <Compile Include="Assets\codes\Player.cs" />
     <Compile Include="Assets\codes\StageManager.cs" />
     <Compile Include="Assets\codes\Table\towerparameter_data.cs" />
     <Compile Include="Assets\codes\Test.cs" />
