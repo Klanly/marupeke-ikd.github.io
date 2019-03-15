@@ -23,6 +23,9 @@ public class Field : MonoBehaviour {
 	public void setup(Param param) {
 		param_ = param;
 
+		hBarricades_ = new Barricade[ param_.region_.x, param_.region_.y + 1 ];
+		vBarricades_ = new Barricade[ param_.region_.x + 1, param_.region_.y ];
+
 		// フィールドプレート敷き詰め
 		for ( int y = 0; y < param_.region_.y; ++y ) {
 			for ( int x = 0; x < param_.region_.x; ++x ) {
@@ -39,10 +42,13 @@ public class Field : MonoBehaviour {
 			var barri = Instantiate<Barricade>( barricadePrefab_ );
 			barri.transform.parent = fieldRoot_;
 			barri.transform.localPosition = new Vector3( 0.5f + x, 0.0f, idx );
+			hBarricades_[ x, idx ] = barri;
+
 			idx = ( idx + Random.Range( 1, param_.region_.y ) ) % param_.region_.y;
 			barri = Instantiate<Barricade>( barricadePrefab_ );
 			barri.transform.parent = fieldRoot_;
 			barri.transform.localPosition = new Vector3( 0.5f + x, 0.0f, idx );
+			hBarricades_[ x, idx ] = barri;
 		}
 		for ( int y = 0; y < param_.region_.y; ++y ) {
 			int idx = Random.Range( 0, param_.region_.x + 1 );
@@ -50,14 +56,38 @@ public class Field : MonoBehaviour {
 			barri.transform.parent = fieldRoot_;
 			barri.transform.localPosition = new Vector3( idx, 0.0f, 0.5f + y );
 			barri.transform.localRotation = Quaternion.Euler( 0.0f, 90.0f, 0.0f );
+			vBarricades_[ idx, y ] = barri;
+
 			idx = ( idx + Random.Range( 1, param_.region_.x ) ) % param_.region_.x;
 			barri = Instantiate<Barricade>( barricadePrefab_ );
 			barri.transform.parent = fieldRoot_;
 			barri.transform.localPosition = new Vector3( idx, 0.0f, 0.5f + y );
 			barri.transform.localRotation = Quaternion.Euler( 0.0f, 90.0f, 0.0f );
+			vBarricades_[ idx, y ] = barri;
 		}
 	}
 
+	public Barricade getBarricadeOnCell( Vector2Int pos, KeyCode key ) {
+		if ( pos.x < 0 || pos.y < 0 || pos.x >= param_.region_.x || pos.y >= param_.region_.y )
+			return null;
+		switch ( key ) {
+		case KeyCode.RightArrow: return vBarricades_[ pos.x + 1, pos.y ];
+		case KeyCode.LeftArrow: return vBarricades_[ pos.x, pos.y ];	
+		case KeyCode.UpArrow: return hBarricades_[ pos.x, pos.y + 1 ];
+		case KeyCode.DownArrow: return hBarricades_[ pos.x, pos.y ];	
+		}
+		return null;
+	}
+
+	// プレート横数を取得
+	public int getWidth() {
+		return param_.region_.x;
+	}
+
+	// プレート縦数を取得
+	public int getHeight() {
+		return param_.region_.y;
+	}
 	// Use this for initialization
 	void Start () {
 		
@@ -68,5 +98,11 @@ public class Field : MonoBehaviour {
 		
 	}
 
+	class Edge {
+		public Barricade barricade_ = null;	// L,R,D,U
+	}
+
+	Barricade[,] hBarricades_;	// 水平バリケード
+	Barricade[,] vBarricades_;	// 垂直バリケード
 	Param param_;
 }

@@ -34,6 +34,8 @@ public class StageManager : MonoBehaviour {
 		// プレイヤー
 		player_ = Instantiate<Player>( playerPrefab_ );
 		player_.transform.parent = field_.transform;
+		player_.setup( field_ );
+		player_.setPos( new Vector2Int( 0, 0 ) );
 	}
 
 	// ステージインデックスを取得
@@ -70,6 +72,7 @@ public class StageManager : MonoBehaviour {
 	class Idle : State<StageManager> {
 		public Idle(StageManager parent) : base( parent ) { }
 		protected override State innerUpdate() {
+/*
 			if ( Input.GetKey( KeyCode.Z ) == true ) {
 				FaderManager.Fader.to( 1.0f, 3.0f, () => {
 					if ( parent_.finishCallback_ != null ) {
@@ -80,6 +83,7 @@ public class StageManager : MonoBehaviour {
 			} else if ( Input.GetKey( KeyCode.G ) == true ) {
 				return new GameOver( parent_ );
 			}
+*/
 			return this;
 		}
 	}
