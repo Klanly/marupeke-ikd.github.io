@@ -75,14 +75,20 @@ public class Player : MonoBehaviour {
 		protected override State innerUpdate() {
 			// 上下左右のキー押し下げチェック
 			KeyCode key = KeyCode.None;
+			int ix = 0;
+			int iy = 0;
 			if ( Input.GetKey( KeyCode.LeftArrow ) == true && parent_.pos_.x > 0 ) {
 				key = KeyCode.LeftArrow;
+				ix = -1;
 			} else if ( Input.GetKey( KeyCode.RightArrow ) == true && parent_.pos_.x + 1 < parent_.field_.getWidth() ) {
 				key = KeyCode.RightArrow;
+				ix = 1;
 			} else if ( Input.GetKey( KeyCode.UpArrow ) == true && parent_.pos_.y + 1 < parent_.field_.getHeight() ) {
 				key = KeyCode.UpArrow;
+				iy = 1;
 			} else if ( Input.GetKey( KeyCode.DownArrow ) == true && parent_.pos_.y > 0 ) {
 				key = KeyCode.DownArrow;
+				iy = -1;
 			}
 			if ( key != KeyCode.None ) {
 				// フィールド上でのインタラクティブチェック
@@ -92,6 +98,13 @@ public class Player : MonoBehaviour {
 				// バリケードが無ければ単純にそちらの方向へ移動する遷移へ
 				if ( baricade == null ) {
 					return new Move( parent_, key );
+				}
+
+				// 進行方向の次の所にバリケードが無く、
+				// [Z]キーを押していたらバリケード押しモードへ
+				Barricade nextBarricade = parent_.field_.getBarricadeOnCell( parent_.pos_ + new Vector2Int( ix, iy ), key );
+				if ( nextBarricade == null && Input.GetKey(KeyCode.Z) == true ) {
+					return new PushBarricadeWait( parent_, key );
 				}
 			}
 			return this;
@@ -122,6 +135,65 @@ public class Player : MonoBehaviour {
 			return this;
 		}
 		KeyCode key_;
+		float x_ = 0.0f;
+		float z_ = 0.0f;
+		int ix_ = 0;
+		int iy_ = 0;
+	}
+
+	class PushBarricadeWait : State< Player > {
+		public PushBarricadeWait(Player parent, KeyCode key ) : base( parent ) {
+			key_ = key;
+		}
+		protected override State innerInit() {
+			// 指定時間押し続けていたら押せる
+			bool bPush = true;
+			GlobalState.time( 0.15f, (sec, t) => {
+				if ( Input.GetKey( key_ ) == false ) {
+					setNextState( new Idle( parent_ ) );
+					return false;
+				}
+				return true;
+			} ).finish( ()=> {
+				// 押せる！
+				if ( bPush == true )
+					setNextState( new PushBarricade( parent_, key_ ) );
+			} );
+			return this;
+		}
+		KeyCode key_;
+	}
+
+	class PushBarricade : State< Player > {
+		public PushBarricade(Player parent, KeyCode key ) : base( parent ) {
+			key_ = key;
+			switch ( key_ ) {
+				case KeyCode.LeftArrow: x_ = -1.0f; ix_ = -1; break;
+				case KeyCode.RightArrow: x_ = 1.0f; ix_ = 1; break;
+				case KeyCode.DownArrow: z_ = -1.0f; iy_ = -1; break;
+				case KeyCode.UpArrow: z_ = 1.0f; iy_ = 1; break;
+			}
+		}
+		protected override State innerInit() {
+			// 指定時間バリケードを一マス押す
+			if ( parent_.field_.moveBarricade( parent_.pos_, key_, 0.35f ) == false ) {
+				setNextState( new Idle( parent_ ) );    // ???
+				return this;
+			}
+			// 一緒にプレイヤーも動かす
+			// 指定の方向に単純移動
+			Vector3 len = new Vector3( 1.0f * x_, 0.0f, 1.0f * z_ );
+			var pos = parent_.transform.localPosition;
+			GlobalState.time( 0.35f, (sec, t) => {
+				parent_.transform.localPosition = pos + Lerps.Vec3.linear( Vector3.zero, len, t );
+				return true;
+			} ).finish( () => {
+				parent_.setPos( parent_.getPos() + new Vector2Int( ix_, iy_ ) );
+				setNextState( new Idle( parent_ ) );
+			} );
+			return this;
+		}
+		KeyCode key_ = KeyCode.None;
 		float x_ = 0.0f;
 		float z_ = 0.0f;
 		int ix_ = 0;

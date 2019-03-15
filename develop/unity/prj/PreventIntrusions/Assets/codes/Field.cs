@@ -79,6 +79,55 @@ public class Field : MonoBehaviour {
 		return null;
 	}
 
+	// バリケードを動かす
+	public bool moveBarricade(Vector2Int pos, KeyCode key, float sec ) {
+		var barricade = getBarricadeOnCell( pos, key );
+		if ( barricade == null )
+			return false;
+		float x = 0.0f;
+		float y = 0.0f;
+		System.Action offsetter = null;
+		switch ( key ) {
+		case KeyCode.LeftArrow:
+				x = -1.0f;
+				offsetter = () => {
+					vBarricades_[ pos.x, pos.y ] = null;
+					vBarricades_[ pos.x - 1, pos.y ] = barricade;
+				};
+				break;
+		case KeyCode.RightArrow:
+				x = 1.0f;
+				offsetter = () => {
+					vBarricades_[ pos.x + 1, pos.y ] = null;
+					vBarricades_[ pos.x + 2, pos.y ] = barricade;
+				};
+				break;
+		case KeyCode.DownArrow:
+				y = -1.0f;
+				offsetter = () => {
+					hBarricades_[ pos.x, pos.y ] = null;
+					hBarricades_[ pos.x, pos.y - 1 ] = barricade;
+				};
+				break;
+		case KeyCode.UpArrow:
+				y = 1.0f;
+				offsetter = () => {
+					hBarricades_[ pos.x, pos.y + 1 ] = null;
+					hBarricades_[ pos.x, pos.y + 2 ] = barricade;
+				};
+				break;
+		}
+		var len = new Vector3( x, 0.0f, y );
+		var start = barricade.transform.localPosition;
+		var end = start + len;
+		GlobalState.time( sec, (_sec, t) => {
+			barricade.transform.localPosition = Lerps.Vec3.linear( start, end, t );
+			offsetter();
+			return true;
+		} );
+		return true;
+	}
+
 	// プレート横数を取得
 	public int getWidth() {
 		return param_.region_.x;
