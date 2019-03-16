@@ -32,15 +32,22 @@ public class StageManager : MonoBehaviour {
 		field_.setup( fieldParam );
 
 		// プレイヤー
+		var playerParam = new Player.Param();
+		playerParam.moveSec_ = 0.1f;
 		player_ = Instantiate<Player>( playerPrefab_ );
 		player_.transform.parent = field_.transform;
-		player_.setup( field_ );
+		player_.setup( field_, playerParam );
 		player_.setPos( new Vector2Int( 0, 0 ) );
 	}
 
 	// ステージインデックスを取得
 	public int getStageIndex() {
 		return param_.stageIndex_;
+	}
+
+	// 削除
+	private void OnDestroy() {
+		Destroy( lookerComponet_ );	// カメラを解放
 	}
 
 	// Use this for initialization
@@ -58,9 +65,10 @@ public class StageManager : MonoBehaviour {
 		public Intro(StageManager parent) : base( parent ) { }
 		protected override State innerInit() {
 			// カメラ初期化
-			Camera.main.transform.parent = parent_.player_.transform;
-			Camera.main.transform.localPosition = new Vector3( 0.0f, 5.0f, -3.0f );
-			Camera.main.transform.localRotation = Quaternion.LookRotation( -Camera.main.transform.localPosition );
+			//  プレイヤーの位置を一定の角度と距離で追従
+			parent_.lookerComponet_ = Camera.main.gameObject.AddComponent<ObjectLooker>();
+			parent_.lookerComponet_.setTarget( parent_.player_.gameObject );
+			parent_.lookerComponet_.setOffset( new Vector3( 0.0f, 5.0f, -3.0f ) );
 
 			FaderManager.Fader.to( 0.0f, 1.0f, () => {
 				setNextState( new Idle( parent_ ) );
@@ -101,10 +109,12 @@ public class StageManager : MonoBehaviour {
 			return this;
 		}
 	}
+
 	Param param_;
 	System.Action<bool> finishCallback_;
 	State state_;
 
 	Field field_;
 	Player player_;
+	ObjectLooker lookerComponet_;
 }

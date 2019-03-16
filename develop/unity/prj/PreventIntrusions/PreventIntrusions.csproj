@@ -240,6 +240,7 @@
     <Compile Include="Assets\codes\common\GlobalStateManager.cs" />
     <Compile Include="Assets\codes\common\ImageBillboarding.cs" />
     <Compile Include="Assets\codes\common\IntroAnimation.cs" />
+    <Compile Include="Assets\codes\common\KeyHelper.cs" />
     <Compile Include="Assets\codes\common\Lerps.cs" />
     <Compile Include="Assets\codes\common\ListUtil.cs" />
     <Compile Include="Assets\codes\common\mesh\GLLine.cs" />
@@ -250,6 +251,7 @@
     <Compile Include="Assets\codes\common\MoveValueColor.cs" />
     <Compile Include="Assets\codes\common\MoveValueFloat.cs" />
     <Compile Include="Assets\codes\common\MoveValueLong.cs" />
+    <Compile Include="Assets\codes\common\ObjectLooker.cs" />
     <Compile Include="Assets\codes\common\OnCollideCallback.cs" />
     <Compile Include="Assets\codes\common\Randoms.cs" />
     <Compile Include="Assets\codes\common\ResourceLoader.cs" />

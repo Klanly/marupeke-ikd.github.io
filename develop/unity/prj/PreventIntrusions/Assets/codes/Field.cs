@@ -67,57 +67,77 @@ public class Field : MonoBehaviour {
 		}
 	}
 
-	public Barricade getBarricadeOnCell( Vector2Int pos, KeyCode key ) {
+	public Barricade getBarricadeOnCell( Vector2Int pos, KeyCode key, ref Vector2Int elem ) {
 		if ( pos.x < 0 || pos.y < 0 || pos.x >= param_.region_.x || pos.y >= param_.region_.y )
 			return null;
 		switch ( key ) {
-		case KeyCode.RightArrow: return vBarricades_[ pos.x + 1, pos.y ];
-		case KeyCode.LeftArrow: return vBarricades_[ pos.x, pos.y ];	
-		case KeyCode.UpArrow: return hBarricades_[ pos.x, pos.y + 1 ];
-		case KeyCode.DownArrow: return hBarricades_[ pos.x, pos.y ];	
+		case KeyCode.RightArrow:
+				elem.x = pos.x + 1;
+				elem.y = pos.y;
+				return vBarricades_[ pos.x + 1, pos.y ];
+		case KeyCode.LeftArrow:
+				elem.x = pos.x;
+				elem.y = pos.y;
+				return vBarricades_[ pos.x, pos.y ];	
+		case KeyCode.UpArrow:
+				elem.x = pos.x;
+				elem.y = pos.y + 1;
+				return hBarricades_[ pos.x, pos.y + 1 ];
+		case KeyCode.DownArrow:
+				elem.x = pos.x;
+				elem.y = pos.y;
+				return hBarricades_[ pos.x, pos.y ];	
 		}
 		return null;
 	}
 
+	// 指定位置は有効？
+	public bool isValidateCoord( Vector2Int pos ) {
+		return !( pos.x < 0 || pos.y < 0 || pos.x >= param_.region_.x || pos.y >= param_.region_.y );
+	}
+
+	// 指定位置にスペースがある？
+	public bool isSpace( Vector2Int pos ) {
+
+		// TODO: 何かオブジェクトがあるかチェック
+		return isValidateCoord( pos );
+	}
+
 	// バリケードを動かす
-	public bool moveBarricade(Vector2Int pos, KeyCode key, float sec ) {
-		var barricade = getBarricadeOnCell( pos, key );
+	public bool moveBarricade(Vector2Int pos, KeyCode key, KeyCode dir, float sec ) {
+		Vector2Int elem = Vector2Int.zero;
+		var barricade = getBarricadeOnCell( pos, key, ref elem );
 		if ( barricade == null )
 			return false;
-		float x = 0.0f;
-		float y = 0.0f;
+		var offset = KeyHelper.offset( dir );
 		System.Action offsetter = null;
-		switch ( key ) {
+		switch ( dir ) {
 		case KeyCode.LeftArrow:
-				x = -1.0f;
 				offsetter = () => {
-					vBarricades_[ pos.x, pos.y ] = null;
-					vBarricades_[ pos.x - 1, pos.y ] = barricade;
+					vBarricades_[ elem.x, elem.y ] = null;
+					vBarricades_[ elem.x - 1, elem.y ] = barricade;
 				};
 				break;
 		case KeyCode.RightArrow:
-				x = 1.0f;
 				offsetter = () => {
-					vBarricades_[ pos.x + 1, pos.y ] = null;
-					vBarricades_[ pos.x + 2, pos.y ] = barricade;
+					vBarricades_[ elem.x, elem.y ] = null;
+					vBarricades_[ elem.x + 1, elem.y ] = barricade;
 				};
 				break;
 		case KeyCode.DownArrow:
-				y = -1.0f;
 				offsetter = () => {
-					hBarricades_[ pos.x, pos.y ] = null;
-					hBarricades_[ pos.x, pos.y - 1 ] = barricade;
+					hBarricades_[ elem.x, elem.y ] = null;
+					hBarricades_[ elem.x, elem.y - 1 ] = barricade;
 				};
 				break;
 		case KeyCode.UpArrow:
-				y = 1.0f;
 				offsetter = () => {
-					hBarricades_[ pos.x, pos.y + 1 ] = null;
-					hBarricades_[ pos.x, pos.y + 2 ] = barricade;
+					hBarricades_[ elem.x, elem.y ] = null;
+					hBarricades_[ elem.x, elem.y + 1 ] = barricade;
 				};
 				break;
 		}
-		var len = new Vector3( x, 0.0f, y );
+		var len = new Vector3( offset.x, 0.0f, offset.y );
 		var start = barricade.transform.localPosition;
 		var end = start + len;
 		GlobalState.time( sec, (_sec, t) => {
