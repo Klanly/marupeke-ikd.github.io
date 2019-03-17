@@ -13,6 +13,9 @@ public class StageManager : MonoBehaviour {
 	[SerializeField]
 	GameOverManager gameOverPrefab_;
 
+	[SerializeField]
+	EnemyFactory enemyFactory_;
+
 	public class Param {
 		public int stageIndex_ = 0;
 	}
@@ -30,6 +33,20 @@ public class StageManager : MonoBehaviour {
 
 		var fieldParam = new Field.Param();
 		field_.setup( fieldParam );
+
+		// TODO: 敵を配置
+		for ( int i = 0; i < 5; ++i ) {
+			var enemy = enemyFactory_.create( EnemyFactory.EnemyType.Hiyorimy );
+			var enemyParam = new Enemy.Param();
+			Vector2Int initPos = Vector2Int.zero;
+			while ( true ) {
+				initPos = new Vector2Int( Random.Range( 0, fieldParam.region_.x ), Random.Range( 0, fieldParam.region_.y ) );
+				if ( field_.isSpace( initPos ) == true )
+					break;
+			}
+			enemy.setup( field_, enemyParam, initPos );
+			field_.addEnemy( enemy, initPos );
+		}
 
 		// プレイヤー
 		var playerParam = new Player.Param();

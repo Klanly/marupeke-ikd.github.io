@@ -25,6 +25,12 @@ public class Field : MonoBehaviour {
 
 		hBarricades_ = new Barricade[ param_.region_.x, param_.region_.y + 1 ];
 		vBarricades_ = new Barricade[ param_.region_.x + 1, param_.region_.y ];
+		objectPoses_ = new int[ param_.region_.x, param_.region_.y ];
+		for ( int x = 0; x < param_.region_.x; ++x ) {
+			for ( int y = 0; y < param_.region_.y; ++y ) {
+				objectPoses_[ x, y ] = 0;
+			}
+		}
 
 		// フィールドプレート敷き詰め
 		for ( int y = 0; y < param_.region_.y; ++y ) {
@@ -67,6 +73,16 @@ public class Field : MonoBehaviour {
 		}
 	}
 
+	// 敵を登録
+	public bool addEnemy( Enemy enemy, Vector2Int initPos ) {
+		if ( isSpace( initPos ) == false )
+			return false;
+		enemy.transform.parent = fieldRoot_;
+		enemies_.AddLast( enemy );
+		objectPoses_[ initPos.x, initPos.y ] = typeEnemy_g;
+		return true;
+	}
+
 	public Barricade getBarricadeOnCell( Vector2Int pos, KeyCode key, ref Vector2Int elem ) {
 		if ( pos.x < 0 || pos.y < 0 || pos.x >= param_.region_.x || pos.y >= param_.region_.y )
 			return null;
@@ -99,8 +115,13 @@ public class Field : MonoBehaviour {
 	// 指定位置にスペースがある？
 	public bool isSpace( Vector2Int pos ) {
 
-		// TODO: 何かオブジェクトがあるかチェック
-		return isValidateCoord( pos );
+		if ( isValidateCoord( pos ) == false )
+			return false;
+
+		if ( objectPoses_[ pos.x, pos.y ] != 0 )
+			return false;
+
+		return true;
 	}
 
 	// バリケードを動かす
@@ -157,6 +178,29 @@ public class Field : MonoBehaviour {
 	public int getHeight() {
 		return param_.region_.y;
 	}
+
+	// 敵を囲ったかチェック
+	public void checkEnemyStockade() {
+		// 全エネミーに対して周囲バリケードの検索を命令
+		for ( var node = enemies_.First; node != null; ) {
+			var e = node.Value;
+			if ( e.checkStockade() == true ) {
+				// 囲まれているので、エネミーを削除
+				e.toDestroy();
+				node = node.Next;
+				enemies_.Remove( node );
+			} else {
+				node = node.Next;
+			}
+		}
+	}
+
+	// 敵の整数座標を更新
+	public void updateEnemyPos( Enemy enemy, Vector2Int prePos, Vector2Int pos ) {
+		objectPoses_[ prePos.x, prePos.y ] = 0;
+		objectPoses_[ pos.x, pos.y ] = typeEnemy_g;
+	}
+
 	// Use this for initialization
 	void Start () {
 		
@@ -174,4 +218,9 @@ public class Field : MonoBehaviour {
 	Barricade[,] hBarricades_;	// 水平バリケード
 	Barricade[,] vBarricades_;	// 垂直バリケード
 	Param param_;
+	LinkedList<Enemy> enemies_ = new LinkedList<Enemy>();
+	int[,] objectPoses_;
+
+	static int typeEnemy_g = 2;
+	static int typePlayer_g = 1;
 }

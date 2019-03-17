@@ -226,6 +226,8 @@ public class Player : MonoBehaviour {
 				return true;
 			} ).finish( () => {
 				parent_.setPos( parent_.getPos() + dir );
+				// 敵を囲ったかチェック
+				parent_.field_.checkEnemyStockade();
 				setNextState( new Idle( parent_ ) );
 			} );
 			return this;
@@ -287,6 +289,8 @@ public class Player : MonoBehaviour {
 				return true;
 			} ).finish( () => {
 				parent_.setPos( parent_.getPos() + dir );
+				// 敵を囲ったかチェック
+				parent_.field_.checkEnemyStockade();
 				setNextState( new Idle( parent_ ) );
 			} );
 			return this;

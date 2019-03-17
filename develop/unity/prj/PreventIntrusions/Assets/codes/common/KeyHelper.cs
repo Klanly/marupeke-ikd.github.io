@@ -5,6 +5,9 @@ using UnityEngine;
 // 方向キー等キーに関するヘルパー
 
 public class KeyHelper {
+
+	static public KeyCode[] ArrowList { get { return arrows_g; } }
+
 	// 方向キー取得
 	//  上下左右方向キーの押し下げチェック
 	static public bool getArrow( ref KeyCode outKey ) {

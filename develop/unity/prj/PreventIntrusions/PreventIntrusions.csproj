@@ -265,6 +265,9 @@
     <Compile Include="Assets\codes\common\UIIntroColorAnimation.cs" />
     <Compile Include="Assets\codes\common\UIIntroTextColorAnimation.cs" />
     <Compile Include="Assets\codes\EndingManager.cs" />
+    <Compile Include="Assets\codes\enemies\Enemy.cs" />
+    <Compile Include="Assets\codes\enemies\EnemyFactory.cs" />
+    <Compile Include="Assets\codes\enemies\EnemyHiyorimy.cs" />
     <Compile Include="Assets\codes\Field.cs" />
     <Compile Include="Assets\codes\FieldPlate.cs" />
     <Compile Include="Assets\codes\GameManager.cs" />
