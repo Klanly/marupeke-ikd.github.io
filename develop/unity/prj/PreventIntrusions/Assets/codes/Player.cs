@@ -64,8 +64,12 @@ public class Player : MonoBehaviour {
 			if ( isDead() == true )
 				return new Dead( parent_ );
 
-			if ( state_ != null )
+			var preState = state_;
+			if ( state_ != null ) {
 				state_ = state_.update();
+				if ( state_ != preState )
+					innerUpdate();
+			}
 
 			return this;
 		}

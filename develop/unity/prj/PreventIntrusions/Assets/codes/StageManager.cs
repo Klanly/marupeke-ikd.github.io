@@ -50,7 +50,7 @@ public class StageManager : MonoBehaviour {
 
 		// プレイヤー
 		var playerParam = new Player.Param();
-		playerParam.moveSec_ = 0.1f;
+		playerParam.moveSec_ = 0.24f;
 		player_ = Instantiate<Player>( playerPrefab_ );
 		player_.transform.parent = field_.transform;
 		player_.setup( field_, playerParam );
