@@ -216,7 +216,9 @@ public class Player : MonoBehaviour {
 		}
 		protected override State innerInit() {
 			// 指定時間バリケードを一マス押す
-			if ( parent_.field_.moveBarricade( parent_.pos_, dir_, dir_, parent_.param_.pushSec_ ) == false ) {
+			bool barricadeMoved = false;
+			if ( parent_.field_.moveBarricade( parent_.pos_, dir_, dir_, parent_.param_.pushSec_, () => { barricadeMoved = true; } ) == false ) {
+				barricadeMoved = true;
 				setNextState( new Idle( parent_ ) );    // ???
 				return this;
 			}
@@ -228,6 +230,8 @@ public class Player : MonoBehaviour {
 			GlobalState.time( parent_.param_.pushSec_, (sec, t) => {
 				parent_.transform.localPosition = pos + Lerps.Vec3.linear( Vector3.zero, len, t );
 				return true;
+			} ).nextTime( 1.0f, (sec, t )=> {
+				return !( barricadeMoved == true );
 			} ).finish( () => {
 				parent_.setPos( parent_.getPos() + dir );
 				// 敵を囲ったかチェック
@@ -279,7 +283,9 @@ public class Player : MonoBehaviour {
 		}
 		protected override State innerInit() {
 			// 指定時間バリケードを一マス引く
-			if ( parent_.field_.moveBarricade( parent_.pos_, KeyHelper.invKey( dir_ ), dir_, parent_.param_.pullSec_ ) == false ) {
+			bool bBarricadeMoved = false;
+			if ( parent_.field_.moveBarricade( parent_.pos_, KeyHelper.invKey( dir_ ), dir_, parent_.param_.pullSec_, () => { bBarricadeMoved = true; } ) == false ) {
+				bBarricadeMoved = true;
 				setNextState( new Idle( parent_ ) );    // ???
 				return this;
 			}
@@ -291,6 +297,8 @@ public class Player : MonoBehaviour {
 			GlobalState.time( parent_.param_.pullSec_, (sec, t) => {
 				parent_.transform.localPosition = pos + Lerps.Vec3.linear( Vector3.zero, len, t );
 				return true;
+			} ).nextTime(1.0f,(sec, t)=> {
+				return !( bBarricadeMoved == true );
 			} ).finish( () => {
 				parent_.setPos( parent_.getPos() + dir );
 				// 敵を囲ったかチェック

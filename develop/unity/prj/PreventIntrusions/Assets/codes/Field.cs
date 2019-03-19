@@ -145,7 +145,7 @@ public class Field : MonoBehaviour {
 	}
 
 	// バリケードを動かす
-	public bool moveBarricade(Vector2Int pos, KeyCode key, KeyCode dir, float sec ) {
+	public bool moveBarricade(Vector2Int pos, KeyCode key, KeyCode dir, float sec, System.Action finishCallback ) {
 		Vector2Int elem = Vector2Int.zero;
 		var barricade = getBarricadeOnCell( pos, key, ref elem );
 		if ( barricade == null )
@@ -195,6 +195,7 @@ public class Field : MonoBehaviour {
 			return true;
 		} ).finish(()=> {
 			offsetter();
+			finishCallback();
 		} );
 		return true;
 	}
