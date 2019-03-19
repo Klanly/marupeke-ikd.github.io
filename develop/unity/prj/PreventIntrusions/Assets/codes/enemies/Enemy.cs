@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour {
 	}
 
 	// 囲まれているかチェック
-	public bool checkStockade() {
+	public virtual bool checkStockade( int[,] floorIds, List<bool> compFlag ) {
 		return false;
 	}
 

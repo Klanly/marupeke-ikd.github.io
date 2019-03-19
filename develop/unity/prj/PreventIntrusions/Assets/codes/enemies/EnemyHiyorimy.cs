@@ -17,6 +17,12 @@ public class EnemyHiyorimy : Enemy {
 			state_ = state_.update();
 	}
 
+	// 囲まれているかチェック
+	public override bool checkStockade( int[,] floorIds, List<bool> compFlag ) {
+		int id = floorIds[ Pos.x, Pos.y ];
+		return compFlag[ id ];
+	}
+
 	// ボーっとしている
 	class Wait : State< EnemyHiyorimy > {
 		public Wait( EnemyHiyorimy parent ) : base( parent ) {
@@ -63,10 +69,13 @@ public class EnemyHiyorimy : Enemy {
 			var endPos3 = prePos3 + new Vector3( 1.0f * dir.x, 0.0f, 1.0f * dir.y );
 			parent_.setPos( endPos );  // 行先は先に確定
 			GlobalState.time( 0.4f, (sec, t) => {
+				if ( parent_ == null )
+					return false;
 				parent_.transform.localPosition = Lerps.Vec3.easeInOut( prePos3, endPos3, t );
 				return true;
 			} ).finish(()=> {
-				setNextState( new Wait( parent_ ) );
+				if ( parent_ != null )
+					setNextState( new Wait( parent_ ) );
 			} );
 			return this;
 		}

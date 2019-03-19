@@ -15,6 +15,10 @@ public class Field : MonoBehaviour {
 	[SerializeField]
 	Transform fieldRoot_;
 
+	[SerializeField]
+	Test testPrefab_;
+	Test test_;
+
 	public class Param {
 		public Vector2Int region_ = new Vector2Int( 10, 8 );
 		public Vector2Int playerPos_ = new Vector2Int( 4, 4 );
@@ -31,14 +35,18 @@ public class Field : MonoBehaviour {
 				objectPoses_[ x, y ] = 0;
 			}
 		}
+		stcChecker_.setup( param.region_ );
+		var walls = stcChecker_.Walls;
 
 		// フィールドプレート敷き詰め
+		plates_ = new FieldPlate[ param_.region_.x , param_.region_.y ];
 		for ( int y = 0; y < param_.region_.y; ++y ) {
 			for ( int x = 0; x < param_.region_.x; ++x ) {
 				var plate = Instantiate<FieldPlate>( platePrefab_ );
 				plate.transform.parent = fieldRoot_;
 				plate.transform.localPosition = new Vector3( x, 0, y );
 				plate.setup( FieldPlate.FieldType.Conclete, Random.Range( 0, 16 ) );
+				plates_[ x, y ] = plate;
 			}
 		}
 
@@ -49,12 +57,14 @@ public class Field : MonoBehaviour {
 			barri.transform.parent = fieldRoot_;
 			barri.transform.localPosition = new Vector3( 0.5f + x, 0.0f, idx );
 			hBarricades_[ x, idx ] = barri;
+			walls.setWall( StockadeChecker.Wall.WallOrder.Horizontal, x, idx, 1 );
 
 			idx = ( idx + Random.Range( 1, param_.region_.y ) ) % param_.region_.y;
 			barri = Instantiate<Barricade>( barricadePrefab_ );
 			barri.transform.parent = fieldRoot_;
 			barri.transform.localPosition = new Vector3( 0.5f + x, 0.0f, idx );
 			hBarricades_[ x, idx ] = barri;
+			walls.setWall( StockadeChecker.Wall.WallOrder.Horizontal, x, idx, 1 );
 		}
 		for ( int y = 0; y < param_.region_.y; ++y ) {
 			int idx = Random.Range( 0, param_.region_.x + 1 );
@@ -63,6 +73,7 @@ public class Field : MonoBehaviour {
 			barri.transform.localPosition = new Vector3( idx, 0.0f, 0.5f + y );
 			barri.transform.localRotation = Quaternion.Euler( 0.0f, 90.0f, 0.0f );
 			vBarricades_[ idx, y ] = barri;
+			walls.setWall( StockadeChecker.Wall.WallOrder.Vertical, idx, y, 1 );
 
 			idx = ( idx + Random.Range( 1, param_.region_.x ) ) % param_.region_.x;
 			barri = Instantiate<Barricade>( barricadePrefab_ );
@@ -70,7 +81,16 @@ public class Field : MonoBehaviour {
 			barri.transform.localPosition = new Vector3( idx, 0.0f, 0.5f + y );
 			barri.transform.localRotation = Quaternion.Euler( 0.0f, 90.0f, 0.0f );
 			vBarricades_[ idx, y ] = barri;
+			walls.setWall( StockadeChecker.Wall.WallOrder.Vertical, idx, y, 1 );
 		}
+
+		var compFlag = new List<bool>();
+		var floorIds = stcChecker_.check( ref compFlag );
+		updateBarricadeState( floorIds, compFlag );
+
+		test_ = Instantiate<Test>( testPrefab_ );
+		test_.transform.localPosition = new Vector3( 10.0f, 0.0f, 0.0f );
+		test_.setup( param_.region_, stcChecker_ );
 	}
 
 	// 敵を登録
@@ -132,29 +152,38 @@ public class Field : MonoBehaviour {
 			return false;
 		var offset = KeyHelper.offset( dir );
 		System.Action offsetter = null;
+		var walls = stcChecker_.Walls;
 		switch ( dir ) {
 		case KeyCode.LeftArrow:
 				offsetter = () => {
 					vBarricades_[ elem.x, elem.y ] = null;
 					vBarricades_[ elem.x - 1, elem.y ] = barricade;
+					walls.setWall( StockadeChecker.Wall.WallOrder.Vertical, elem.x, elem.y, 0 );
+					walls.setWall( StockadeChecker.Wall.WallOrder.Vertical, elem.x - 1, elem.y, 1 );
 				};
 				break;
 		case KeyCode.RightArrow:
 				offsetter = () => {
 					vBarricades_[ elem.x, elem.y ] = null;
 					vBarricades_[ elem.x + 1, elem.y ] = barricade;
+					walls.setWall( StockadeChecker.Wall.WallOrder.Vertical, elem.x, elem.y, 0 );
+					walls.setWall( StockadeChecker.Wall.WallOrder.Vertical, elem.x + 1, elem.y, 1 );
 				};
 				break;
 		case KeyCode.DownArrow:
 				offsetter = () => {
 					hBarricades_[ elem.x, elem.y ] = null;
 					hBarricades_[ elem.x, elem.y - 1 ] = barricade;
+					walls.setWall( StockadeChecker.Wall.WallOrder.Horizontal, elem.x, elem.y, 0 );
+					walls.setWall( StockadeChecker.Wall.WallOrder.Horizontal, elem.x, elem.y - 1, 1 );
 				};
 				break;
 		case KeyCode.UpArrow:
 				offsetter = () => {
 					hBarricades_[ elem.x, elem.y ] = null;
 					hBarricades_[ elem.x, elem.y + 1 ] = barricade;
+					walls.setWall( StockadeChecker.Wall.WallOrder.Horizontal, elem.x, elem.y, 0 );
+					walls.setWall( StockadeChecker.Wall.WallOrder.Horizontal, elem.x, elem.y + 1, 1 );
 				};
 				break;
 		}
@@ -163,8 +192,9 @@ public class Field : MonoBehaviour {
 		var end = start + len;
 		GlobalState.time( sec, (_sec, t) => {
 			barricade.transform.localPosition = Lerps.Vec3.linear( start, end, t );
-			offsetter();
 			return true;
+		} ).finish(()=> {
+			offsetter();
 		} );
 		return true;
 	}
@@ -181,14 +211,19 @@ public class Field : MonoBehaviour {
 
 	// 敵を囲ったかチェック
 	public void checkEnemyStockade() {
+		var completeStockadeList = new List<bool>();
+		var floorIds = stcChecker_.check( ref completeStockadeList );
+		updateBarricadeState( floorIds, completeStockadeList );
+
 		// 全エネミーに対して周囲バリケードの検索を命令
 		for ( var node = enemies_.First; node != null; ) {
 			var e = node.Value;
-			if ( e.checkStockade() == true ) {
+			if ( e.checkStockade( floorIds, completeStockadeList ) == true ) {
 				// 囲まれているので、エネミーを削除
 				e.toDestroy();
+				var deleteNode = node;
 				node = node.Next;
-				enemies_.Remove( node );
+				enemies_.Remove( deleteNode );
 			} else {
 				node = node.Next;
 			}
@@ -199,6 +234,19 @@ public class Field : MonoBehaviour {
 	public void updateEnemyPos( Enemy enemy, Vector2Int prePos, Vector2Int pos ) {
 		objectPoses_[ prePos.x, prePos.y ] = 0;
 		objectPoses_[ pos.x, pos.y ] = typeEnemy_g;
+	}
+
+	// バリケードの囲い状態を更新
+	void updateBarricadeState( int[,] floorIds, List<bool> compFlag ) {
+		for ( int x = 0; x < param_.region_.x; ++x ) {
+			for ( int y = 0; y < param_.region_.y; ++y ) {
+				int id = floorIds[ x, y ];
+				if ( compFlag[ id ] == true )
+					plates_[ x, y ].setColor( Color.red );
+				else
+					plates_[ x, y ].setColor( Color.white );
+			}
+		}
 	}
 
 	// Use this for initialization
@@ -220,6 +268,8 @@ public class Field : MonoBehaviour {
 	Param param_;
 	LinkedList<Enemy> enemies_ = new LinkedList<Enemy>();
 	int[,] objectPoses_;
+	StockadeChecker stcChecker_ = new StockadeChecker();
+	FieldPlate[,] plates_;
 
 	static int typeEnemy_g = 2;
 	static int typePlayer_g = 1;

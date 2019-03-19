@@ -22,6 +22,13 @@ public class FieldPlate : MonoBehaviour {
 		}
 	}
 
+	// 色を設定
+	public void setColor( Color color ) {
+		var mat = mesh_.material;
+		mat.color = color;
+		mesh_.material = mat;
+	}
+
 	// Use this for initialization
 	void Start () {
 		

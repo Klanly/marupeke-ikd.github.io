@@ -16,14 +16,22 @@ public class Test : MonoBehaviour {
 	[SerializeField]
 	TestFloor compFloorPrefab_;
 
+	public void setup(Vector2Int region, StockadeChecker checker ) {
+		bInitialized_ = true;
+		checker_ = checker;
+		region_ = region;
+	}
+
 	// Use this for initialization
 	void Start () {
-		checker_.setup( region_ );
-		var walls = checker_.Walls;
-		string[] dirs = new string[] { "L", "R", "U", "D" };
-		int r = 250;
-		for ( int i = 0; i < r; ++i ) {
-			addWall( Random.Range( 0, region_.x ), Random.Range( 0, region_.y ), dirs[ Random.Range( 0, 4 ) ] );
+		if ( bInitialized_ == false ) {
+			checker_.setup( region_ );
+			var walls = checker_.Walls;
+			string[] dirs = new string[] { "L", "R", "U", "D" };
+			int r = 250;
+			for ( int i = 0; i < r; ++i ) {
+				addWall( Random.Range( 0, region_.x ), Random.Range( 0, region_.y ), dirs[ Random.Range( 0, 4 ) ] );
+			}
 		}
 		updateWalls();
 		check();
@@ -184,4 +192,5 @@ public class Test : MonoBehaviour {
 	List<GameObject> walls_ = new List<GameObject>();
 	List<GameObject> floors_ = new List<GameObject>();
 	Vector2Int region_ = new Vector2Int( 16, 16 );
+	bool bInitialized_ = false;
 }

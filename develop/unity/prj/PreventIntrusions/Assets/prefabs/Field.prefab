@@ -85,3 +85,5 @@ MonoBehaviour:
   barricadePrefab_: {fileID: 114996506235772676, guid: 73018c82ca25d944cb3f9b9fe453eba3,
     type: 2}
   fieldRoot_: {fileID: 4065332820443052}
+  testPrefab_: {fileID: 114725544858588056, guid: 7a5e5487f611ad7489385c4f069cb468,
+    type: 2}
