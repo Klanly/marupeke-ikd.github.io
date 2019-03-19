@@ -274,8 +274,10 @@
     <Compile Include="Assets\codes\GameOverManager.cs" />
     <Compile Include="Assets\codes\Player.cs" />
     <Compile Include="Assets\codes\StageManager.cs" />
+    <Compile Include="Assets\codes\StockadeChecker.cs" />
     <Compile Include="Assets\codes\Table\towerparameter_data.cs" />
     <Compile Include="Assets\codes\Test.cs" />
+    <Compile Include="Assets\codes\TestFloor.cs" />
     <Compile Include="Assets\codes\TitleManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
