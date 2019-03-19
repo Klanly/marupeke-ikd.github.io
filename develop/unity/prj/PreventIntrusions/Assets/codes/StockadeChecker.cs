@@ -170,112 +170,74 @@ public class StockadeChecker {
 	}
 
 	// 囲いチェック
-	public int[,] check() {
+	//  completeStockadeList: 塗りつぶしIdのフロアが完全囲いになっているか？（要素番号と対応）
+	public int[,] check( ref List<bool> completeStockadeList ) {
+		completeStockadeList.Clear();
 		for ( int x = 0; x < region_.x; ++x ) {
 			for ( int y = 0; y < region_.y; ++y ) {
 				checkField_[ x, y ] = 0;
 			}
 		}
+		completeStockadeList.Add( false );	// 0番目はダミー
 
-		// (0,0)からチェック開始
-		int moveDirIdx = 0;     // 0: Up, 1: Right, 2: Down, 3: Left
-		Vector2Int[] moveDirs = new Vector2Int[] {
-			new Vector2Int( 0, 1 ),		// UP
-			new Vector2Int( 1, 0 ),		// Right
-			new Vector2Int( 0, -1 ),	// Down
-			new Vector2Int( -1, 0 )		// Left
-		};
-		Wall.WallDir[] leftHandDirs = new Wall.WallDir[] {	// 移動方向に対する左手向き
-			Wall.WallDir.Left,
-			Wall.WallDir.Up,
-			Wall.WallDir.Right,
-			Wall.WallDir.Down
-		};
-		int curFloorIdx = 0;
+		int curFloorIdx = 1;
 		for ( int x = 0; x < region_.x; ++x ) {
 			for ( int y = 0; y < region_.y; ++y ) {
 				// フロアにチェックマークがある所は検索済みなのでスキップ
-				if ( checkField_[ x, y ] != 0 ) {
-					continue;
-				}
-				// フロアにチェックマークが無くて四方に壁が無い所はスペースなので
-				// 塗りつぶしプロセスへ（スペースが新規はありえない）
-				if ( walls_.isSpace( x, y ) == true ) {
-					// 自分の四方のどこかにマークがあるので検索
-					int mark = 0;
-					for ( int i = 0; i < 4; ++i ) {
-						mark = checkField_[ x + moveDirs[ i ].x, y + moveDirs[ i ].y ];
-						if ( mark != 0 )
-							break;
-					}
-					// 自分自身と四方を再マーク
-					checkField_[ x, y ] = mark;
-					for ( int i = 0; i < 4; ++i ) {
-						checkField_[ x + moveDirs[ i ].x, y + moveDirs[ i ].y ] = mark;
-					}
+				if (checkField_[ x, y ] != 0) {
 					continue;
 				}
 
-				// 新規の囲いチェックプロセス //
-				//  左手法で囲いを調べる
+				// 塗りつぶしアルゴリズムでフロアにチェックマーク＆囲いの有効性を判定
+				bool bCompleteStockade = true;
+				fillMe( ref checkField_, x, y, curFloorIdx, ref bCompleteStockade );
+				completeStockadeList.Add( bCompleteStockade );
 				curFloorIdx++;
-
-				// チェックマークが無くて四方がすべて壁の特殊ケースは
-				// ここでマークを入れる
-				if ( walls_.isJustOneFloor( x, y ) == true ) {
-					checkField_[ x, y ] = curFloorIdx;
-					continue;
-				}
-
-				int cx = x;
-				int cy = y;
-				int sx = x;	// スタート座標
-				int sy = y; // スタート座標
-				int startDir = 0;	// スタート時の向き
-				bool bStarted = false;
-				bool bEnd = false;
-				int tmpCount = region_.x * region_.y * 4;
-				while ( tmpCount != 0 ) {
-					tmpCount--;
-					// フロアにチェックマーク
-					if ( checkField_[ cx, cy ] == 0 ) {
-						checkField_[ cx, cy ] = curFloorIdx;
-					}
-					for ( int i = 0; i < 4; ++i ) {
-						int id = walls_.getWall( cx, cy, leftHandDirs[ moveDirIdx ] );
-						if ( id == 0 ) {
-							// 左手の方向（正面+3）へ移動確定
-							moveDirIdx = ( moveDirIdx + 3 ) % 4;
-							if ( bStarted == false ) {
-								bStarted = true;
-								sx = x;
-								sy = y;
-								startDir = moveDirIdx;
-							} else {
-								// スタート地点に戻ってきた？
-								if ( cx == sx && cy == sy && moveDirIdx == startDir ) {
-									// ゴール！
-									bEnd = true;
-									break;
-								}
-							}
-							cx += moveDirs[ moveDirIdx ].x;
-							cy += moveDirs[ moveDirIdx ].y;
-							break;
-						}
-						moveDirIdx = ( ++moveDirIdx ) % 4;
-					}
-					if ( bEnd == true )
-						break;
-				}
 			}
 		}
-
 		return checkField_;
 	}
 
-    Vector2Int region_;
+	void fillMe( ref int[,] checkField, int x, int y, int floorIdx, ref bool isCompleteStockade ) {
+		// 自分自身を塗る
+		if (checkField[ x, y ] == 0) {
+			checkField[ x, y ] = floorIdx;
+		} else {
+			return;	// 既に塗りつぶし済み
+		}
+		// U,R,D,Lの順で検査
+		for (int md = 0; md < 4; md++) {
+			var id = walls_.getWall( x, y, wallDir_g[ md ] );
+			if (id == 0) {
+				// 移動可能なので移動先を塗る
+				fillMe( ref checkField, x + moveDirs_g[ md ].x, y + moveDirs_g[ md ].y, floorIdx, ref isCompleteStockade );
+			} else {
+				// 壁向こうのフロアが同じfloorIdxだったら
+				// 完全囲い不成立
+				int sx = x + moveDirs_g[ md ].x;
+				int sy = y + moveDirs_g[ md ].y;
+				if ( sx >= 0 && sx < region_.x && sy >= 0 && sy < region_.y ) {
+					if (checkField[ sx, sy ] == floorIdx)
+						isCompleteStockade = false;
+				}
+			}
+		}
+	}
+
+	Vector2Int region_;
 	int[,] field_;
 	WallSetter walls_ = new WallSetter();
 	int[,] checkField_;
+	static Vector2Int[] moveDirs_g = new Vector2Int[] {
+		new Vector2Int( 0, 1 ),		// UP
+		new Vector2Int( 1, 0 ),		// Right
+		new Vector2Int( 0, -1 ),	// Down
+		new Vector2Int( -1, 0 )		// Left
+	};
+	static Wall.WallDir[] wallDir_g = new Wall.WallDir[] {	// 移動方向に対する向き
+		Wall.WallDir.Up,
+		Wall.WallDir.Right,
+		Wall.WallDir.Down,
+		Wall.WallDir.Left,
+	};
 }

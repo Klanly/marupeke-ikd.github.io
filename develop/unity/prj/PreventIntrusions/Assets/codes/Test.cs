@@ -13,67 +13,83 @@ public class Test : MonoBehaviour {
 	[SerializeField]
 	TestFloor floorPrefab_;
 
+	[SerializeField]
+	TestFloor compFloorPrefab_;
+
 	// Use this for initialization
 	void Start () {
 		checker_.setup( region_ );
 		var walls = checker_.Walls;
 		string[] dirs = new string[] { "L", "R", "U", "D" };
-		int r = 30;
+		int r = 250;
 		for ( int i = 0; i < r; ++i ) {
 			addWall( Random.Range( 0, region_.x ), Random.Range( 0, region_.y ), dirs[ Random.Range( 0, 4 ) ] );
 		}
 		updateWalls();
 		check();
+		updateWalls();
 	}
 
 	void addWall( int x, int y, string dir ) {
 		var walls = checker_.Walls;
-		walls.setWall( 0, 0, StockadeChecker.Wall.WallDir.Right, 1 );
-		walls.setWall( 2, 0, StockadeChecker.Wall.WallDir.Right, 1 );
-		walls.setWall( 2, 0, StockadeChecker.Wall.WallDir.Up, 1 );
-		walls.setWall( 3, 0, StockadeChecker.Wall.WallDir.Up, 1 );
-		walls.setWall( 5, 0, StockadeChecker.Wall.WallDir.Up, 1 );
-		walls.setWall( 5, 1, StockadeChecker.Wall.WallDir.Left, 1 );
-		walls.setWall( 0, 2, StockadeChecker.Wall.WallDir.Up, 1 );
-		walls.setWall( 1, 2, StockadeChecker.Wall.WallDir.Right, 1 );
-		walls.setWall( 2, 2, StockadeChecker.Wall.WallDir.Right, 1 );
-		walls.setWall( 2, 2, StockadeChecker.Wall.WallDir.Up, 1 );
-		walls.setWall( 3, 2, StockadeChecker.Wall.WallDir.Up, 1 );
-		walls.setWall( 2, 3, StockadeChecker.Wall.WallDir.Up, 1 );
-		walls.setWall( 4, 3, StockadeChecker.Wall.WallDir.Right, 1 );
-		walls.setWall( 5, 3, StockadeChecker.Wall.WallDir.Up, 1 );
-		walls.setWall( 1, 4, StockadeChecker.Wall.WallDir.Right, 1 );
-		walls.setWall( 2, 4, StockadeChecker.Wall.WallDir.Up, 1 );
-		walls.setWall( 3, 4, StockadeChecker.Wall.WallDir.Up, 1 );
-		walls.setWall( 1, 5, StockadeChecker.Wall.WallDir.Up, 1 );
-		walls.setWall( 2, 5, StockadeChecker.Wall.WallDir.Right, 1 );
-		walls.setWall( 5, 5, StockadeChecker.Wall.WallDir.Up, 1 );
-		walls.setWall( 1, 6, StockadeChecker.Wall.WallDir.Right, 1 );
-		walls.setWall( 5, 6, StockadeChecker.Wall.WallDir.Left, 1 );
-
-		/*
-				switch (dir) {
-				case "L":
-					walls.setWall( x, y, StockadeChecker.Wall.WallDir.Left, 1 );
-					break;
-				case "R":
-					walls.setWall( x, y, StockadeChecker.Wall.WallDir.Right, 1 );
-					break;
-				case "D":
-					walls.setWall( x, y, StockadeChecker.Wall.WallDir.Down, 1 );
-					break;
-				case "U":
-					walls.setWall( x, y, StockadeChecker.Wall.WallDir.Up, 1 );
-					break;
-				}
-		*/
+		switch (dir) {
+		case "L":
+			walls.setWall( x, y, StockadeChecker.Wall.WallDir.Left, 1 );
+			break;
+		case "R":
+			walls.setWall( x, y, StockadeChecker.Wall.WallDir.Right, 1 );
+			break;
+		case "D":
+			walls.setWall( x, y, StockadeChecker.Wall.WallDir.Down, 1 );
+			break;
+		case "U":
+			walls.setWall( x, y, StockadeChecker.Wall.WallDir.Up, 1 );
+			break;
+		}
 	}
 
 	void check() {
 		foreach( var f in floors_ ) {
 			Destroy( f );
 		}
-		var region = checker_.check();
+		var completeStockadeList = new List<bool>();
+		var region = checker_.check( ref completeStockadeList );
+		var walls = checker_.Walls;
+
+#if false
+		// 全て完璧にするために壁を境に向かい合うフロアの
+		// IDが一緒の場合、その壁を取り除く
+		var dirs = new StockadeChecker.Wall.WallDir[] {
+			StockadeChecker.Wall.WallDir.Up,
+			StockadeChecker.Wall.WallDir.Right,
+			StockadeChecker.Wall.WallDir.Down,
+			StockadeChecker.Wall.WallDir.Left,
+		};
+		Vector2Int[] moveDirs = new Vector2Int[] {
+			new Vector2Int( 0, 1 ),		// UP
+			new Vector2Int( 1, 0 ),		// Right
+			new Vector2Int( 0, -1 ),	// Down
+			new Vector2Int( -1, 0 )		// Left
+		};
+		for (int y = 0; y < region.GetLength( 1 ); ++y) {
+			for (int x = 0; x < region.GetLength( 0 ); ++x) {
+				int floorId = region[ x, y ];
+				for ( int i = 0; i < 4; ++i ) {
+					var id = walls.getWall( x, y, dirs[ i ] );
+					int sx = x + moveDirs[ i ].x;
+					int sy = y + moveDirs[ i ].y;
+					if ( sx >= 0 && sx < region.GetLength( 0 ) && sy >= 0 && sy < region.GetLength( 1 ) ) {
+						int tgtId = region[ sx, sy ];
+						if (floorId == tgtId) {
+							walls.setWall( x, y, dirs[ i ], 0 );
+						}
+					}
+				}
+			}
+		}
+		region = checker_.check( ref completeStockadeList );
+#endif
+
 		// スペースごとに塗り分け
 		Color[] colors = new Color[] {
 			Color.red,
@@ -83,7 +99,11 @@ public class Test : MonoBehaviour {
 		};
 		for ( int y = 0; y < region.GetLength(1); ++y ) {
 			for ( int x = 0; x < region.GetLength(0); ++x ) {
-				var f = Instantiate<TestFloor>( floorPrefab_ );
+				TestFloor f = null;
+				if ( completeStockadeList[ region[ x, y ] ] == true )
+					f = Instantiate<TestFloor>( compFloorPrefab_ );
+				else
+					f = Instantiate<TestFloor>( floorPrefab_ );
 				f.transform.localPosition = new Vector3( x, y, 0.0f );
 				f.setColor( colors[ region[ x, y ] % colors.Length ] );
 				floors_.Add( f.gameObject );
@@ -163,5 +183,5 @@ public class Test : MonoBehaviour {
 	StockadeChecker checker_ = new StockadeChecker();
 	List<GameObject> walls_ = new List<GameObject>();
 	List<GameObject> floors_ = new List<GameObject>();
-	Vector2Int region_ = new Vector2Int( 6, 8 );
+	Vector2Int region_ = new Vector2Int( 16, 16 );
 }
