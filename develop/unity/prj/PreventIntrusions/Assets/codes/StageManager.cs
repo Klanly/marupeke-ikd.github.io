@@ -16,6 +16,14 @@ public class StageManager : MonoBehaviour {
 	[SerializeField]
 	EnemyFactory enemyFactory_;
 
+	[SerializeField]
+	UnityEngine.UI.Image clearImage_;
+
+
+	private void Awake() {
+		clearImage_.gameObject.SetActive( false );
+	}
+
 	public class Param {
 		public int stageIndex_ = 0;
 	}
@@ -112,20 +120,23 @@ public class StageManager : MonoBehaviour {
 
 	class Idle : State<StageManager> {
 		public Idle(StageManager parent) : base( parent ) { }
-		protected override State innerUpdate() {
-/*
-			if ( Input.GetKey( KeyCode.Z ) == true ) {
-				FaderManager.Fader.to( 1.0f, 3.0f, () => {
-					if ( parent_.finishCallback_ != null ) {
+		protected override State innerInit() {
+			// 全囲い達成したらクリア
+			parent_.field_.AllRegionStockadeCallback = () => {
+				parent_.clearImage_.gameObject.SetActive( true );
+				GlobalState.wait( 4.0f, () => {
+					FaderManager.Fader.to( 1.0f, 3.0f, () => {
 						parent_.finishCallback_( true );
-						parent_.finishCallback_ = null;
-					}
+					} );
+					return false;
 				} );
-			} else if ( Input.GetKey( KeyCode.G ) == true ) {
-				return new GameOver( parent_ );
-			}
-*/
+			};
 			return this;
+		}
+	}
+
+	class Clear : State<StageManager> {
+		public Clear(StageManager parent) : base( parent ) {
 		}
 	}
 

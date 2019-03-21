@@ -19,6 +19,8 @@ public class Field : MonoBehaviour {
 	Test testPrefab_;
 	Test test_;
 
+	public System.Action AllRegionStockadeCallback { set { allRegionStockadeCallback_ = value; } }
+
 	public class Param {
 		public Vector2Int region_ = new Vector2Int( 10, 8 );
 		public Vector2Int playerPos_ = new Vector2Int( 4, 4 );
@@ -82,8 +84,7 @@ public class Field : MonoBehaviour {
 			}
 		}
 
-		floorIds_ = stcChecker_.check( ref completeFloorIdList_ );
-		updateBarricadeState( floorIds_, completeFloorIdList_ );
+		updateBarricadeState();
 
 		test_ = Instantiate<Test>( testPrefab_ );
 		test_.transform.localPosition = new Vector3( 10.0f, 0.0f, 0.0f );
@@ -234,8 +235,7 @@ public class Field : MonoBehaviour {
 
 	// 敵を囲ったかチェック
 	public void checkEnemyStockade() {
-		floorIds_ = stcChecker_.check( ref completeFloorIdList_ );
-		updateBarricadeState( floorIds_, completeFloorIdList_ );
+		updateBarricadeState();
 
 		// 全エネミーに対して周囲バリケードの検索を命令
 		for ( var node = enemies_.First; node != null; ) {
@@ -260,15 +260,22 @@ public class Field : MonoBehaviour {
 	}
 
 	// バリケードの囲い状態を更新
-	void updateBarricadeState( int[,] floorIds, List<bool> compFlag ) {
+	void updateBarricadeState() {
+		floorIds_ = stcChecker_.check( ref completeFloorIdList_ );
 		for ( int x = 0; x < param_.region_.x; ++x ) {
 			for ( int y = 0; y < param_.region_.y; ++y ) {
-				int id = floorIds[ x, y ];
-				if ( compFlag[ id ] == true )
+				int id = floorIds_[ x, y ];
+				if ( completeFloorIdList_[ id ] == true )
 					plates_[ x, y ].setColor( Color.red );
 				else
 					plates_[ x, y ].setColor( Color.white );
 			}
+		}
+
+		// もし全領域を囲えていたら報告
+		if ( isAllRegionStockaded()  == true ) {
+			if ( allRegionStockadeCallback_ != null )
+				allRegionStockadeCallback_();
 		}
 	}
 
@@ -348,6 +355,7 @@ public class Field : MonoBehaviour {
 	FieldPlate[,] plates_;
 	int[,] floorIds_;
 	List<bool> completeFloorIdList_ = new List<bool>();
+	System.Action allRegionStockadeCallback_;
 
 	static int typeEnemy_g = 2;
 	static int typePlayer_g = 1;
