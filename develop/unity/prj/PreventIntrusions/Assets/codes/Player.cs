@@ -126,7 +126,8 @@ public class Player : MonoBehaviour {
 				Vector2Int elem = Vector2Int.zero;
 				if (
 					parent_.field_.getBarricadeOnCell( parent_.pos_, key, ref elem ) == null &&
-					parent_.field_.isValidateCoord( nextPos ) == true )
+					parent_.field_.isSpace( nextPos )
+				)
 				{
 					return new Move( parent_, key );
 				}

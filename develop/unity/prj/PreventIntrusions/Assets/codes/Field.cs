@@ -51,37 +51,35 @@ public class Field : MonoBehaviour {
 		}
 
 		// バリケードテスト
+		var indicesX = new List<int>();
+		var indicesY = new List<int>();
+		ListUtil.numbering( ref indicesX, param_.region_.x + 1 );
+		ListUtil.numbering( ref indicesY, param_.region_.y + 1 );
+		ListUtil.shuffle( ref indicesX );
 		for ( int x = 0; x < param_.region_.x; ++x ) {
-			int idx = Random.Range( 0, param_.region_.y + 1 );
-			var barri = Instantiate<Barricade>( barricadePrefab_ );
-			barri.transform.parent = fieldRoot_;
-			barri.transform.localPosition = new Vector3( 0.5f + x, 0.0f, idx );
-			hBarricades_[ x, idx ] = barri;
-			walls.setWall( StockadeChecker.Wall.WallOrder.Horizontal, x, idx, 1 );
-
-			idx = ( idx + Random.Range( 1, param_.region_.y ) ) % param_.region_.y;
-			barri = Instantiate<Barricade>( barricadePrefab_ );
-			barri.transform.parent = fieldRoot_;
-			barri.transform.localPosition = new Vector3( 0.5f + x, 0.0f, idx );
-			hBarricades_[ x, idx ] = barri;
-			walls.setWall( StockadeChecker.Wall.WallOrder.Horizontal, x, idx, 1 );
+			ListUtil.shuffle( ref indicesY );
+			int addBarricade = Random.Range( 0, 2 );
+			for ( int n = 0; n < 2 + addBarricade; ++n ) {
+				int idx = indicesY[ n ];
+				var barri = Instantiate<Barricade>( barricadePrefab_ );
+				barri.transform.parent = fieldRoot_;
+				barri.transform.localPosition = new Vector3( 0.5f + x, 0.0f, idx );
+				hBarricades_[ x, idx ] = barri;
+				walls.setWall( StockadeChecker.Wall.WallOrder.Horizontal, x, idx, 1 );
+			}
 		}
 		for ( int y = 0; y < param_.region_.y; ++y ) {
-			int idx = Random.Range( 0, param_.region_.x + 1 );
-			var barri = Instantiate<Barricade>( barricadePrefab_ );
-			barri.transform.parent = fieldRoot_;
-			barri.transform.localPosition = new Vector3( idx, 0.0f, 0.5f + y );
-			barri.transform.localRotation = Quaternion.Euler( 0.0f, 90.0f, 0.0f );
-			vBarricades_[ idx, y ] = barri;
-			walls.setWall( StockadeChecker.Wall.WallOrder.Vertical, idx, y, 1 );
-
-			idx = ( idx + Random.Range( 1, param_.region_.x ) ) % param_.region_.x;
-			barri = Instantiate<Barricade>( barricadePrefab_ );
-			barri.transform.parent = fieldRoot_;
-			barri.transform.localPosition = new Vector3( idx, 0.0f, 0.5f + y );
-			barri.transform.localRotation = Quaternion.Euler( 0.0f, 90.0f, 0.0f );
-			vBarricades_[ idx, y ] = barri;
-			walls.setWall( StockadeChecker.Wall.WallOrder.Vertical, idx, y, 1 );
+			ListUtil.shuffle( ref indicesX );
+			int addBarricade = Random.Range( 0, 2 );
+			for ( int n = 0; n < 2 + addBarricade; ++n ) {
+				int idx = indicesX[ n ];
+				var barri = Instantiate<Barricade>( barricadePrefab_ );
+				barri.transform.parent = fieldRoot_;
+				barri.transform.localPosition = new Vector3( idx, 0.0f, 0.5f + y );
+				barri.transform.localRotation = Quaternion.Euler( 0.0f, 90.0f, 0.0f );
+				vBarricades_[ idx, y ] = barri;
+				walls.setWall( StockadeChecker.Wall.WallOrder.Vertical, idx, y, 1 );
+			}
 		}
 
 		floorIds_ = stcChecker_.check( ref completeFloorIdList_ );
@@ -281,6 +279,7 @@ public class Field : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+#if false
 		// バリケード整合性チェック	
 		if ( param_ == null || hBarricades_ == null || vBarricades_ == null ) {
 			return;
@@ -307,6 +306,7 @@ public class Field : MonoBehaviour {
 				break;
 			}
 		}
+#endif
 	}
 
 	private void OnDrawGizmos() {
