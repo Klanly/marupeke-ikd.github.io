@@ -21,6 +21,8 @@ public class ObjectLooker : MonoBehaviour {
 	}
 	
 	void Update () {
+		if ( target_ == null )
+			return;
 		transform.position = target_.transform.position + offset_;
 		transform.rotation = Quaternion.LookRotation( -offset_ );
 	}

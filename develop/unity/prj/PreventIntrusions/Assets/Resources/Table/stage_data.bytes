@@ -1,0 +1,7 @@
+4
+3
+id	width	height	enemyNum
+string	int	int	int
+stage_0	5	5	0
+stage_1	5	5	1
+stage_2	7	7	3

@@ -47,22 +47,28 @@ public class GameManager : MonoBehaviour {
 			parent_.stageIndex_ = stageIndex;
 		}
 		protected override State innerInit() {
-			stage_ = Instantiate<StageManager>( parent_.stagePrefab_ );
-			var param = new StageManager.Param();   // TODO: テーブルから取得
+			int stageNum = Stage_data.getInstance().getRowNum();
+			if ( stageIndex_ >= stageNum ) {
+				// タイトルへ
+				parent_.stageIndex_ = 0;
+				return new Title( parent_ );
+			}
+			var param = new StageManager.Param();
 			param.stageIndex_ = stageIndex_;
+			var sp = Stage_data.getInstance().getParam( "stage_" + stageIndex_ );
+			param.fieldParam_.region_.x = sp.width_;
+			param.fieldParam_.region_.y = sp.height_;
+			param.enemyNum_ = sp.enemyNum_;
+
+			stage_ = Instantiate<StageManager>( parent_.stagePrefab_ );
 			stage_.setup( param );
 			stage_.FinishCallback = ( isNext )=> {
-				var finalStage = 2;	// TODO: テーブルから取得
 				if ( isNext == true ) {
-					if ( stage_.getStageIndex() == finalStage ) {
-						// エンディングへ
-						setNextState( new Ending( parent_ ) );
-					} else {
-						// 次のステージへ
-						setNextState( new Stage( parent_, stage_.getStageIndex() + 1 ) );
-					}
+					// 次のステージへ
+					setNextState( new Stage( parent_, stage_.getStageIndex() + 1 ) );
 				} else {
 					// ゲームオーバー後なのでタイトルへ
+					parent_.stageIndex_ = 0;
 					setNextState( new Title( parent_ ) );
 				}
 				Destroy( stage_.gameObject );

@@ -244,7 +244,7 @@ public class Player : MonoBehaviour {
 
 		protected override State innerUpdate() {
 			// 指定時間以上経ったら抜けるようにする
-			tm_ = Time.deltaTime;
+			tm_ += Time.deltaTime;
 			if ( tm_ >= parent_.param_.pushSec_ + 1.0f ) {
 				return new Idle( parent_ );
 			}

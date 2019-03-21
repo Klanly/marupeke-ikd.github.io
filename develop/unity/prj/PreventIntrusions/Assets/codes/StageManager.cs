@@ -26,6 +26,8 @@ public class StageManager : MonoBehaviour {
 
 	public class Param {
 		public int stageIndex_ = 0;
+		public Field.Param fieldParam_ = new Field.Param();
+		public int enemyNum_ = 3;
 	}
 
 	public System.Action< bool > FinishCallback { set { finishCallback_ = value; } }
@@ -38,12 +40,10 @@ public class StageManager : MonoBehaviour {
 		field_ = Instantiate<Field>( fieldPrefab_ );
 		field_.transform.parent = transform;
 		field_.transform.localPosition = Vector3.zero;
-
-		var fieldParam = new Field.Param();
-		field_.setup( fieldParam );
+		field_.setup( param.fieldParam_ );
 
 		// TODO: 敵を配置
-		for ( int i = 0; i < 5; ++i ) {
+		for ( int i = 0; i < param.enemyNum_; ++i ) {
 			emitEnemy();
 		}
 

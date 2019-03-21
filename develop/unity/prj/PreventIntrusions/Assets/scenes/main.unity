@@ -321,7 +321,7 @@ MonoBehaviour:
     type: 2}
   endingPrefab_: {fileID: 114738492982967502, guid: 0b3213def9be52049bf437edd7ed9f74,
     type: 2}
-  stageIndex_: 1
+  stageIndex_: 2
 --- !u!4 &637419627
 Transform:
   m_ObjectHideFlags: 0

@@ -275,10 +275,21 @@
     <Compile Include="Assets\codes\Player.cs" />
     <Compile Include="Assets\codes\StageManager.cs" />
     <Compile Include="Assets\codes\StockadeChecker.cs" />
-    <Compile Include="Assets\codes\Table\towerparameter_data.cs" />
+    <Compile Include="Assets\codes\Table\Stage_data.cs" />
     <Compile Include="Assets\codes\Test.cs" />
     <Compile Include="Assets\codes\TestFloor.cs" />
     <Compile Include="Assets\codes\TitleManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Plugins\BitmapFontImporter\Examples\Font1\font1.fnt" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Examples\Font2\font2.fnt" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Examples\font3\font3.fnt" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\BFILogic.cginc" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font2.shader" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font3.shader" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font4.shader" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font5.shader" />
+    <None Include="Assets\fonts\font48.fnt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
