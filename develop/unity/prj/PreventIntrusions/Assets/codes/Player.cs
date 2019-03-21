@@ -241,6 +241,16 @@ public class Player : MonoBehaviour {
 			} );
 			return this;
 		}
+
+		protected override State innerUpdate() {
+			// 指定時間以上経ったら抜けるようにする
+			tm_ = Time.deltaTime;
+			if ( tm_ >= parent_.param_.pushSec_ + 1.0f ) {
+				return new Idle( parent_ );
+			}
+			return this;
+		}
+		float tm_ = 0.0f;
 		KeyCode dir_;
 	}
 
@@ -308,6 +318,16 @@ public class Player : MonoBehaviour {
 			} );
 			return this;
 		}
+
+		protected override State innerUpdate() {
+			// 指定時間以上経ったら抜けるようにする
+			tm_ = Time.deltaTime;
+			if ( tm_ >= parent_.param_.pushSec_ + 1.0f ) {
+				return new Idle( parent_ );
+			}
+			return this;
+		}
+		float tm_ = 0.0f;
 		KeyCode dir_;
 	}
 
