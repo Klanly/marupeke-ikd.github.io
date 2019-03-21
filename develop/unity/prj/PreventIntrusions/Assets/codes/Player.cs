@@ -36,6 +36,11 @@ public class Player : MonoBehaviour {
 		return pos_;
 	}
 
+	// クリアへ
+	public void toClear() {
+		bClear_ = true;
+	}
+
 	// ゲームオーバーへ
 	public void toGameOver() {
 		if ( bGameOver_ == true )
@@ -90,6 +95,10 @@ public class Player : MonoBehaviour {
 			// 死亡判定
 			if ( isDead() == true )
 				return new Dead( parent_ );
+
+			if ( parent_.bClear_ == true ) {
+				return null;
+			}
 
 			var preState = state_;
 			if ( state_ != null ) {
@@ -397,4 +406,5 @@ public class Player : MonoBehaviour {
 	Field field_;
 	System.Action<int> enemyCollideCallback_;   // 敵に当たったらコール
 	bool bGameOver_ = false;
+	bool bClear_ = false;
 }

@@ -145,6 +145,7 @@ public class StageManager : MonoBehaviour {
 			parent_.field_.AllRegionStockadeCallback = () => {
 				parent_.timeCounter_.setActive( false );
 				parent_.clearImage_.gameObject.SetActive( true );
+				parent_.player_.toClear();
 				GlobalState.wait( 3.0f, () => {
 					FaderManager.Fader.to( 1.0f, 3.0f, () => {
 						parent_.finishCallback_( true );
