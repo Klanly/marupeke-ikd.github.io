@@ -8,16 +8,22 @@ public class StageManager : MonoBehaviour {
 	Field fieldPrefab_;
 
 	[SerializeField]
-	Player playerPrefab_;
+	protected Player playerPrefab_;
 
 	[SerializeField]
 	GameOverManager gameOverPrefab_;
 
 	[SerializeField]
-	EnemyFactory enemyFactory_;
+	protected EnemyFactory enemyFactory_;
 
 	[SerializeField]
 	UnityEngine.UI.Image clearImage_;
+
+	[SerializeField]
+	UnityEngine.UI.Image gameOverImage_;
+
+	[SerializeField]
+	protected TimeCounter timeCounter_;
 
 
 	private void Awake() {
@@ -28,6 +34,7 @@ public class StageManager : MonoBehaviour {
 		public int stageIndex_ = 0;
 		public Field.Param fieldParam_ = new Field.Param();
 		public int enemyNum_ = 3;
+		public int timeSec_ = 120;
 	}
 
 	public System.Action< bool > FinishCallback { set { finishCallback_ = value; } }
@@ -54,6 +61,11 @@ public class StageManager : MonoBehaviour {
 		player_.transform.parent = field_.transform;
 		player_.setup( field_, playerParam );
 		player_.setPos( new Vector2Int( 0, 0 ) );
+
+		// タイマー
+		timeCounter_.setup( param.timeSec_ );
+
+		bInitialized_ = true;
 	}
 
 	// ステージインデックスを取得
@@ -67,7 +79,7 @@ public class StageManager : MonoBehaviour {
 	}
 
 	// 敵を生成
-	void emitEnemy() {
+	virtual protected void emitEnemy() {
 		if ( field_.isAllRegionStockaded() == true ) {
 			return;	// 置き場が無い
 		}
@@ -82,7 +94,9 @@ public class StageManager : MonoBehaviour {
 		}
 		enemy.setup( field_, enemyParam, initPos );
 		enemy.DestroyCallback = () => {
-			GlobalState.wait( 2.0f, () => {
+			GlobalState.wait( 15.0f, () => {
+				if ( this == null )
+					return false;
 				emitEnemy();
 				return false;
 			} );
@@ -93,7 +107,8 @@ public class StageManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		state_ = new Intro( this );
+		if ( bInitialized_ == true )
+			state_ = new Intro( this );
 	}
 
 	// Update is called once per frame
@@ -102,7 +117,7 @@ public class StageManager : MonoBehaviour {
 			state_ = state_.update();
 	}
 
-	class Intro : State<StageManager> {
+	protected class Intro : State<StageManager> {
 		public Intro(StageManager parent) : base( parent ) { }
 		protected override State innerInit() {
 			// カメラ初期化
@@ -118,15 +133,26 @@ public class StageManager : MonoBehaviour {
 		}
 	}
 
-	class Idle : State<StageManager> {
+	protected class Idle : State<StageManager> {
 		public Idle(StageManager parent) : base( parent ) { }
 		protected override State innerInit() {
 			// 全囲い達成したらクリア
 			parent_.field_.AllRegionStockadeCallback = () => {
+				parent_.timeCounter_.setActive( false );
 				parent_.clearImage_.gameObject.SetActive( true );
-				GlobalState.wait( 4.0f, () => {
+				GlobalState.wait( 3.0f, () => {
 					FaderManager.Fader.to( 1.0f, 3.0f, () => {
 						parent_.finishCallback_( true );
+					} );
+					return false;
+				} );
+			};
+			// タイムアウトしたらゲームオーバー
+			parent_.timeCounter_.TimeOverCallback = () => {
+				parent_.gameOverImage_.gameObject.SetActive( true );
+				GlobalState.wait( 3.0f, () => {
+					FaderManager.Fader.to( 1.0f, 3.0f, () => {
+						parent_.finishCallback_( false );
 					} );
 					return false;
 				} );
@@ -154,11 +180,12 @@ public class StageManager : MonoBehaviour {
 		}
 	}
 
-	Param param_;
-	System.Action<bool> finishCallback_;
-	State state_;
+	protected Param param_;
+	protected System.Action<bool> finishCallback_;
+	protected State state_;
 
-	Field field_;
-	Player player_;
-	ObjectLooker lookerComponet_;
+	protected Field field_;
+	protected Player player_;
+	protected ObjectLooker lookerComponet_;
+	protected bool bInitialized_ = false;
 }

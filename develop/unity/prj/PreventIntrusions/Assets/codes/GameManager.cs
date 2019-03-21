@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviour {
 	EndingManager endingPrefab_;
 
 	[SerializeField]
+	TutorialStageManager tutorialStagePrefeb_;
+
+	[SerializeField]
 	int stageIndex_ = 1;
 
 	void Start () {
@@ -32,8 +35,11 @@ public class GameManager : MonoBehaviour {
 
 		protected override State innerInit() {
 			title_ = Instantiate<TitleManager>( parent_.titlePrefab_ );
-			title_.FinishCallback = () => {
-				setNextState( new Stage( parent_, parent_.stageIndex_ ) );
+			title_.FinishCallback = ( mode ) => {
+				if ( mode == TitleManager.Mode.Start )
+					setNextState( new Stage( parent_, parent_.stageIndex_ ) );
+				else
+					setNextState( new TutorialStage( parent_, parent_.stageIndex_ ) );
 				Destroy( title_.gameObject );
 			};
 			return this;
@@ -60,6 +66,7 @@ public class GameManager : MonoBehaviour {
 			param.fieldParam_.region_.y = sp.height_;
 			param.fieldParam_.maxBarricadeNum_ = sp.maxBarricadeNum_;
 			param.enemyNum_ = sp.enemyNum_;
+			param.timeSec_ = sp.time_;
 
 			stage_ = Instantiate<StageManager>( parent_.stagePrefab_ );
 			stage_.setup( param );
@@ -70,6 +77,35 @@ public class GameManager : MonoBehaviour {
 				} else {
 					// ゲームオーバー後なのでタイトルへ
 					parent_.stageIndex_ = 0;
+					setNextState( new Title( parent_ ) );
+				}
+				Destroy( stage_.gameObject );
+			};
+			return this;
+		}
+		StageManager stage_;
+		int stageIndex_ = 0;
+	}
+
+	class TutorialStage : State<GameManager> {
+		public TutorialStage(GameManager parent, int stageIndex ) : base( parent ) {
+			stageIndex_ = stageIndex;
+		}
+		protected override State innerInit() {
+			var stage = Instantiate<TutorialStageManager>( parent_.tutorialStagePrefeb_ );
+			stage_ = stage;
+			if ( stage.setup( stageIndex_ ) == false ) {
+				Destroy( stage_.gameObject );
+				// タイトルへ戻る
+				return new Title( parent_ );
+			}
+
+			stage_.FinishCallback = (isNext) => {
+				if ( isNext == true ) {
+					// 次のステージへ
+					setNextState( new TutorialStage( parent_, stage_.getStageIndex() + 1 ) );
+				} else {
+					// タイトルへ戻る
 					setNextState( new Title( parent_ ) );
 				}
 				Destroy( stage_.gameObject );

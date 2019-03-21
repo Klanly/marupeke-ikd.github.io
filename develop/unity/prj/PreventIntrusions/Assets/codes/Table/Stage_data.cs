@@ -18,6 +18,7 @@ public class Stage_data : Table {
 		param.height_ = values[ "height" ].iVal_;
 		param.enemyNum_ = values[ "enemyNum" ].iVal_;
 		param.maxBarricadeNum_ = values[ "maxBarricadeNum" ].iVal_;
+		param.time_ = values[ "time" ].iVal_;
 		params_[ values[ "id" ].sVal_ ] = param;
 
 		paramList_.Add( param );
@@ -46,6 +47,7 @@ public class Stage_data : Table {
 		public int height_;
 		public int enemyNum_;
 		public int maxBarricadeNum_;
+		public int time_;
 
 	}
 	static Stage_data instance_ = new Stage_data();

@@ -7,13 +7,13 @@ using UnityEngine;
 public class Field : MonoBehaviour {
 
 	[SerializeField]
-	FieldPlate platePrefab_;
+	protected FieldPlate platePrefab_;
 
 	[SerializeField]
-	Barricade barricadePrefab_;
+	protected Barricade barricadePrefab_;
 
 	[SerializeField]
-	Transform fieldRoot_;
+	protected Transform fieldRoot_;
 
 	[SerializeField]
 	Test testPrefab_;
@@ -261,7 +261,7 @@ public class Field : MonoBehaviour {
 	}
 
 	// バリケードの囲い状態を更新
-	void updateBarricadeState() {
+	protected void updateBarricadeState() {
 		floorIds_ = stcChecker_.check( ref completeFloorIdList_ );
 		for ( int x = 0; x < param_.region_.x; ++x ) {
 			for ( int y = 0; y < param_.region_.y; ++y ) {
@@ -347,13 +347,13 @@ public class Field : MonoBehaviour {
 		public Barricade barricade_ = null;	// L,R,D,U
 	}
 
-	Barricade[,] hBarricades_;	// 水平バリケード
-	Barricade[,] vBarricades_;	// 垂直バリケード
-	Param param_;
+	protected Barricade[,] hBarricades_;    // 水平バリケード
+	protected Barricade[,] vBarricades_;	// 垂直バリケード
+	protected Param param_;
 	LinkedList<Enemy> enemies_ = new LinkedList<Enemy>();
-	int[,] objectPoses_;
-	StockadeChecker stcChecker_ = new StockadeChecker();
-	FieldPlate[,] plates_;
+	protected int[,] objectPoses_;
+	protected StockadeChecker stcChecker_ = new StockadeChecker();
+	protected FieldPlate[,] plates_;
 	int[,] floorIds_;
 	List<bool> completeFloorIdList_ = new List<bool>();
 	System.Action allRegionStockadeCallback_;
