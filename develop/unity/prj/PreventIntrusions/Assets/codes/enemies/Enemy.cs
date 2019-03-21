@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour {
 	}
 
 	public Vector2Int Pos { get { return pos_; } }
+	public System.Action DestroyCallback { set { destroyCallback_ = value; } }
 
 	// セットアップ
 	public void setup( Field field, Param param, Vector2Int initPos ) {
@@ -37,6 +38,8 @@ public class Enemy : MonoBehaviour {
 
 	// 囲まれてやられた
 	public void toDestroy() {
+		if ( destroyCallback_ != null )
+			destroyCallback_();
 		Destroy( gameObject );
 	}
 
@@ -52,5 +55,6 @@ public class Enemy : MonoBehaviour {
 
 	protected Field field_;
 	protected Param param_;
-	Vector2Int pos_;	// 現在位置
+	Vector2Int pos_;    // 現在位置
+	System.Action destroyCallback_;
 }

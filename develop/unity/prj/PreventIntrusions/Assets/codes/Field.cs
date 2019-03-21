@@ -84,13 +84,17 @@ public class Field : MonoBehaviour {
 			walls.setWall( StockadeChecker.Wall.WallOrder.Vertical, idx, y, 1 );
 		}
 
-		var compFlag = new List<bool>();
-		var floorIds = stcChecker_.check( ref compFlag );
-		updateBarricadeState( floorIds, compFlag );
+		floorIds_ = stcChecker_.check( ref completeFloorIdList_ );
+		updateBarricadeState( floorIds_, completeFloorIdList_ );
 
 		test_ = Instantiate<Test>( testPrefab_ );
 		test_.transform.localPosition = new Vector3( 10.0f, 0.0f, 0.0f );
 		test_.setup( param_.region_, stcChecker_ );
+	}
+
+	// フィールド領域を取得
+	public Vector2Int getRegion() {
+		return param_.region_;
 	}
 
 	// 敵を登録
@@ -148,8 +152,10 @@ public class Field : MonoBehaviour {
 	public bool moveBarricade(Vector2Int pos, KeyCode key, KeyCode dir, float sec, System.Action finishCallback ) {
 		Vector2Int elem = Vector2Int.zero;
 		var barricade = getBarricadeOnCell( pos, key, ref elem );
-		if ( barricade == null )
+		if ( barricade == null ) {
+			finishCallback();
 			return false;
+		}
 		var offset = KeyHelper.offset( dir );
 		System.Action offsetter = null;
 		var walls = stcChecker_.Walls;
@@ -210,17 +216,35 @@ public class Field : MonoBehaviour {
 		return param_.region_.y;
 	}
 
+	// 指定座標が囲い位置内？
+	public bool isStockadePos( Vector2Int pos ) {
+		if ( isValidateCoord( pos ) == false )
+			return false;
+		int id = floorIds_[ pos.x, pos.y ];
+		return ( id != 0 && completeFloorIdList_[ id ] == true );
+	}
+
+	public bool isAllRegionStockaded() {
+		for ( int x = 0; x < param_.region_.x; ++x ) {
+			for ( int y = 0; y < param_.region_.y; ++y ) {
+				if ( isStockadePos( new Vector2Int( x, y ) ) == false )
+					return false;
+			}
+		}
+		return true;
+	}
+
 	// 敵を囲ったかチェック
 	public void checkEnemyStockade() {
-		var completeStockadeList = new List<bool>();
-		var floorIds = stcChecker_.check( ref completeStockadeList );
-		updateBarricadeState( floorIds, completeStockadeList );
+		floorIds_ = stcChecker_.check( ref completeFloorIdList_ );
+		updateBarricadeState( floorIds_, completeFloorIdList_ );
 
 		// 全エネミーに対して周囲バリケードの検索を命令
 		for ( var node = enemies_.First; node != null; ) {
 			var e = node.Value;
-			if ( e.checkStockade( floorIds, completeStockadeList ) == true ) {
+			if ( e.checkStockade( floorIds_, completeFloorIdList_ ) == true ) {
 				// 囲まれているので、エネミーを削除
+				objectPoses_[ e.Pos.x, e.Pos.y ] = 0;
 				e.toDestroy();
 				var deleteNode = node;
 				node = node.Next;
@@ -257,7 +281,58 @@ public class Field : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		// バリケード整合性チェック	
+		if ( param_ == null || hBarricades_ == null || vBarricades_ == null ) {
+			return;
+		}
+		for ( int x = 0; x < param_.region_.x; ++x ) {
+			int counter = 0;
+			for ( int y = 0; y < param_.region_.y + 1; ++y ) {
+				if ( hBarricades_[ x, y ] != null )
+					counter++;
+			}
+			if ( counter != 2 ) {
+				Debug.LogWarning( "Barricade Error! hBarricade_[" + x + ",*]" );
+				break;
+			}
+		}
+		for ( int y = 0; y < param_.region_.y; ++y ) {
+			int counter = 0;
+			for ( int x = 0; x < param_.region_.x + 1; ++x ) {
+				if ( vBarricades_[ x, y ] != null )
+					counter++;
+			}
+			if ( counter != 2 ) {
+				Debug.LogWarning( "Barricade Error! vBarricade_[*," + y + "]" );
+				break;
+			}
+		}
+	}
+
+	private void OnDrawGizmos() {
+		if ( param_ == null || floorIds_ == null || stcChecker_ == null )
+			return;
+
+		var wall = stcChecker_.Walls;
+		if ( wall == null )
+			return;
+
+		for ( int x = 0; x < param_.region_.x; ++x ) {
+			for ( int y = 0; y < param_.region_.y + 1; ++y ) {
+				var id = wall.getWall( StockadeChecker.Wall.WallOrder.Horizontal, x, y );
+				if ( id != 0 ) {
+					Gizmos.DrawLine( new Vector3( x, 2.0f, y ), new Vector3( x + 1, 2.0f, y ) );
+				}
+			}
+		}
+		for ( int x = 0; x < param_.region_.x + 1; ++x ) {
+			for ( int y = 0; y < param_.region_.y; ++y ) {
+				var id = wall.getWall( StockadeChecker.Wall.WallOrder.Vertical, x, y );
+				if ( id != 0 ) {
+					Gizmos.DrawLine( new Vector3( x, 2.0f, y ), new Vector3( x, 2.0f, y + 1 ) );
+				}
+			}
+		}
 	}
 
 	class Edge {
@@ -271,6 +346,8 @@ public class Field : MonoBehaviour {
 	int[,] objectPoses_;
 	StockadeChecker stcChecker_ = new StockadeChecker();
 	FieldPlate[,] plates_;
+	int[,] floorIds_;
+	List<bool> completeFloorIdList_ = new List<bool>();
 
 	static int typeEnemy_g = 2;
 	static int typePlayer_g = 1;

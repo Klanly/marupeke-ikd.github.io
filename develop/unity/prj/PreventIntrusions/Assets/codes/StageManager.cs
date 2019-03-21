@@ -36,16 +36,7 @@ public class StageManager : MonoBehaviour {
 
 		// TODO: 敵を配置
 		for ( int i = 0; i < 5; ++i ) {
-			var enemy = enemyFactory_.create( EnemyFactory.EnemyType.Hiyorimy );
-			var enemyParam = new Enemy.Param();
-			Vector2Int initPos = Vector2Int.zero;
-			while ( true ) {
-				initPos = new Vector2Int( Random.Range( 0, fieldParam.region_.x ), Random.Range( 0, fieldParam.region_.y ) );
-				if ( field_.isSpace( initPos ) == true )
-					break;
-			}
-			enemy.setup( field_, enemyParam, initPos );
-			field_.addEnemy( enemy, initPos );
+			emitEnemy();
 		}
 
 		// プレイヤー
@@ -65,6 +56,31 @@ public class StageManager : MonoBehaviour {
 	// 削除
 	private void OnDestroy() {
 		Destroy( lookerComponet_ );	// カメラを解放
+	}
+
+	// 敵を生成
+	void emitEnemy() {
+		if ( field_.isAllRegionStockaded() == true ) {
+			return;	// 置き場が無い
+		}
+		var enemy = enemyFactory_.create( EnemyFactory.EnemyType.Hiyorimy );
+		var enemyParam = new Enemy.Param();
+		Vector2Int initPos = Vector2Int.zero;
+		Vector2Int region = field_.getRegion();
+		while ( true ) {
+			initPos = new Vector2Int( Random.Range( 0, region.x ), Random.Range( 0, region.y ) );
+			if ( field_.isSpace( initPos ) == true && field_.isStockadePos( initPos ) == false )
+				break;
+		}
+		enemy.setup( field_, enemyParam, initPos );
+		enemy.DestroyCallback = () => {
+			GlobalState.wait( 2.0f, () => {
+				emitEnemy();
+				return false;
+			} );
+		};
+
+		field_.addEnemy( enemy, initPos );
 	}
 
 	// Use this for initialization
