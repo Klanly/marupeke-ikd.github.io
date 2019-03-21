@@ -246,6 +246,7 @@ public class Player : MonoBehaviour {
 			// 指定時間以上経ったら抜けるようにする
 			tm_ += Time.deltaTime;
 			if ( tm_ >= parent_.param_.pushSec_ + 1.0f ) {
+				setNextState( null );
 				return new Idle( parent_ );
 			}
 			return this;
@@ -323,6 +324,7 @@ public class Player : MonoBehaviour {
 			// 指定時間以上経ったら抜けるようにする
 			tm_ = Time.deltaTime;
 			if ( tm_ >= parent_.param_.pushSec_ + 1.0f ) {
+				setNextState( null );
 				return new Idle( parent_ );
 			}
 			return this;

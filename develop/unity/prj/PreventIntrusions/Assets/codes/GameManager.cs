@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour {
 			var sp = Stage_data.getInstance().getParam( "stage_" + stageIndex_ );
 			param.fieldParam_.region_.x = sp.width_;
 			param.fieldParam_.region_.y = sp.height_;
+			param.fieldParam_.maxBarricadeNum_ = sp.maxBarricadeNum_;
 			param.enemyNum_ = sp.enemyNum_;
 
 			stage_ = Instantiate<StageManager>( parent_.stagePrefab_ );

@@ -24,6 +24,7 @@ public class Field : MonoBehaviour {
 	public class Param {
 		public Vector2Int region_ = new Vector2Int( 10, 8 );
 		public Vector2Int playerPos_ = new Vector2Int( 4, 4 );
+		public int maxBarricadeNum_ = 2;
 	}
 
 	public void setup(Param param) {
@@ -60,7 +61,7 @@ public class Field : MonoBehaviour {
 		ListUtil.shuffle( ref indicesX );
 		for ( int x = 0; x < param_.region_.x; ++x ) {
 			ListUtil.shuffle( ref indicesY );
-			int addBarricade = Random.Range( 0, 2 );
+			int addBarricade = Random.Range( 0, param_.maxBarricadeNum_ - 1 );
 			for ( int n = 0; n < 2 + addBarricade; ++n ) {
 				int idx = indicesY[ n ];
 				var barri = Instantiate<Barricade>( barricadePrefab_ );
