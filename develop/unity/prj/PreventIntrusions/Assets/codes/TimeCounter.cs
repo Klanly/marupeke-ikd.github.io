@@ -16,6 +16,14 @@ public class TimeCounter : MonoBehaviour {
 		bActive_ = isActive;
 	}
 
+	public void addSec( float sec ) {
+		sec_ += sec;
+	}
+
+	public float getSec() {
+		return sec_;
+	}
+
 	void updatetTimeStr() {
 		int minute = ( int )( sec_ / 60.0f );
 		int sec = ( int )( sec_ % 60 );

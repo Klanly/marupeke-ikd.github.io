@@ -722,7 +722,7 @@ MonoBehaviour:
     type: 2}
   enemyFactory_: {fileID: 114239306184009380}
   clearImage_: {fileID: 114887400249454582}
-  gameOverImage_: {fileID: 114887400249454582}
+  gameOverImage_: {fileID: 114842174019980022}
   timeCounter_: {fileID: 114301862344687818}
 --- !u!114 &114817613631626280
 MonoBehaviour:

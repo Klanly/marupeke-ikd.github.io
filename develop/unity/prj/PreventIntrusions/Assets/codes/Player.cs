@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+	public System.Action<int> EnemyCollideCallback { set { enemyCollideCallback_ = value; } }
+
 	public class Param {
 		public Vector2Int initPos_;			// 初期位置
 		public float moveSec_ = 0.30f;		// 1セル分移動する時の移動時間
@@ -34,9 +36,25 @@ public class Player : MonoBehaviour {
 		return pos_;
 	}
 
+	// ゲームオーバーへ
+	public void toGameOver() {
+		if ( bGameOver_ == true )
+			return;
+		bGameOver_ = true;
+	}
+
 	// プレイヤーの向いている方向
 	KeyCode getDir() {
 		return dir_;
+	}
+
+	// コリジョンチェック
+	void checkCollide() {
+		int colNum = field_.isEnemyExist( pos_ );
+		if ( colNum > 0 ) {
+			if ( enemyCollideCallback_ != null )
+				enemyCollideCallback_( colNum );
+		}
 	}
 
 	// Use this for initialization
@@ -59,6 +77,15 @@ public class Player : MonoBehaviour {
 		public Alive(Player parent) : base( parent ) {
 			state_ = new Idle( parent );
 		}
+		protected override State innerInit() {
+			GlobalState.interval( 0.5f, -1, () => {
+				if ( this == null )
+					return false;
+				parent_.checkCollide();
+				return true;
+			} );
+			return null;
+		}
 		protected override State innerUpdate() {
 			// 死亡判定
 			if ( isDead() == true )
@@ -75,7 +102,7 @@ public class Player : MonoBehaviour {
 		}
 
 		bool isDead() {
-			return false;	// 後で
+			return parent_.bGameOver_;
 		}
 
 		State state_;
@@ -368,4 +395,6 @@ public class Player : MonoBehaviour {
 	Vector2Int pos_ = Vector2Int.zero;  // プレイヤーの整数座標
 	KeyCode dir_ = KeyCode.DownArrow;	// 向いている方向
 	Field field_;
+	System.Action<int> enemyCollideCallback_;   // 敵に当たったらコール
+	bool bGameOver_ = false;
 }

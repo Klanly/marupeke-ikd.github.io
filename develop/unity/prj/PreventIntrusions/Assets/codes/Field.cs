@@ -260,6 +260,16 @@ public class Field : MonoBehaviour {
 		objectPoses_[ pos.x, pos.y ] = typeEnemy_g;
 	}
 
+	// 敵がいる？
+	public int isEnemyExist( Vector2Int pos ) {
+		int count = 0;
+		foreach ( var e in enemies_ ) {
+			if ( pos == e.Pos )
+				count++;
+		}
+		return count;
+	}
+
 	// バリケードの囲い状態を更新
 	protected void updateBarricadeState() {
 		floorIds_ = stcChecker_.check( ref completeFloorIdList_ );

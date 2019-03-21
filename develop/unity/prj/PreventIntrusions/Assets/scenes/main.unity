@@ -328,7 +328,7 @@ MonoBehaviour:
     type: 2}
   tutorialStagePrefeb_: {fileID: 114126740055337876, guid: 4d0c4c43e304b4949a8a5db5ec371b7d,
     type: 2}
-  stageIndex_: 0
+  stageIndex_: 3
 --- !u!4 &637419627
 Transform:
   m_ObjectHideFlags: 0
@@ -974,7 +974,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1516481894
 Transform:
   m_ObjectHideFlags: 0

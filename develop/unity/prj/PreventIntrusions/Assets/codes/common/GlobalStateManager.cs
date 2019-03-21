@@ -180,6 +180,34 @@ public class GlobalState : GlobalStateBase
         return nextState_;
     }
 
+	// 一定間隔コール
+	//  waitSec: 間隔
+	//  count  : 繰り返し数。マイナス値で無限に回る(actionがfalseを返したら終了)
+	static public GlobalState interval(float waitSec, int count, System.Func<bool> action) {
+		float curSec = 0.0f;
+		bool infinit = ( count < 0 );
+		var state = new GlobalState(
+			() => {
+				curSec += Time.deltaTime;
+				if ( curSec >= waitSec ) {
+					curSec -= waitSec;
+					action();
+					if ( infinit == false ) {
+						count--;
+						if ( count == 0 )
+							return false;
+					}
+					return action();
+				}
+				return true;
+			},
+			null
+		);
+		GlobalStateUpdater.getInstance().add( state );
+		return state;
+	}
+
+
 	// 待つ
 	public GlobalState wait( float sec ) {
 		float curSec = 0.0f;

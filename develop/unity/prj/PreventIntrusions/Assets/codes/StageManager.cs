@@ -61,6 +61,11 @@ public class StageManager : MonoBehaviour {
 		player_.transform.parent = field_.transform;
 		player_.setup( field_, playerParam );
 		player_.setPos( new Vector2Int( 0, 0 ) );
+		player_.EnemyCollideCallback = (num) => {
+			timeCounter_.addSec( -10.0f );
+			if ( timeCounter_.getSec() <= 0.0f )
+				player_.toGameOver();
+		};
 
 		// タイマー
 		timeCounter_.setup( param.timeSec_ );
