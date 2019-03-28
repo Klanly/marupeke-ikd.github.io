@@ -75,6 +75,13 @@
     <Compile Include="TrochoidRippleWaveUC.Designer.cs">
       <DependentUpon>TrochoidRippleWaveUC.cs</DependentUpon>
     </Compile>
+    <Compile Include="TrochoidStraightWave.cs" />
+    <Compile Include="TrochoidStraightWaveUC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TrochoidStraightWaveUC.Designer.cs">
+      <DependentUpon>TrochoidStraightWaveUC.cs</DependentUpon>
+    </Compile>
     <Compile Include="Vector2.cs" />
     <Compile Include="Wave.cs" />
     <Compile Include="World.cs" />
@@ -98,6 +105,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TrochoidRippleWaveUC.resx">
       <DependentUpon>TrochoidRippleWaveUC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TrochoidStraightWaveUC.resx">
+      <DependentUpon>TrochoidStraightWaveUC.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

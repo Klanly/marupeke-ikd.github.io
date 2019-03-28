@@ -46,6 +46,7 @@
 			this.trochoidRippleWaveUC = new WaveGenerator.TrochoidRippleWaveUC();
 			this.sinStraightWaveUC = new WaveGenerator.SinStraightWaveUC();
 			this.sinRippleWaveUC = new WaveGenerator.SinRippleWaveUC();
+			this.trochoidStraightWaveUC = new WaveGenerator.TrochoidStraightWaveUC();
 			((System.ComponentModel.ISupportInitialize)(this.outputPict)).BeginInit();
 			this.panel1.SuspendLayout();
 			this.waveParamContPanel.SuspendLayout();
@@ -55,7 +56,7 @@
 			// 
 			this.outputPict.BackColor = System.Drawing.Color.Silver;
 			this.outputPict.Location = new System.Drawing.Point(3, 2);
-			this.outputPict.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.outputPict.Margin = new System.Windows.Forms.Padding(4);
 			this.outputPict.Name = "outputPict";
 			this.outputPict.Size = new System.Drawing.Size(256, 256);
 			this.outputPict.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -65,7 +66,7 @@
 			// runBtn
 			// 
 			this.runBtn.Location = new System.Drawing.Point(592, 490);
-			this.runBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.runBtn.Margin = new System.Windows.Forms.Padding(4);
 			this.runBtn.Name = "runBtn";
 			this.runBtn.Size = new System.Drawing.Size(104, 31);
 			this.runBtn.TabIndex = 1;
@@ -78,7 +79,7 @@
 			this.panel1.AutoScroll = true;
 			this.panel1.Controls.Add(this.outputPict);
 			this.panel1.Location = new System.Drawing.Point(11, 10);
-			this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.panel1.Margin = new System.Windows.Forms.Padding(4);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(347, 325);
 			this.panel1.TabIndex = 2;
@@ -87,7 +88,7 @@
 			// 
 			this.waveSelector.FormattingEnabled = true;
 			this.waveSelector.Location = new System.Drawing.Point(365, 12);
-			this.waveSelector.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.waveSelector.Margin = new System.Windows.Forms.Padding(4);
 			this.waveSelector.Name = "waveSelector";
 			this.waveSelector.Size = new System.Drawing.Size(295, 106);
 			this.waveSelector.TabIndex = 3;
@@ -97,7 +98,7 @@
 			// addWaveBtn
 			// 
 			this.addWaveBtn.Location = new System.Drawing.Point(669, 15);
-			this.addWaveBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.addWaveBtn.Margin = new System.Windows.Forms.Padding(4);
 			this.addWaveBtn.Name = "addWaveBtn";
 			this.addWaveBtn.Size = new System.Drawing.Size(27, 25);
 			this.addWaveBtn.TabIndex = 4;
@@ -108,7 +109,7 @@
 			// removeWaveBtn
 			// 
 			this.removeWaveBtn.Location = new System.Drawing.Point(669, 48);
-			this.removeWaveBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.removeWaveBtn.Margin = new System.Windows.Forms.Padding(4);
 			this.removeWaveBtn.Name = "removeWaveBtn";
 			this.removeWaveBtn.Size = new System.Drawing.Size(27, 25);
 			this.removeWaveBtn.TabIndex = 5;
@@ -119,7 +120,7 @@
 			// saveToClipBoardBtn
 			// 
 			this.saveToClipBoardBtn.Location = new System.Drawing.Point(11, 490);
-			this.saveToClipBoardBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.saveToClipBoardBtn.Margin = new System.Windows.Forms.Padding(4);
 			this.saveToClipBoardBtn.Name = "saveToClipBoardBtn";
 			this.saveToClipBoardBtn.Size = new System.Drawing.Size(153, 31);
 			this.saveToClipBoardBtn.TabIndex = 6;
@@ -129,11 +130,12 @@
 			// 
 			// waveParamContPanel
 			// 
+			this.waveParamContPanel.Controls.Add(this.trochoidStraightWaveUC);
 			this.waveParamContPanel.Controls.Add(this.trochoidRippleWaveUC);
 			this.waveParamContPanel.Controls.Add(this.sinStraightWaveUC);
 			this.waveParamContPanel.Controls.Add(this.sinRippleWaveUC);
 			this.waveParamContPanel.Location = new System.Drawing.Point(365, 232);
-			this.waveParamContPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.waveParamContPanel.Margin = new System.Windows.Forms.Padding(4);
 			this.waveParamContPanel.Name = "waveParamContPanel";
 			this.waveParamContPanel.Size = new System.Drawing.Size(331, 250);
 			this.waveParamContPanel.TabIndex = 8;
@@ -147,9 +149,10 @@
 			this.waveTypeLB.Items.AddRange(new object[] {
             "Ripple Sin",
             "Straight Sin",
-            "Ripple Trochoid"});
+            "Ripple Trochoid",
+            "Straight Trochoid"});
 			this.waveTypeLB.Location = new System.Drawing.Point(365, 130);
-			this.waveTypeLB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.waveTypeLB.Margin = new System.Windows.Forms.Padding(4);
 			this.waveTypeLB.Name = "waveTypeLB";
 			this.waveTypeLB.Size = new System.Drawing.Size(295, 94);
 			this.waveTypeLB.TabIndex = 9;
@@ -158,7 +161,7 @@
 			// gridWidthTxt
 			// 
 			this.gridWidthTxt.Location = new System.Drawing.Point(197, 342);
-			this.gridWidthTxt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.gridWidthTxt.Margin = new System.Windows.Forms.Padding(4);
 			this.gridWidthTxt.Name = "gridWidthTxt";
 			this.gridWidthTxt.Size = new System.Drawing.Size(73, 22);
 			this.gridWidthTxt.TabIndex = 10;
@@ -167,7 +170,7 @@
 			// gridHeightTxt
 			// 
 			this.gridHeightTxt.Location = new System.Drawing.Point(280, 342);
-			this.gridHeightTxt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.gridHeightTxt.Margin = new System.Windows.Forms.Padding(4);
 			this.gridHeightTxt.Name = "gridHeightTxt";
 			this.gridHeightTxt.Size = new System.Drawing.Size(73, 22);
 			this.gridHeightTxt.TabIndex = 11;
@@ -196,7 +199,7 @@
 			// worldWidthTxt
 			// 
 			this.worldWidthTxt.Location = new System.Drawing.Point(197, 374);
-			this.worldWidthTxt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.worldWidthTxt.Margin = new System.Windows.Forms.Padding(4);
 			this.worldWidthTxt.Name = "worldWidthTxt";
 			this.worldWidthTxt.Size = new System.Drawing.Size(73, 22);
 			this.worldWidthTxt.TabIndex = 14;
@@ -215,7 +218,7 @@
 			// worldCenterXTxt
 			// 
 			this.worldCenterXTxt.Location = new System.Drawing.Point(197, 406);
-			this.worldCenterXTxt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.worldCenterXTxt.Margin = new System.Windows.Forms.Padding(4);
 			this.worldCenterXTxt.Name = "worldCenterXTxt";
 			this.worldCenterXTxt.Size = new System.Drawing.Size(73, 22);
 			this.worldCenterXTxt.TabIndex = 16;
@@ -224,7 +227,7 @@
 			// worldCenterYTxt
 			// 
 			this.worldCenterYTxt.Location = new System.Drawing.Point(280, 406);
-			this.worldCenterYTxt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.worldCenterYTxt.Margin = new System.Windows.Forms.Padding(4);
 			this.worldCenterYTxt.Name = "worldCenterYTxt";
 			this.worldCenterYTxt.Size = new System.Drawing.Size(73, 22);
 			this.worldCenterYTxt.TabIndex = 17;
@@ -233,7 +236,7 @@
 			// dupricateWaveBtn
 			// 
 			this.dupricateWaveBtn.Location = new System.Drawing.Point(669, 80);
-			this.dupricateWaveBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.dupricateWaveBtn.Margin = new System.Windows.Forms.Padding(4);
 			this.dupricateWaveBtn.Name = "dupricateWaveBtn";
 			this.dupricateWaveBtn.Size = new System.Drawing.Size(27, 25);
 			this.dupricateWaveBtn.TabIndex = 18;
@@ -264,6 +267,13 @@
 			this.sinRippleWaveUC.Size = new System.Drawing.Size(292, 246);
 			this.sinRippleWaveUC.TabIndex = 7;
 			// 
+			// trochoidStraightWaveUC
+			// 
+			this.trochoidStraightWaveUC.Location = new System.Drawing.Point(3, 3);
+			this.trochoidStraightWaveUC.Name = "trochoidStraightWaveUC";
+			this.trochoidStraightWaveUC.Size = new System.Drawing.Size(330, 232);
+			this.trochoidStraightWaveUC.TabIndex = 19;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -286,7 +296,7 @@
 			this.Controls.Add(this.waveSelector);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.runBtn);
-			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.Margin = new System.Windows.Forms.Padding(4);
 			this.Name = "MainForm";
 			this.Text = "Wave Generator v0.01";
 			this.Load += new System.EventHandler(this.MainForm_Load);
@@ -322,6 +332,7 @@
 		private System.Windows.Forms.TextBox worldCenterYTxt;
 		private System.Windows.Forms.Button dupricateWaveBtn;
 		private TrochoidRippleWaveUC trochoidRippleWaveUC;
+		private TrochoidStraightWaveUC trochoidStraightWaveUC;
 	}
 }
 

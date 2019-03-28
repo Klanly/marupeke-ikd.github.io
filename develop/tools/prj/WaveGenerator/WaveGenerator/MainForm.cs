@@ -91,30 +91,6 @@ namespace WaveGenerator
 			selectWaveList( waves_[ index ] );
 		}
 
-		void invisibleAllWaveControllers() {
-			sinRippleWaveUC.Visible = false;
-			sinStraightWaveUC.Visible = false;
-			trochoidRippleWaveUC.Visible = false;
-		}
-
-		void visibleWaveController( Wave wave ) {
-			switch (wave.WaveType) {
-			case Wave.EWaveType.SinRipple:
-				sinRippleWaveUC.Wave = wave;
-				sinRippleWaveUC.Visible = true;
-				break;
-			case Wave.EWaveType.SinStraignt:
-				sinStraightWaveUC.Wave = wave;
-				sinStraightWaveUC.Visible = true;
-				break;
-			case Wave.EWaveType.TrochoidRipple:
-				trochoidRippleWaveUC.Wave = wave;
-				trochoidRippleWaveUC.Visible = true;
-				break;
-			}
-			return;
-		}
-
 		void selectWaveList( Wave wave ) {
 			if (wave.WaveType == Wave.EWaveType.None)
 				return;
@@ -143,6 +119,7 @@ namespace WaveGenerator
 			selectWaveList( waves_[ waveIndex ] );
 		}
 
+		// 個々のWaveを生成
 		Wave createWave( Wave.EWaveType waveType ) {
 			switch (waveType) {
 			case Wave.EWaveType.None:
@@ -151,10 +128,43 @@ namespace WaveGenerator
 				return new SinRippleWave();
 			case Wave.EWaveType.SinStraignt:
 				return new SinStraightWave();
-				case Wave.EWaveType.TrochoidRipple:
-					return new TrochoidRippleWave();
+			case Wave.EWaveType.TrochoidRipple:
+				return new TrochoidRippleWave();
+			case Wave.EWaveType.TrochoidStraight:
+				return new TrochoidStraightWave();
 			}
 			return null;
+		}
+
+		// 全てのサブコンとロールを非表示にする
+		void invisibleAllWaveControllers() {
+			sinRippleWaveUC.Visible = false;
+			sinStraightWaveUC.Visible = false;
+			trochoidRippleWaveUC.Visible = false;
+			trochoidStraightWaveUC.Visible = false;
+		}
+
+		// 引数の波のパラメータを設定するコントロールを表示する
+		void visibleWaveController(Wave wave) {
+			switch ( wave.WaveType ) {
+				case Wave.EWaveType.SinRipple:
+					sinRippleWaveUC.Wave = wave;
+					sinRippleWaveUC.Visible = true;
+					break;
+				case Wave.EWaveType.SinStraignt:
+					sinStraightWaveUC.Wave = wave;
+					sinStraightWaveUC.Visible = true;
+					break;
+				case Wave.EWaveType.TrochoidRipple:
+					trochoidRippleWaveUC.Wave = wave;
+					trochoidRippleWaveUC.Visible = true;
+					break;
+				case Wave.EWaveType.TrochoidStraight:
+					trochoidStraightWaveUC.Wave = wave;
+					trochoidStraightWaveUC.Visible = true;
+					break;
+			}
+			return;
 		}
 
 		private void gridWidthTxt_TextChanged(object sender, EventArgs e) {

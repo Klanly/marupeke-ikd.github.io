@@ -4,18 +4,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-// トロコイド環状波
-
 namespace WaveGenerator {
-	class TrochoidRippleWave : Wave {
-		public TrochoidRippleWave() {
-			waveType_ = EWaveType.TrochoidRipple;
+	class TrochoidStraightWave : Wave {
+		public TrochoidStraightWave() {
+			waveType_ = EWaveType.TrochoidStraight;
 		}
 
-		// 中心点を設定
-		//  x, y: ワールドスケール座標での中心位置
-		public Vector2 Center { set { center_ = value; } get { return center_; } }
-
+		// 進行向き
+		public Vector2 Direction {
+			set {
+				dir_ = value;
+				dir_ = dir_.normalize();
+				var ang = Math.Atan2( dir_.y_, dir_.x_ );
+				if ( ang < 0.0f )
+					deg_ = 360.0f - ( float )ang;
+				else
+					deg_ = ( float )ang;
+			}
+			get {
+				return dir_;
+			}
+		}
+		public float Degree {
+			set {
+				deg_ = value;
+				dir_.x_ = ( float )Math.Cos( deg_ / 180.0f * Math.PI );
+				dir_.y_ = ( float )Math.Sin( deg_ / 180.0f * Math.PI );
+			}
+			get {
+				return deg_;
+			}
+		}
 		public float AmplitudeRate { set { setAmplitudeRate( value ); } get { return ampRate_; } }
 
 		public float WaveLength { set { setWaveLen( value ); } get { return waveLen_; } }
@@ -24,7 +43,7 @@ namespace WaveGenerator {
 
 		// 波長に対する振幅率を設定
 		// ampRate: 振幅率（0～1）
-		public void setAmplitudeRate(float ampRate) {
+		public void setAmplitudeRate(float ampRate ) {
 			if ( ampRate < 0.0f )
 				ampRate = 0.0f;
 			else if ( ampRate >= 1.0f )
@@ -54,7 +73,7 @@ namespace WaveGenerator {
 			for ( int y = 0; y < world.GridPixelHeight; ++y ) {
 				for ( int x = 0; x < world.GridPixelWidth; ++x ) {
 					world.getWorldPos( x, y, ref wp );
-					float d = center_.sub( ref tmp, wp ).Len;
+					float d = dir_.x_ * wp.x_ + dir_.y_ * wp.y_;
 
 					// ニュートン法でθ算出
 					float th = ( float )( 2.0f * Math.PI / waveLen_ * ( d - phaseSpeed_ * sec_ ) );
@@ -72,8 +91,8 @@ namespace WaveGenerator {
 
 		// クローン作成
 		override public Wave clone() {
-			var obj = new TrochoidRippleWave();
-			obj.Center = Center;
+			var obj = new TrochoidStraightWave();
+			obj.Degree = Degree;
 			obj.WaveLength = WaveLength;
 			obj.AmplitudeRate = AmplitudeRate;
 			obj.phaseSpeed_ = phaseSpeed_;
@@ -81,8 +100,8 @@ namespace WaveGenerator {
 			return obj;
 		}
 
-
-		Vector2 center_ = new Vector2();
+		Vector2 dir_ = new Vector2( 1.0f, 0.0f );
+		float deg_ = 0.0f;
 		float ampRate_ = 0.8f;
 		float waveLen_ = 2.0f;
 		float phaseSpeed_ = 1.0f;

@@ -12,10 +12,11 @@ namespace WaveGenerator
 	{
 		public enum EWaveType
 		{
-			None,			// 無し
-			SinRipple,		// sinの環状波
-			SinStraignt,	// sinの直進波
-			TrochoidRipple,	// トロコイド環状波
+			None,				// 無し
+			SinRipple,			// sinの環状波
+			SinStraignt,		// sinの直進波
+			TrochoidRipple,		// トロコイド環状波
+			TrochoidStraight,	// トロコイド直進波
 		}
 
 		public EWaveType WaveType { get { return waveType_; } }
