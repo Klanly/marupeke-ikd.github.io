@@ -51,15 +51,19 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MiniJSON.cs" />
+    <Compile Include="MiniJsonHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SinRippleWave.cs" />
+    <Compile Include="SinRippleWaveData.cs" />
     <Compile Include="SinRippleWaveUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="SinRippleWaveUC.Designer.cs">
       <DependentUpon>SinRippleWaveUC.cs</DependentUpon>
     </Compile>
+    <Compile Include="SinStraightWaveData.cs" />
     <Compile Include="SinStraightWaveUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -69,6 +73,7 @@
     <Compile Include="SinStraightWave.cs" />
     <Compile Include="StrConv.cs" />
     <Compile Include="TrochoidRippleWave.cs" />
+    <Compile Include="TrochoidRippleWaveData.cs" />
     <Compile Include="TrochoidRippleWaveUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -76,6 +81,7 @@
       <DependentUpon>TrochoidRippleWaveUC.cs</DependentUpon>
     </Compile>
     <Compile Include="TrochoidStraightWave.cs" />
+    <Compile Include="TrochoidStraightWaveData.cs" />
     <Compile Include="TrochoidStraightWaveUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -84,6 +90,7 @@
     </Compile>
     <Compile Include="Vector2.cs" />
     <Compile Include="Wave.cs" />
+    <Compile Include="WaveData.cs" />
     <Compile Include="World.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

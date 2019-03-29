@@ -43,10 +43,11 @@
 			this.worldCenterXTxt = new System.Windows.Forms.TextBox();
 			this.worldCenterYTxt = new System.Windows.Forms.TextBox();
 			this.dupricateWaveBtn = new System.Windows.Forms.Button();
+			this.trochoidStraightWaveUC = new WaveGenerator.TrochoidStraightWaveUC();
 			this.trochoidRippleWaveUC = new WaveGenerator.TrochoidRippleWaveUC();
 			this.sinStraightWaveUC = new WaveGenerator.SinStraightWaveUC();
 			this.sinRippleWaveUC = new WaveGenerator.SinRippleWaveUC();
-			this.trochoidStraightWaveUC = new WaveGenerator.TrochoidStraightWaveUC();
+			this.loadGenDataBtn = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.outputPict)).BeginInit();
 			this.panel1.SuspendLayout();
 			this.waveParamContPanel.SuspendLayout();
@@ -244,6 +245,13 @@
 			this.dupricateWaveBtn.UseVisualStyleBackColor = true;
 			this.dupricateWaveBtn.Click += new System.EventHandler(this.dupricateWaveBtn_Click);
 			// 
+			// trochoidStraightWaveUC
+			// 
+			this.trochoidStraightWaveUC.Location = new System.Drawing.Point(3, 3);
+			this.trochoidStraightWaveUC.Name = "trochoidStraightWaveUC";
+			this.trochoidStraightWaveUC.Size = new System.Drawing.Size(330, 232);
+			this.trochoidStraightWaveUC.TabIndex = 19;
+			// 
 			// trochoidRippleWaveUC
 			// 
 			this.trochoidRippleWaveUC.Location = new System.Drawing.Point(3, 3);
@@ -267,18 +275,23 @@
 			this.sinRippleWaveUC.Size = new System.Drawing.Size(292, 246);
 			this.sinRippleWaveUC.TabIndex = 7;
 			// 
-			// trochoidStraightWaveUC
+			// loadGenDataBtn
 			// 
-			this.trochoidStraightWaveUC.Location = new System.Drawing.Point(3, 3);
-			this.trochoidStraightWaveUC.Name = "trochoidStraightWaveUC";
-			this.trochoidStraightWaveUC.Size = new System.Drawing.Size(330, 232);
-			this.trochoidStraightWaveUC.TabIndex = 19;
+			this.loadGenDataBtn.Location = new System.Drawing.Point(11, 451);
+			this.loadGenDataBtn.Margin = new System.Windows.Forms.Padding(4);
+			this.loadGenDataBtn.Name = "loadGenDataBtn";
+			this.loadGenDataBtn.Size = new System.Drawing.Size(153, 31);
+			this.loadGenDataBtn.TabIndex = 19;
+			this.loadGenDataBtn.Text = "Load generate data";
+			this.loadGenDataBtn.UseVisualStyleBackColor = true;
+			this.loadGenDataBtn.Click += new System.EventHandler(this.loadGenDataBtn_Click);
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(707, 536);
+			this.Controls.Add(this.loadGenDataBtn);
 			this.Controls.Add(this.dupricateWaveBtn);
 			this.Controls.Add(this.worldCenterYTxt);
 			this.Controls.Add(this.worldCenterXTxt);
@@ -333,6 +346,7 @@
 		private System.Windows.Forms.Button dupricateWaveBtn;
 		private TrochoidRippleWaveUC trochoidRippleWaveUC;
 		private TrochoidStraightWaveUC trochoidStraightWaveUC;
+		private System.Windows.Forms.Button loadGenDataBtn;
 	}
 }
 

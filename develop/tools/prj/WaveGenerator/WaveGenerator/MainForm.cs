@@ -215,5 +215,55 @@ namespace WaveGenerator
 				return;
 			waves_[ e.Index ].Active = ( e.NewValue == CheckState.Checked );
 		}
+
+		// 外部データで波を生成
+		private void loadGenDataBtn_Click(object sender, EventArgs e) {
+			// Jsonからデータ読み込み
+
+			var dialog = new OpenFileDialog();
+			dialog.Filter = "JSON(*.json)|*.json";
+			dialog.Title = "Select wave generate data.";
+			if ( dialog.ShowDialog() != DialogResult.OK )
+				return;
+
+			var stream = new System.IO.StreamReader( dialog.FileName );
+			var json = stream.ReadToEnd();
+			stream.Close();
+			var root = MiniJSON.Json.Deserialize( json );
+			if ( root == null ) {
+				MessageBox.Show( "読み込みに失敗しました。" );
+				return;
+			}
+			var rootDict = root as Dictionary<string, object>;
+
+			var newWaves = new List<Wave>();
+			foreach ( var obj in rootDict ) {
+				var waveData = obj.Value as Dictionary<string, object>;
+				if ( waveData == null ) {
+					continue;
+				}
+				string type = MiniJsonHelper.getString( waveData, "type", "" );
+				switch ( ( string )waveData[ "type" ] ) {
+					case "sinRipple":
+						SinRippleWaveData.create( waveData, newWaves );
+						break;
+					case "sinStraight":
+						SinStraightWaveData.create( waveData, newWaves );
+						break;
+					case "trochoidRipple":
+						TrochoidRippleWaveData.create( waveData, newWaves );
+						break;
+					case "trochoidStraight":
+						TrochoidStraightWaveData.create( waveData, newWaves );
+						break;
+				}
+			}
+
+			foreach ( var wave in newWaves ) {
+				// Wave追加
+				waves_.Add( wave );
+				waveSelector.Items.Add( "Wave", true );
+			}
+		}
 	}
 }
