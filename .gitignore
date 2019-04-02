@@ -44,3 +44,5 @@ develop/unity/prj/PreventIntrusions/Temp/
 develop/tools/prj/WaveGenerator/.vs/
 develop/tools/prj/WaveGenerator/WaveGenerator/obj/
 develop/unity/test/Wave/Wave/.vs/
+develop/unity/test/Wave/Wave/Library/
+develop/unity/test/Wave/Wave/Temp/
