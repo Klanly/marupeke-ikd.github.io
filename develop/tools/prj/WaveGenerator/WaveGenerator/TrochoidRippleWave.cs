@@ -48,8 +48,10 @@ namespace WaveGenerator {
 		override public void addMe(World world) {
 			Vector2 wp = new Vector2(); // ワールド位置
 			Vector2 tmp = new Vector2();
-			float amp = ( float )( waveLen_ / ( 2.0f * Math.PI ) ) * ampRate_;
+			float grav = 9.8f;
 			float A = ( float )( waveLen_ / ( 2.0f * Math.PI ) );
+			float B = ( float )( A * ampRate_ / 2.0f );
+			float C = ( float )( Math.Sqrt( A * grav ) ) * sec_;
 			var grid = world.Grid;
 			for ( int y = 0; y < world.GridPixelHeight; ++y ) {
 				for ( int x = 0; x < world.GridPixelWidth; ++x ) {
@@ -57,15 +59,15 @@ namespace WaveGenerator {
 					float d = center_.sub( ref tmp, wp ).Len;
 
 					// ニュートン法でθ算出
-					float th = ( float )( 2.0f * Math.PI / waveLen_ * ( d - phaseSpeed_ * sec_ ) );
+					float th = ( d - C ) / A;
 					for ( int e = 0; e < 3; ++e ) {
-						float fth = ( float )( A * th - amp * Math.Sin( th ) + phaseSpeed_ * sec_ - d );
-						float dfth = A - ( float )( amp * Math.Cos( th ) );
+						float fth = ( float )( A * th - B * Math.Sin( th ) + C - d );
+						float dfth = ( float )( A - B * Math.Cos( th ) );
 						th = th - fth / dfth;
 					}
 					// 波の高さ算出
-					float v = ( float )( amp * ( 1.0f + Math.Cos( th ) ) * 0.5f );
-					grid[ x, y ] += v;
+					float h = ( float )( B * Math.Cos( th ) );
+					grid[ x, y ] += h;
 				}
 			}
 		}

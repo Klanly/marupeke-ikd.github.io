@@ -23,7 +23,8 @@ namespace WaveGenerator {
 				var wave = new SinRippleWave();
 				float rad = ( float )( rand.NextDouble() * 2.0 * Math.PI );
 				float r = frand( radius, rand );
-				wave.Center = new Vector2( ( float )( r * Math.Cos( rad ) ) , ( float )( r * Math.Sin( rad ) ) );
+				Vector2 center = new Vector2();
+				wave.Center = circleRrand( radius, rand, ref center );
 				wave.WaveLength = frand( waveLength, rand );
 				wave.Amplitude = frand( amplitude, rand );
 				wave.PeakedPower = frand( peakedPower, rand );

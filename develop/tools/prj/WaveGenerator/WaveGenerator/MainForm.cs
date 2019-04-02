@@ -22,7 +22,7 @@ namespace WaveGenerator
 			InitializeComponent();
 		}
 
-		private void runBtn_Click(object sender, EventArgs e) {
+		private async void runBtn_Click(object sender, EventArgs e) {
 
 			// 指定サイズのBMPを作成
 			var bmp = new Bitmap( gridWidth_, gridHeight_ );
@@ -35,10 +35,7 @@ namespace WaveGenerator
 			var world = new World( bmp.Width, bmp.Height, worldWidth_, worldCenter_ );
 
 			// Waveデータを重ね合わせ
-			foreach ( var w in waves_ ) {
-				if ( w.Active == true )
-					w.addMe( world );
-			}
+			await compWaves( world );
 
 			// 色情報配列をbmpDataへコピー
 			var data = world.createColorByteArray( true, false, 1.0f );
@@ -49,6 +46,19 @@ namespace WaveGenerator
 
 			// outputPictへ反映
 			outputPict.Image = bmp;
+		}
+
+		Task compWaves( World world ) {
+			var tasks = new List<Task>();
+			foreach ( var w in waves_ ) {
+				if ( w.Active == true ) {
+					var task = Task.Run( () => {
+						w.addMe( world ); }
+					);
+					tasks.Add( task );
+				}
+			}
+			return Task.WhenAll( tasks );
 		}
 
 		private void addWaveBtn_Click(object sender, EventArgs e) {

@@ -79,12 +79,15 @@ namespace WaveGenerator
 			Vector2 wp = new Vector2(); // ワールド位置
 			Vector2 tmp = new Vector2();
 			var grid = world.Grid;
-			for (int y = 0; y < world.GridPixelHeight; ++y) {
+			float grav = 9.8f;
+			float _2pi_per_L = ( float )( Math.PI * 2.0f / waveLen_ );
+			float velo = ( float )( Math.Sqrt( _2pi_per_L * grav ) );
+			for ( int y = 0; y < world.GridPixelHeight; ++y) {
 				for (int x = 0; x < world.GridPixelWidth; ++x) {
 					world.getWorldPos( x, y, ref wp );
 					float d = dir_.x_ * wp.x_ + dir_.y_ * wp.y_;
-					float v = ( float )( Math.Sin( d / waveLen_ + phaseSpeed_ * sec_ ) );
-					grid[ x, y ] += ( float )( amp_ * Math.Pow( ( v + 1.0f ) / 2.0f, peakedPower_ ) );
+					float h = ( float )( Math.Sin( d * _2pi_per_L - phaseSpeed_ * velo * sec_ ) );
+					grid[ x, y ] += ( float )( amp_ * Math.Pow( ( h + 1.0f ) / 2.0f, peakedPower_ ) );
 				}
 			}
 		}
