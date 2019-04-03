@@ -1,0 +1,20 @@
+{
+	"2" : {
+		"type" : "trochoidRipple",
+		"num" : 200,
+		"radius" : [ 0, 20 ]
+		"waveLength" : [ 0.2, 0.4 ],
+		"amplitudeRate" : [ 0.8, 0.9 ],
+		"phase" : [ 1, 1 ],
+		"sec" : [ 0, 10 ]
+	},
+	"2_2" : {
+		"type" : "trochoidRipple",
+		"num" : 50,
+		"radius" : [ 0, 20 ]
+		"waveLength" : [ 0.4, 0.8 ],
+		"amplitudeRate" : [ 0.8, 0.9 ],
+		"phase" : [ 1, 1 ],
+		"sec" : [ 0, 10 ]
+	}
+}

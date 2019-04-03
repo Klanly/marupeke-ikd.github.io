@@ -1,0 +1,131 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: WaterWave
+  m_Shader: {fileID: 4800000, guid: 77db9eb69aaef5b44a98a0183adb5f45, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EnvMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EnvTex:
+        m_Texture: {fileID: 8900000, guid: 3622a1acad8b155458698a3c4b4f1d02, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HeightTex0:
+        m_Texture: {fileID: 2800000, guid: 1634f0e356bf82d4d8604f0f1f22dfac, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HeightTex1:
+        m_Texture: {fileID: 2800000, guid: 1634f0e356bf82d4d8604f0f1f22dfac, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HeightTex2:
+        m_Texture: {fileID: 2800000, guid: c5395439d4b747247aa1aa6fee850217, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalTex0:
+        m_Texture: {fileID: 2800000, guid: 42693c4dfba62a34c821d6c7fdb4131b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _AmpRate: 0.12
+    - _BumpPower0: 6
+    - _BumpPower1: 3
+    - _BumpPower2: 3
+    - _BumpScale: 1
+    - _ColorTransRate: 0.165
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _DiffuseRange: 0
+    - _DstBlend: 0
+    - _EnvRate: 0.3
+    - _FieldScale: 1
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _HeightTexScale0: 1
+    - _HeightTexScale1: 2
+    - _HeightTexScale2: 2
+    - _Metallic: 0
+    - _Mode: 0
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _RefractiveRatio: 0.75
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SpecularPower: 100
+    - _SrcBlend: 1
+    - _UVResolitionUnit: 1
+    - _UVResolutionUnit: 1024
+    - _UVSec: 0
+    - _ZWrite: 1
+    - _ampRate: 0.083
+    - _f: 0
+    - _fieldScale: 10
+    - _fieldScaleX: 10
+    - _fieldScaleY: 10
+    - _specularPower: 7.7
+    - _t: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DeepColor: {r: 0, g: 0.2627451, b: 0.36862746, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _NearColor: {r: 0.19215687, g: 0.2784314, b: 0.84705883, a: 1}
+    - _VertexWaveDir0_1: {r: 0.2, g: 0.4, b: -0.5, a: 0.3}
+    - _VertexWaveDir2_3: {r: -0.3, g: 0.7, b: 0.8, a: -0.2}
+    - _VertexWaveDir4_5: {r: 0.1, g: -0.6, b: 0.5, a: 0.1}
+    - _VertexWaveDir6_7: {r: 0.4, g: -0.8, b: 0.7, a: -0.2}
+    - _VertexWaveLength0_3: {r: 1, g: 1, b: 1, a: 2}
+    - _VertexWaveLength4_7: {r: 2, g: 4, b: 4, a: 8}
+    - _color: {r: 0.19274436, g: 0.27828935, b: 0.8455882, a: 1}

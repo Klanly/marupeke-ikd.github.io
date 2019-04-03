@@ -1,0 +1,60 @@
+{
+	"0" : {
+		"type" : "sinRipple",
+		"num" : 10,
+		"radius" : [ 400, 600 ]
+		"waveLength" : [ 4, 6 ],
+		"amplitude" : [ 2, 3 ],
+		"peakedPower" : [ 3, 4 ],
+		"phase" : [ 1, 1 ],
+		"sec" : [ 0, 10 ]
+	},
+	"1" : {
+		"type" : "sinStraight",
+		"num" : 10,
+		"degree" : [ 0, 360 ]
+		"waveLength" : [ 4, 6 ],
+		"amplitude" : [ 2, 3 ],
+		"peakedPower" : [ 3, 4 ],
+		"phase" : [ 1, 1 ],
+		"sec" : [ 0, 10 ]
+	},
+	"0_1" : {
+		"type" : "sinRipple",
+		"num" : 10,
+		"radius" : [ 400, 600 ]
+		"waveLength" : [ 8, 12 ],
+		"amplitude" : [ 4, 6 ],
+		"peakedPower" : [ 3, 4 ],
+		"phase" : [ 1, 1 ],
+		"sec" : [ 0, 10 ]
+	},
+	"1_1" : {
+		"type" : "sinStraight",
+		"num" : 10,
+		"degree" : [ 0, 360 ]
+		"waveLength" : [ 8, 12 ],
+		"amplitude" : [ 4, 6 ],
+		"peakedPower" : [ 3, 4 ],
+		"phase" : [ 1, 1 ],
+		"sec" : [ 0, 10 ]
+	},
+	"2" : {
+		"type" : "trochoidRipple",
+		"num" : 20,
+		"radius" : [ 200, 300 ]
+		"waveLength" : [ 3, 4 ],
+		"amplitudeRate" : [ 0.7, 0.9 ],
+		"phase" : [ 1, 1 ],
+		"sec" : [ 0, 10 ]
+	},
+	"3" : {
+		"type" : "trochoidStraight",
+		"num" : 20,
+		"degree" : [ 0, 360 ]
+		"waveLength" : [ 8, 24 ],
+		"amplitudeRate" : [ 0.7, 0.9 ],
+		"phase" : [ 1, 1 ],
+		"sec" : [ 0, 10 ]
+	},
+}
