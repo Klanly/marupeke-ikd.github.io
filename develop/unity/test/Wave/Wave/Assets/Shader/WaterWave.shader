@@ -34,7 +34,7 @@ Shader "Custom/WaterWave"
 		_DeepColor( "Deep Color", Color ) = ( 0, 0, 0, 0 )
 		_ColorTransRate( "Color Transparent Rate", Range( 0.0, 1.0 ) ) = 0.7
 		_DiffuseRange( "Diffuse Range", Range( 0.0, 1.0) ) = 0.0
-		_SpecularPower( "Specular Power", Range( 0.0, 50.0 ) ) = 10.0
+		_SpecularPower( "Specular Power", Range( 0.0, 100.0 ) ) = 10.0
 		_FieldScale( "Field Scale(m/unit)", float ) = 1.0
 		_t( "Time(sec.)", float ) = 0.0
 		_AmpRate( "Amplitude Rate(0-1)", Range( 0.0, 1.0 ) ) = 0.5
@@ -190,7 +190,7 @@ Shader "Custom/WaterWave"
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				UNITY_TRANSFER_FOG(o,o.vertex);
 
-				o.posW = mul( unity_ObjectToWorld, v.vertex );
+				o.posW = worldPos;
 				return o;
 			}
 
@@ -238,7 +238,7 @@ Shader "Custom/WaterWave"
 				float3 diffuse = diffusePower * _LightColor0.rgb * col.xyz * ( _NearColor.rgb * diffuseColorPower + _DeepColor.rgb * ( 1.0f - diffuseColorPower ) );
 
 				// Specular
-				float2 lightRefVec = reflect( -lightDir, n );
+				float3 lightRefVec = reflect( -lightDir, n );
 				float specularBase = max( 0.0f, dot( lightRefVec, cameraDir ) );
 				float specular = pow( specularBase, _SpecularPower ) * float3( 1.0f, 1.0f, 1.0f );
 
@@ -251,8 +251,8 @@ Shader "Custom/WaterWave"
 				UNITY_APPLY_FOG(i.fogCoord, col );
 				return col;
 
-				col.rgb = specular;
-				return col;
+//				col.rgb = env;
+//				return col;
 			}
 			ENDCG
 		}
