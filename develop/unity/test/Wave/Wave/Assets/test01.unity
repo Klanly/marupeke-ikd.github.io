@@ -321,6 +321,9 @@ MonoBehaviour:
   cubemaps_:
   - {fileID: 8900000, guid: 3622a1acad8b155458698a3c4b4f1d02, type: 2}
   - {fileID: 8900000, guid: bf35c2e8c732f3a43974f40f0ff0fb75, type: 2}
+  - {fileID: 8900000, guid: b6bf4831d8a9d9a45810e92a40f1e9b4, type: 2}
+  curSceneIdx_: 0
+  skyboxMaterial_: {fileID: 2100000, guid: 2e5da34bbb51db8438314b17688410a3, type: 2}
 --- !u!4 &1141649825
 Transform:
   m_ObjectHideFlags: 0

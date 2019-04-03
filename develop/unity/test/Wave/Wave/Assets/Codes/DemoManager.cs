@@ -22,6 +22,9 @@ public class DemoManager : MonoBehaviour {
 	[SerializeField]
 	int curSceneIdx_ = 0;
 
+	[SerializeField]
+	Material skyboxMaterial_;
+
 
 	class Param {
 		public Color nearColor;
@@ -147,10 +150,12 @@ public class DemoManager : MonoBehaviour {
 			parent_.water_.setEnvironmentalColorRate( param.environmentalColorRate );
 
 			parent_.water_.setSkybox( parent_.cubemaps_[ param.cubeMapIdx ] );
-			var cubemapMaterial = new Material( Shader.Find( "Skybox/Cubemap" ) );
-			RenderSettings.skybox = cubemapMaterial;
-			int skyboxID = Shader.PropertyToID( "_Tex" );
-			cubemapMaterial.SetTexture( skyboxID, parent_.cubemaps_[ param.cubeMapIdx ] );
+			var skyboxMat = new Material( parent_.skyboxMaterial_ );
+			if ( parent_.skyboxMaterial_ != null ) {
+				int skyboxID = Shader.PropertyToID( "_Tex" );
+				skyboxMat.SetTexture( skyboxID, parent_.cubemaps_[ param.cubeMapIdx ] );
+				RenderSettings.skybox = skyboxMat;
+			}
 
 			parent_.camera_.transform.position = param.cameraPos;
 			var cameraRot = parent_.camera_.transform.rotation.eulerAngles;
@@ -177,7 +182,6 @@ public class DemoManager : MonoBehaviour {
 	class Idle : State< DemoManager > {
 		public Idle( DemoManager parent ) : base( parent ) { }
 		protected override State innerInit() {
-			bool bSkip = false;
 			GlobalState.time( 10.0f, (sec, t) => {
 				if ( Input.GetMouseButtonDown( 0 ) == true )
 					return false;
