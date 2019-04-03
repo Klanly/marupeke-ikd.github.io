@@ -16,6 +16,11 @@ public class Water : MonoBehaviour {
 	[SerializeField]
 	Vector2 offsetSpeed2_;
 
+	public void setColors( Color nearColor, Color farColor ) {
+		var mat = renderer_.material;
+		mat.SetColor( "", nearColor );
+	}
+
 	// Use this for initialization
 	void Start () {
 		

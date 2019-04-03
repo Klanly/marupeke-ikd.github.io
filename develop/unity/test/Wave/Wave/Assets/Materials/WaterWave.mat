@@ -79,15 +79,18 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _AmpRate: 0.12
     - _BumpPower0: 6
     - _BumpPower1: 3
     - _BumpPower2: 3
     - _BumpScale: 1
+    - _ColorTransRate: 0.165
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DiffuseRange: 0.3
+    - _DiffuseRange: 0
     - _DstBlend: 0
     - _EnvRate: 0.3
+    - _FieldScale: 1
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -101,6 +104,7 @@ Material:
     - _RefractiveRatio: 0.8
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
+    - _SpecularPower: 5.9
     - _SrcBlend: 1
     - _UVResolitionUnit: 1
     - _UVResolutionUnit: 1024
@@ -111,10 +115,17 @@ Material:
     - _fieldScale: 10
     - _fieldScaleX: 10
     - _fieldScaleY: 10
-    - _specularPower: 13.9
+    - _specularPower: 7.7
     - _t: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DeepColor: {r: 0, g: 0.2627451, b: 0.36862746, a: 0}
+    - _DeepColor: {r: 0, g: 0.2627451, b: 0.36862746, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _color: {r: 0.028871097, g: 0.3437986, b: 0.6544118, a: 1}
+    - _NearColor: {r: 0.19215687, g: 0.2784314, b: 0.84705883, a: 1}
+    - _VertexWaveDir0_1: {r: 0.2, g: 0.4, b: -0.5, a: 0.3}
+    - _VertexWaveDir2_3: {r: -0.3, g: 0.7, b: 0.8, a: -0.2}
+    - _VertexWaveDir4_5: {r: 0.1, g: -0.6, b: 0.5, a: 0.1}
+    - _VertexWaveDir6_7: {r: 0.4, g: -0.8, b: 0.7, a: -0.2}
+    - _VertexWaveLength0_3: {r: 1, g: 1, b: 1, a: 2}
+    - _VertexWaveLength4_7: {r: 2, g: 4, b: 4, a: 8}
+    - _color: {r: 0.19274436, g: 0.27828935, b: 0.8455882, a: 1}

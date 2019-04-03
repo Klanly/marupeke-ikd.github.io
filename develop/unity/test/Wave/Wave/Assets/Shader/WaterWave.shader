@@ -1,4 +1,6 @@
-﻿Shader "Custom/WaterWave"
+﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+
+Shader "Custom/WaterWave"
 {
 	Properties
 	{
@@ -18,17 +20,24 @@
 		_HeightTexScale2( "Height Texture Scale2", float ) = 1.0
 		_BumpPower2( "Bumping Power2", Range( 0.0, 100.0 ) ) = 100.0
 
+		_VertexWaveLength0_3( "Vertex Wave Length No.0-3 (m)", Vector ) = ( 1.0, 1.0, 1.0, 2.0 )
+		_VertexWaveLength4_7( "Vertex Wave Length No.4-7 (m)", Vector ) = ( 2.0, 4.0, 4.0, 8.0 )
+		_VertexWaveDir0_1( "Vertex Wave Length No.0-1", Vector ) = ( 0.2, 0.4, -0.5, 0.3 )
+		_VertexWaveDir2_3( "Vertex Wave Length No.2-3", Vector ) = ( -0.3, 0.7, 0.8, -0.2 )
+		_VertexWaveDir4_5( "Vertex Wave Length No.4-5", Vector ) = ( 0.1, -0.6, 0.5, 0.1 )
+		_VertexWaveDir6_7( "Vertex Wave Length No.6-7", Vector ) = ( 0.4, -0.8, 0.7, -0.2 )
+
 		_RefractiveRatio( "Refractive Ratio", Range( 0.0, 1.0) ) = 0.8
 
 		_UVResolutionUnit( "UV Resolution Unit", float ) = 1024
-		_color( "Main Color", Color ) = ( 1, 1, 1, 1 )
+		_NearColor( "Main Color", Color ) = ( 1, 1, 1, 1 )
 		_DeepColor( "Deep Color", Color ) = ( 0, 0, 0, 0 )
 		_ColorTransRate( "Color Transparent Rate", Range( 0.0, 1.0 ) ) = 0.7
 		_DiffuseRange( "Diffuse Range", Range( 0.0, 1.0) ) = 0.0
-		_specularPower( "Specular Power", Range( 0.0, 50.0 ) ) = 10.0
-		_fieldScale( "Field Scale(m)", float ) = 1.0
+		_SpecularPower( "Specular Power", Range( 0.0, 50.0 ) ) = 10.0
+		_FieldScale( "Field Scale(m/unit)", float ) = 1.0
 		_t( "Time(sec.)", float ) = 0.0
-		_ampRate( "Amplitude Rate(0-1)", Range( 0.0, 1.0 ) ) = 0.5
+		_AmpRate( "Amplitude Rate(0-1)", Range( 0.0, 1.0 ) ) = 0.5
 	}
 	SubShader
 	{
@@ -81,29 +90,41 @@
 			float4 _HeightTex2_ST;
 			float _HeightTexScale2;
 			float _BumpPower2;
+
+			float4 _VertexWaveLength0_3;
+			float4 _VertexWaveLength4_7;
+			float4 _VertexWaveDir0_1;
+			float4 _VertexWaveDir2_3;
+			float4 _VertexWaveDir4_5;
+			float4 _VertexWaveDir6_7;
+
+			float _VertexWaveLengthMin;
+			float _VertexWaveLengthMax;
 			float _RefractiveRatio;
 			float _UVResolutionUnit;
-			float4 _color;
+			float4 _NearColor;
 			float4 _DeepColor;
 			float _ColorTransRate;
 			float _DiffuseRange;
-			float _specularPower;
-			float _fieldScale;
+			float _SpecularPower;
+			float _FieldScale;
 			float _t;
-			float _ampRate;
+			float _AmpRate;
 
-			void addSinWave( inout appdata v, inout v2f o, float waveLen, float2 browDir ) {
-				float grav = 9.8f;
+			void addSinWave( inout float4 v, inout v2f o, float waveLen, float2 browDir ) {
+				browDir = normalize( browDir );
+				waveLen /= _FieldScale;
+				float grav = 9.8f / _FieldScale;
 				float _2pi_per_L = 2.0f * 3.14159265f / waveLen;
-				float d = dot( browDir, v.vertex.xz * float2( _fieldScale, _fieldScale ) );
-				float A = _ampRate * waveLen / 14.0f / _fieldScale;
+				float d = dot( browDir, v.xz );
+				float A = _AmpRate * waveLen / 14.0f;
 				float C = _2pi_per_L;
 				float D = sqrt( _2pi_per_L * grav ) * _t;
 				float S = C * d - D;
 				float H = A * sin( S );
 
 				// 波の高さを加算
-				v.vertex.y += H;
+				v.y += H;
 
 				// 法線算出
 				o.normal += UnityObjectToWorldNormal( float3( -browDir.x * A * cos( S ), 1.0f, -browDir.y * A * cos( S ) ) );
@@ -130,38 +151,42 @@
 				o.binormal = float3( 0.0f, 0.0f, 0.0f );
 				o.posW = 0.0f;
 
-				// ローカル座標のY値＝波の高さを(x,z)から計算
-				float _waveLen0 = 1.0f;
-				float2 _browDir0 = normalize( float2( 1.0f, 0.7f ) );
-				float _waveLen1 = 2.0f;
-				float2 _browDir1 = normalize( float2( -0.5f, 0.4f ) );
-				float _waveLen2 = 4.0f;
-				float2 _browDir2 = normalize( float2( -1.54f, -0.72f ) );
-				float _waveLen3 = 8.0f;
-				float2 _browDir3 = normalize( float2( 0.93f, 1.60f ) );
-				float _waveLen4 = 1.0f;
-				float2 _browDir4 = normalize( float2( 2.4f, -0.9f ) );
-				float _waveLen5 = 2.0f;
-				float2 _browDir5 = normalize( float2( 0.2f, 0.8f ) );
-				float _waveLen6 = 4.0f;
-				float2 _browDir6 = normalize( float2( 1.1f, -0.72f ) );
-				float _waveLen7 = 8.0f;
-				float2 _browDir7 = normalize( float2( -0.23f, 0.40f ) );
+				// 頂点波発生
+				// _VertexWaveLengthMin～_VertexWaveLengthMaxの波長を持った
+				// 波を8本発生
+				float _waveLen0 = _VertexWaveLength0_3.x;
+				float2 _browDir0 = normalize( _VertexWaveDir0_1.xy );
+				float _waveLen1 = _VertexWaveLength0_3.y;
+				float2 _browDir1 = normalize( _VertexWaveDir0_1.zw );
+				float _waveLen2 = _VertexWaveLength0_3.z;
+				float2 _browDir2 = normalize( _VertexWaveDir2_3.xy );
+				float _waveLen3 = _VertexWaveLength0_3.w;
+				float2 _browDir3 = normalize( _VertexWaveDir2_3.zw );
+				float _waveLen4 = _VertexWaveLength4_7.x;
+				float2 _browDir4 = normalize( _VertexWaveDir4_5.xy );
+				float _waveLen5 = _VertexWaveLength4_7.y;
+				float2 _browDir5 = normalize( _VertexWaveDir4_5.zw );
+				float _waveLen6 = _VertexWaveLength4_7.z;
+				float2 _browDir6 = normalize( _VertexWaveDir6_7.xy );
+				float _waveLen7 = _VertexWaveLength4_7.w;
+				float2 _browDir7 = normalize( _VertexWaveDir6_7.zw );
 
-				addSinWave( v, o, _waveLen0, _browDir0 );
-				addSinWave( v, o, _waveLen1, _browDir1 );
-				addSinWave( v, o, _waveLen2, _browDir2 );
-				addSinWave( v, o, _waveLen3, _browDir3 );
-				addSinWave( v, o, _waveLen3, _browDir4 );
-				addSinWave( v, o, _waveLen3, _browDir5 );
-				addSinWave( v, o, _waveLen3, _browDir6 );
-				addSinWave( v, o, _waveLen3, _browDir7 );
+				float4 worldPos = mul( unity_ObjectToWorld, v.vertex );
+
+				addSinWave( worldPos, o, _waveLen0, _browDir0 );
+				addSinWave( worldPos, o, _waveLen1, _browDir1 );
+				addSinWave( worldPos, o, _waveLen2, _browDir2 );
+				addSinWave( worldPos, o, _waveLen3, _browDir3 );
+				addSinWave( worldPos, o, _waveLen4, _browDir4 );
+				addSinWave( worldPos, o, _waveLen5, _browDir5 );
+				addSinWave( worldPos, o, _waveLen6, _browDir6 );
+				addSinWave( worldPos, o, _waveLen7, _browDir7 );
 
 				o.normal = normalize( o.normal );
 				o.tangent = normalize( cross( o.normal, o.binormal ) );
 				o.binormal = normalize( cross( o.tangent, o.normal ) );	// 直行性確保
 
-				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.vertex = mul( UNITY_MATRIX_VP, worldPos );
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				UNITY_TRANSFER_FOG(o,o.vertex);
 
@@ -210,12 +235,12 @@
 				// Diffuse
 				float diffuseColorPower = pow( fresnelAlpha, _ColorTransRate );
 				float diffusePower = max( _DiffuseRange, dot( n, lightDir ) );
-				float3 diffuse = diffusePower * _LightColor0.rgb * col.xyz * ( _color.rgb * diffuseColorPower + _DeepColor.rgb * ( 1.0f - diffuseColorPower ) );
+				float3 diffuse = diffusePower * _LightColor0.rgb * col.xyz * ( _NearColor.rgb * diffuseColorPower + _DeepColor.rgb * ( 1.0f - diffuseColorPower ) );
 
 				// Specular
 				float2 lightRefVec = reflect( -lightDir, n );
 				float specularBase = max( 0.0f, dot( lightRefVec, cameraDir ) );
-				float specular = pow( specularBase, _specularPower ) * float3( 1.0f, 1.0f, 1.0f );
+				float specular = pow( specularBase, _SpecularPower ) * float3( 1.0f, 1.0f, 1.0f );
 
 				// Env
 				float3 env = UNITY_SAMPLE_TEXCUBE( _EnvTex, reflect( -cameraDir, n ) );

@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 5a780d00dcd4e5d41a88b0d338e3552b, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4502468, g: 0.5002775, b: 0.57536584, a: 1}
+  m_IndirectSpecularColor: {r: 0.5333931, g: 0.61280113, b: 0.7079605, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -467,12 +467,20 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 9d0d0de8e0bfdee44abedfc61e605f52, type: 3}
       propertyPath: m_Name
-      value: palte
+      value: plate
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 9d0d0de8e0bfdee44abedfc61e605f52, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 873f63373ef7db4478aa6e90764c3d70, type: 2}
+    - target: {fileID: 400000, guid: 9d0d0de8e0bfdee44abedfc61e605f52, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 9d0d0de8e0bfdee44abedfc61e605f52, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 50
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9d0d0de8e0bfdee44abedfc61e605f52, type: 3}
   m_IsPrefabParent: 0
