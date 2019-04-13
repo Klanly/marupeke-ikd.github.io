@@ -232,6 +232,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Codes\CameraPicker.cs" />
     <Compile Include="Assets\Codes\common\Bezier.cs" />
     <Compile Include="Assets\Codes\common\CollideUtil.cs" />
     <Compile Include="Assets\Codes\common\DeltaLerpManager.cs" />

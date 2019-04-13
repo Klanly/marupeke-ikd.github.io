@@ -30,15 +30,45 @@ public class Player : MonoBehaviour {
             return null;
         }
         protected override State innerUpdate() {
-            if ( Input.GetMouseButtonDown( 0 ) == true ) {
-                // スピーカ選択？
-                var speaker = parent_.isSelectSpeaker();
-                if ( speaker != null ) {
-                    speaker.playSE();
+            // カメラズーム
+            var scrDelta = Input.mouseScrollDelta;
+            float zoomScale = 0.2f;
+            if ( scrDelta.y != 0.0f ) {
+                var cp = Camera.main.transform.position;
+                var nextY = cp.y + ( Camera.main.transform.forward.y ) * scrDelta.y * zoomScale;
+                if ( nextY >= 1.6f && nextY <= 7.0f ) {
+                    cp += Camera.main.transform.forward * scrDelta.y * zoomScale;
+                    Camera.main.transform.position = cp;
                 }
+            }
+
+            if ( Input.GetMouseButtonDown( 0 ) == true ) {
+                // フィールドドラッグ開始
+                fieldDrugging_ = true;
+                clickPos_ = Input.mousePosition;
+                cameraPicker_.startPicking( Camera.main, Input.mousePosition, Screen.height, Vector3.up, Vector3.zero );
+            }
+
+            if ( Input.GetMouseButtonUp( 0 ) == true ) {
+                // フィールドドラッグ終了
+                fieldDrugging_ = false;
+                if ( ( clickPos_ - Input.mousePosition ).magnitude <= 0.1f ) {
+                    // スピーカ選択？
+                    var speaker = parent_.isSelectSpeaker();
+                    if ( speaker != null ) {
+                        speaker.playSE();
+                    }
+                }
+            }
+
+            if ( fieldDrugging_ == true && Input.GetMouseButton( 0 ) == true ) {
+                cameraPicker_.updateCameraPos( Input.mousePosition );
             }
             return this;
         }
+        CameraPicker cameraPicker_ = new CameraPicker();
+        bool fieldDrugging_ = false;
+        Vector3 clickPos_ = Vector3.zero;
     }
 
     State state_;
