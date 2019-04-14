@@ -7,6 +7,10 @@ public class Speaker : MonoBehaviour {
     [SerializeField]
     string seName_;
 
+    public void setSE( string name ) {
+        seName_ = name;
+    }
+
     public void playSE() {
         if ( bPlaying_ == true )
             return;

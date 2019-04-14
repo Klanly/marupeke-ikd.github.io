@@ -11,7 +11,12 @@ public class GameManager : MonoBehaviour {
     Transform root_;
 
     void Start () {
-        SoundAccessor.getInstance().loadSE( "Sounds/catvoice", "cat" );
+        // SEデータの一括読み込み
+        var soundDataNum = Sound_data.getInstance().getRowNum();
+        for ( int i = 0; i < soundDataNum; ++i ) {
+            var param = Sound_data.getInstance().getParamFromIndex( i );
+            SoundAccessor.getInstance().loadSE( "Sounds/" + param.filename_, param.name_ );
+        }
         state_ = new Setup( this );
 	}
 	
@@ -26,12 +31,22 @@ public class GameManager : MonoBehaviour {
 
         }
         protected override State innerInit() {
-            // スピーカーを52個散りばめる
-            for ( int i = 0; i < 52; ++i ) {
-                var speaker = Instantiate<Speaker>( parent_.speakerPrefab_ );
-                speaker.transform.parent = parent_.root_;
-                speaker.transform.localPosition = new Vector3( Random.Range( -4.0f, 4.0f ), 0.0f, Random.Range( -4.0f, 4.0f ) );
-                speaker.transform.localRotation = Quaternion.Euler( 0.0f, Random.Range( 0.0f, 360.0f ), 0.0f );
+            // スピーカーをSEの数×2個散りばめる
+            var soundDataNum = Sound_data.getInstance().getRowNum();
+            var cd = new CardDistributer();
+            var poses = cd.create( soundDataNum * 2, 0.17f, 0.22f, 0.05f );
+
+            int e = 0;
+            for ( int i = 0; i < soundDataNum; ++i ) {
+                var param = Sound_data.getInstance().getParamFromIndex( i );
+                for ( int j = 0; j < 2; ++j ) {
+                    var speaker = Instantiate<Speaker>( parent_.speakerPrefab_ );
+                    speaker.transform.parent = parent_.root_;
+                    speaker.transform.localPosition = poses[ e ];
+                    speaker.transform.localRotation = Quaternion.Euler( 0.0f, Random.Range( 0.0f, 360.0f ), 0.0f );
+                    speaker.setSE( param.name_ );
+                    e++;
+                }
             }
             return this;
         }

@@ -46,7 +46,7 @@ public class Player : MonoBehaviour {
                 // フィールドドラッグ開始
                 fieldDrugging_ = true;
                 clickPos_ = Input.mousePosition;
-                cameraPicker_.startPicking( Camera.main, Input.mousePosition, Screen.height, Vector3.up, Vector3.zero );
+                cameraPicker_.startPicking( Camera.main, Input.mousePosition, Vector3.up, Vector3.zero );
             }
 
             if ( Input.GetMouseButtonUp( 0 ) == true ) {
