@@ -254,3 +254,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seName_: cat
+  rigidBody_: {fileID: 54523675372466500}
+  collision_: {fileID: 65629216065459200}

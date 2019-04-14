@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+    public void setup( GameManager manager ) {
+        manager_ = manager;
+    }
+
 	void Start () {
         state_ = new Gaming( this );
 	}
@@ -58,6 +62,18 @@ public class Player : MonoBehaviour {
                     if ( speaker != null ) {
                         speaker.playSE();
                     }
+                    // 1つ目ならスタック
+                    if ( bSelectFirst_ == true ) {
+                        firstSelectSpeaker_ = speaker;
+                        bSelectFirst_ = false;
+                    } else {
+                        // 2つ目なので合致したら得点を
+                        if ( firstSelectSpeaker_.getSEName() == speaker.getSEName() ) {
+                            // 合致！
+                            parent_.manager_.getSpeakers( parent_, new Speaker[] { firstSelectSpeaker_, speaker } );
+                        }
+                        bSelectFirst_ = true;
+                    }
                 }
             }
 
@@ -69,7 +85,10 @@ public class Player : MonoBehaviour {
         CameraPicker cameraPicker_ = new CameraPicker();
         bool fieldDrugging_ = false;
         Vector3 clickPos_ = Vector3.zero;
+        bool bSelectFirst_ = true;
+        Speaker firstSelectSpeaker_ = null;
     }
 
+    GameManager manager_;
     State state_;
 }
