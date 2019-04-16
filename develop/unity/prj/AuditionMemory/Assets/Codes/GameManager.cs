@@ -13,6 +13,13 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     Player player0_;
 
+    [SerializeField]
+    UnityEngine.UI.Text scoreText_;
+
+    [SerializeField]
+    UnityEngine.UI.Text addScoreText_;
+
+
     // 合致したスピーカーをゲット
     public void getSpeakers( Player player, Speaker[] speakers ) {
         // スピーカーを取り除く
@@ -27,12 +34,47 @@ public class GameManager : MonoBehaviour {
         } );
     }
 
+    // 相方スピーカーを取得
+    public Speaker getPairSpeaker( Speaker firstSpeaker ) {
+        var pair = speakerSet_[ firstSpeaker.getSEName() ];
+        if ( pair[ 0 ] == firstSpeaker )
+            return pair[ 1 ];
+        return pair[ 0 ];
+    }
+
+    // スコアを更新
+    public void updateScore( int baseScore, int comboCount, int totalScore, bool isIncrement ) {
+        score_.setAim( totalScore );
+        score_.Value = (val) => {
+            scoreText_.text = string.Format( "{0}", val );
+        };
+        var color = addScoreText_.color;
+        if ( baseScore != 0 ) {
+            addScoreText_.text = string.Format( "{0} x {1}", baseScore, comboCount );
+            GlobalState.time( 2.0f, (sec, t) => {
+                color.a = 1.0f - Lerps.Float.easeIn01( t );
+                addScoreText_.color = color;
+                return true;
+            } );
+        }
+    }
+
+    private void Awake() {
+        var color = addScoreText_.color;
+        color.a = 0.0f;
+        addScoreText_.color = color;
+    }
+
     void Start () {
         // SEデータの一括読み込み
         var soundDataNum = Sound_data.getInstance().getRowNum();
         for ( int i = 0; i < soundDataNum; ++i ) {
             var param = Sound_data.getInstance().getParamFromIndex( i );
-            SoundAccessor.getInstance().loadSE( "Sounds/" + param.filename_, param.name_ );
+            if ( param.group_ == groupIdx_ ) {
+                SoundAccessor.getInstance().loadSE( "Sounds/" + param.filename_, param.name_ );
+            }  else {
+                SoundAccessor.getInstance().removeSE( param.name_ );
+            }
         }
 
         // プレイヤー設定
@@ -60,6 +102,8 @@ public class GameManager : MonoBehaviour {
             int e = 0;
             for ( int i = 0; i < soundDataNum; ++i ) {
                 var param = Sound_data.getInstance().getParamFromIndex( i );
+                if ( param.group_ != parent_.groupIdx_ )
+                    continue;
                 Speaker[] speakers = new Speaker[ 2 ];
                 for ( int j = 0; j < 2; ++j ) {
                     var speaker = Instantiate<Speaker>( parent_.speakerPrefab_ );
@@ -78,4 +122,6 @@ public class GameManager : MonoBehaviour {
 
     State state_;
     Dictionary<string, Speaker[]> speakerSet_ = new Dictionary<string, Speaker[]>();
+    int groupIdx_ = 0;
+    MoveValueLong score_ = new MoveValueLong( 0, 1.3f );
 }

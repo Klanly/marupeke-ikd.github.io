@@ -233,9 +233,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Codes\CardDistributer.cs" />
+    <Compile Include="Assets\Codes\Comments.cs" />
     <Compile Include="Assets\Codes\common\Bezier.cs" />
     <Compile Include="Assets\Codes\common\camera\CameraPicker.cs" />
     <Compile Include="Assets\Codes\common\CollideUtil.cs" />
+    <Compile Include="Assets\Codes\common\ColorHelper.cs" />
     <Compile Include="Assets\Codes\common\DeltaLerpManager.cs" />
     <Compile Include="Assets\Codes\common\GlobalStateManager.cs" />
     <Compile Include="Assets\Codes\common\ImageBillboarding.cs" />
@@ -264,8 +266,20 @@
     <Compile Include="Assets\Codes\common\UIIntroTextColorAnimation.cs" />
     <Compile Include="Assets\Codes\GameManager.cs" />
     <Compile Include="Assets\Codes\Player.cs" />
+    <Compile Include="Assets\Codes\SelectCursor.cs" />
     <Compile Include="Assets\Codes\Speaker.cs" />
     <Compile Include="Assets\Codes\Table\Sound_data.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Fonts\font_64.fnt" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Examples\Font1\font1.fnt" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Examples\Font2\font2.fnt" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Examples\font3\font3.fnt" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\BFILogic.cginc" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font2.shader" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font3.shader" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font4.shader" />
+    <None Include="Assets\Plugins\BitmapFontImporter\Shaders\Font5.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

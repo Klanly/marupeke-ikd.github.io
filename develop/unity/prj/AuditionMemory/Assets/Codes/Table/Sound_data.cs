@@ -16,6 +16,7 @@ public class Sound_data : Table {
 		param.id_ = values[ "id" ].sVal_;
 		param.filename_ = values[ "filename" ].sVal_;
 		param.name_ = values[ "name" ].sVal_;
+		param.group_ = values[ "group" ].iVal_;
 		params_[ values[ "id" ].sVal_ ] = param;
 
 		paramList_.Add( param );
@@ -42,6 +43,7 @@ public class Sound_data : Table {
 		public string id_;
 		public string filename_;
 		public string name_;
+		public int group_;
 
 	}
 	static Sound_data instance_ = new Sound_data();

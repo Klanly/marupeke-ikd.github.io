@@ -26,10 +26,22 @@ public class Speaker : MonoBehaviour {
             return;
         float sec = SoundAccessor.getInstance().playSE( seName_ );
         bPlaying_ = true;
+        var initScale = transform.localScale;
+        GlobalState.time( sec, (_sec, t) => {
+            float scaleAdd = 0.3f * ( 1.0f + Mathf.Sin( t * sec * 2.0f * Mathf.PI * 10.0f ) ) * 0.5f;
+            transform.localScale = initScale * ( 1.0f + scaleAdd );
+            return true;
+        } ).finish( () => {
+            transform.localScale = initScale;
+        } );
         GlobalState.wait( sec, () => {
             bPlaying_ = false;
             return false;
         } );
+    }
+
+    public void enableSelect( bool isEnable ) {
+        collision_.enabled = isEnable;
     }
 
     public void removeAction( System.Action finishCallback ) {
@@ -38,6 +50,14 @@ public class Speaker : MonoBehaviour {
         Destroy( collision_ );
         removeFinishCallback_ = finishCallback;
         state_ = new RemoveAction( this );
+    }
+
+    public int getSelectCount() {
+        return selectCount_;
+    }
+
+    public void addSelectCount() {
+        selectCount_++;
     }
 
     // Use this for initialization
@@ -83,4 +103,5 @@ public class Speaker : MonoBehaviour {
     bool bPlaying_ = false;
     State state_;
     System.Action removeFinishCallback_;
+    int selectCount_ = 0;
 }

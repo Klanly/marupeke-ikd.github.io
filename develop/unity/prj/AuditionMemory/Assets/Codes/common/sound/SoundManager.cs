@@ -39,6 +39,12 @@ public class SoundManager : MonoBehaviour {
         seMap_[ name ] = clip;
     }
 
+    public void removeSE( string name ) {
+        if ( seMap_.ContainsKey( name ) == true ) {
+            seMap_.Remove( name );
+        }
+    }
+
     private void Awake() {
         seAudio_ = gameObject.AddComponent<AudioSource>();
         bgmAudio_ = gameObject.AddComponent<AudioSource>();
@@ -81,6 +87,10 @@ class SoundAccessor {
         ResourceLoader.getInstance().loadAsync<AudioClip>( filePath, (res, obj) => {
             manager_.addSE( seName, obj );
         } );
+    }
+
+    public void removeSE( string seName ) {
+        manager_.removeSE( seName );
     }
 
 	static SoundAccessor accessor_ = new SoundAccessor();
