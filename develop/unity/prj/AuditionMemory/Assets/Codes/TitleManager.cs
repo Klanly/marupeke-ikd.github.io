@@ -13,11 +13,34 @@ public class TitleManager : MonoBehaviour {
     [SerializeField]
     UnityEngine.UI.Button hardBtn_;
 
+    [SerializeField]
+    UnityEngine.UI.Button creditBtn_;
+
+    [SerializeField]
+    UnityEngine.UI.Button allBtn_;
+
+    [SerializeField]
+    AudioSource bgm_;
+
+    [SerializeField]
+    SpriteRenderer notify_;
+
+    [SerializeField]
+    Camera phoneCamera_;
+
+    [SerializeField]
+    GameObject credit_;
+
+
     public System.Action< string > FinishCallback { set { finishCallback_ = value; } }
+
+    private void Awake() {
+        credit_.SetActive( false );
+    }
 
     // Use this for initialization
     void Start () {
-        state_ = new FadeIn( this );
+        state_ = new Notify( this );
     }
 
     // Update is called once per frame
@@ -26,10 +49,33 @@ public class TitleManager : MonoBehaviour {
             state_ = state_.update();
     }
 
+    class Notify : State< TitleManager > {
+        public Notify( TitleManager parent ) : base( parent ) { }
+        protected override State innerInit() {
+            var color = parent_.notify_.color;
+            GlobalState.time( 0.75f, (sec, t) => {
+                color.a = t;
+                parent_.notify_.color = color;
+                return true;
+            } ).nextTime( 2.75f, (sec, t) => {
+                return true;
+            } ).nextTime( 0.75f, (sec, t) => {
+                color.a = 1.0f - t;
+                parent_.notify_.color = color;
+                return true;
+            } ).finish( () => {
+                Destroy( parent_.phoneCamera_.gameObject );
+                setNextState( new FadeIn( parent_ ) );
+            } );
+            return this;
+        }
+    }
+
     class FadeIn : State< TitleManager > {
         public FadeIn(TitleManager parent) : base( parent ) { }
         protected override State innerInit() {
-            FaderManager.Fader.to( 0.0f, 2.0f, () => {
+            FaderManager.Fader.to( 0.0f, 1.0f, () => {
+                parent_.bgm_.Play();
                 setNextState( new Idle( parent_ ) );
             } );
             return this;
@@ -49,6 +95,19 @@ public class TitleManager : MonoBehaviour {
             parent_.hardBtn_.onClick.AddListener( () => {
                 level = "hard";
             } );
+            parent_.allBtn_.onClick.AddListener( () => {
+                level = "all";
+            } );
+            parent_.creditBtn_.onClick.AddListener( () => {
+                parent_.credit_.SetActive( true );
+                GlobalState.start( () => {
+                    if ( Input.GetMouseButton( 0 ) == true ) {
+                        parent_.credit_.SetActive( false );
+                        return false;
+                    }
+                    return true;
+                } );
+            } );
             GlobalState.start( () => {
                 if ( level != "" ) {
                     setNextState( new FadeOut( parent_, level ) );
@@ -65,7 +124,11 @@ public class TitleManager : MonoBehaviour {
             level_ = level;
         }
         protected override State innerInit() {
-            FaderManager.Fader.to( 1.0f, 2.0f, () => {
+            GlobalState.time( 0.9f, (sec, t) => {
+                parent_.bgm_.volume = 1.0f - t;
+                return true;
+            } );
+            FaderManager.Fader.to( 1.0f, 1.0f, () => {
                 parent_.finishCallback_( level_ );
             } );
             return this;

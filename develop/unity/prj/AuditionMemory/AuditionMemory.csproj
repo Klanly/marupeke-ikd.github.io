@@ -268,6 +268,7 @@
     <Compile Include="Assets\Codes\common\UIIntroAnimation.cs" />
     <Compile Include="Assets\Codes\common\UIIntroColorAnimation.cs" />
     <Compile Include="Assets\Codes\common\UIIntroTextColorAnimation.cs" />
+    <Compile Include="Assets\Codes\Credit.cs" />
     <Compile Include="Assets\Codes\GameManager.cs" />
     <Compile Include="Assets\Codes\Player.cs" />
     <Compile Include="Assets\Codes\SceneManager.cs" />

@@ -42,6 +42,9 @@ public class GameManager : MonoBehaviour {
             case "hard":
                 groupIdx_ = 2;
                 break;
+            case "all":
+                groupIdx_ = 99;
+                break;
         }
     }
 
@@ -102,7 +105,7 @@ public class GameManager : MonoBehaviour {
         var soundDataNum = Sound_data.getInstance().getRowNum();
         for ( int i = 0; i < soundDataNum; ++i ) {
             var param = Sound_data.getInstance().getParamFromIndex( i );
-            if ( param.group_ == groupIdx_ ) {
+            if ( groupIdx_ == 99 || param.group_ == groupIdx_ ) {
                 SoundAccessor.getInstance().loadSE( "Sounds/" + param.filename_, param.name_ );
             }  else {
                 SoundAccessor.getInstance().removeSE( param.name_ );
@@ -140,12 +143,13 @@ public class GameManager : MonoBehaviour {
             // スピーカーをSEの数×2個散りばめる
             var soundDataNum = Sound_data.getInstance().getRowNum();
             var cd = new CardDistributer();
-            var poses = cd.create( soundDataNum * 2, 0.17f, 0.22f, 0.05f );
+            var poses = cd.create( soundDataNum * ( parent_.groupIdx_ == 99 ? 4 : 2 ), 0.2f, 0.3f, 0.07f );
+            ListUtil.shuffle( ref poses );
 
             int e = 0;
             for ( int i = 0; i < soundDataNum; ++i ) {
                 var param = Sound_data.getInstance().getParamFromIndex( i );
-                if ( param.group_ != parent_.groupIdx_ )
+                if ( parent_.groupIdx_ != 99 && param.group_ != parent_.groupIdx_ )
                     continue;
                 Speaker[] speakers = new Speaker[ 2 ];
                 for ( int j = 0; j < 2; ++j ) {

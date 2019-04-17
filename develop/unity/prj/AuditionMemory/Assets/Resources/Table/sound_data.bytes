@@ -1,5 +1,5 @@
 4
-12
+36
 id	filename	name	group
 string	string	string	int
 sound_0001	dog1	dog	0
@@ -14,3 +14,27 @@ sound_0009	鳥・フクロウ02	owl	0
 sound_0010	鳥・トンビ05	tobi	0
 sound_0011	鳥・タカ03	eagle	0
 sound_0012	holstein-cow-mooing-1	cow	0
+sound_0013	boyon1	boyon	1
+sound_0014	feed1	feed1	1
+sound_0015	nyu2	nyu2	1
+sound_0016	touch1	touch1	1
+sound_0017	puyon1	puyon	1
+sound_0018	tickle1	tickle1	1
+sound_0019	machdash1	machdash1	1
+sound_0020	question1	question1	1
+sound_0021	costume-drama1	costume-drama1	1
+sound_0022	correct1	correct1	1
+sound_0023	incorrect1	incorrect1	1
+sound_0024	Accent13-1	Accent13-1	1
+sound_0025	se_maoudamashii_instruments_guitar01	se_maoudamashii_instruments_guitar01	2
+sound_0026	se_maoudamashii_instruments_guitar02	se_maoudamashii_instruments_guitar02	2
+sound_0027	se_maoudamashii_instruments_guitar03	se_maoudamashii_instruments_guitar03	2
+sound_0028	se_maoudamashii_instruments_guitar04	se_maoudamashii_instruments_guitar04	2
+sound_0029	se_maoudamashii_instruments_guitar05	se_maoudamashii_instruments_guitar05	2
+sound_0030	se_maoudamashii_instruments_guitar06	se_maoudamashii_instruments_guitar06	2
+sound_0031	se_maoudamashii_instruments_guitar07	se_maoudamashii_instruments_guitar07	2
+sound_0032	se_maoudamashii_instruments_guitar08	se_maoudamashii_instruments_guitar08	2
+sound_0033	se_maoudamashii_instruments_guitar09	se_maoudamashii_instruments_guitar09	2
+sound_0034	se_maoudamashii_instruments_guitar10	se_maoudamashii_instruments_guitar10	2
+sound_0035	se_maoudamashii_instruments_guitar11	se_maoudamashii_instruments_guitar11	2
+sound_0036	se_maoudamashii_instruments_guitar12	se_maoudamashii_instruments_guitar12	2
