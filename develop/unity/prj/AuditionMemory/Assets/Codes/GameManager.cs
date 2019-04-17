@@ -19,6 +19,31 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     UnityEngine.UI.Text addScoreText_;
 
+    [SerializeField]
+    GameObject finishImage_;
+
+    [SerializeField]
+    bool bDebugGetAll_ = false;
+
+
+    // 終了コールバック
+    public System.Action FinishCallback { set { finishCallback_ = value; } }
+
+    // セットアップ
+    public void setup( string level ) {
+        level_ = level;
+        switch ( level_ ) {
+            case "easy":
+                groupIdx_ = 0;
+                break;
+            case "normal":
+                groupIdx_ = 1;
+                break;
+            case "hard":
+                groupIdx_ = 2;
+                break;
+        }
+    }
 
     // 合致したスピーカーをゲット
     public void getSpeakers( Player player, Speaker[] speakers ) {
@@ -32,6 +57,12 @@ public class GameManager : MonoBehaviour {
         speakerSet_[ name ][ 1 ].removeAction( () => {
             speakerSet_[ name ][ 1 ].gameObject.SetActive( false );
         } );
+
+        // 盤面のスピーカーがすべてなくなったらFinishへ
+        remainSpeakerNum_--;
+        if ( remainSpeakerNum_ == 0 ) {
+            state_ = new Finish( this );
+        }
     }
 
     // 相方スピーカーを取得
@@ -63,6 +94,7 @@ public class GameManager : MonoBehaviour {
         var color = addScoreText_.color;
         color.a = 0.0f;
         addScoreText_.color = color;
+        finishImage_.gameObject.SetActive( false );
     }
 
     void Start () {
@@ -87,7 +119,18 @@ public class GameManager : MonoBehaviour {
 	void Update () {
         if ( state_ != null )
             state_ = state_.update();
-	}
+        if ( bDebugGetAll_ == true ) {
+            bDebugGetAll_ = false;
+            var speakers = new List<Speaker>();
+            foreach ( var obj in speakerSet_ ) {
+                speakers.Add( obj.Value[ 0 ] );
+                speakers.Add( obj.Value[ 1 ] );
+            }
+            for ( int i = 0; i < speakers.Count / 2; ++i ) {
+                getSpeakers( null, new Speaker[] { speakers[ 2 * i ], speakers[ 2 * i + 1 ] } );
+            }
+        }
+    }
 
     class Setup : State< GameManager > {
         public Setup( GameManager parent ) : base( parent ) {
@@ -116,12 +159,46 @@ public class GameManager : MonoBehaviour {
                 }
                 parent_.speakerSet_[ param.name_ ] = speakers;
             }
+            parent_.remainSpeakerNum_ = parent_.speakerSet_.Count;
+
+            // フェードイン
+            FaderManager.Fader.to( 0.0f, 1.0f );
             return this;
         }
     }
 
+    class Finish : State< GameManager > {
+        public Finish( GameManager parent ) : base( parent ) {
+
+        }
+        protected override State innerInit() {
+            GlobalState.wait( 1.0f, () => {
+                parent_.finishImage_.gameObject.SetActive( true );
+                GlobalState.wait( 4.0f, () => {
+                    setNextState( new FadeOut( parent_ ) );
+                    return false;
+                } );
+                return false;
+            } );
+            return this;
+        }
+    }
+
+    class FadeOut : State< GameManager > {
+        public FadeOut(GameManager parent) : base( parent ) { }
+        protected override State innerInit() {
+            FaderManager.Fader.to( 1.0f, 3.0f, () => {
+                parent_.finishCallback_();
+            } );
+            return null;
+        }
+    }
+
     State state_;
+    string level_;
     Dictionary<string, Speaker[]> speakerSet_ = new Dictionary<string, Speaker[]>();
     int groupIdx_ = 0;
     MoveValueLong score_ = new MoveValueLong( 0, 1.3f );
+    int remainSpeakerNum_ = 0;
+    System.Action finishCallback_;
 }

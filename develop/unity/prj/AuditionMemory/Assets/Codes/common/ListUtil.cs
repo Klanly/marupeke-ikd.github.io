@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ListUtil {
     // シャッフル
-    public static void shuffle<T>( ref List<T> list, int seed = -1 )
+    public static List<T> shuffle<T>( ref List<T> list, int seed = -1 )
     {
         if ( seed >= 0 )
             Random.InitState( seed );
@@ -18,5 +18,16 @@ public class ListUtil {
             list[ r ] = list[ i ];
             list[ i ] = tmp;
         }
+		return list;
     }
+
+	// 数値振り
+	//  start: 最初の値
+	public static List<int> numbering( ref List<int> list, int num = 1, int start = 0 ) {
+		list.Clear();
+		for ( int i = start; i < start + num; ++i ) {
+			list.Add( i );
+		}
+		return list;
+	}
 }
