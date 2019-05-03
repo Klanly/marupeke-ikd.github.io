@@ -232,8 +232,48 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Codes\common\Bezier.cs" />
+    <Compile Include="Assets\Codes\common\camera\CameraPicker.cs" />
+    <Compile Include="Assets\Codes\common\camera\CameraUtil.cs" />
+    <Compile Include="Assets\Codes\common\CollideUtil.cs" />
+    <Compile Include="Assets\Codes\common\ColorHelper.cs" />
+    <Compile Include="Assets\Codes\common\DeltaLerpManager.cs" />
+    <Compile Include="Assets\Codes\common\Fader.cs" />
+    <Compile Include="Assets\Codes\common\GlobalStateManager.cs" />
+    <Compile Include="Assets\Codes\common\ImageBillboarding.cs" />
+    <Compile Include="Assets\Codes\common\IntroAnimation.cs" />
+    <Compile Include="Assets\Codes\common\KeyHelper.cs" />
+    <Compile Include="Assets\Codes\common\Lerps.cs" />
+    <Compile Include="Assets\Codes\common\ListUtil.cs" />
+    <Compile Include="Assets\Codes\common\mesh\GLLine.cs" />
+    <Compile Include="Assets\Codes\common\mesh\GLLines.cs" />
+    <Compile Include="Assets\Codes\common\mesh\GLLineTrail.cs" />
+    <Compile Include="Assets\Codes\common\mesh\TorusMesh.cs" />
+    <Compile Include="Assets\Codes\common\MiniJSON.cs" />
+    <Compile Include="Assets\Codes\common\MoveValueColor.cs" />
+    <Compile Include="Assets\Codes\common\MoveValueFloat.cs" />
+    <Compile Include="Assets\Codes\common\MoveValueLong.cs" />
+    <Compile Include="Assets\Codes\common\ObjectLooker.cs" />
+    <Compile Include="Assets\Codes\common\OnCollideCallback.cs" />
+    <Compile Include="Assets\Codes\common\Randoms.cs" />
+    <Compile Include="Assets\Codes\common\ResourceLoader.cs" />
+    <Compile Include="Assets\Codes\common\ResurceLoaderUpdater.cs" />
+    <Compile Include="Assets\Codes\common\shape\AABB.cs" />
+    <Compile Include="Assets\Codes\common\SimplePath.cs" />
+    <Compile Include="Assets\Codes\common\sound\SoundManager.cs" />
+    <Compile Include="Assets\Codes\common\SphereSurfUtil.cs" />
+    <Compile Include="Assets\Codes\common\State.cs" />
+    <Compile Include="Assets\Codes\common\Table.cs" />
+    <Compile Include="Assets\Codes\common\ToVal.cs" />
+    <Compile Include="Assets\Codes\common\UIIntroAnimation.cs" />
+    <Compile Include="Assets\Codes\common\UIIntroColorAnimation.cs" />
+    <Compile Include="Assets\Codes\common\UIIntroTextColorAnimation.cs" />
+    <Compile Include="Assets\Codes\common\Vector3Util.cs" />
     <Compile Include="Assets\Codes\FallLine.cs" />
+    <Compile Include="Assets\Codes\GameManager.cs" />
     <Compile Include="Assets\Codes\OrbitLine.cs" />
+    <Compile Include="Assets\Codes\SiteEmitter.cs" />
+    <Compile Include="Assets\Codes\SiteManager.cs" />
     <Compile Include="Assets\Codes\TrailLine.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -28,17 +28,38 @@ public class OrbitLine : MonoBehaviour {
     [SerializeField]
     float stepSec_ = 0.02f;
 
+    public class Parameter {
+        public Vector3 initPos_;
+        public Vector3 initVec_;
+        public float gravity_;
+        public float planetaryRadius_;
+        public float targetHeight_;
+        public float stepSec_;
+    }
+
+    // セットアップ
+    public void setup( Parameter param ) {
+        param_ = param;
+        // 軌道計算
+        data_ = FallLine.calcOrbit( param_.planetaryRadius_, param_.initPos_, param_.initVec_, param_.gravity_, param_.stepSec_, param_.targetHeight_ );
+        // ライン作成
+        trailLine_.setup( data_.orbit_, width_ );
+    }
+
+    // データ取得
+    public FallLine.Data getData() {
+        return data_;
+    }
+
 	// Use this for initialization
 	void Start () {
-        // 軌道計算
-        var data = FallLine.calcOrbit( planetaryRadius_, initPos_, initVec_, gravity_, stepSec_, targetHeight_ );
-
-        // ライン作成
-        trailLine_.setup( data.orbit_, width_ );
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
+
+    FallLine.Data data_ = null;
+    Parameter param_ = new Parameter();
 }
