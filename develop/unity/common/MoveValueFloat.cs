@@ -20,9 +20,11 @@ public class MoveValueFloat {
 	}
 
 	// エイム値を更新
-	public void setAim(float aim) {
+	public void setAim(float aim, float sec = -1.0f) {
 		if ( aimValue_ == aim )
 			return;
+		if ( sec >= 0.0f )
+			sec_ = sec;
 
 		// 差分だけ動くDeltaLerpを追加
 		DeltaLerp.Float.linear( aim - aimValue_, sec_, (_sec, _t, _td, _delta) => {
@@ -47,8 +49,8 @@ public class MoveValueFloat {
 
 	// 遷移時間を変更
 	public void setSec(float sec) {
-		if ( sec <= 0.0f )
-			sec = Time.deltaTime;
+		if ( sec < 0.0f )
+			sec = 0.0f;
 		sec_ = sec;
 	}
 

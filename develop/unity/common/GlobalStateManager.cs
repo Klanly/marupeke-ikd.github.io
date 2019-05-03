@@ -13,7 +13,7 @@ public class GlobalStateManager : MonoBehaviour {
     private void Update()
     {
         updater_.update();
-        stateNum_ = updater_.getStateNum();
+//        stateNum_ = updater_.getStateNum();
     }
 
     public void setUpdater(GlobalStateUpdater updater)
@@ -22,7 +22,7 @@ public class GlobalStateManager : MonoBehaviour {
     }
 
     GlobalStateUpdater updater_;
-    int stateNum_ = 0;
+	// int stateNum_ = 0;
 }
 
 
@@ -93,8 +93,24 @@ public class GlobalState : GlobalStateBase
         onPost_ = post;
     }
 
-    // ステート開始
-    static public GlobalState start( System.Func< bool > action, System.Action post = null )
+	// 並列監視
+	static public GlobalState parallel( params GlobalState[] observeStates ) {
+		int counter = 0;
+		foreach ( var s in observeStates ) {
+			s.FinishCallback = () => {
+				counter--;
+			};
+			counter++;
+		}
+		var state = new GlobalState( () => {
+			return counter > 0;
+		}, null );
+		GlobalStateUpdater.getInstance().add( state );
+		return state;
+	}
+
+	// ステート開始
+	static public GlobalState start( System.Func< bool > action, System.Action post = null )
     {
         var state = new GlobalState( action, post );
         GlobalStateUpdater.getInstance().add( state );
@@ -164,6 +180,34 @@ public class GlobalState : GlobalStateBase
         return nextState_;
     }
 
+	// 一定間隔コール
+	//  waitSec: 間隔
+	//  count  : 繰り返し数。マイナス値で無限に回る(actionがfalseを返したら終了)
+	static public GlobalState interval(float waitSec, int count, System.Func<bool> action) {
+		float curSec = 0.0f;
+		bool infinit = ( count < 0 );
+		var state = new GlobalState(
+			() => {
+				curSec += Time.deltaTime;
+				if ( curSec >= waitSec ) {
+					curSec -= waitSec;
+					action();
+					if ( infinit == false ) {
+						count--;
+						if ( count == 0 )
+							return false;
+					}
+					return action();
+				}
+				return true;
+			},
+			null
+		);
+		GlobalStateUpdater.getInstance().add( state );
+		return state;
+	}
+
+
 	// 待つ
 	public GlobalState wait( float sec ) {
 		float curSec = 0.0f;
@@ -205,8 +249,15 @@ public class GlobalState : GlobalStateBase
         return nextState_;
     }
 
-    // 最終アクション
-    public void finish( System.Action onFinish )
+	// 次の並列監視
+	public GlobalState nextParallel(params GlobalState[] observeStates) {
+		nextState_ = parallel( observeStates );
+		nextState_.preState_ = this;
+		return nextState_;
+	}
+
+	// 最終アクション
+	public void finish( System.Action onFinish )
     {
         nextState_ = new GlobalState( onFinish, () => { return false; }, () => { } );
     }
@@ -225,13 +276,20 @@ public class GlobalState : GlobalStateBase
                 onPost_();
             }
 
-            // 強制終了時は次のステートは実行しない
-            if ( bForceStop_ == true )
-                return false;
+			// 強制終了時は次のステートは実行しない
+			if ( bForceStop_ == true ) {
+				if ( final_ != null )
+					final_();
+				return false;
+			}
 
             if ( nextState_ != null ) {
+				nextState_.FinishCallback = final_;
                 GlobalStateUpdater.getInstance().add( nextState_ );
-            }
+            } else {
+				if ( final_ != null )
+					final_();
+			}
             return false;   // このステート自体は終了
         }
         return true;
@@ -244,9 +302,13 @@ public class GlobalState : GlobalStateBase
             preState_.forceFinish();
     }
 
-    System.Action init_ = null;
+	// 終了コールバック登録（内部用）
+	System.Action FinishCallback { set { final_ = value; } }
+
+	System.Action init_ = null;
     System.Func<bool> action_ = null;
     System.Action onPost_ = null;
     GlobalState nextState_ = null;
     GlobalState preState_ = null;
+	System.Action final_ = null;	// 内部通知用
 }
