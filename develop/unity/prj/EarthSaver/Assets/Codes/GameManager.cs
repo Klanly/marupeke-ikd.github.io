@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
+    [SerializeField]
+    Transform siteManagerRoot_;
+
     class Parameter {
 
     }
@@ -29,7 +32,8 @@ public class GameManager : MonoBehaviour {
     }
 
     // サイトエミット
-    void emitSite() {
+    void emitSite( SiteManager siteManager ) {
+        siteManager.transform.SetParent( siteManagerRoot_ );
         Debug.Log( "Emit!!" );
     }
 

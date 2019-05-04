@@ -6,13 +6,30 @@ using UnityEngine;
 
 public class SiteManager : MonoBehaviour {
 
+    [SerializeField]
+    Transform orbitRoot_;
+
     public class Parameter {
         public float orbitPointHeightRange_ = 1.5f;
         public OrbitLine orbitLine_;
     }
 
-    public bool setup( Parameter param ) {
-        param = param_;
+    public bool setup(OrbitLine orbitLinePrefab, Parameter param ) {
+
+        param_ = param;
+        param_.orbitLine_ = Instantiate<OrbitLine>( orbitLinePrefab );
+        param_.orbitLine_.transform.position = Vector3.zero;
+        param_.orbitLine_.transform.SetParent( orbitRoot_ );
+
+        var oparam = new OrbitLine.Parameter();
+        oparam.gravity_ = 9.81f;
+        oparam.initPos_ = SphereSurfUtil.convPolerToPos( Randoms.Float.valueCenter() * 90.0f, Randoms.Float.valueCenter() * 180.0f ) * Random.Range( 1.8f, 3.0f );
+        oparam.initVec_ = Randoms.Vec3.angleVariance( oparam.initPos_, 90.0f + Random.Range( 0.0f, 45.0f ) ) * Random.Range( 0.5f, 1.5f );  // 地球側にちょっと向く
+        oparam.planetaryRadius_ = 1.0f;
+        oparam.stepSec_ = 0.05f;
+        oparam.targetHeight_ = 1.5f;
+
+        param_.orbitLine_.setup( oparam );
 
         // カメラアングル算出
         // ある高さH(orbitPointHeightRange_)までに含まれる軌道点から軌道を含む面法線Nを算出。
@@ -54,7 +71,7 @@ public class SiteManager : MonoBehaviour {
 	}
 
     Parameter param_;
-    AABB aabb_;
-    Vector3 cameraPos_;
-    Quaternion cameraQ_;
+    AABB aabb_ = new AABB();
+    Vector3 cameraPos_ = Vector3.zero;
+    Quaternion cameraQ_ = Quaternion.identity;
 }

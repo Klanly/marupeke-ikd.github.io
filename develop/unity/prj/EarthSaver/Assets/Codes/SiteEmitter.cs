@@ -5,17 +5,19 @@ using UnityEngine;
 // サイトエミッター
 
 public class SiteEmitter {
-    System.Action emitCallback_;
+    System.Action<SiteManager> emitCallback_;
     bool bActive_ = false;
     float aveSec_ = 10.0f;  // 平均発生秒
     float maxSec_ = 20.0f;  // 最大待ち時間
 
-    public System.Action EmitCallback { set { emitCallback_ = value; } }
+    public System.Action<SiteManager> EmitCallback { set { emitCallback_ = value; } }
     public float AveSec { set { aveSec_ = value; } }
     public float maxSec { set { maxSec = value; } }
 
     public SiteEmitter() {
         state_ = new Wait( this );
+        siteManagerPrefab_ = ResourceLoader.getInstance().loadSync<SiteManager>( "Prefabs/SiteManager" );
+        orbitLinePrefab_ = ResourceLoader.getInstance().loadSync<OrbitLine>( "Prefabs/OrbitLine" );
     }
 
     public void update() {
@@ -53,13 +55,22 @@ public class SiteEmitter {
     class Emit : State< SiteEmitter > {
         public Emit(SiteEmitter parent) : base( parent ) { }
         protected override State innerInit() {
+            var siteManager = GameObject.Instantiate<SiteManager>( parent_.siteManagerPrefab_ );
+            siteManager.transform.position = Vector3.zero;
+
+            var param = new SiteManager.Parameter();
+            param.orbitPointHeightRange_ = 1.5f;
+            siteManager.setup( parent_.orbitLinePrefab_, param );
+
             // 発生コールバック
             if ( parent_.emitCallback_ != null )
-                parent_.emitCallback_();
+                parent_.emitCallback_( siteManager );
 
             return new Wait( parent_ );
         }
     }
 
     State state_;
+    SiteManager siteManagerPrefab_;
+    OrbitLine orbitLinePrefab_;
 }
