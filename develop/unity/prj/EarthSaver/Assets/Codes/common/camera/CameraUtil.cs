@@ -16,16 +16,16 @@ public class CameraUtil {
     static public void fitAABB( Camera camera, Vector3 forward, Vector3 up, AABB aabb, out Vector3 pos, out Quaternion q ) {
         var forwardN = forward.normalized;
         var cameraPos = aabb.Center - forwardN;
-        var viewMat = Matrix4x4.LookAt( cameraPos, aabb.Center, up );
+        var viewMat = Matrix4x4.LookAt( cameraPos, aabb.Center, up ).inverse;
         var vertices = aabb.getVertices();
-        float fovY = camera.fieldOfView * 0.5f;
+        float fovY = camera.fieldOfView * 0.5f * Mathf.Deg2Rad;
         float asp = camera.aspect;
         float tan = Mathf.Tan( fovY );
         float curZ = float.MaxValue;
         foreach ( var p in vertices ) {
             var vp = viewMat.MultiplyPoint( p );
-            float ly = vp.y / tan;
-            float lx = vp.x / ( tan * asp );
+            float ly = Mathf.Abs( vp.y ) / tan;
+            float lx = Mathf.Abs( vp.x ) / ( tan * asp );
             if ( vp.z - lx < curZ ) {
                 curZ = vp.z - lx;
             }

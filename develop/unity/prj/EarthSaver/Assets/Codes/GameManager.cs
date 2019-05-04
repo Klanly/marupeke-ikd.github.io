@@ -21,6 +21,14 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
         state_ = new GameStart( this );
+
+        // TEST
+        var pos = Vector3.zero;
+        var q = Quaternion.identity;
+        var aabb = new AABB();
+        aabb.Min = new Vector3( -1.0f, -1.0f, -1.0f );
+        aabb.Max = new Vector3(  1.0f,  1.0f,  1.0f );
+        CameraUtil.fitAABB( Camera.main, Vector3.right, Vector3.up, aabb, out pos, out q );
 	}
 	
 	// Update is called once per frame

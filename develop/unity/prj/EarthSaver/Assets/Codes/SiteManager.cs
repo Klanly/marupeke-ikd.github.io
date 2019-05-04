@@ -49,8 +49,12 @@ public class SiteManager : MonoBehaviour {
 
         var normal = Vector3.Cross( list[ 1 ] - list[ 0 ], list[ 2 ] - list[ 0 ] ).normalized;
         aabb_.set( list );
-        CameraUtil.fitAABB( Camera.main, aabb_.Center - normal, aabb_.Center.normalized, aabb_, out cameraPos_, out cameraQ_ );
+        CameraUtil.fitAABB( Camera.main, normal, aabb_.Center.normalized, aabb_, out cameraPos_, out cameraQ_ );
 
+        Camera.main.transform.position = cameraPos_;
+        Camera.main.transform.rotation = cameraQ_;
+
+        // DebugArrowLine.create( aabb_.Center, aabb_.Center + normal * 10.0f );
         return true;
     }
 

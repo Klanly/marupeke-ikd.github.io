@@ -245,6 +245,7 @@
     <Compile Include="Assets\Codes\common\KeyHelper.cs" />
     <Compile Include="Assets\Codes\common\Lerps.cs" />
     <Compile Include="Assets\Codes\common\ListUtil.cs" />
+    <Compile Include="Assets\Codes\common\mesh\DebugAllow.cs" />
     <Compile Include="Assets\Codes\common\mesh\GLLine.cs" />
     <Compile Include="Assets\Codes\common\mesh\GLLines.cs" />
     <Compile Include="Assets\Codes\common\mesh\GLLineTrail.cs" />
