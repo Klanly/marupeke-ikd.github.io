@@ -89,6 +89,7 @@ public class SiteManager : MonoBehaviour {
         Vector3 rayCp = Vector3.zero;
         float width = 0.03f;
         float minDist = float.MaxValue;
+        Segment colSeg = null;
         foreach( var seg in segments_ ) {
             float s = 0.0f;
             float t = 0.0f;
@@ -97,10 +98,13 @@ public class SiteManager : MonoBehaviour {
             if ( dist <= width && dist < minDist ) {
                 minDist = dist;
                 cp = tmpCp;
-                break;
+                colSeg = seg;
             }
         }
-        cursorObj_.transform.position = cp;
+        if ( colSeg != null ) {
+            cursorObj_.transform.position = cp;
+            cursorObj_.transform.rotation = Quaternion.LookRotation( colSeg.Ray );
+        }
     }
 
     Parameter param_;

@@ -274,6 +274,7 @@
     <Compile Include="Assets\Codes\FallLine.cs" />
     <Compile Include="Assets\Codes\GameManager.cs" />
     <Compile Include="Assets\Codes\OrbitLine.cs" />
+    <Compile Include="Assets\Codes\Shild.cs" />
     <Compile Include="Assets\Codes\SiteEmitter.cs" />
     <Compile Include="Assets\Codes\SiteManager.cs" />
     <Compile Include="Assets\Codes\TrailLine.cs" />
