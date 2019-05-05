@@ -260,6 +260,7 @@
     <Compile Include="Assets\Codes\common\ResourceLoader.cs" />
     <Compile Include="Assets\Codes\common\ResurceLoaderUpdater.cs" />
     <Compile Include="Assets\Codes\common\shape\AABB.cs" />
+    <Compile Include="Assets\Codes\common\shape\Segment.cs" />
     <Compile Include="Assets\Codes\common\SimplePath.cs" />
     <Compile Include="Assets\Codes\common\sound\SoundManager.cs" />
     <Compile Include="Assets\Codes\common\SphereSurfUtil.cs" />
