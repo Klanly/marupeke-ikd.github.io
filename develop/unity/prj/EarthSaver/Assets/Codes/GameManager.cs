@@ -9,6 +9,12 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     Transform siteManagerRoot_;
 
+    [SerializeField]
+    Transform uiRoot_;
+
+    [SerializeField]
+    SiteAccPanel siteAccessPanelPrefab_;
+
     class Parameter {
 
     }
@@ -43,6 +49,51 @@ public class GameManager : MonoBehaviour {
     void emitSite( SiteManager siteManager ) {
         siteManager.transform.SetParent( siteManagerRoot_ );
         Debug.Log( "Emit!!" );
+
+        // サイトアクセスパネルを追加
+        var panel = Instantiate<SiteAccPanel>( siteAccessPanelPrefab_ );
+        panel.transform.SetParent( uiRoot_ );
+        panel.setCheck( false );
+        panel.setup( siteManager );
+        panel.SiteAccBtn.onClick.AddListener( () => {
+            // 現在のサイトを不活性に、選択サイトを活性に
+            if ( curSelectSite_ != null )
+                curSelectSite_.setActive( false );
+
+            // カメラ位置を変更
+            // ボタン操作は移動するまで不可に
+            setAllSiteAccBtnActive( false );
+
+            Vector3 endPos = Vector3.zero;
+            Quaternion endRot = Quaternion.identity;
+            siteManager.getCameraPose( out endPos, out endRot );
+            Vector3 startPos = Camera.main.transform.position;
+            Quaternion startRot = Camera.main.transform.rotation;
+            float startRad = startPos.magnitude;
+            float endRad = endPos.magnitude;
+            GlobalState.time( 0.75f, (sec, t) => {
+                var p = SphereSurfUtil.lerp( startPos, endPos, t ) * Lerps.Float.linear( startRad, endRad, t );
+                var q = Quaternion.Lerp( startRot, endRot, t );
+                Camera.main.transform.position = p;
+                Camera.main.transform.rotation = q;
+                return true;
+            } ).finish(()=> {
+                setAllSiteAccBtnActive( true );
+                panel.SiteAccBtn.interactable = false;   // 現在のボタンは選択不可に
+
+                // 移動後サイト活性
+                siteManager.setActive( true );
+                curSelectSite_ = siteManager;
+            } );
+        } );
+        siteAccPanels_.Add( panel );
+    }
+
+    void setAllSiteAccBtnActive( bool isActive ) {
+        foreach( var p in siteAccPanels_ ) {
+            p.SiteAccBtn.enabled = isActive;
+            p.SiteAccBtn.interactable = true;   // インタラクティブは可にしておく
+        }
     }
 
     class GameStart : State< GameManager > {
@@ -73,4 +124,6 @@ public class GameManager : MonoBehaviour {
 
     State state_;
     SiteEmitter siteEmitter_;   // サイト発生者
+    List<SiteAccPanel> siteAccPanels_ = new List<SiteAccPanel>();
+    SiteManager curSelectSite_ = null;
 }

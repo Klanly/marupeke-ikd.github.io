@@ -61,10 +61,9 @@ public class SiteManager : MonoBehaviour {
         aabb_.set( list );
         CameraUtil.fitAABB( Camera.main, normal, aabb_.Center.normalized, aabb_, out cameraPos_, out cameraQ_ );
 
-        Camera.main.transform.position = cameraPos_;
-        Camera.main.transform.rotation = cameraQ_;
-
-        debugLine_ =DebugArrowLine.create( aabb_.Center, aabb_.Center + normal * 10.0f );
+        //  Camera.main.transform.position = cameraPos_;
+        //  Camera.main.transform.rotation = cameraQ_;
+        // debugLine_ =DebugArrowLine.create( aabb_.Center, aabb_.Center + normal * 10.0f );
         return true;
     }
 
@@ -76,6 +75,12 @@ public class SiteManager : MonoBehaviour {
     // アクティブ？
     public bool isActive() {
         return bActive_;
+    }
+
+    // カメラ設定を取得
+    public void getCameraPose( out Vector3 position, out Quaternion rotateion ) {
+        position = cameraPos_;
+        rotateion = cameraQ_;
     }
 
     // 削除時処理
@@ -99,8 +104,8 @@ public class SiteManager : MonoBehaviour {
         cursorSeg_.Start = ray.origin;
         cursorSeg_.End = cursorSeg_.Start + ray.direction * 10.0f;
 
-        debugLine_.Start = cursorSeg_.Start;
-        debugLine_.End = cursorSeg_.End;
+        // debugLine_.Start = cursorSeg_.Start;
+        // debugLine_.End = cursorSeg_.End;
 
         Vector3 cp = Vector3.zero;
         Vector3 rayCp = Vector3.zero;
@@ -136,6 +141,6 @@ public class SiteManager : MonoBehaviour {
     Quaternion cameraQ_ = Quaternion.identity;
     List<Segment> segments_ = new List<Segment>();
     Segment cursorSeg_ = new Segment();
-    DebugArrowLine debugLine_;
+    // DebugArrowLine debugLine_;
     bool bActive_ = true;
 }
