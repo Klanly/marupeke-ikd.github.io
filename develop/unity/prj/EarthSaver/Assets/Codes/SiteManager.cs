@@ -10,7 +10,11 @@ public class SiteManager : MonoBehaviour {
     Transform orbitRoot_;
 
     [SerializeField]
-    GameObject cursorObj_;
+    Shild cursorObj_;
+
+    [SerializeField]
+    Transform shildRoot_;
+
 
     public class Parameter {
         public float orbitPointHeightRange_ = 1.5f;
@@ -64,6 +68,16 @@ public class SiteManager : MonoBehaviour {
         return true;
     }
 
+    // アクティブ設定
+    public void setActive( bool isActive ) {
+        bActive_ = isActive;
+    }
+
+    // アクティブ？
+    public bool isActive() {
+        return bActive_;
+    }
+
     // 削除時処理
     private void OnDestroy() {
         if ( param_ != null && param_.orbitLine_ != null )
@@ -77,6 +91,9 @@ public class SiteManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if ( bActive_ == false )
+            return;
+
         // ラインとのコリジョン
         Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
         cursorSeg_.Start = ray.origin;
@@ -105,6 +122,12 @@ public class SiteManager : MonoBehaviour {
             cursorObj_.transform.position = cp;
             cursorObj_.transform.rotation = Quaternion.LookRotation( colSeg.Ray );
         }
+
+        // クリックしたらシールド設置
+        if ( Input.GetMouseButton( 0 ) == true && colSeg != null ) {
+            var shild = Instantiate<Shild>( cursorObj_ );
+            shild.transform.SetParent( shildRoot_ );
+        }
     }
 
     Parameter param_;
@@ -114,4 +137,5 @@ public class SiteManager : MonoBehaviour {
     List<Segment> segments_ = new List<Segment>();
     Segment cursorSeg_ = new Segment();
     DebugArrowLine debugLine_;
+    bool bActive_ = true;
 }
