@@ -162,6 +162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   check_: {fileID: 114957295885652348}
   siteAccBtn_: {fileID: 114467788953332958}
+  btnText_: {fileID: 114837104299210288}
 --- !u!114 &114837104299210288
 MonoBehaviour:
   m_ObjectHideFlags: 1

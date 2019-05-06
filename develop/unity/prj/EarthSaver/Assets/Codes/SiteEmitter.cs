@@ -8,7 +8,7 @@ public class SiteEmitter {
     System.Action<SiteManager> emitCallback_;
     bool bActive_ = false;
     float aveSec_ = 10.0f;  // 平均発生秒
-    float maxSec_ = 20.0f;  // 最大待ち時間
+    float maxSec_ = 15.0f;  // 最大待ち時間
 
     public System.Action<SiteManager> EmitCallback { set { emitCallback_ = value; } }
     public float AveSec { set { aveSec_ = value; } }

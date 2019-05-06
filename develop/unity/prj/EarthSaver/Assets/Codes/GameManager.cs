@@ -55,6 +55,16 @@ public class GameManager : MonoBehaviour {
         panel.transform.SetParent( uiRoot_ );
         panel.setCheck( false );
         panel.setup( siteManager );
+
+        // 残り時間をボタン上に表示
+        GlobalState.start( () => {
+            panel.setBtnText( string.Format( "{0:0.##}", siteManager.LookTime ) );
+            if ( siteManager.LookTime <= 0.0f ) {
+                return false;
+            }
+            return true;
+        });
+
         panel.SiteAccBtn.onClick.AddListener( () => {
             // 現在のサイトを不活性に、選択サイトを活性に
             if ( curSelectSite_ != null )

@@ -63,6 +63,7 @@ public class Randoms {
         static public float value() {
             return Random.value;
         }
+
         // -1～1乱数
         static public float valueCenter() {
             return ( Random.value - 0.5f ) * 2.0f;

@@ -24,6 +24,19 @@ public class Segment {
         return Len < 0.00001f;
     }
 
+    // 点との最近距離算出
+    //  reference:「ゲームプログラミングの為のリアルタイム衝突判定」128p
+    public float calcDistPoint( Vector3 p, out float inter, out Vector3 close ) {
+        Vector3 ab = Ray;
+        inter = Vector3.Dot( p - Start, ab ) / LenSq;
+        if ( inter < 0.0f )
+            inter = 0.0f;
+        else if ( inter > 1.0f )
+            inter = 1.0f;
+        close = Start + inter * ab;
+        return ( close - p ).magnitude;
+    }
+
     // 線分同士の再近距離算出
     //  reference:「ゲームプログラミングの為のリアルタイム衝突判定」149p
     public float calcDistSegment( Segment s2, out float inter1, out float inter2, out Vector3 close1, out Vector3 close2 ) {

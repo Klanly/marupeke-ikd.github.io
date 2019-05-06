@@ -15,6 +15,14 @@ public class TrailLine : MonoBehaviour {
         renderer_.endWidth = width;
     }
 
+    public void setAlpha( float a ) {
+        var mat = renderer_.material;
+        var color = mat.GetColor( "_TintColor" );
+        color.a = a;
+        mat.SetColor( "_TintColor", color );
+        renderer_.material = mat;
+    }
+
 	// Use this for initialization
 	void Start () {
 		

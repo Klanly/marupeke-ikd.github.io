@@ -51,6 +51,14 @@ public class OrbitLine : MonoBehaviour {
         return data_;
     }
 
+    public void setActiveLine( bool isActive ) {
+        if ( isActive == true ) {
+            trailLine_.setAlpha( 1.0f );
+        } else {
+            trailLine_.setAlpha( 0.05f );
+        }
+    }
+
 	// Use this for initialization
 	void Start () {
     }
@@ -62,4 +70,5 @@ public class OrbitLine : MonoBehaviour {
 
     FallLine.Data data_ = null;
     Parameter param_ = new Parameter();
+    Material lineMat_;
 }

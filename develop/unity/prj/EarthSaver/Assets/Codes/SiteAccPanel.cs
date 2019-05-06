@@ -10,15 +10,27 @@ public class SiteAccPanel : MonoBehaviour {
     [SerializeField]
     UnityEngine.UI.Button siteAccBtn_;
 
+    [SerializeField]
+    UnityEngine.UI.Text btnText_;
+
     public UnityEngine.UI.Button SiteAccBtn { get { return siteAccBtn_; } }
 
     public void setup( SiteManager siteManager ) {
         siteManager_ = siteManager;
         siteManager_.setActive( false );    // 初期状態はサイトは不活性で
+
+        // 設定完了したらチェックマークON
+        siteManager.CompleteCallback = () => {
+            setCheck( true );
+        };
     }
 
     public void setCheck( bool isCheck ) {
         check_.gameObject.SetActive( isCheck );
+    }
+
+    public void setBtnText( string text ) {
+        btnText_.text = text;
     }
 
 	// Use this for initialization
