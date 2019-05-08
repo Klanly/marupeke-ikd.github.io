@@ -44,6 +44,9 @@ public class SiteManager : MonoBehaviour {
     // 設置完了
     public System.Action CompleteCallback { set { completeCallback_ = value; } }
 
+    // 落下物破壊
+    public System.Action BrokenObjectCallback { set { brokenObjectCallback_ = value; } }
+
     // 落下物出現時間
     public float LookTime { get { return curRemainTime_; } }
 
@@ -203,6 +206,8 @@ public class SiteManager : MonoBehaviour {
                             // 落下物破壊
                             bFallObjectBroken_ = true;
                             fallObject_.gameObject.SetActive( false );
+                            if ( brokenObjectCallback_ != null )
+                                brokenObjectCallback_();
                         }
                     }
                 }
@@ -272,6 +277,7 @@ public class SiteManager : MonoBehaviour {
     bool bActive_ = true;
     bool bEnableBreakFallObject_ = false;
     System.Action completeCallback_ = null;
+    System.Action brokenObjectCallback_ = null;
     float totalBreakPower_ = 0.0f;
     MoveValueFloat curRemainPower_ = null;
     float curFallObjPower_ = 0.0f;

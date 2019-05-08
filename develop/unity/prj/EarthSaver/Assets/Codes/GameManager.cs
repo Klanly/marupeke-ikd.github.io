@@ -96,6 +96,23 @@ public class GameManager : MonoBehaviour {
                 curSelectSite_ = siteManager;
             } );
         } );
+
+        // シールド設定完了したらチェックマークON
+        siteManager.CompleteCallback = () => {
+            panel.setCheck( true );
+        };
+
+        // TODO:
+        //  落下物破壊を確認
+        siteManager.BrokenObjectCallback = () => {
+            // ボタン・サイト削除
+            siteAccPanels_.Remove( panel );
+            Destroy( panel.gameObject );
+            Destroy( siteManager.gameObject, 5.0f );
+
+            // スコア追加
+        };
+
         siteAccPanels_.Add( panel );
     }
 

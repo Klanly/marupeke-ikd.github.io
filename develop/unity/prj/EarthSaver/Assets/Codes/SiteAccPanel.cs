@@ -18,11 +18,6 @@ public class SiteAccPanel : MonoBehaviour {
     public void setup( SiteManager siteManager ) {
         siteManager_ = siteManager;
         siteManager_.setActive( false );    // 初期状態はサイトは不活性で
-
-        // 設定完了したらチェックマークON
-        siteManager.CompleteCallback = () => {
-            setCheck( true );
-        };
     }
 
     public void setCheck( bool isCheck ) {
