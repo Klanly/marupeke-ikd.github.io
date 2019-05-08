@@ -31,7 +31,7 @@ public class SiteManager : MonoBehaviour {
     UnityEngine.UI.Text lookTimeText_;
 
     [SerializeField]
-    GameObject fallObject_;
+    Meteo fallObject_;
 
 
     public class Parameter {
@@ -46,6 +46,9 @@ public class SiteManager : MonoBehaviour {
 
     // 落下物破壊
     public System.Action BrokenObjectCallback { set { brokenObjectCallback_ = value; } }
+
+    // 落下物接地
+    public System.Action ObjectContactedCallback { set { objectContactedCallback_ = value; } }
 
     // 落下物出現時間
     public float LookTime { get { return curRemainTime_; } }
@@ -153,11 +156,13 @@ public class SiteManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update () {
+        if ( bFallObjectContactToEarth_ == true )
+            return;
+
         // 落下物は落ち続ける
         if ( bFallObjectBroken_ == false ) {
             t_ += Time.deltaTime;
@@ -182,6 +187,12 @@ public class SiteManager : MonoBehaviour {
                 curFallObjOrbit_.Start = preFallObjPos;
                 curFallObjOrbit_.End = fallObjPos;
                 validateFallObjSeg = true;
+            } else {
+                // 落下物が地球に衝突！
+                bFallObjectContactToEarth_ = true;
+                fallObject_.reachToEarth();
+                if ( objectContactedCallback_ != null )
+                    objectContactedCallback_();
             }
 
             // シールドとの衝突チェック
@@ -205,6 +216,7 @@ public class SiteManager : MonoBehaviour {
                         if ( curFallObjPower_ <= 0.0f ) {
                             // 落下物破壊
                             bFallObjectBroken_ = true;
+                            fallObject_.destroy();
                             fallObject_.gameObject.SetActive( false );
                             if ( brokenObjectCallback_ != null )
                                 brokenObjectCallback_();
@@ -278,6 +290,7 @@ public class SiteManager : MonoBehaviour {
     bool bEnableBreakFallObject_ = false;
     System.Action completeCallback_ = null;
     System.Action brokenObjectCallback_ = null;
+    System.Action objectContactedCallback_ = null;
     float totalBreakPower_ = 0.0f;
     MoveValueFloat curRemainPower_ = null;
     float curFallObjPower_ = 0.0f;
@@ -286,4 +299,5 @@ public class SiteManager : MonoBehaviour {
     List<Shild> placeShields_ = new List<Shild>();
     Segment curFallObjOrbit_ = new Segment();
     bool bFallObjectBroken_ = false;
+    bool bFallObjectContactToEarth_ = false;
 }

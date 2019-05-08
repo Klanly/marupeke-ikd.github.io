@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // インゲーム管理人
 
@@ -15,6 +16,27 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     SiteAccPanel siteAccessPanelPrefab_;
 
+    [SerializeField]
+    GameObject gameOverObj_;
+
+    [SerializeField]
+    UnityEngine.UI.Button gameOverBtn_;
+
+    [SerializeField]
+    float aveSec_ = 10.0f;
+
+    [SerializeField]
+    float maxSec_ = 15.0f;
+
+    [SerializeField]
+    float halfRateSec_ = 30.0f;
+
+    [SerializeField]
+    float fallObjAvePowerMin_ = 200.0f;
+
+    [SerializeField]
+    float fallObjAvePowerMax_ = 600.0f;
+
     class Parameter {
 
     }
@@ -22,6 +44,11 @@ public class GameManager : MonoBehaviour {
     private void Awake() {
         siteEmitter_ = new SiteEmitter();
         siteEmitter_.EmitCallback = emitSite;
+        siteEmitter_.MaxSec = maxSec_;
+        siteEmitter_.AveSec = aveSec_;
+        siteEmitter_.AveHalfUnitSec = halfRateSec_;
+        siteEmitter_.FallObjPowerMin = fallObjAvePowerMin_;
+        siteEmitter_.FallObjPowerMax = fallObjAvePowerMax_;
     }
 
     // Use this for initialization
@@ -58,6 +85,8 @@ public class GameManager : MonoBehaviour {
 
         // 残り時間をボタン上に表示
         GlobalState.start( () => {
+            if ( panel == null )
+                return false;
             panel.setBtnText( string.Format( "{0:0.##}", siteManager.LookTime ) );
             if ( siteManager.LookTime <= 0.0f ) {
                 return false;
@@ -99,18 +128,29 @@ public class GameManager : MonoBehaviour {
 
         // シールド設定完了したらチェックマークON
         siteManager.CompleteCallback = () => {
-            panel.setCheck( true );
+            if ( panel != null )
+                panel.setCheck( true );
         };
 
         // TODO:
         //  落下物破壊を確認
         siteManager.BrokenObjectCallback = () => {
+            if ( panel == null )
+                return;
             // ボタン・サイト削除
             siteAccPanels_.Remove( panel );
             Destroy( panel.gameObject );
             Destroy( siteManager.gameObject, 5.0f );
 
             // スコア追加
+        };
+
+        // 落下物が接地したらGameOver
+        siteManager.ObjectContactedCallback = () => {
+            siteEmitter_.setActive( false );
+            if ( bGameOver_ == false ) {
+                toGameOver( siteManager );
+            }
         };
 
         siteAccPanels_.Add( panel );
@@ -121,6 +161,40 @@ public class GameManager : MonoBehaviour {
             p.SiteAccBtn.enabled = isActive;
             p.SiteAccBtn.interactable = true;   // インタラクティブは可にしておく
         }
+    }
+
+    void toGameOver( SiteManager siteManager ) {
+        bGameOver_ = true;
+        // カメラ位置を変更
+        // ボタン操作は不可に
+        // 全てのパネルを消去
+        setAllSiteAccBtnActive( false );
+        foreach ( var panel in siteAccPanels_ ) {
+            panel.gameObject.SetActive( false );
+        }
+
+        Vector3 endPos = Vector3.zero;
+        Quaternion endRot = Quaternion.identity;
+        siteManager.getCameraPose( out endPos, out endRot );
+        Vector3 startPos = Camera.main.transform.position;
+        Quaternion startRot = Camera.main.transform.rotation;
+        float startRad = startPos.magnitude;
+        float endRad = endPos.magnitude;
+        GlobalState.time( 2.0f, (sec, t) => {
+            var p = SphereSurfUtil.lerp( startPos, endPos, t ) * Lerps.Float.easeInOut( startRad, endRad, t );
+            var q = Quaternion.Lerp( startRot, endRot, t );
+            Camera.main.transform.position = p;
+            Camera.main.transform.rotation = q;
+            return true;
+        } ).finish( () => {
+            gameOverObj_.SetActive( true );
+            gameOverBtn_.gameObject.SetActive( true );
+            gameOverBtn_.onClick.AddListener( () => {
+                DeltaLerp.clearAllLerps();
+                SceneManager.LoadScene( "main" );
+                Destroy( gameOverBtn_.gameObject );
+            } );
+        } );
     }
 
     class GameStart : State< GameManager > {
@@ -153,4 +227,5 @@ public class GameManager : MonoBehaviour {
     SiteEmitter siteEmitter_;   // サイト発生者
     List<SiteAccPanel> siteAccPanels_ = new List<SiteAccPanel>();
     SiteManager curSelectSite_ = null;
+    bool bGameOver_ = false;
 }
