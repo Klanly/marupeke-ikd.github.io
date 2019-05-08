@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviour {
     UnityEngine.UI.Button gameOverBtn_;
 
     [SerializeField]
+    UnityEngine.UI.Text missionTimeText_;
+
+    [SerializeField]
     float aveSec_ = 10.0f;
 
     [SerializeField]
@@ -49,6 +52,8 @@ public class GameManager : MonoBehaviour {
         siteEmitter_.AveHalfUnitSec = halfRateSec_;
         siteEmitter_.FallObjPowerMin = fallObjAvePowerMin_;
         siteEmitter_.FallObjPowerMax = fallObjAvePowerMax_;
+
+        missionTimeText_.text = string.Format( "{0:0.00}", 0.0f );
     }
 
     // Use this for initialization
@@ -70,6 +75,10 @@ public class GameManager : MonoBehaviour {
             state_ = state_.update();
         if ( siteEmitter_ != null )
             siteEmitter_.update();
+        if ( bGameOver_ == false ) {
+            curMissionTime_ += Time.deltaTime;
+            missionTimeText_.text = string.Format( "{0:0.00}", curMissionTime_ );
+        }
     }
 
     // サイトエミット
@@ -228,4 +237,5 @@ public class GameManager : MonoBehaviour {
     List<SiteAccPanel> siteAccPanels_ = new List<SiteAccPanel>();
     SiteManager curSelectSite_ = null;
     bool bGameOver_ = false;
+    float curMissionTime_ = 0.0f;
 }

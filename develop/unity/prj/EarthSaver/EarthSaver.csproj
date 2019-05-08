@@ -300,6 +300,7 @@
     <None Include="Assets\Detonator Explosion Framework\Resources\Detonator\Textures\HeatDistort.shader" />
     <None Include="Assets\Fonts\agencyFB_48.fnt" />
     <None Include="Assets\Fonts\agencyFB_48B.fnt" />
+    <None Include="Assets\Fonts\cambria_48.fnt" />
     <None Include="Assets\Plugins\BitmapFontImporter\Examples\Font1\font1.fnt" />
     <None Include="Assets\Plugins\BitmapFontImporter\Examples\Font2\font2.fnt" />
     <None Include="Assets\Plugins\BitmapFontImporter\Examples\font3\font3.fnt" />
