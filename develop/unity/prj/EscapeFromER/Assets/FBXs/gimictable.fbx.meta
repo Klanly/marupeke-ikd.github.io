@@ -1,0 +1,181 @@
+fileFormatVersion: 2
+guid: e652b31cd9c33ca4cb8ffa0cfd74817b
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Camera
+    100002: CenterHex
+    100004: Circle
+    100006: Club
+    100008: Cross
+    100010: Diamond
+    100012: GimicTable
+    100014: //RootNode
+    100016: Hart
+    100018: Lamp
+    100020: Spade
+    400000: Camera
+    400002: CenterHex
+    400004: Circle
+    400006: Club
+    400008: Cross
+    400010: Diamond
+    400012: GimicTable
+    400014: //RootNode
+    400016: Hart
+    400018: Lamp
+    400020: Spade
+    2000000: Camera
+    2100000: CenterHex
+    2100002: No Name
+    2100004: circle
+    2100006: diamond
+    2100008: club
+    2100010: spade
+    2100012: hart
+    2100014: GimicTable
+    2300000: CenterHex
+    2300002: Circle
+    2300004: Club
+    2300006: Cross
+    2300008: Diamond
+    2300010: GimicTable
+    2300012: Hart
+    2300014: Spade
+    3300000: CenterHex
+    3300002: Circle
+    3300004: Club
+    3300006: Cross
+    3300008: Diamond
+    3300010: GimicTable
+    3300012: Hart
+    3300014: Spade
+    4300000: CenterHex
+    4300002: Cross
+    4300004: Circle
+    4300006: Diamond
+    4300008: Club
+    4300010: Spade
+    4300012: Hart
+    4300014: GimicTable
+    10800000: Lamp
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CenterHex
+    second: {fileID: 2100000, guid: af7cb127d710c4b488f52f3316e5bb77, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: GimicTable
+    second: {fileID: 2100000, guid: f18804b62b62f7f49be207567f7f792e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: 2cac4428e33b2cd4d8c4515b90f6fc8a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: circle
+    second: {fileID: 2100000, guid: 5ae7044a08155c844ba0440f45fac447, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: club
+    second: {fileID: 2100000, guid: 7b54c772ee8c9cf4792355f7cec81d6a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: diamond
+    second: {fileID: 2100000, guid: 1a71b8ff1acf471479f0c8afc93653f3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: hart
+    second: {fileID: 2100000, guid: 73f490336fdd0cb43b8f412d3b40754b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: spade
+    second: {fileID: 2100000, guid: 8b51b01f8392f2847971a13f4fe5baf2, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 1
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
