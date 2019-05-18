@@ -289,6 +289,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\7barSP_01_64.fnt" />
+    <None Include="Assets\Fonts\bookantique_64.fnt" />
     <None Include="Assets\MACHIN3\Skybox\Blueprint-Schematic_03_readme.txt" />
     <None Include="Assets\Plugins\BitmapFontImporter\Examples\Font1\font1.fnt" />
     <None Include="Assets\Plugins\BitmapFontImporter\Examples\Font2\font2.fnt" />

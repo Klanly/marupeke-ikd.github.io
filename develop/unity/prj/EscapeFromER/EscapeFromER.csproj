@@ -235,6 +235,7 @@
     <Compile Include="Assets\Codes\common\Bezier.cs" />
     <Compile Include="Assets\Codes\common\camera\CameraPicker.cs" />
     <Compile Include="Assets\Codes\common\camera\CameraUtil.cs" />
+    <Compile Include="Assets\Codes\common\camera\FPSCameraMotion.cs" />
     <Compile Include="Assets\Codes\common\CollideUtil.cs" />
     <Compile Include="Assets\Codes\common\ColorHelper.cs" />
     <Compile Include="Assets\Codes\common\DeltaLerpManager.cs" />
@@ -271,11 +272,14 @@
     <Compile Include="Assets\Codes\common\UIIntroColorAnimation.cs" />
     <Compile Include="Assets\Codes\common\UIIntroTextColorAnimation.cs" />
     <Compile Include="Assets\Codes\common\Vector3Util.cs" />
+    <Compile Include="Assets\Codes\Filer.cs" />
+    <Compile Include="Assets\Codes\Room.cs" />
     <Compile Include="Assets\Codes\StringLine.cs" />
     <Compile Include="Assets\Codes\StringLineGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\7barSP_01_64.fnt" />
+    <None Include="Assets\Fonts\bookantique_64.fnt" />
     <None Include="Assets\MACHIN3\Skybox\Blueprint-Schematic_03_readme.txt" />
     <None Include="Assets\Plugins\BitmapFontImporter\Examples\Font1\font1.fnt" />
     <None Include="Assets\Plugins\BitmapFontImporter\Examples\Font2\font2.fnt" />
