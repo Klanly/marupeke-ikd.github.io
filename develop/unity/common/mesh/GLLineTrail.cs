@@ -75,10 +75,10 @@ public class GLLineTrail : GLLine {
 		bActive_ = isActive;
 	}
 
-	// 描画（GLLineTrailから呼ばれる）
-	override public void draw() {
+	// 描画（GLLinesから呼ばれる）
+	override public bool draw() {
 		if ( bActive_ == false || gameObject.activeInHierarchy == false )
-			return;
+			return true;
 		int idx = curPos_;
 		for ( int i = 0; i < pointNum_ - 1; ++i ) {
 			idx = ( pointNum_ + idx ) % pointNum_;
@@ -90,6 +90,7 @@ public class GLLineTrail : GLLine {
 			GL.Vertex3( points_[ e * 3 ], points_[ e * 3 + 1 ], points_[ e * 3 + 2 ] );
 			idx--;
 		}
+        return true;
 	}
 
 	void Start () {

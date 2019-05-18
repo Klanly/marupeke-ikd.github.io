@@ -86,6 +86,13 @@ public class SphereSurfUtil {
         return q * a.normalized;
     }
 
+    // 球面上画のAからBへ補間
+    // a   : 球面上のスタート位置座標。半径は正規化される。
+    // b   : 球面上のゴール位置座標。半径は正規化される。
+    static public Vector3 lerp( Vector3 a, Vector3 b, float t ) {
+        return Vector3.Slerp( a.normalized, b.normalized, t );
+    }
+
     // 球面上の角度（デグリー角）を算出
     //  center: 角度を計る頂点
     //  p0    : centerから伸びる線分の端点0

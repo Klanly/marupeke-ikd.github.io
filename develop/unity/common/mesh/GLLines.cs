@@ -16,17 +16,12 @@ public class GLLines : MonoBehaviour {
 	static Material lineMaterial_;
 	static void createLineMaterial() {
 		if ( !lineMaterial_ ) {
-			// Unity has a built-in shader that is useful for drawing
-			// simple colored things.
 			Shader shader = Shader.Find( "Hidden/Internal-Colored" );
 			lineMaterial_ = new Material( shader );
 			lineMaterial_.hideFlags = HideFlags.HideAndDontSave;
-			// Turn on alpha blending
 			lineMaterial_.SetInt( "_SrcBlend", ( int )UnityEngine.Rendering.BlendMode.SrcAlpha );
 			lineMaterial_.SetInt( "_DstBlend", ( int )UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha );
-			// Turn backface culling off
 			lineMaterial_.SetInt( "_Cull", ( int )UnityEngine.Rendering.CullMode.Off );
-			// Turn off depth writes
 			lineMaterial_.SetInt( "_ZWrite", 0 );
 		}
 	}
@@ -43,13 +38,23 @@ public class GLLines : MonoBehaviour {
 		GL.PushMatrix();
 
 		GL.Begin( GL.LINES );
-		for ( var n = lines_.First; n != null; n = n.Next ) {
-			n.Value.draw();
-		}
-		foreach ( var n in fixLines_ ) {
-			n.draw();
-		}
-		GL.End();
+        LinkedListNode<GLLine> node = lines_.First;
+        while ( node != null ) {
+            var obj = node.Value;
+            if ( obj.draw() == false ) {
+                var removeNode = node;
+                node = node.Next;
+                lines_.Remove( removeNode );
+            } else {
+                node = node.Next;
+            }
+        }
+        if ( fixLines_ != null ) {
+            foreach ( var n in fixLines_ ) {
+                n.draw();
+            }
+        }
+        GL.End();
 		GL.PopMatrix();
 	}
 
@@ -58,4 +63,21 @@ public class GLLines : MonoBehaviour {
 	}
 
 	LinkedList<GLLine> lines_ = new LinkedList<GLLine>(); 
+}
+
+
+// グローバルなGLLines
+public class StaticGLLines {
+    protected StaticGLLines() {
+        var obj = new GameObject( "StaticGLLines" );
+        glLines_ = obj.AddComponent<GLLines>();
+    }
+    public static StaticGLLines getInstance() {
+        return instance_g;
+    }
+    public void addLine( GLLine line ) {
+        glLines_.addLine( line );
+    }
+    static StaticGLLines instance_g = new StaticGLLines();
+    GLLines glLines_;
 }

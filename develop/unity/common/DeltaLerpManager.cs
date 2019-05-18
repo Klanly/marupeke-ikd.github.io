@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DeltaLerpManager : MonoBehaviour {
-	void Update() {
+    void Update() {
 		DeltaLerpUpdater.getInstance().update();
 	}
 }
@@ -12,6 +12,7 @@ public class DeltaLerpUpdater {
 	private DeltaLerpUpdater() {
 		var obj = new GameObject( "DeltaLerpUpdater" );
 		obj.AddComponent< DeltaLerpManager >();
+        GameObject.DontDestroyOnLoad( obj );
 	}
 
 	static public DeltaLerpUpdater getInstance() {
@@ -22,7 +23,12 @@ public class DeltaLerpUpdater {
 		addList_.Add( lerpObj );
 	}
 
-	public void update() {
+    public void clearAll() {
+        addList_.Clear();
+        updateList_.Clear();
+    }
+
+    public void update() {
 		if ( addList_.Count > 0 ) {
 			foreach ( var obj in addList_ ) {
 				updateList_.AddLast( obj );
@@ -48,6 +54,10 @@ public class DeltaLerpUpdater {
 }
 
 public class DeltaLerp {
+
+    public static void clearAllLerps() {
+        DeltaLerpUpdater.getInstance().clearAll();
+    }
 
 	public class Result {
 		virtual public bool update() {

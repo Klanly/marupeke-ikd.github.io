@@ -15,7 +15,6 @@ public class CameraPicker {
         Vector3 p = cameraRot_ * new Vector3( screenPos.x, screenPos.y, D_ ) + C_;
         var p_c = p - C_;
         float a = Vector3.Dot( P0_ - C_, N_ ) / Vector3.Dot( p_c, N_ );
-        var res = C_ + p_c * a;
         return C_ + p_c * a;
     }
 
