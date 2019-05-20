@@ -11,6 +11,11 @@ public class Inventory : MonoBehaviour {
         return items_;
     }
 
+    // アイテムを追加
+    public void add( Item item ) {
+        items_.Add( item );
+    }
+
     // Use this for initialization
     void Start () {
 		

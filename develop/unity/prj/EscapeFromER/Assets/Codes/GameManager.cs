@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
     FPSCameraMotion fpsMotion_;
 
     Focus focusPrefab_;
+    GameState curGameState_;
 
     static public GameManager getInstance() {
         return instance_g;
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour {
     private void Awake() {
         instance_g = this;
         focusPrefab_ = PrefabUtil.load<Focus>( "Prefabs/Focus" );
+        curGameState_ = PrefabUtil.createInstance<GameState>( "Prefabs/ConfidentialFileCreateState", transform );
     }
 
     // インベントリー取得
@@ -59,6 +61,9 @@ public class GameManager : MonoBehaviour {
             // 左クリックで現在選択中のアイテムに対して選択イベント発動
             if ( Input.GetMouseButtonDown( 0 ) == true && selectingItem_ != null && selectingItem_.isSelecting() == false ) {
                 selectingItem_.onSelect();
+                if ( selectingItem_.isPickUpItem() == true ) {
+                    parent_.inventory_.add( selectingItem_ );
+                }
             }
 
             // [Z}でしゃがみ/立ち切り替え

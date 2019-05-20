@@ -8,6 +8,9 @@ public class Item : MonoBehaviour {
     [SerializeField]
     Collider collider_;
 
+    [SerializeField]
+    bool bInvisibleOnPickUp_ = true;   // ピックアップされたらオブジェクトを非表示にする？
+
     public string Name { get { return name_; } }
 
     // コライダーを取得
@@ -24,11 +27,25 @@ public class Item : MonoBehaviour {
     public void onSelect() {
         Debug.Log( Name + ": Select" );
         bSelecting_ = true;
+        if ( bInvisibleOnPickUp_ == true ) {
+            collider_.gameObject.SetActive( false );
+        }
     }
 
     // 今選択中？
     public bool isSelecting() {
         return bSelecting_;
+    }
+
+    // ピックアップするアイテム？
+    public bool isPickUpItem() {
+        return bEnablePickUp_;
+    }
+
+    // 選択の可否を設定
+    public void setEnableSelect( bool isEnable ) {
+        bEnableSelect_ = isEnable;
+        collider_.enabled = bEnableSelect_;
     }
 
     private void Awake() {
@@ -37,6 +54,9 @@ public class Item : MonoBehaviour {
         foreach ( var f in filters ) {
             bound_.Encapsulate( f.mesh.bounds );
         }
+
+        // 初期状態での選択可否
+        setEnableSelect( bEnableSelect_ );
     }
 
     // Use this for initialization
@@ -56,4 +76,7 @@ public class Item : MonoBehaviour {
     bool bEnablePickUp_ = true; // ピックアップ可能
     Bounds bound_ = new Bounds( Vector3.zero, Vector3.one );
     bool bSelecting_ = false;
+
+    [SerializeField]
+    bool bEnableSelect_ = true; // 選択可能
 }
