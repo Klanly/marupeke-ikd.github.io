@@ -240,6 +240,7 @@
     <Compile Include="Assets\Codes\common\ColorHelper.cs" />
     <Compile Include="Assets\Codes\common\DeltaLerpManager.cs" />
     <Compile Include="Assets\Codes\common\Fader.cs" />
+    <Compile Include="Assets\Codes\common\GameObjectUtil.cs" />
     <Compile Include="Assets\Codes\common\GlobalStateManager.cs" />
     <Compile Include="Assets\Codes\common\ImageBillboarding.cs" />
     <Compile Include="Assets\Codes\common\IntroAnimation.cs" />
@@ -257,6 +258,7 @@
     <Compile Include="Assets\Codes\common\MoveValueLong.cs" />
     <Compile Include="Assets\Codes\common\ObjectLooker.cs" />
     <Compile Include="Assets\Codes\common\OnCollideCallback.cs" />
+    <Compile Include="Assets\Codes\common\PrefabUtil.cs" />
     <Compile Include="Assets\Codes\common\Randoms.cs" />
     <Compile Include="Assets\Codes\common\ResourceLoader.cs" />
     <Compile Include="Assets\Codes\common\ResurceLoaderUpdater.cs" />
@@ -273,9 +275,19 @@
     <Compile Include="Assets\Codes\common\UIIntroTextColorAnimation.cs" />
     <Compile Include="Assets\Codes\common\Vector3Util.cs" />
     <Compile Include="Assets\Codes\Filer.cs" />
+    <Compile Include="Assets\Codes\Focus.cs" />
+    <Compile Include="Assets\Codes\GameManager.cs" />
+    <Compile Include="Assets\Codes\GameState\ConfidentialFileCreateState.cs" />
+    <Compile Include="Assets\Codes\GameState\ConfidentialFilePazzleState.cs" />
+    <Compile Include="Assets\Codes\GameState\FindMemoState.cs" />
+    <Compile Include="Assets\Codes\GameState\GameState.cs" />
+    <Compile Include="Assets\Codes\GameState\StockConfidentialFilesState.cs" />
+    <Compile Include="Assets\Codes\Inventory.cs" />
+    <Compile Include="Assets\Codes\Item.cs" />
     <Compile Include="Assets\Codes\Room.cs" />
     <Compile Include="Assets\Codes\StringLine.cs" />
     <Compile Include="Assets\Codes\StringLineGenerator.cs" />
+    <Compile Include="Assets\Codes\test\FocusTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\7barSP_01_64.fnt" />

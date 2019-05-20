@@ -40,11 +40,10 @@ public class FPSCameraMotion : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if ( bVisibleCursor_ != preVisibleCursor_ ) {
-            // Cursor.visible = bVisibleCursor_;
-            Cursor.visible = true;
+            Cursor.visible = bVisibleCursor_;
 
             if ( bVisibleCursor_ == false ) {
-                // カーソルを画面中央に固定
+                // カーソルを画面内に固定
                 Cursor.lockState = CursorLockMode.Confined;
                 // 基点確定
                 cursorOrg_ = Input.mousePosition;
