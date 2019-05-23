@@ -7,6 +7,11 @@ public class GameState : MonoBehaviour {
 
     public System.Action CompleteCallback { set { completeCallback_ = value; } }
 
+    // 強制的にコンプさせる（デバッグ用）
+    public void forceComplete() {
+        complete();
+    }
+
     protected virtual void complete() {
         if ( completeCallback_ != null )
             completeCallback_();

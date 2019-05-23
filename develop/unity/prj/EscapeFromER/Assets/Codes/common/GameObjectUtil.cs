@@ -20,10 +20,35 @@ public class GameObjectUtil {
     }
 
     // ヒエラルキー内のオブジェクトを取得
-    static public T find< T >( string name ) where T : MonoBehaviour {
-        var obj = GameObject.Find( name );
-        if ( obj == null )
-            return null;
-        return obj.GetComponent<T>();
+    static public T find< T >( string name, bool ignoreInvisible = false ) where T : MonoBehaviour {
+        if ( ignoreInvisible == true ) {
+            var obj = GameObject.Find( name );
+            if ( obj == null )
+                return null;
+            return obj.GetComponent<T>();
+        }
+
+        // 見えていない物も検索
+        var objects = UnityEngine.Resources.FindObjectsOfTypeAll( typeof( GameObject ) );
+        foreach ( var o in objects ) {
+            if ( o.name == name ) {
+                var obj = o as GameObject;
+                return obj.GetComponent<T>();
+            }
+        }
+
+        return null;
+    }
+
+    // ヒエラルキーから削除
+    static public void remove( string[] names ) {
+        var objects = UnityEngine.Resources.FindObjectsOfTypeAll( typeof( GameObject ) );
+        foreach ( var o in objects ) {
+            foreach ( var n in names ) {
+                if ( o.name == n ) {
+                    Object.Destroy( o );
+                }
+            }
+        }
     }
 }

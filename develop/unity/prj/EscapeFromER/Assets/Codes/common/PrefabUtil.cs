@@ -24,4 +24,12 @@ public class PrefabUtil {
         obj.transform.SetParent( parent );
         return obj;
     }
+
+    // プレハブをインスタンシングして親と関連付け
+    static public T createInstance<T>( T prefab, Transform parent = null) where T : Object {
+        var obj = GameObject.Instantiate<T>( prefab );
+        var o = obj as GameObject;
+        o.transform.SetParent( parent );
+        return obj;
+    }
 }

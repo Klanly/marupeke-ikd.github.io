@@ -45,7 +45,8 @@ public class Item : MonoBehaviour {
     // 選択の可否を設定
     public void setEnableSelect( bool isEnable ) {
         bEnableSelect_ = isEnable;
-        collider_.enabled = bEnableSelect_;
+        if ( collider_ != null )
+            collider_.enabled = bEnableSelect_;
     }
 
     private void Awake() {

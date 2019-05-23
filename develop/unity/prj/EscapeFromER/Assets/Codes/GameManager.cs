@@ -13,6 +13,15 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     FPSCameraMotion fpsMotion_;
 
+    [SerializeField]
+    Room room_;
+
+    [SerializeField]
+    Display display_;
+
+    [SerializeField]
+    GameObject escapeSuccessImage_;
+
     Focus focusPrefab_;
     GameState curGameState_;
 
@@ -21,9 +30,25 @@ public class GameManager : MonoBehaviour {
     }
 
     private void Awake() {
+        state_ = new FieldState( this );
+
         instance_g = this;
         focusPrefab_ = PrefabUtil.load<Focus>( "Prefabs/Focus" );
         curGameState_ = PrefabUtil.createInstance<GameState>( "Prefabs/ConfidentialFileCreateState", transform );
+        curGameState_.CompleteCallback = () => {
+            Destroy( curGameState_.gameObject );
+            curGameState_ = PrefabUtil.createInstance<GameState>( "Prefabs/WarningState", transform );
+            curGameState_.CompleteCallback = () => {
+                Destroy( curGameState_.gameObject );
+                curGameState_ = PrefabUtil.createInstance<GameState>( "Prefabs/SuccessEscapeState", transform );
+                state_ = new ClearState( this );
+            };
+
+            // curGameState_.forceComplete();  // DEBUG
+
+        };
+
+       // curGameState_.forceComplete();  // DEBUG
     }
 
     // インベントリー取得
@@ -32,9 +57,18 @@ public class GameManager : MonoBehaviour {
 
     }
 
+    // 部屋取得
+    public Room getRoom() {
+        return room_;
+    }
+
+    // ディスプレイ取得
+    public Display getDisplay() {
+        return display_;
+    }
+
     // Use this for initialization
     void Start () {
-        state_ = new FieldState( this );
 	}
 	
 	// Update is called once per frame
@@ -57,6 +91,18 @@ public class GameManager : MonoBehaviour {
         }
 
         protected override State innerUpdate() {
+
+            // [Q]でインベントリーオープン
+            if ( Input.GetKeyDown( KeyCode.Q ) == true && parent_.inventory_.isShow() == false && parent_.inventory_.compClose() == true ) {
+                parent_.fpsMotion_.setActive( false );
+                parent_.inventory_.show( () => {
+                    parent_.fpsMotion_.setActive( true );
+                } );
+            }
+
+            if ( parent_.inventory_.isShow() == true ) {
+                return this;
+            }
 
             // 左クリックで現在選択中のアイテムに対して選択イベント発動
             if ( Input.GetMouseButtonDown( 0 ) == true && selectingItem_ != null && selectingItem_.isSelecting() == false ) {
@@ -119,10 +165,22 @@ public class GameManager : MonoBehaviour {
 
             return this;
         }
+
         Item selectingItem_ = null;
         Focus curFocus_ = null;
         bool bCrouching_ = false;
         float standUpHeight_ = 0.0f;
+    }
+
+    class ClearState : State<GameManager> {
+        public ClearState(GameManager parent) : base( parent ) {
+        }
+        protected override State innerInit() {
+            parent_.fpsMotion_.enabled = false;
+            parent_.escapeSuccessImage_.SetActive( true );
+            parent_.fpsMotion_.showReticle( false );
+            return this;
+        }
     }
 
     static GameManager instance_g = null;
