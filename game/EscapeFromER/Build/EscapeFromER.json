@@ -1,0 +1,13 @@
+{
+"companyName": "DefaultCompany",
+"productName": "EscapeFromER",
+"dataUrl": "EscapeFromER.data.unityweb",
+"asmCodeUrl": "EscapeFromER.asm.code.unityweb",
+"asmMemoryUrl": "EscapeFromER.asm.memory.unityweb",
+"asmFrameworkUrl": "EscapeFromER.asm.framework.unityweb",
+"TOTAL_MEMORY": 268435456,
+"graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"splashScreenStyle": "Dark",
+"backgroundColor": "#231F20"
+}
