@@ -11,7 +11,7 @@ public class Player : MonoBehaviour {
     MazeMesh mezeMesh_;
 
     [SerializeField]
-    Light torch_;
+    Torch torch_;
 
     // 落下
     void fall( System.Action finishCallback ) {
@@ -69,11 +69,19 @@ public class Player : MonoBehaviour {
         if ( Physics.Raycast( ray, out hit, 0.7f ) == true ) {
             var mazeMesh = hit.collider.GetComponent<MazeMesh>();
             if ( mazeMesh != null ) {
-                // 松明を付ける
-                var p = hit.point + hit.normal * 0.05f;
-                var torch = Instantiate<Light>( torch_ );
-                torch.transform.localPosition = p;
-                torch.gameObject.SetActive( true );
+                // 松明を付ける。ただし天井は付けない。
+                if ( hit.normal.y > -0.2f ) {
+                    var torch = Instantiate<Torch>( torch_ );
+                    var p = hit.point;
+                    torch.transform.localPosition = p;
+                    // 壁から少し傾けて設定
+                    if ( Vector3.Dot( hit.normal, Vector3.up ) < 0.1f ) {
+                        Vector3 dir = hit.normal + new Vector3( 0.0f, -0.3f, 0.0f );
+                        var q = Quaternion.LookRotation( dir );
+                        torch.transform.localRotation = q;
+                    }
+                    torch.gameObject.SetActive( true );
+                }
             } else {
                 var torch = hit.collider.GetComponent<Torch>();
                 if ( torch != null ) {

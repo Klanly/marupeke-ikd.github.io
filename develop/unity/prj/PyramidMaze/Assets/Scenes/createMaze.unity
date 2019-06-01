@@ -304,7 +304,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upDown_: {fileID: 1707793044}
   mezeMesh_: {fileID: 2057798183}
-  torch_: {fileID: 108710219755616974, guid: ce9a2e89f695222469e086e287618d84, type: 2}
+  torch_: {fileID: 114109219444927556, guid: 4f8e0f8b408444443bb5a374b9965c3f, type: 2}
 --- !u!114 &1707793044
 MonoBehaviour:
   m_ObjectHideFlags: 0
