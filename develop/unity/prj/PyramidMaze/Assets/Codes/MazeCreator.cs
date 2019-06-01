@@ -14,6 +14,7 @@ public class MazeCreator : MonoBehaviour {
         public float roomHeight_ = 1.0f;    // 部屋の高さ
         public int groupCountMin_ = 5;      // 作成時の最小連続接続数
         public int groupCountMax_ = 10;      // 作成時の最大連続接続数
+        public bool useLevel0Holl_ = false;     // Level0の壁に穴を空ける？
     }
 
     // 生成
@@ -106,37 +107,39 @@ public class MazeCreator : MonoBehaviour {
             }
         }
 
-        // Level0の任意の部屋の外側の壁を外す（スタート地点）
-        {
-            int xSize = param.cellLevel_[ 0 ].cells_.GetLength( 0 );
-            int zSize = param.cellLevel_[ 0 ].cells_.GetLength( 1 );
-            int x = 0;
-            int z = 0;
-            int wallIdx = 0;
-            switch ( Random.Range( 0, 4 ) ) {
-                case 0: // L
-                    x = 0;
-                    z = Random.Range( 0, zSize );
-                    wallIdx = 8;
-                    break;
-                case 1:  // R
-                    x = xSize - 1;
-                    z = Random.Range( 0, zSize );
-                    wallIdx = 9;
-                    break;
-                case 2: // B
-                    x = Random.Range( 0, xSize );
-                    z = 0;
-                    wallIdx = 10;
-                    break;
-                case 3: // T
-                    x = Random.Range( 0, xSize );
-                    z = zSize - 1;
-                    wallIdx = 11;
-                    break;
+        if ( param.useLevel0Holl_ == true ) {
+            // Level0の任意の部屋の外側の壁を外す（スタート地点）
+            {
+                int xSize = param.cellLevel_[ 0 ].cells_.GetLength( 0 );
+                int zSize = param.cellLevel_[ 0 ].cells_.GetLength( 1 );
+                int x = 0;
+                int z = 0;
+                int wallIdx = 0;
+                switch ( Random.Range( 0, 4 ) ) {
+                    case 0: // L
+                        x = 0;
+                        z = Random.Range( 0, zSize );
+                        wallIdx = 8;
+                        break;
+                    case 1:  // R
+                        x = xSize - 1;
+                        z = Random.Range( 0, zSize );
+                        wallIdx = 9;
+                        break;
+                    case 2: // B
+                        x = Random.Range( 0, xSize );
+                        z = 0;
+                        wallIdx = 10;
+                        break;
+                    case 3: // T
+                        x = Random.Range( 0, xSize );
+                        z = zSize - 1;
+                        wallIdx = 11;
+                        break;
+                }
+                var startCell = param.cellLevel_[ 0 ].cells_[ z, x ];
+                startCell.link_[ wallIdx ] = startCell; // 自分を入れておくことにする！
             }
-            var startCell = param.cellLevel_[ 0 ].cells_[ z, x ];
-            startCell.link_[ wallIdx ] = startCell; // 自分を入れておくことにする！
         }
 
         // 壁メッシュデータ作成

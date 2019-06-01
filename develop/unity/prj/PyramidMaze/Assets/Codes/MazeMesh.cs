@@ -9,8 +9,8 @@ public class MazeMesh : MonoBehaviour {
     [SerializeField]
     Material sourceMaterial_;
 
-    [SerializeField]
-    Light light_;
+    //[SerializeField]
+    //Light light_;
 
     public void setParam(MazeCreator.Parameter param ) {
         var vertices = new List<Vector3>();
@@ -30,8 +30,8 @@ public class MazeMesh : MonoBehaviour {
                         }
                     }
                     // ライト
-                    var lt = Instantiate<Light>( light_ );
-                    lt.transform.localPosition = cell.localPos_;
+                    //var lt = Instantiate<Light>( light_ );
+                    //lt.transform.localPosition = cell.localPos_;
                 }
             }
         }

@@ -10,6 +10,9 @@ public class Player : MonoBehaviour {
     [SerializeField]
     MazeMesh mezeMesh_;
 
+    [SerializeField]
+    Light torch_;
+
     // 落下
     void fall( System.Action finishCallback ) {
         // 足元に床が無い場合に落下成立
@@ -31,6 +34,7 @@ public class Player : MonoBehaviour {
             } );
         } else {
             finishCallback();
+            noUpDown();
         }
     }
 
@@ -54,6 +58,29 @@ public class Player : MonoBehaviour {
             } );
         } else {
             finishCallback();
+            noUpDown();
+        }
+    }
+
+    void noUpDown() {
+        // 松明を追加
+        var ray = Camera.main.ScreenPointToRay( new Vector3( Screen.width * 0.5f, Screen.height * 0.5f, 0.0f ) );
+        RaycastHit hit;
+        if ( Physics.Raycast( ray, out hit, 0.7f ) == true ) {
+            var mazeMesh = hit.collider.GetComponent<MazeMesh>();
+            if ( mazeMesh != null ) {
+                // 松明を付ける
+                var p = hit.point + hit.normal * 0.05f;
+                var torch = Instantiate<Light>( torch_ );
+                torch.transform.localPosition = p;
+                torch.gameObject.SetActive( true );
+            } else {
+                var torch = hit.collider.GetComponent<Torch>();
+                if ( torch != null ) {
+                    // 松明を消す
+                    Destroy( torch.gameObject );
+                }
+            }
         }
     }
 
@@ -61,6 +88,7 @@ public class Player : MonoBehaviour {
     void Start () {
         upDown_.FallCallback = fall;
         upDown_.JumpCallback = jump;
+        upDown_.NoUpDownCallback = noUpDown;
     }
 
     // Update is called once per frame

@@ -6,8 +6,10 @@ public class PlayerUpDown : MonoBehaviour {
 
     public System.Action< System.Action > FallCallback { set { fallCallback_ = value; } }
     public System.Action< System.Action > JumpCallback { set { jumpCallback_ = value; } }
+    public System.Action NoUpDownCallback { set { noUpDownCallback_ = value; } }
     System.Action<System.Action> fallCallback_;
     System.Action<System.Action> jumpCallback_;
+    System.Action noUpDownCallback_;
 
     // Use this for initialization
     void Start () {
@@ -21,18 +23,20 @@ public class PlayerUpDown : MonoBehaviour {
 
         // カメラの視点方向でジャンプか飛び降りか決める
         if ( Input.GetMouseButtonDown( 0 ) == true ) {
-            if ( Camera.main.transform.forward.y < -0.3f ) {
+            if ( Camera.main.transform.forward.y < -0.8f ) {
                 bEnable_ = false;
                 // 飛び降り
                 fallCallback_( () => {
                     bEnable_ = true;
                 } );
-            } else if ( Camera.main.transform.forward.y > 0.3f ) {
+            } else if ( Camera.main.transform.forward.y > 0.8f ) {
                 bEnable_ = false;
                 // ジャンプ
                 jumpCallback_( () => {
                     bEnable_ = true;
                 } );
+            } else {
+                noUpDownCallback_();
             }
         }
 	}
