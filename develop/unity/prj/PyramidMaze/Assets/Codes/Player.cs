@@ -8,15 +8,18 @@ public class Player : MonoBehaviour {
     PlayerUpDown upDown_;
 
     [SerializeField]
-    MazeMesh mezeMesh_;
+    MazeMesh mazeMesh_;
 
     [SerializeField]
     Torch torch_;
 
+    [SerializeField]
+    float radius_ = 0.1f;
+
     // 落下
     void fall( System.Action finishCallback ) {
         // 足元に床が無い場合に落下成立
-        var mazeCollider = mezeMesh_.getCollider();
+        var mazeCollider = mazeMesh_.getCollider();
         var ray = new Ray( transform.position, Vector3.down );
         RaycastHit hit;
         if ( mazeCollider.Raycast( ray, out hit, 0.7f ) == false ) {
@@ -40,7 +43,7 @@ public class Player : MonoBehaviour {
 
     void jump(System.Action finishCallback) {
         // 上に天井が無い場合に上昇成立
-        var mazeCollider = mezeMesh_.getCollider();
+        var mazeCollider = mazeMesh_.getCollider();
         var ray = new Ray( transform.position, Vector3.up );
         RaycastHit hit;
         if ( mazeCollider.Raycast( ray, out hit, 0.7f ) == false ) {
@@ -101,6 +104,20 @@ public class Player : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-		
+        // 迷路とのコリジョンをチェック
+        var cell = mazeMesh_.getCellFromPosition( transform.position );        
+        if ( cell == null ) {
+            return;
+        }
+        float distance = 0.0f;
+        Vector3 normal;
+        bool isColl = cell.getClosestWall( transform.position, out distance, out normal );
+
+        // 衝突していたら押し戻す
+        if ( isColl == true && distance < radius_ ) {
+            var p = transform.position;
+            p += normal * ( radius_ - distance );
+            transform.position = p;
+        }
 	}
 }

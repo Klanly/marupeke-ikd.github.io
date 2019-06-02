@@ -226,4 +226,39 @@ public class Cell {
             wallMeshes_.Add( wall );
         }
     }
+
+    // 最も近い壁情報を取得
+    public bool getClosestWall( Vector3 position, out float distance, out Vector3 normal ) {
+        var dir = position - localPos_;
+        Vector3 n = Vector3.zero;
+        bool existWall = false;
+        if ( dir.x < dir.z ) {
+            // 左上三角
+            if ( dir.x + dir.z < 0 ) {
+                n.x = 1.0f;     // 左壁
+                distance = len_ * 0.5f + dir.x;
+                existWall = link_[ 8 ] == null;
+            } else {
+                n.z = -1.0f;    // 上壁
+                distance = len_ * 0.5f - dir.z;
+                existWall = link_[ 11 ] == null;
+            }
+        } else {
+            // 右下三角
+            if ( dir.x + dir.z < 0 ) {
+                n.z = 1.0f;     // 下壁
+                distance = len_ * 0.5f + dir.z;
+                existWall = link_[ 10 ] == null;
+            } else {
+                n.x = -1.0f;    // 右壁
+                distance = len_ * 0.5f - dir.x;
+                existWall = link_[ 9 ] == null;
+            }
+        }
+        normal = n;
+        if ( distance < 0.0f ) {
+            distance *= -1.0f;
+        }
+        return existWall;
+    }
 }

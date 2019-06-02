@@ -59,6 +59,28 @@ public class MazeMesh : MonoBehaviour {
         return collider_;
     }
 
+    public Cell getCellFromPosition( Vector3 position ) {
+        if ( param_ == null )
+            return null;
+        // ピラミッドの構造からLevelとXZを算出
+        float len = param_.roomWidthX_;
+        int level = ( int )( position.y - 0.5 * len );
+        if ( level >= param_.cellLevel_.Count )
+            return null;
+
+        float xf = position.x / len + 0.5f - level * 0.5f;
+        int x = ( int )xf;
+        float zf = position.z / len + 0.5f - level * 0.5f;
+        int z = ( int )zf;
+
+        if ( x >= param_.cellLevel_[ level ].cells_.GetLength( 0 ) )
+            return null;
+        if ( z >= param_.cellLevel_[ level ].cells_.GetLength( 1 ) )
+            return null;
+
+        return param_.cellLevel_[ level ].cells_[ z, x ];
+    }
+
     private void Awake() {
         renderer_ = GetComponent<MeshRenderer>();
         filter_ = GetComponent<MeshFilter>();
