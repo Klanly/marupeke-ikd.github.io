@@ -13,6 +13,9 @@ public class MazeCreateTest : MonoBehaviour {
     [SerializeField]
     int levelNum_ = 2;
 
+    [SerializeField]
+    Item keyPrefab_;
+
 	// Use this for initialization
 	void Start () {
         var param = new MazeCreator.Parameter();
@@ -20,6 +23,15 @@ public class MazeCreateTest : MonoBehaviour {
         MazeCreator.create( ref param );
         mazeMesh_.setParam( param );
 
+        // 鍵を設置
+        {
+            var key = Instantiate<Item>( keyPrefab_ );
+            int level = Random.Range( 0, levelNum_ - 1 );
+            int x = Random.Range( 0, levelNum_ - level );
+            int z = Random.Range( 0, levelNum_ - level );
+            var cell = param.cellLevel_[ level ].cells_[ z, x ];
+            key.transform.localPosition = cell.localPos_;
+        }
     }
 	
 	// Update is called once per frame

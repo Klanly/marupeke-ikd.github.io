@@ -15,6 +15,15 @@ public class MazeCreator : MonoBehaviour {
         public int groupCountMin_ = 5;      // 作成時の最小連続接続数
         public int groupCountMax_ = 10;      // 作成時の最大連続接続数
         public bool useLevel0Holl_ = false;     // Level0の壁に穴を空ける？
+        public bool bReady_ = false;
+
+        public Cell getTopCell() {
+            return cellLevel_[ level_ - 1 ].cells_[ 0, 0 ];
+        }
+
+        public bool isReady() {
+            return bReady_;
+        }
     }
 
     // 生成
@@ -153,6 +162,8 @@ public class MazeCreator : MonoBehaviour {
                 }
             }
         }
+
+        param.bReady_ = true;
     }
 
     // セルの位置は妥当？

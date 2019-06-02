@@ -50,6 +50,13 @@ public class Lerps {
         {
             return easeIn01( t * t );
         }
+
+        // ループ円(0->1->0)
+        //  t: 0-0.5で0->1、0.5->1.0で1.0->1を返す
+        public static float loopCircle( float s, float e, float t ) {
+            float t0 = 1.0f - ( 1.0f + Mathf.Cos( Mathf.Repeat( t, 1.0f ) * 2.0f * Mathf.PI ) ) * 0.5f;
+            return s + ( e - s ) * t0;
+        }
     }
 
     // Vector3
