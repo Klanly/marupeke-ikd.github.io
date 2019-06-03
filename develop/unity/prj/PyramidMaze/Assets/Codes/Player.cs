@@ -22,6 +22,15 @@ public class Player : MonoBehaviour {
     [SerializeField]
     Ending ending_;
 
+    [SerializeField]
+    GameObject keyImage_;
+
+    [SerializeField]
+    GameObject nullKeyImage_;
+
+    [SerializeField]
+    bool debugKey_ = false;
+
     // 落下
     void fall( System.Action finishCallback ) {
         if ( bExit_ == true )
@@ -136,6 +145,9 @@ public class Player : MonoBehaviour {
             var magicCircle = Instantiate<GameObject>( magicCirclePrefab_ );
             magicCircle.transform.localPosition = topCell.localPos_ + new Vector3( 0.0f, param.roomHeight_ * 0.45f, 0.0f );   // 天井へ
             magicCircle.gameObject.SetActive( true );
+            // 鍵イメージ表示
+            keyImage_.SetActive( true );
+            nullKeyImage_.SetActive( false );
         }
     }
 
@@ -162,6 +174,8 @@ public class Player : MonoBehaviour {
         ending_.gameObject.SetActive( false );
         ending_.transform.SetParent( null );
         ending_.transform.localPosition = Vector3.zero;
+        keyImage_.SetActive( false );
+        nullKeyImage_.SetActive( true );
     }
 
     // Use this for initialization
@@ -188,7 +202,13 @@ public class Player : MonoBehaviour {
             p += normal * ( radius_ - distance );
             transform.position = p;
         }
-	}
+
+#if UNITY_EDITOR
+        if ( debugKey_ == true ) {
+            bKey_ = true;
+        }
+#endif
+    }
 
     bool bKey_ = false;
     bool bExit_ = false;

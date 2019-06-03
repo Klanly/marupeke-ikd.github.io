@@ -20,6 +20,7 @@ public class Ending : MonoBehaviour {
     [SerializeField]
     GameObject magicCircle_;
 
+
     public void setup( MazeCreator.Parameter param ) {
         param_ = param;
     }
@@ -82,7 +83,7 @@ public class Ending : MonoBehaviour {
             } );
             float y = lookPos.y + 1.0f;
             GlobalState.time( 3.0f, (sec, t) => {
-                y = lookPos.y + 1.0f + Lerps.Float.easeOut01( t ) * radius * 0.5f;
+                y = lookPos.y + 1.0f + Lerps.Float.easeOut01( t ) * radius * 0.2f;
                 return true;
             } );
 

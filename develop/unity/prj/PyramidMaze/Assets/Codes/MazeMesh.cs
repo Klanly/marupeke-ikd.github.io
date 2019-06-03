@@ -73,9 +73,9 @@ public class MazeMesh : MonoBehaviour {
         float zf = position.z / len + 0.5f - level * 0.5f;
         int z = ( int )zf;
 
-        if ( x >= param_.cellLevel_[ level ].cells_.GetLength( 0 ) )
+        if ( x < 0.0f || x >= param_.cellLevel_[ level ].cells_.GetLength( 0 ) )
             return null;
-        if ( z >= param_.cellLevel_[ level ].cells_.GetLength( 1 ) )
+        if ( z < 0.0f || z >= param_.cellLevel_[ level ].cells_.GetLength( 1 ) )
             return null;
 
         return param_.cellLevel_[ level ].cells_[ z, x ];
