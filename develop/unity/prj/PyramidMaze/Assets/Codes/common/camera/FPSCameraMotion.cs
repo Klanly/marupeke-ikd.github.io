@@ -35,6 +35,11 @@ public class FPSCameraMotion : MonoBehaviour {
     [SerializeField]
     GameObject reticle_;
 
+    // マウスモーションを反映させる？
+    public void setEnable( bool isEnable ) {
+        bEnable_ = isEnable;
+    }
+
     // FPS視点移動のアクティブを切り替え
     public void setActive( bool isAcive ) {
         bVisibleCursor_ = !isAcive;
@@ -45,17 +50,25 @@ public class FPSCameraMotion : MonoBehaviour {
         reticle_.SetActive( isShow );
     }
 
+    // 視点をリセット
+    public void resetPose( Vector3 forward ) {
+        SphereSurfUtil.convPosToPoler( forward, out pitchRot_, out yawRot_ );
+    }
+
     private void OnDestroy() {
         Cursor.visible = true;    
     }
 
+    private void Awake() {
+        resetPose( transform.forward );
+    }
+
     // Use this for initialization
     void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update () {
         // Escapeで強制カーソル表示後に画面内をクリックしたら
         // カーソルを再度非表示に
         if (
@@ -95,10 +108,14 @@ public class FPSCameraMotion : MonoBehaviour {
         if ( bVisibleCursor_ == true )
             return;
 
+        // マウスモーションを許可した時だけアクティブ
+        if ( bEnable_ == false )
+            return;
+
         // 基点からの相対値で軸回転角度を算出
         // X軸方向：Y軸差分回転量
         // Y軸方向：X軸回転量 (minPitchAngle_～maxPitchAngle_）
-        var refDist = new Vector2( Input.GetAxis( "Mouse X" ), Input.GetAxis( "Mouse Y" ) ) * sensitivity_;
+        Vector2 refDist = new Vector2( Input.GetAxis( "Mouse X" ), Input.GetAxis( "Mouse Y" ) ) * sensitivity_;
         refDist.x *= -1.0f;     // マウスを左右に移動したらそちらへ向く
         if ( pitchRot_ + refDist.y < minPitchAngle_ )
             pitchRot_ = minPitchAngle_;
@@ -152,4 +169,5 @@ public class FPSCameraMotion : MonoBehaviour {
     float pitchRot_ = 0.0f;
     float yawRot_ = 0.0f;
     bool bEscape_ = true;
+    bool bEnable_ = true;
 }

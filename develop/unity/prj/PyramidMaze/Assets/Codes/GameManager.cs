@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+    public System.Action FinishCallback { set { finishCallback_ = value; } }
+
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -13,4 +15,6 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    System.Action finishCallback_;
 }

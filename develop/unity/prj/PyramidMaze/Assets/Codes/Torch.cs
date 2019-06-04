@@ -10,6 +10,17 @@ public class Torch : MonoBehaviour {
     [SerializeField]
     float speed_;
 
+    [SerializeField]
+    string typeName_;
+
+    [SerializeField]
+    float offset_ = 0.0f;
+
+    [SerializeField]
+    float power_ = 1.0f;
+
+    public string TypeName { get { return typeName_; } }
+
     private void Awake() {
         initIntensity_ = light_.intensity;
         for ( int i = 0; i < ts_.Length; ++i ) {
@@ -36,7 +47,7 @@ public class Torch : MonoBehaviour {
             float times = 1 << i;
             power += calcNoiseValue( ref ts_[ i ], 1 << i ) / times;
         }
-        light_.intensity = initIntensity_ + 1.0f * ( power - 0.5f );
+        light_.intensity = initIntensity_ + power_ * ( power - 0.5f ) + offset_;
 	}
     float initIntensity_ = 1.0f;
     float[] ts_ = new float[ 4 ];

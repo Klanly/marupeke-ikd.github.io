@@ -29,7 +29,7 @@ public class PrefabUtil {
     // プレハブをインスタンシングして親と関連付け
     static public T createInstance<T>( T prefab, Transform parent = null) where T : Object {
         var obj = GameObject.Instantiate<T>( prefab );
-        var o = obj as GameObject;
+        var o = obj as MonoBehaviour;
         o.transform.SetParent( parent );
         return obj;
     }

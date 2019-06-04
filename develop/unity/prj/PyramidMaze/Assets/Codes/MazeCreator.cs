@@ -12,8 +12,6 @@ public class MazeCreator : MonoBehaviour {
         public float roomWidthX_ = 1.0f;    // 部屋のX軸方向の幅
         public float roomWidthZ_ = 1.0f;    // 部屋のZ軸方向の幅
         public float roomHeight_ = 1.0f;    // 部屋の高さ
-        public int groupCountMin_ = 5;      // 作成時の最小連続接続数
-        public int groupCountMax_ = 10;      // 作成時の最大連続接続数
         public bool useLevel0Holl_ = false;     // Level0の壁に穴を空ける？
         public bool bReady_ = false;
 
@@ -82,9 +80,8 @@ public class MazeCreator : MonoBehaviour {
             noGroupCells.Remove( startCell );
 
             // 進行
-            int groupCount = Random.Range( param.groupCountMin_, param.groupCountMax_ + 1 );
             Cell curCell = startCell;
-            for ( int i = 0; i < groupCount; ++i ) {
+            while ( true ) {
                 // 周囲のセルの内未グループもしくは自分以外のグループを収集
                 var adjCells = new List<Cell>();    // x, level, z
                 foreach ( var offset in offsets ) {
