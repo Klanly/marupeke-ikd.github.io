@@ -19,6 +19,13 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     UnityEngine.UI.Image fader_;
 
+    [SerializeField]
+    GameObject[] keyImages_;
+
+    [SerializeField]
+    GameObject[] nullKeyImages_;
+
+
 
     public System.Action FinishCallback { set { finishCallback_ = value; } }
 
@@ -32,13 +39,32 @@ public class GameManager : MonoBehaviour {
             ending_.transform.localPosition = Vector3.zero;
         };
 
+        foreach ( var k in keyImages_ ) {
+            k.gameObject.SetActive( false );
+        }
+        foreach ( var nk in nullKeyImages_ ) {
+            nk.gameObject.SetActive( false );
+        }
+        for ( int i = 0; i < maze_.getKeyNum(); ++i ) {
+            nullKeyImages_[ i ].SetActive( true );
+        }
+
         player_.ItemGetCallback = (item) => {
-            // 出口魔法陣を表示
-            var param = maze_.getParam();
-            var topCell = param.getTopCell();
-            var magicCircle = PrefabUtil.createInstance<GameObject>( magicCirclePrefab_, transform );
-            magicCircle.transform.localPosition = topCell.localPos_ + new Vector3( 0.0f, param.roomHeight_ * 0.45f, 0.0f );   // 天井へ
-            magicCircle.gameObject.SetActive( true );
+
+            // 鍵イメージ表示
+            keyImages_[ curGetKeyNum_ ].SetActive( true );
+            nullKeyImages_[ curGetKeyNum_ ].SetActive( false );
+
+            curGetKeyNum_++;
+
+            if ( curGetKeyNum_ >= maze_.getKeyNum() ) {
+                // 出口魔法陣を表示
+                var param = maze_.getParam();
+                var topCell = param.getTopCell();
+                var magicCircle = PrefabUtil.createInstance<GameObject>( magicCirclePrefab_, transform );
+                magicCircle.transform.localPosition = topCell.localPos_ + new Vector3( 0.0f, param.roomHeight_ * 0.45f, 0.0f );   // 天井へ
+                magicCircle.gameObject.SetActive( true );
+            }
         };
 
         bInitialize_ = true;
@@ -114,4 +140,5 @@ public class GameManager : MonoBehaviour {
     System.Action finishCallback_;
     bool bInitialize_ = false;
     State state_;
+    int curGetKeyNum_ = 0;
 }

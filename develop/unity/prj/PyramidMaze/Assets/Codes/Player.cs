@@ -23,12 +23,6 @@ public class Player : MonoBehaviour {
     float radius_ = 0.1f;
 
     [SerializeField]
-    GameObject keyImage_;
-
-    [SerializeField]
-    GameObject nullKeyImage_;
-
-    [SerializeField]
     UnityEngine.UI.Text floorText_;
 
     [SerializeField]
@@ -178,9 +172,6 @@ public class Player : MonoBehaviour {
             // 鍵ゲット
             bKey_ = true;
             Destroy( item.gameObject );
-            // 鍵イメージ表示
-            keyImage_.SetActive( true );
-            nullKeyImage_.SetActive( false );
         }
         itemGetCallback_( item );
     }
@@ -203,8 +194,6 @@ public class Player : MonoBehaviour {
             }
             return true;
         } );
-        keyImage_.SetActive( false );
-        nullKeyImage_.SetActive( true );
         upDown_.enabled = false;
 
         state_ = new WakeUp( this );
