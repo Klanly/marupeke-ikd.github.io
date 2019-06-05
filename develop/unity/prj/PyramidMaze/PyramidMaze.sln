@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PyramidMaze", "PyramidMaze.csproj", "{E5393F3A-EC9A-AE21-431D-0171674AE02B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PyramidMaze.Plugins", "PyramidMaze.Plugins.csproj", "{686F1558-CA2D-3BD8-1E38-83F3CAF104E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PyramidMaze.Editor.Plugins", "PyramidMaze.Editor.Plugins.csproj", "{5A1C1846-C408-E5F6-5CDC-8061AF6361DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E5393F3A-EC9A-AE21-431D-0171674AE02B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5393F3A-EC9A-AE21-431D-0171674AE02B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5393F3A-EC9A-AE21-431D-0171674AE02B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5393F3A-EC9A-AE21-431D-0171674AE02B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{686F1558-CA2D-3BD8-1E38-83F3CAF104E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{686F1558-CA2D-3BD8-1E38-83F3CAF104E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{686F1558-CA2D-3BD8-1E38-83F3CAF104E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{686F1558-CA2D-3BD8-1E38-83F3CAF104E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A1C1846-C408-E5F6-5CDC-8061AF6361DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A1C1846-C408-E5F6-5CDC-8061AF6361DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A1C1846-C408-E5F6-5CDC-8061AF6361DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A1C1846-C408-E5F6-5CDC-8061AF6361DE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
