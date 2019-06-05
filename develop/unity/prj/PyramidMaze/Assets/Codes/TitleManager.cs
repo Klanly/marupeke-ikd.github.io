@@ -17,6 +17,18 @@ public class TitleManager : MonoBehaviour {
     [SerializeField]
     int level_ = 3;
 
+    [SerializeField]
+    CanvasGroup levelGroup_;
+
+    [SerializeField]
+    UnityEngine.UI.Button level3Btn_;
+
+    [SerializeField]
+    UnityEngine.UI.Button level5Btn_;
+
+    [SerializeField]
+    UnityEngine.UI.Button level7Btn_;
+
 
     public System.Action<int> FinishCallback { set { finishCallback_ = value; } }
 
@@ -55,13 +67,26 @@ public class TitleManager : MonoBehaviour {
 
     class Idle : State< TitleManager > {
         public Idle( TitleManager parent ) : base( parent ) {
+            GlobalState.time( 2.0f, (sec, t) => {
+                parent_.levelGroup_.alpha = t;
+                return true;
+            } ).finish(()=> {
+                parent_.level3Btn_.onClick.AddListener( () => { level_ = 3; } );
+                parent_.level5Btn_.onClick.AddListener( () => { level_ = 5; } );
+                parent_.level7Btn_.onClick.AddListener( () => { level_ = 7; } );
+            } );
         }
         protected override State innerUpdate() {
-            if ( Input.GetMouseButtonDown( 0 ) == true ) {
+            if ( level_ > 0 ) {
+                parent_.level_ = level_;
+                parent_.level3Btn_.enabled = true;
+                parent_.level5Btn_.enabled = true;
+                parent_.level7Btn_.enabled = true;
                 return new FadeOut( parent_ );
             }
             return this;
         }
+        int level_ = 0;
     }
 
     class FadeOut : State< TitleManager > {

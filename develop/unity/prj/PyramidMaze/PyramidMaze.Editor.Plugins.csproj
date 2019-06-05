@@ -309,6 +309,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Flames Of The Phoenix\READ_ME.txt" />
+    <None Include="Assets\Fonts\def_font_48.fnt" />
     <None Include="Assets\Fonts\floor.fnt" />
     <None Include="Assets\Models\Key\readME keys.txt" />
     <None Include="Assets\Models\torch\readme.txt" />

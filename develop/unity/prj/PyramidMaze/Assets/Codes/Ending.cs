@@ -20,6 +20,8 @@ public class Ending : MonoBehaviour {
     [SerializeField]
     GameObject magicCircle_;
 
+    public System.Action FinishCallback { set { finishCallback_ = value; } }
+    System.Action finishCallback_;
 
     public void setup( MazeCreator.Parameter param ) {
         param_ = param;
@@ -42,7 +44,7 @@ public class Ending : MonoBehaviour {
 
         protected override State innerUpdate() {
             if ( parent_.param_ != null ) {
-                Camera.main.transform.SetParent( null );
+                Camera.main.transform.SetParent( parent_.transform );
                 return new CameraBack( parent_ );
             }
             return this;
@@ -111,6 +113,16 @@ public class Ending : MonoBehaviour {
 
             // 魔法円を設置
             parent_.magicCircle_.transform.position = floorPos + new Vector3( 0.0f, 0.05f, 0.0f );   // ちょっと上に
+
+
+            // 時間が経った後に終了検知開始
+            GlobalState.wait( 4.5f, () => {
+                if ( Input.GetMouseButtonDown( 0 ) == true ) {
+                    parent_.finishCallback_();
+                    return false;
+                }
+                return true;
+            } );
 
             return this;
         }

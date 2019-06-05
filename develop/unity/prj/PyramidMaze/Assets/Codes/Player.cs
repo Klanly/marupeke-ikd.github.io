@@ -23,12 +23,6 @@ public class Player : MonoBehaviour {
     float radius_ = 0.1f;
 
     [SerializeField]
-    GameObject magicCirclePrefab_;    // 出口魔法円
-
-    [SerializeField]
-    Ending ending_;
-
-    [SerializeField]
     GameObject keyImage_;
 
     [SerializeField]
@@ -39,6 +33,15 @@ public class Player : MonoBehaviour {
 
     [SerializeField]
     bool debugKey_ = false;
+
+    [SerializeField]
+    Transform torchRoot_;
+
+    public System.Action GoEndingCallback { set { goEndingCallback_ = value; } }
+    System.Action goEndingCallback_;
+
+    public System.Action< Item > ItemGetCallback { set { itemGetCallback_ = value; } }
+    System.Action<Item> itemGetCallback_;
 
     // 落下
     void fall( System.Action finishCallback ) {
@@ -95,7 +98,7 @@ public class Player : MonoBehaviour {
                 bExit_ = true;
                 // エンディング起動
                 GlobalState.wait( 1.0f, () => {
-                    ending_.gameObject.SetActive( true );
+                    goEndingCallback_();
                     return false;
                 } );
             }
@@ -106,7 +109,7 @@ public class Player : MonoBehaviour {
     }
 
     void attachTorch( Torch torchPrefab, Vector3 point, Vector3 normal ) {
-        var torch = Instantiate<Torch>( torchPrefab );
+        var torch = PrefabUtil.createInstance<Torch>( torchPrefab, torchRoot_ );
         var p = point;
         torch.transform.localPosition = p;
         // 壁から少し傾けて設定
@@ -175,16 +178,11 @@ public class Player : MonoBehaviour {
             // 鍵ゲット
             bKey_ = true;
             Destroy( item.gameObject );
-            // 出口魔法陣を表示
-            var param = mazeMesh_.getParam();
-            var topCell = param.getTopCell();
-            var magicCircle = Instantiate<GameObject>( magicCirclePrefab_ );
-            magicCircle.transform.localPosition = topCell.localPos_ + new Vector3( 0.0f, param.roomHeight_ * 0.45f, 0.0f );   // 天井へ
-            magicCircle.gameObject.SetActive( true );
             // 鍵イメージ表示
             keyImage_.SetActive( true );
             nullKeyImage_.SetActive( false );
         }
+        itemGetCallback_( item );
     }
 
     // 鍵持ってる？
@@ -201,16 +199,10 @@ public class Player : MonoBehaviour {
     private void Awake() {
         GlobalState.start( () => {
             if ( mazeMesh_.getParam() != null && mazeMesh_.getParam().isReady() == true ) {
-                ending_.setup( mazeMesh_.getParam() );
-                //ending_.gameObject.SetActive( true );
                 return false;
             }
             return true;
         } );
-        ending_.gameObject.SetActive( false );
-        ending_.transform.SetParent( null );
-        ending_.transform.localPosition = Vector3.zero;
-
         keyImage_.SetActive( false );
         nullKeyImage_.SetActive( true );
         upDown_.enabled = false;

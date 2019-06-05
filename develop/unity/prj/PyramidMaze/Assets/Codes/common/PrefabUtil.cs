@@ -30,7 +30,13 @@ public class PrefabUtil {
     static public T createInstance<T>( T prefab, Transform parent = null) where T : Object {
         var obj = GameObject.Instantiate<T>( prefab );
         var o = obj as MonoBehaviour;
-        o.transform.SetParent( parent );
+        if ( o != null )
+            o.transform.SetParent( parent );
+        else {
+            var o2 = obj as GameObject;
+            if ( o2 != null )
+                o2.transform.SetParent( parent );
+        }
         return obj;
     }
 }

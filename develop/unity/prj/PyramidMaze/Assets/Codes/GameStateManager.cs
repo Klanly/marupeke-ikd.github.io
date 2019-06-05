@@ -33,15 +33,19 @@ public class GameStateManager : MonoBehaviour {
     }
 
     class Game : State< GameStateManager > {
-        public Game(GameStateManager parent, int level ) : base( parent ) { }
+        public Game(GameStateManager parent, int level ) : base( parent ) {
+            level_ = level;
+        }
         protected override State innerInit() {
             manager_ = PrefabUtil.createInstance( parent_.gamePrefab_, parent_.transform );
+            manager_.setup( level_ );
             manager_.FinishCallback = () => {
                 Destroy( manager_.gameObject );
                 setNextState( new Title( parent_ ) );
             };
             return this;
         }
+        int level_;
         GameManager manager_;
     }
     State state_;

@@ -16,6 +16,14 @@ public class MazeCreateTest : MonoBehaviour {
     [SerializeField]
     Item keyPrefab_;
 
+    public void setup( int level ) {
+        levelNum_ = level;
+    }
+
+    public MazeCreator.Parameter getParam() {
+        return mazeMesh_.getParam();
+    }
+
 	// Use this for initialization
 	void Start () {
         var param = new MazeCreator.Parameter();
@@ -25,7 +33,7 @@ public class MazeCreateTest : MonoBehaviour {
 
         // 鍵を設置
         {
-            var key = Instantiate<Item>( keyPrefab_ );
+            var key = PrefabUtil.createInstance<Item>( keyPrefab_, transform );
             int level = Random.Range( 0, levelNum_ - 1 );
             int x = Random.Range( 0, levelNum_ - level );
             int z = Random.Range( 0, levelNum_ - level );
