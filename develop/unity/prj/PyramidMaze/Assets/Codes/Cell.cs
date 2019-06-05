@@ -261,4 +261,26 @@ public class Cell {
         }
         return existWall;
     }
+
+    // 床がある？
+    // pos: 中心を0とする相対位置(x,z)
+    public bool existFloor( Vector3 pos ) {
+        if ( pos.x < 0.0f && pos.z < 0.0f ) {
+            // 左下
+            return link_[ 4 ] == null;
+        }
+        if ( pos.x >= 0.0f && pos.z < 0.0f ) {
+            // 右下
+            return link_[ 5 ] == null;
+        }
+        if ( pos.x < 0.0f && pos.z >= 0.0f ) {
+            // 左上
+            return link_[ 6 ] == null;
+        }
+        if ( pos.x >= 0.0f && pos.z >= 0.0f ) {
+            // 右上
+            return link_[ 7 ] == null;
+        }
+        return false;
+    }
 }

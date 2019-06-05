@@ -92,6 +92,7 @@ public class Ending : MonoBehaviour {
             // カメラ位置更新
             Camera.main.transform.position = lookPos;
             Vector3 cameraPos = lookPos;
+            var yOffset = new Vector3( 0.0f, -1.0f, 0.0f );
             GlobalState.start( () => {
                 if ( parent_ == null )
                     return false;
@@ -101,7 +102,7 @@ public class Ending : MonoBehaviour {
                 cameraPos.z = r * Mathf.Sin( rad ) + lookPos.z;
                 cameraPos.y = y;
                 Camera.main.transform.position = cameraPos;
-                Camera.main.transform.rotation = Quaternion.LookRotation( lookPos - cameraPos );
+                Camera.main.transform.rotation = Quaternion.LookRotation( lookPos - cameraPos + yOffset );
                 return true;
             } );
 

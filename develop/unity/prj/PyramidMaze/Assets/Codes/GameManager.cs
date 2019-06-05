@@ -25,6 +25,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     GameObject[] nullKeyImages_;
 
+    [SerializeField]
+    UnityEngine.UI.Text floorText_;
+
 
 
     public System.Action FinishCallback { set { finishCallback_ = value; } }
@@ -37,6 +40,10 @@ public class GameManager : MonoBehaviour {
             ending_.gameObject.SetActive( true );
             ending_.setup( maze_.getParam() );
             ending_.transform.localPosition = Vector3.zero;
+            floorText_.gameObject.SetActive( false );
+            foreach ( var k in keyImages_ ) {
+                k.gameObject.SetActive( false );
+            }
         };
 
         foreach ( var k in keyImages_ ) {
