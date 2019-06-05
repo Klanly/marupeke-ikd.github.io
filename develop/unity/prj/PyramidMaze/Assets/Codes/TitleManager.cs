@@ -52,6 +52,9 @@ public class TitleManager : MonoBehaviour {
         public FadeIn( TitleManager parent ) : base( parent ) {
         }
         protected override State innerInit() {
+            // 移動範囲解放
+            Cursor.lockState = CursorLockMode.None;
+
             float a = 0.0f;
             Color c = Color.black;
             GlobalState.time( parent_.fadeInTime_, (sec, t) => {
