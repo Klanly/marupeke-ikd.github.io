@@ -78,7 +78,7 @@ public class StageManager : MonoBehaviour
                 {
                     var obj = hit.collider.gameObject.GetComponent<Door>();
                     if ( obj != null ) {
-                        if ( key_ != null ) {
+                        if ( key_ == true ) {
                             // ステージクリア
                             clear();
                         }
