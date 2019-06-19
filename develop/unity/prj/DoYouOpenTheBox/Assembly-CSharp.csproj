@@ -120,6 +120,7 @@
     <Compile Include="Assets\Codes\MimicBreath2.cs" />
     <Compile Include="Assets\Codes\Player.cs" />
     <Compile Include="Assets\Codes\StageManager.cs" />
+    <Compile Include="Assets\Codes\TBBreath.cs" />
     <Compile Include="Assets\Codes\TitleManager.cs" />
     <Compile Include="Assets\Codes\Treasurebox.cs" />
     <None Include="Assets\Models\Key\readME keys.txt" />
