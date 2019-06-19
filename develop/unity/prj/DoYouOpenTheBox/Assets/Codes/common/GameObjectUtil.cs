@@ -53,7 +53,7 @@ public class GameObjectUtil {
     }
 
     // 指定の親の下にある特定コンポーネントを持った子オブジェクトを取得
-    static public void getChildrenComponents<T>(GameObject parent, ref List<T> outList, bool isRecursive = true ) where T : MonoBehaviour {
+    static public void getChildrenComponents<T>(GameObject parent, ref List<T> outList, bool isRecursive = true ) where T : Component {
         if ( parent == null )
             return;
         for ( int i = 0; i < parent.transform.childCount; ++i ) {

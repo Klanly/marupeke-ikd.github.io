@@ -67,6 +67,8 @@
     <Compile Include="Assets\Codes\common\camera\CameraUtil.cs" />
     <Compile Include="Assets\Codes\common\camera\FPSCameraMotion.cs" />
     <Compile Include="Assets\Codes\common\CollideUtil.cs" />
+    <Compile Include="Assets\Codes\common\collision\ColliderGroup.cs" />
+    <Compile Include="Assets\Codes\common\collision\CollisionManager.cs" />
     <Compile Include="Assets\Codes\common\ColorHelper.cs" />
     <Compile Include="Assets\Codes\common\DeltaLerpManager.cs" />
     <Compile Include="Assets\Codes\common\Fader.cs" />
@@ -85,6 +87,7 @@
     <Compile Include="Assets\Codes\common\MiniJSON.cs" />
     <Compile Include="Assets\Codes\common\motion\AutoRotation.cs" />
     <Compile Include="Assets\Codes\common\motion\ColorRotation.cs" />
+    <Compile Include="Assets\Codes\common\motion\FPSMoveMotiion.cs" />
     <Compile Include="Assets\Codes\common\motion\LerpAction.cs" />
     <Compile Include="Assets\Codes\common\MoveValueColor.cs" />
     <Compile Include="Assets\Codes\common\MoveValueFloat.cs" />
@@ -107,13 +110,19 @@
     <Compile Include="Assets\Codes\common\UIIntroColorAnimation.cs" />
     <Compile Include="Assets\Codes\common\UIIntroTextColorAnimation.cs" />
     <Compile Include="Assets\Codes\common\Vector3Util.cs" />
+    <Compile Include="Assets\Codes\Door.cs" />
+    <Compile Include="Assets\Codes\EatenToMimic.cs" />
     <Compile Include="Assets\Codes\GameManager.cs" />
     <Compile Include="Assets\Codes\GameStateManager.cs" />
+    <Compile Include="Assets\Codes\Key.cs" />
     <Compile Include="Assets\Codes\Mimic.cs" />
     <Compile Include="Assets\Codes\MimicBreath.cs" />
+    <Compile Include="Assets\Codes\MimicBreath2.cs" />
     <Compile Include="Assets\Codes\Player.cs" />
     <Compile Include="Assets\Codes\StageManager.cs" />
+    <Compile Include="Assets\Codes\TitleManager.cs" />
     <Compile Include="Assets\Codes\Treasurebox.cs" />
+    <None Include="Assets\Models\Key\readME keys.txt" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/DoYouOpenTheBox/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

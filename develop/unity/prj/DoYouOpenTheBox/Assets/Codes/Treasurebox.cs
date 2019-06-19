@@ -10,14 +10,22 @@ public class Treasurebox : MonoBehaviour
     [SerializeField]
     Transform hinge_;
 
+    [SerializeField]
+    bool bValidateOpen_ = true;
+
     public System.Action<Treasurebox> ClickCallback { set { clickCallback_ = value;  } }
+
+    // ミミック？
+    public bool isMimic() {
+        return bMimic_;
+    }
 
     public void setFlapAngle(float angle) {
         angle_ = angle;
     }
 
     public void onClick() {
-        if ( bOpen_ == true )
+        if ( bOpen_ == true || bValidateOpen_ == false )
             return;
         clickCallback_( this );
     }
@@ -29,7 +37,13 @@ public class Treasurebox : MonoBehaviour
 
     // 箱を開く
     public void open( float sec ) {
+        if ( bValidateOpen_ == false )
+            return;
+
         bOpen_ = true;
+        if ( collider_ != null ) {
+            collider_.enabled = false;
+        }
         openMotion( sec );
     }
 
@@ -49,6 +63,10 @@ public class Treasurebox : MonoBehaviour
         hinge_.transform.localRotation = Quaternion.Euler( 0.0f, angle_, 0.0f );
     }
 
+    private void Awake() {
+        collider_ = GetComponent<Collider>();
+    }
+
     // Start is called before the first frame update
     void Start() {
     }
@@ -60,4 +78,6 @@ public class Treasurebox : MonoBehaviour
 
     System.Action<Treasurebox> clickCallback_;
     bool bOpen_ = false;
+    Collider collider_;
+    protected bool bMimic_ = false;
 }

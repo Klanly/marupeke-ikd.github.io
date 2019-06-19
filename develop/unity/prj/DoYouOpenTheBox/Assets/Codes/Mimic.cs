@@ -48,6 +48,7 @@ public class Mimic : Treasurebox
     // Start is called before the first frame update
     void Start()
     {
+        bMimic_ = true;
     }
 
     // Update is called once per frame

@@ -133,29 +133,9 @@ public class FPSCameraMotion : MonoBehaviour {
         transform.localRotation = q;
 
         // WASDで移動（現在の姿勢ベース）
-        // AD: 左右へ平行移動
-        // WS: 前後へ平行移動
         // Z: しゃがみ
         // Q: 立ち
-        Vector3 xMove = Vector3.zero;
-        Vector3 zMove = Vector3.zero;
         Vector3 yMove = Vector3.zero;
-        if ( Input.GetKey( KeyCode.A ) == true ) {
-            xMove -= transform.right * moveSpeed_;
-        }
-        if ( Input.GetKey( KeyCode.D ) == true ) {
-            xMove += transform.right * moveSpeed_;
-        }
-        if ( Input.GetKey( KeyCode.S ) == true ) {
-            var f = transform.forward;
-            f.y = 0.0f;
-            zMove -= f.normalized * moveSpeed_;
-        }
-        if ( Input.GetKey( KeyCode.W ) == true ) {
-            var f = transform.forward;
-            f.y = 0.0f;
-            zMove += f.normalized * moveSpeed_;
-        }
         if ( Input.GetKey( KeyCode.Z ) == true ) {
             yMove.y -= upDownSpeed_;
         }
@@ -164,17 +144,7 @@ public class FPSCameraMotion : MonoBehaviour {
         }
 
         var p = transform.localPosition;
-        p += xMove + yMove + zMove;
-        if ( p.x < moveRangeMin_.x ) {
-            p.x = moveRangeMin_.x;
-        } else if ( p.x > moveRangeMax_.x ) {
-            p.x = moveRangeMax_.x;
-        }
-        if ( p.z < moveRangeMin_.z ) {
-            p.z = moveRangeMin_.z;
-        } else if ( p.z > moveRangeMax_.z ) {
-            p.z = moveRangeMax_.z;
-        }
+        p += yMove;
         if ( p.y < moveRangeMin_.y ) {
             p.y = moveRangeMin_.y;
         } else if ( p.y > moveRangeMax_.y ) {
