@@ -51,6 +51,9 @@ public class BillCreator : MonoBehaviour
             float baseC = Random.Range( 0.3f, 0.85f );
             bill.OutWallColor = new Color( baseC, baseC, baseC, 1.0f );
 
+            // 窓の透過度
+            bill.WindowTransRate = Random.Range( 0.5f, 0.85f );
+
             // 位置
             float r = Mathf.Sqrt( Random.value ) * radius_;
             float angle = Random.value * 2 * Mathf.PI;

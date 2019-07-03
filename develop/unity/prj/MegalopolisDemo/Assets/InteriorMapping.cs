@@ -34,6 +34,10 @@ public class InteriorMapping : MonoBehaviour
     Color outWallColor_ = Color.gray;   // 窓枠外壁の色
     public Color OutWallColor { set { outWallColor_ = value; bUpdate_ = true; } get { return outWallColor_; } }
 
+    [SerializeField]
+    float windowTransRate_ = 0.70f;
+    public float WindowTransRate { set { windowTransRate_ = value; bUpdate_ = true; } get { return windowTransRate_; } }
+
     private void OnValidate() {
         // ビルの高さとスケールを調整
         float billHeight = height1Floor_ * roomSep_.y;
@@ -70,6 +74,9 @@ public class InteriorMapping : MonoBehaviour
 
         // 窓枠外壁の色
         mat.SetColor( "_OutWallColor", outWallColor_ );
+
+        // 
+        mat.SetFloat( "_WindowTransRate", windowTransRate_ );
 
         // ビルの高さとスケールを調整
         float billHeight = height1Floor_ * roomSep_.y;
