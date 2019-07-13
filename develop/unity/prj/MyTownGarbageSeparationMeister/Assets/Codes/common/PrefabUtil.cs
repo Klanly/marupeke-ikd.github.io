@@ -36,6 +36,12 @@ public class PrefabUtil {
             var o2 = obj as GameObject;
             if ( o2 != null )
                 o2.transform.SetParent( parent );
+            else {
+                var o3 = obj as Component;
+                if ( o3 != null ) {
+                    o3.transform.SetParent( parent );
+                }
+            }
         }
         return obj;
     }

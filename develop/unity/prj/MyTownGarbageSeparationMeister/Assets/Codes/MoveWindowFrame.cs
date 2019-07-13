@@ -22,9 +22,12 @@ public class MoveWindowFrame : MonoBehaviour
     [SerializeField]
     bool debugExit_ = false;
 
-    public void start() {
-        if ( bMoving_ == true )
+    public void start( System.Action<bool> finishCallback = null ) {
+        if ( bMoving_ == true ) {
+            if ( finishCallback != null )
+                finishCallback( false );
             return;
+        }
         bMoving_ = true;
 
         // ピボットを真ん中へ
@@ -46,6 +49,7 @@ public class MoveWindowFrame : MonoBehaviour
             return true;
         } ).finish(()=> {
             bMoving_ = false;
+            finishCallback( true );
         } );
     }
 
