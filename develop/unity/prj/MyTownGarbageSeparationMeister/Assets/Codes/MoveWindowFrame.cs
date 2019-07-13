@@ -53,7 +53,7 @@ public class MoveWindowFrame : MonoBehaviour
         } );
     }
 
-    public void exit() {
+    public void exit( System.Action finishCallback = null ) {
         if ( bMoving_ == true )
             return;
         bMoving_ = true;
@@ -76,6 +76,8 @@ public class MoveWindowFrame : MonoBehaviour
             return true;
         } ).finish( () => {
             bMoving_ = false;
+            if ( finishCallback != null )
+                finishCallback();
         } );
     }
 

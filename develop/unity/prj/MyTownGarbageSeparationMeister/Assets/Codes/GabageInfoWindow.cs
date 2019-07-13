@@ -37,6 +37,25 @@ public class GabageInfoWindow : MonoBehaviour
     [ SerializeField]
     bool debugStart_;
 
+    public void setParam( Card.Param param ) {
+        // 項目
+        //  0: 名前
+        //  1: 材料
+        //  2: 重さ
+        //  3: 寸法
+        termStrs_.Clear();
+        termStrs_.Add( "名前:" );
+        termStrs_.Add( "材料:" );
+        termStrs_.Add( "重さ:" );
+        termStrs_.Add( "寸法:" );
+
+        infoStrs_.Clear();
+        infoStrs_.Add( param.name );
+        infoStrs_.Add( param.material );
+        infoStrs_.Add( param.weight.ToString() + " " + param.weightUnit );
+        infoStrs_.Add( param.dimensionX.ToString() + "x" + param.dimensionY.ToString() + "x" + param.dimensionZ.ToString() + " " + param.dimensionUnit );
+    }
+
     public void start() {
         terms_.clear();
         infos_.clear();
@@ -82,6 +101,16 @@ public class GabageInfoWindow : MonoBehaviour
                 infos_.gameObject.SetActive( true );
             } );
             return false;
+        } );
+    }
+
+    public void shrink() {
+        terms_.gameObject.SetActive( false );
+        infos_.gameObject.SetActive( false );
+        indicateLine1_.setRate( 0.0f );
+        indicateLine2_.setRate( 0.0f );
+        frame_.exit( ()=> {
+            frame_.gameObject.SetActive( false );
         } );
     }
 

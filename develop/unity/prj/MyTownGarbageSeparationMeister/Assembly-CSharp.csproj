@@ -62,6 +62,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Codes\Card.cs" />
+    <Compile Include="Assets\Codes\CardPlace.cs" />
     <Compile Include="Assets\Codes\common\Bezier.cs" />
     <Compile Include="Assets\Codes\common\camera\CameraPicker.cs" />
     <Compile Include="Assets\Codes\common\camera\CameraUtil.cs" />
@@ -108,10 +110,12 @@
     <Compile Include="Assets\Codes\common\UIIntroTextColorAnimation.cs" />
     <Compile Include="Assets\Codes\common\Vector3Util.cs" />
     <Compile Include="Assets\Codes\GabageInfoWindow.cs" />
+    <Compile Include="Assets\Codes\GameManager.cs" />
     <Compile Include="Assets\Codes\MoveWindowFrame.cs" />
     <Compile Include="Assets\Codes\MultiMeshText.cs" />
     <Compile Include="Assets\Codes\StretchLine.cs" />
     <Compile Include="Assets\Codes\TurnTable.cs" />
+    <Compile Include="Assets\Codes\TurnTableManager.cs" />
     <Compile Include="Assets\Codes\WindowFrame.cs" />
     <None Include="Assets\Shaders\DotLine.shader" />
     <Reference Include="Unity.Timeline.Editor">
