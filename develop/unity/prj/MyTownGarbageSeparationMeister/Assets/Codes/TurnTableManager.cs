@@ -16,6 +16,10 @@ public class TurnTableManager : MonoBehaviour
         return turnTable_.turnNext( finishCallback );
     }
 
+    public Card.Param getCurCardParam() {
+        return turnTable_.getCurCard().getParam();
+    }
+
     // Start is called before the first frame update
     void Start()
     {

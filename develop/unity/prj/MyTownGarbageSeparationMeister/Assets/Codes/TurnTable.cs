@@ -58,6 +58,11 @@ public class TurnTable : MonoBehaviour
         return true;
     }
 
+    // 現在のカードを取得
+    public Card getCurCard() {
+        return cards_[ curCardIdx_ ].getCard();
+    }
+
     // 次のカードをセット
     bool setNextCard() {
         if ( curCardIdx_ + 1 >= param_.cards.Count )

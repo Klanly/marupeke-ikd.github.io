@@ -56,7 +56,7 @@ public class GabageInfoWindow : MonoBehaviour
         infoStrs_.Add( param.dimensionX.ToString() + "x" + param.dimensionY.ToString() + "x" + param.dimensionZ.ToString() + " " + param.dimensionUnit );
     }
 
-    public void start() {
+    public void start( System.Action finishCallback = null ) {
         terms_.clear();
         infos_.clear();
         for ( int i = 0; i < termStrs_.Count; ++i )
@@ -99,6 +99,8 @@ public class GabageInfoWindow : MonoBehaviour
                     return;
                 terms_.gameObject.SetActive( true );
                 infos_.gameObject.SetActive( true );
+                if ( finishCallback != null )
+                    finishCallback();
             } );
             return false;
         } );

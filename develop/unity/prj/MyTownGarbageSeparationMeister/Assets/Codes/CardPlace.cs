@@ -19,6 +19,10 @@ public class CardPlace : MonoBehaviour
         card_.gameObject.SetActive( isActive );
     }
 
+    public Card getCard() {
+        return card_;
+    }
+
     // Start is called before the first frame update
     void Start()
     {

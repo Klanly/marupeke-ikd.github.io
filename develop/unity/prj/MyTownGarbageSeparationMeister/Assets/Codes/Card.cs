@@ -13,6 +13,7 @@ public class Card : MonoBehaviour
         public float dimensionY = 1.0f;
         public float dimensionZ = 1.0f;
         public string dimensionUnit = "cm";
+        public string answer = "";
     }
 
     public void setParam( Param param ) {
