@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Card : MonoBehaviour
 {
+    [SerializeField]
+    SpriteRenderer src_;
+
     public class Param {
         public string name = "";
         public string material = "";
@@ -14,14 +17,27 @@ public class Card : MonoBehaviour
         public float dimensionZ = 1.0f;
         public string dimensionUnit = "cm";
         public string answer = "";
+        public string image = "";
     }
 
     public void setParam( Param param ) {
         param_ = param;
+        setImage( param_.image );
     }
 
     public Param getParam() {
         return param_;
+    }
+
+    // 指定名のスプライトを設定
+    void setImage(string name) {
+        // リソースからロード
+        var sprite = ResourceLoader.getInstance().loadSync<Sprite>( "garbeges/" + name );
+        if ( sprite != null ) {
+            src_.sprite = sprite;
+        } else {
+            Debug.Log( "Cardスプライト読み込み失敗" );
+        }
     }
 
     // Start is called before the first frame update

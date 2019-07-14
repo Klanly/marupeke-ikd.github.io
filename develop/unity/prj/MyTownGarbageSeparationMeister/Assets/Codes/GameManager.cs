@@ -41,30 +41,25 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start() {
-        var param = new TurnTable.Param();
-        var card0 = new Card.Param();
-        card0.name = "ペットボトル";
-        card0.material = "PET";
-        card0.weight = 10.0f;
-        card0.weightUnit = "g";
-        card0.dimensionX = 7.0f;
-        card0.dimensionY = 25.0f;
-        card0.dimensionZ = 7.0f;
-        card0.dimensionUnit = "cm";
-        card0.answer = "recycle";
-        param.cards.Add( card0 );
 
-        var card1 = new Card.Param();
-        card1.name = "生ごみ";
-        card1.material = "野菜の切れ端";
-        card1.weight = 60.0f;
-        card1.weightUnit = "g";
-        card1.dimensionX = 10.0f;
-        card1.dimensionY = 8.0f;
-        card1.dimensionZ = 7.0f;
-        card1.dimensionUnit = "cm";
-        card1.answer = "burn";
-        param.cards.Add( card1 );
+        var param = new TurnTable.Param();
+        var table = Data_tokyo_shibuya_data.getInstance();
+        int n = table.getRowNum();
+        for ( int i = 0; i < n; ++i ) {
+            var p = table.getParamFromIndex( i );
+            var card = new Card.Param();
+            card.name = p.name_;
+            card.material = p.material_;
+            card.weight = p.weight_;
+            card.weightUnit = p.weightUnit_;
+            card.dimensionX = p.dimensionX_;
+            card.dimensionY = p.dimensionY_;
+            card.dimensionZ = p.dimensionZ_;
+            card.dimensionUnit = p.dimensionUnit_;
+            card.answer = p.answer_;
+            card.image = p.image_;
+            param.cards.Add( card );
+        }
 
         turnTableManage_.setup( param );
 

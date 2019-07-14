@@ -1,0 +1,7 @@
+11
+3
+id	name	material	weight	weightUnit	dimensionX	dimensionY	dimensionZ	dimensionUnit	answer	image
+string	string	string	float	string	float	float	float	string	string	string
+garbage_0001	ペットボトル	PET	10	g	7	25	7	cm	recycle	plastic-bottle-500ml
+garbage_0002	生ごみ	野菜の切れ端	60	g	10	8	7	cm	burn	369386
+garbage_0003	アイロン	鉄、プラスチック	2.1	kg	27	15	16	cm	noburn	924600
