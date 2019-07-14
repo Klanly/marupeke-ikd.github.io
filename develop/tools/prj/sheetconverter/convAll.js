@@ -9,6 +9,9 @@ for ( ; !e.atEnd(); e.moveNext() ) {
 	var file = e.item();
 	var ext = fso.GetExtensionName( file.Name );
 	if ( ext == "xlsx" ) {
+		if ( file.Name.charAt(0) == '~' ) {
+			continue;
+		}
 		WScript.Echo( file.Name );
 		var oExe = wsh.Exec( "sheetconverter.exe -i " + curPath + "\\" + file.Name + " -p unity" );
 		while( oExe.Status == 0 ) {
