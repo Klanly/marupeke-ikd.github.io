@@ -51,4 +51,31 @@ public class GameObjectUtil {
             }
         }
     }
+
+    // 指定オブジェクト以下の全コンポーネントを取得
+    static public List<T> findAllComponent< T >( GameObject root, bool containRoot = true, bool ignoreInvisible = false ) where T : Component {
+        var list = new List<T>();
+        if ( containRoot == true ) {
+            findAllComponent( ref list, root, ignoreInvisible );
+        } else {
+            int n = root.transform.childCount;
+            for ( int i = 0; i < n; ++i ) {
+                findAllComponent( ref list, root.transform.GetChild( i ).gameObject, ignoreInvisible );
+            }
+        }
+        return list;
+    }
+
+    // 指定オブジェクト以下の全コンポーネントを取得
+    static private void findAllComponent<T>( ref List< T > list, GameObject target, bool ignoreInvisible ) where T : Component {
+        if ( ignoreInvisible == false || target.activeSelf == true ) {
+            var obj = target.GetComponent<T>();
+            if ( obj != null )
+                list.Add( obj );
+        }
+        int n = target.transform.childCount;
+        for ( int i = 0; i < n; ++i ) {
+            findAllComponent( ref list, target.transform.GetChild( i ).gameObject, ignoreInvisible );
+        }
+    }
 }

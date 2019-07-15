@@ -9,9 +9,6 @@ using UnityEngine;
 public class SpriteButton : SpriteUI
 {
     [SerializeField]
-    SpriteRenderer buttonSprite_;
-
-    [SerializeField]
     float downScale_ = 0.95f;
 
     [SerializeField]
@@ -26,60 +23,60 @@ public class SpriteButton : SpriteUI
 
     // 押し下げられた
     override protected void innerOnDown() {
-        if ( buttonSprite_ != null ) {
-            var e = scale_ * downScale_;
-            GlobalState.time( downSec_, (sec, t) => {
-                buttonSprite_.transform.localScale = Lerps.Vec3.easeIn( scale_, e, t );
-                return true;
-            } );
-        }
+        var e = scale_ * downScale_;
+        GlobalState.time( downSec_, (sec, t) => {
+            transform.localScale = Lerps.Vec3.easeIn( scale_, e, t );
+            return true;
+        } );
         Debug.Log( "押し下げ" );
     }
 
     // 元に戻った
     override protected void innerOnUp() {
-        if ( buttonSprite_ != null ) {
-            var s = buttonSprite_.transform.localScale;
-            var e = scale_;
-            GlobalState.time( downSec_, (sec, t) => {
-                buttonSprite_.transform.localScale = Lerps.Vec3.easeIn( s, e, t );
-                return true;
-            } );
+        var s = transform.localScale;
+        var e = scale_;
+        GlobalState.time( downSec_, (sec, t) => {
+            transform.localScale = Lerps.Vec3.easeIn( s, e, t );
+            return true;
+        } );
 
-            if ( onDecide_ != null ) {
-                onDecide_( name );
-            }
+        if ( onDecide_ != null ) {
+            onDecide_( name );
         }
         Debug.Log( "戻した" );
     }
 
     // キャンセル
     override protected void innerOnCancel() {
-        if ( buttonSprite_ != null ) {
-            var s = buttonSprite_.transform.localScale;
-            var e = s / downScale_;
-            GlobalState.time( 0.2f, (sec, t) => {
-                buttonSprite_.transform.localScale = Lerps.Vec3.easeIn( s, e, t );
-                return true;
-            } );
-        }
+        var s = transform.localScale;
+        var e = s / downScale_;
+        GlobalState.time( 0.2f, (sec, t) => {
+            transform.localScale = Lerps.Vec3.easeIn( s, e, t );
+            return true;
+        } );
         Debug.Log( "キャンセル" );
     }
 
     // UIアクティブ切り替え
     override protected void innerOnEnable( bool isEnable ) {
         if ( isEnable == false ) {
-            buttonSprite_.color = color_ * disableColor_;
+            for ( int i = 0; i < renderers_.Count; ++i ) {
+                renderers_[ i ].color = renderersColor_[ i ] * disableColor_;
+            }
         } else {
-            buttonSprite_.color = color_;
+            for ( int i = 0; i < renderers_.Count; ++i ) {
+                renderers_[ i ].color = renderersColor_[ i ];
+            }
         }
     }
 
     private void Awake() {
-        if ( buttonSprite_ ) {
-            scale_ = buttonSprite_.transform.localScale;
-            color_ = buttonSprite_.color;
+        // ぶら下がっているすべてのスプライトを取得
+        renderers_ = GameObjectUtil.findAllComponent<SpriteRenderer>( gameObject, true, false );
+        foreach ( var r in renderers_ ) {
+            renderersColor_.Add( r.color );
         }
+        scale_ = transform.localScale;
     }
 
     // Start is called before the first frame update
@@ -96,4 +93,6 @@ public class SpriteButton : SpriteUI
 
     Vector3 scale_ = Vector3.one;
     Color color_ = Color.white;
+    List<SpriteRenderer> renderers_ = new List<SpriteRenderer>();
+    List<Color> renderersColor_ = new List<Color>();
 }
