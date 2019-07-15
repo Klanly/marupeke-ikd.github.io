@@ -88,6 +88,8 @@
     <Compile Include="Assets\Codes\common\motion\AutoRotation.cs" />
     <Compile Include="Assets\Codes\common\motion\ColorRotation.cs" />
     <Compile Include="Assets\Codes\common\motion\LerpAction.cs" />
+    <Compile Include="Assets\Codes\common\motion\Sprite\SMPosShake.cs" />
+    <Compile Include="Assets\Codes\common\motion\Sprite\SMScaleBounding.cs" />
     <Compile Include="Assets\Codes\common\MoveValueColor.cs" />
     <Compile Include="Assets\Codes\common\MoveValueFloat.cs" />
     <Compile Include="Assets\Codes\common\MoveValueLong.cs" />

@@ -13,6 +13,12 @@ public class GameManager : MonoBehaviour {
     SpriteButton[] buttons_;
 
     [SerializeField]
+    GameObject good_;
+
+    [SerializeField]
+    GameObject no_;
+
+    [SerializeField]
     bool debugNext_ = false;
 
     void turnNext() {
@@ -38,6 +44,8 @@ public class GameManager : MonoBehaviour {
 
     private void Awake() {
         state_ = new Intro( this );
+        good_.SetActive( false );
+        no_.SetActive( false );
     }
 
     void Start() {
@@ -92,12 +100,22 @@ public class GameManager : MonoBehaviour {
     // 正解
     void onCorrect(System.Action finishCallback) {
         Debug.Log( "正解！" );
+        good_.SetActive( true );
+        GlobalState.wait( 1.5f, () => {
+            good_.SetActive( false );
+            return false;
+        } );
         finishCallback();
     }
 
     // 不正解
     void onUncorrect(System.Action finishCallback) {
         Debug.Log( "不正解…" );
+        no_.SetActive( true );
+        GlobalState.wait( 1.5f, () => {
+            no_.SetActive( false );
+            return false;
+        } );
         finishCallback();
     }
 
