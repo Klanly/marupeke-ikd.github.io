@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour {
     GabageInfoWindow infoWindow_;
 
     [SerializeField]
+    ErrorWindowFrame errWindow_;
+
+    [SerializeField]
     SpriteButton[] buttons_;
 
     [SerializeField]
@@ -46,10 +49,10 @@ public class GameManager : MonoBehaviour {
         state_ = new Intro( this );
         good_.SetActive( false );
         no_.SetActive( false );
+        errWindow_.gameObject.SetActive( false );
     }
 
     void Start() {
-
         var param = new TurnTable.Param();
         var table = Data_tokyo_shibuya_data.getInstance();
         int n = table.getRowNum();
@@ -66,6 +69,7 @@ public class GameManager : MonoBehaviour {
             card.dimensionUnit = p.dimensionUnit_;
             card.answer = p.answer_;
             card.image = p.image_;
+            card.comment = p.comment_;
             param.cards.Add( card );
         }
 
@@ -112,11 +116,19 @@ public class GameManager : MonoBehaviour {
     void onUncorrect(System.Action finishCallback) {
         Debug.Log( "不正解…" );
         no_.SetActive( true );
+        var param = turnTableManage_.getCurCardParam();
         GlobalState.wait( 1.5f, () => {
             no_.SetActive( false );
             return false;
+        }, () => {
+            errWindow_.gameObject.SetActive( true );
+            errWindow_.setStr( param.comment );
+        } )
+        .wait( 3.0f )
+        .finish(()=> {
+            errWindow_.gameObject.SetActive( false );
+            finishCallback();
         } );
-        finishCallback();
     }
 
     // Update is called once per frame

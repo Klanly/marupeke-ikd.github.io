@@ -22,8 +22,11 @@ public class Data_tokyo_shibuya_data : Table {
 		param.dimensionY_ = values[ "dimensionY" ].fVal_;
 		param.dimensionZ_ = values[ "dimensionZ" ].fVal_;
 		param.dimensionUnit_ = values[ "dimensionUnit" ].sVal_;
+		param.point_ = values[ "point" ].sVal_;
 		param.answer_ = values[ "answer" ].sVal_;
 		param.image_ = values[ "image" ].sVal_;
+		param.errPos_ = values[ "errPos" ].sVal_;
+		param.comment_ = values[ "comment" ].sVal_;
 		params_[ values[ "id" ].sVal_ ] = param;
 
 		paramList_.Add( param );
@@ -56,8 +59,11 @@ public class Data_tokyo_shibuya_data : Table {
 		public float dimensionY_;
 		public float dimensionZ_;
 		public string dimensionUnit_;
+		public string point_;
 		public string answer_;
 		public string image_;
+		public string errPos_;
+		public string comment_;
 
 	}
 	static Data_tokyo_shibuya_data instance_ = new Data_tokyo_shibuya_data();

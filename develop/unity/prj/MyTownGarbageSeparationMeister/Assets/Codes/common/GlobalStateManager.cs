@@ -124,7 +124,7 @@ public class GlobalState : GlobalStateBase
     }
 
     // 間を置く
-    static public GlobalState wait( float waitSec, System.Func< bool > action )
+    static public GlobalState wait( float waitSec, System.Func< bool > action, System.Action post = null )
     {
         float t = 0.0f;
         var state = new GlobalState(
@@ -135,7 +135,7 @@ public class GlobalState : GlobalStateBase
                 return true;
             },
             () => {
-                start( action );
+                start( action, post );
             }
         );
         GlobalStateUpdater.getInstance().add( state );

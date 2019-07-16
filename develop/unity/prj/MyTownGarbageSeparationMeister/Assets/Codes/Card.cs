@@ -18,6 +18,7 @@ public class Card : MonoBehaviour
         public string dimensionUnit = "cm";
         public string answer = "";
         public string image = "";
+        public string comment = "";
     }
 
     public void setParam( Param param ) {
