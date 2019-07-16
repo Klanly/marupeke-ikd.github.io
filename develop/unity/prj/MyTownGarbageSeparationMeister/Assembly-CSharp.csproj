@@ -124,6 +124,7 @@
     <Compile Include="Assets\Codes\TurnTable.cs" />
     <Compile Include="Assets\Codes\TurnTableManager.cs" />
     <Compile Include="Assets\Codes\WindowFrame.cs" />
+    <None Include="Assets\Fonts\counter01.fnt" />
     <None Include="Assets\Shaders\DotLine.shader" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/MyTownGarbageSeparationMeister/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

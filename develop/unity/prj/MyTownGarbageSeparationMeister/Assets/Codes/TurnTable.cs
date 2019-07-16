@@ -34,6 +34,10 @@ public class TurnTable : MonoBehaviour
         param_ = param;
     }
 
+    public int getCardNum() {
+        return param_.cards.Count;
+    }
+
     // 次のターンにする
     public bool turnNext( System.Action<Card.Param> finishCallback ) {
         if ( bTurning_ == true )

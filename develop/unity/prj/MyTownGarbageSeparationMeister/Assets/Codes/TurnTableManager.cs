@@ -20,6 +20,10 @@ public class TurnTableManager : MonoBehaviour
         return turnTable_.getCurCard().getParam();
     }
 
+    public int getCardNum() {
+        return turnTable_.getCardNum();
+    }
+
     // Start is called before the first frame update
     void Start()
     {

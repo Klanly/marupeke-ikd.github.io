@@ -22,12 +22,19 @@ public class GameManager : MonoBehaviour {
     GameObject no_;
 
     [SerializeField]
+    TextMesh conter_;
+
+    [SerializeField]
     bool debugNext_ = false;
 
     void turnNext() {
         uiActive( false );
         infoWindow_.shrink();
         if ( turnTableManage_.setNext( (param) => {
+
+            // カウンタ
+            conter_.text = string.Format( "正解：{0} 不正解：{1}  {2}/{3}", correctNum_, missNum_, correctNum_ + missNum_ + 1, turnTableManage_.getCardNum() );
+
             infoWindow_.setParam( param );
             infoWindow_.start( () => {
                 // UI許可
@@ -83,6 +90,9 @@ public class GameManager : MonoBehaviour {
                 onSelect( name );
             };
         }
+
+        // カウンタ
+        conter_.text = string.Format( "正解：{0} 不正解：{1}  {2}/{3}", correctNum_, missNum_, 0, turnTableManage_.getCardNum() );
     }
 
     // ボタンを押して選択した
@@ -104,6 +114,11 @@ public class GameManager : MonoBehaviour {
     // 正解
     void onCorrect(System.Action finishCallback) {
         Debug.Log( "正解！" );
+
+        // カウンタ
+        correctNum_++;
+        conter_.text = string.Format( "正解：{0} 不正解：{1}  {2}/{3}", correctNum_, missNum_, 0, turnTableManage_.getCardNum() );
+
         good_.SetActive( true );
         GlobalState.wait( 1.5f, () => {
             good_.SetActive( false );
@@ -115,6 +130,11 @@ public class GameManager : MonoBehaviour {
     // 不正解
     void onUncorrect(System.Action finishCallback) {
         Debug.Log( "不正解…" );
+
+        // カウンタ
+        missNum_++;
+        conter_.text = string.Format( "正解：{0} 不正解：{1}  {2}/{3}", correctNum_, missNum_, 0, turnTableManage_.getCardNum() );
+
         no_.SetActive( true );
         var param = turnTableManage_.getCurCardParam();
         GlobalState.wait( 1.5f, () => {
@@ -169,4 +189,6 @@ public class GameManager : MonoBehaviour {
         }
     }
     State state_;
+    int correctNum_ = 0;
+    int missNum_ = 0;
 }
