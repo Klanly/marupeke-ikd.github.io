@@ -49,7 +49,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10100, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 7683362804468812512, guid: 6cc4e5e2107178446a51f66acb030e23, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -79,7 +79,7 @@ TextMesh:
   m_GameObject: {fileID: 494563518649174306}
   m_Text: Hello World
   m_OffsetZ: 0
-  m_CharacterSize: 0.07
+  m_CharacterSize: 0.16
   m_LineSpacing: 1
   m_Anchor: 0
   m_Alignment: 0
@@ -87,7 +87,7 @@ TextMesh:
   m_FontSize: 60
   m_FontStyle: 0
   m_RichText: 1
-  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Font: {fileID: 12800000, guid: 6cc4e5e2107178446a51f66acb030e23, type: 2}
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
