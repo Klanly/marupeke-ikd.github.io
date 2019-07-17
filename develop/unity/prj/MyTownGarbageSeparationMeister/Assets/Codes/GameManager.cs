@@ -33,6 +33,10 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     int debugInitCardIdx_ = 0;
 
+    public System.Action FinishCallback { set { finishCallback_ = value; } }
+    System.Action finishCallback_ = null;
+
+
     void turnNext() {
         uiActive( false );
         infoWindow_.shrink();
@@ -175,7 +179,9 @@ public class GameManager : MonoBehaviour {
         }
 
         protected override State innerInit() {
-            setNextState( new Gaming( parent_ ) );
+            FaderManager.Fader.to( 0.0f, 1.0f, () => {
+                setNextState( new Gaming( parent_ ) );
+            } );
             return this;
         }
     }
@@ -207,6 +213,12 @@ public class GameManager : MonoBehaviour {
 
     class FadeOut : State<GameManager> {
         public FadeOut(GameManager parent) : base( parent ) {
+        }
+        protected override State innerInit() {
+            FaderManager.Fader.to( 1.0f, 1.0f, () => {
+                parent_.finishCallback_();
+            } );
+            return null;
         }
     }
 
