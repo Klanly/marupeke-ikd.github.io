@@ -25,7 +25,13 @@ public class GameManager : MonoBehaviour {
     TextMesh conter_;
 
     [SerializeField]
+    ResultManager result_;
+
+    [SerializeField]
     bool debugNext_ = false;
+
+    [SerializeField]
+    int debugInitCardIdx_ = 0;
 
     void turnNext() {
         uiActive( false );
@@ -57,13 +63,14 @@ public class GameManager : MonoBehaviour {
         good_.SetActive( false );
         no_.SetActive( false );
         errWindow_.gameObject.SetActive( false );
+        result_.gameObject.SetActive( false );
     }
 
     void Start() {
         var param = new TurnTable.Param();
         var table = Data_tokyo_shibuya_data.getInstance();
         int n = table.getRowNum();
-        for ( int i = 0; i < n; ++i ) {
+        for ( int i = debugInitCardIdx_; i < n; ++i ) {
             var p = table.getParamFromIndex( i );
             var card = new Card.Param();
             card.name = p.name_;
@@ -97,6 +104,7 @@ public class GameManager : MonoBehaviour {
 
     // ボタンを押して選択した
     void onSelect(string name) {
+        uiActive( false );
         var param = turnTableManage_.getCurCardParam();
         if ( param.answer == name ) {
             // 正解
@@ -117,7 +125,7 @@ public class GameManager : MonoBehaviour {
 
         // カウンタ
         correctNum_++;
-        conter_.text = string.Format( "正解：{0} 不正解：{1}  {2}/{3}", correctNum_, missNum_, 0, turnTableManage_.getCardNum() );
+        conter_.text = string.Format( "正解：{0} 不正解：{1}  {2}/{3}", correctNum_, missNum_, correctNum_ + missNum_, turnTableManage_.getCardNum() );
 
         good_.SetActive( true );
         GlobalState.wait( 1.5f, () => {
@@ -133,7 +141,7 @@ public class GameManager : MonoBehaviour {
 
         // カウンタ
         missNum_++;
-        conter_.text = string.Format( "正解：{0} 不正解：{1}  {2}/{3}", correctNum_, missNum_, 0, turnTableManage_.getCardNum() );
+        conter_.text = string.Format( "正解：{0} 不正解：{1}  {2}/{3}", correctNum_, missNum_, correctNum_ + missNum_, turnTableManage_.getCardNum() );
 
         no_.SetActive( true );
         var param = turnTableManage_.getCurCardParam();
@@ -145,7 +153,7 @@ public class GameManager : MonoBehaviour {
             errWindow_.setStr( param.comment );
         } )
         .wait( 3.0f )
-        .finish(()=> {
+        .finish( () => {
             errWindow_.gameObject.SetActive( false );
             finishCallback();
         } );
@@ -181,13 +189,27 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    class GameFinish : State< GameManager> {
-        public GameFinish( GameManager parent ): base( parent ) {
+    class GameFinish : State<GameManager> {
+        public GameFinish(GameManager parent) : base( parent ) {
         }
         protected override State innerInit() {
+            GlobalState.wait( 1.5f, () => {
+                parent_.result_.setup( parent_.correctNum_, parent_.missNum_ );
+                parent_.result_.gameObject.SetActive( true );
+                parent_.result_.FinishCallback = () => {
+                    setNextState( new FadeOut( parent_ ) );
+                };
+                return false;
+            } );
             return this;
         }
     }
+
+    class FadeOut : State<GameManager> {
+        public FadeOut(GameManager parent) : base( parent ) {
+        }
+    }
+
     State state_;
     int correctNum_ = 0;
     int missNum_ = 0;

@@ -119,6 +119,7 @@
     <Compile Include="Assets\Codes\GameManager.cs" />
     <Compile Include="Assets\Codes\MoveWindowFrame.cs" />
     <Compile Include="Assets\Codes\MultiMeshText.cs" />
+    <Compile Include="Assets\Codes\ResultManager.cs" />
     <Compile Include="Assets\Codes\StretchLine.cs" />
     <Compile Include="Assets\Codes\Table\Data_tokyo_shibuya_data.cs" />
     <Compile Include="Assets\Codes\TurnTable.cs" />

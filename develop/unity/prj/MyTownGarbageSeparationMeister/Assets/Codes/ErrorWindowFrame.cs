@@ -11,8 +11,13 @@ public class ErrorWindowFrame : MonoBehaviour
     MultiMeshText text_;
 
     public void setStr( string str ) {
+        char sep = '@';
+        var strs = str.Split( sep );
         text_.clear();
-        text_.setStr( 0, str );
+
+        for ( int i = 0; i < strs.Length; ++i ) {
+            text_.setStr( i, strs[ i ] );
+        }
         text_.updateAll();
         text_.gameObject.SetActive( false );
         var s = new Vector2( 1.0f, 2.0f );
@@ -23,6 +28,9 @@ public class ErrorWindowFrame : MonoBehaviour
         } ).finish(()=> {
             text_.gameObject.SetActive( true );
         } );
+    }
+
+    private void Awake() {
     }
 
     // Start is called before the first frame update

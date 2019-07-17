@@ -33,7 +33,7 @@ public class Card : MonoBehaviour
     // 指定名のスプライトを設定
     void setImage(string name) {
         // リソースからロード
-        var sprite = ResourceLoader.getInstance().loadSync<Sprite>( "garbeges/" + name );
+        var sprite = ResourceLoader.getInstance().loadSync<Sprite>( "garbages/" + name );
         if ( sprite != null ) {
             src_.sprite = sprite;
         } else {

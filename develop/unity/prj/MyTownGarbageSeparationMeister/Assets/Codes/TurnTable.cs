@@ -44,36 +44,47 @@ public class TurnTable : MonoBehaviour
             return false;
         bTurning_ = true;
 
-        if ( setNextCard() == false ) {
-            return false;
-        }
-
         float turnDeg = 360.0f / cardPlaceNum_;
         var sQ = turnRoot_.localRotation;
         var eQ = Quaternion.Euler( 0.0f, 0.0f, turnDeg ) * sQ;
+        if ( setNextCard() == false ) {
+            // 終了ターン
+            GlobalState.time( turnSec_, (sec, t) => {
+                turnRoot_.localRotation = Lerps.Quaternion.easeInOut( sQ, eQ, t );
+                return true;
+            } ).finish( () => {
+                bTurning_ = false;
+            } );
+            return false;
+        }
+
         GlobalState.time( turnSec_, (sec, t) => {
             turnRoot_.localRotation = Lerps.Quaternion.easeInOut( sQ, eQ, t );
             return true;
         } ).finish(()=> {
             bTurning_ = false;
             if ( finishCallback != null )
-                finishCallback( cards_[ curCardIdx_ ].getParam() );
+                finishCallback( cards_[ curCardPlaceIdx_ ].getParam() );
         } );
         return true;
     }
 
     // 現在のカードを取得
     public Card getCurCard() {
-        return cards_[ curCardIdx_ ].getCard();
+        return cards_[ curCardPlaceIdx_ ].getCard();
     }
 
     // 次のカードをセット
     bool setNextCard() {
-        if ( curCardIdx_ + 1 >= param_.cards.Count )
+        if ( curCardIdx_ + 1 >= param_.cards.Count ) {
+            curCardPlaceIdx_++;
+            curCardPlaceIdx_ = curCardPlaceIdx_ % cardPlaceNum_;
+            cards_[ curCardPlaceIdx_ ].setActive( false );
             return false;
+        }
         curCardIdx_++;
         curCardPlaceIdx_++;
-        curCardPlaceIdx_ = curCardPlaceIdx_ % cards_.Count;
+        curCardPlaceIdx_ = curCardPlaceIdx_ % cardPlaceNum_;
         cards_[ curCardPlaceIdx_ ].setParam( param_.cards[ curCardIdx_ ] );
         cards_[ curCardPlaceIdx_ ].setActive( true );
         return true;
