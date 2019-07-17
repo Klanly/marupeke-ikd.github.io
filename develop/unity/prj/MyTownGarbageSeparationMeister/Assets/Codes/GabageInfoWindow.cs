@@ -43,17 +43,20 @@ public class GabageInfoWindow : MonoBehaviour
         //  1: 材料
         //  2: 重さ
         //  3: 寸法
+        //  4: 特徴
         termStrs_.Clear();
         termStrs_.Add( "名前:" );
         termStrs_.Add( "材料:" );
         termStrs_.Add( "重さ:" );
         termStrs_.Add( "寸法:" );
+        termStrs_.Add( "特徴:" );
 
         infoStrs_.Clear();
         infoStrs_.Add( param.name );
         infoStrs_.Add( param.material );
         infoStrs_.Add( param.weight.ToString() + " " + param.weightUnit );
         infoStrs_.Add( param.dimensionX.ToString() + "x" + param.dimensionY.ToString() + "x" + param.dimensionZ.ToString() + " " + param.dimensionUnit );
+        infoStrs_.Add( param.point );
     }
 
     public void start( System.Action finishCallback = null ) {

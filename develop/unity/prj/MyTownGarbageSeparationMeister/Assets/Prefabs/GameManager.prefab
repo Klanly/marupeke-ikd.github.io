@@ -1,5 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &4475614759669328826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2171604088149867324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3be48ed202d56a4cab310c2f6781b7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frame_: {fileID: 2171604088149867325}
+  text_: {fileID: 4475614760013786584}
 --- !u!1 &4475614758644436956
 GameObject:
   m_ObjectHideFlags: 0
@@ -1919,20 +1933,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4475614759669328826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2171604088149867324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3be48ed202d56a4cab310c2f6781b7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  frame_: {fileID: 2171604088149867325}
-  text_: {fileID: 4475614760013786584}
 --- !u!1 &4475614759727852034
 GameObject:
   m_ObjectHideFlags: 0
@@ -4234,7 +4234,7 @@ MonoBehaviour:
   conter_: {fileID: 4475614759003961639}
   result_: {fileID: 4475614758644436958}
   debugNext_: 0
-  debugInitCardIdx_: 28
+  debugInitCardIdx_: 0
 --- !u!1 &4475614760649500921
 GameObject:
   m_ObjectHideFlags: 0
@@ -4443,16 +4443,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2323722720917529950, guid: bd283137779841340aa6ccc34a5aa1fa,
         type: 3}
-      propertyPath: pivotRate_.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2323722720917529950, guid: bd283137779841340aa6ccc34a5aa1fa,
-        type: 3}
-      propertyPath: pivotRate_.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2323722720917529950, guid: bd283137779841340aa6ccc34a5aa1fa,
-        type: 3}
       propertyPath: frameSize_.x
       value: 8
       objectReference: {fileID: 0}
@@ -4461,6 +4451,17 @@ PrefabInstance:
       propertyPath: frameSize_.y
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2323722720917529950, guid: bd283137779841340aa6ccc34a5aa1fa,
+        type: 3}
+      propertyPath: pivotRate_.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323722720582041307, guid: bd283137779841340aa6ccc34a5aa1fa,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 81605eda94016a74d9c663a9d038f9fe,
+        type: 3}
     - target: {fileID: 2323722720582041307, guid: bd283137779841340aa6ccc34a5aa1fa,
         type: 3}
       propertyPath: m_Color.r
@@ -4476,12 +4477,6 @@ PrefabInstance:
       propertyPath: m_Color.b
       value: 0.5368903
       objectReference: {fileID: 0}
-    - target: {fileID: 2323722720582041307, guid: bd283137779841340aa6ccc34a5aa1fa,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 81605eda94016a74d9c663a9d038f9fe,
-        type: 3}
     - target: {fileID: 2323722721728909868, guid: bd283137779841340aa6ccc34a5aa1fa,
         type: 3}
       propertyPath: m_Color.r

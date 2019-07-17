@@ -19,6 +19,7 @@ public class Card : MonoBehaviour
         public string answer = "";
         public string image = "";
         public string comment = "";
+        public string point = "";
     }
 
     public void setParam( Param param ) {

@@ -12,7 +12,7 @@ public class SMScaleBounding : MonoBehaviour
     float maxScaleX_ = 1.5f;    // X軸の最大スケール値
 
     [SerializeField]
-    float dampSecX_ = 2.0f;     // X軸の振動がほぼ0になるまでの時間
+    float dampSecX_ = 2.0f;     // X軸の振動がほぼ0になるまでの時間（マイナス値で減衰無し無限）
 
     [SerializeField]
     float freqX_ = 1.0f;        // X軸の周波数
@@ -21,7 +21,7 @@ public class SMScaleBounding : MonoBehaviour
     float maxScaleY_ = 1.5f;    // Y軸の最大スケール値
 
     [SerializeField]
-    float dampSecY_ = 2.0f;     // Y軸の振動がほぼ0になるまでの時間
+    float dampSecY_ = 2.0f;     // Y軸の振動がほぼ0になるまでの時間（マイナス値で減衰無し無限）
 
     [SerializeField]
     float freqY_ = 1.0f;        // Y軸の周波数
@@ -52,6 +52,10 @@ public class SMScaleBounding : MonoBehaviour
     }
 
     float updateScale( float t, float defScale, float maxScale, float dumpSec, float freq ) {
+        if ( dumpSec < 0.0f ) {
+            // 減衰無し
+            return defScale * ( 1.0f + maxScale * Mathf.Cos( 2.0f * Mathf.PI * freq * t ) );
+        }
         if ( t >= dumpSec ) {
             return defScale;
         }

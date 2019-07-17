@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TitleManager : MonoBehaviour {
+
+    [SerializeField]
+    SpriteButton start_;
+
     public System.Action FinishCallback { set { finishCallback_ = value; } }
     System.Action finishCallback_ = null;
 
@@ -38,10 +42,9 @@ public class TitleManager : MonoBehaviour {
 
         }
         protected override State innerInit() {
-            GlobalState.wait( 0.5f, () => {
+            parent_.start_.OnDecide = (str) => {
                 setNextState( new FadeOut( parent_ ) );
-                return false;
-            } );
+            };
             return this;
         }
     }

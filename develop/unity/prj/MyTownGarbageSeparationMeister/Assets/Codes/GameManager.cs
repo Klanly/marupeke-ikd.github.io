@@ -88,8 +88,10 @@ public class GameManager : MonoBehaviour {
             card.answer = p.answer_;
             card.image = p.image_;
             card.comment = p.comment_;
+            card.point = p.point_;
             param.cards.Add( card );
         }
+        param.cards = ListUtil.shuffle( ref param.cards );
 
         turnTableManage_.setup( param );
 
