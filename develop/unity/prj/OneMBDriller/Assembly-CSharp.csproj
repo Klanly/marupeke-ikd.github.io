@@ -66,6 +66,7 @@
     <Compile Include="Assets\Codes\BlockDistributer.cs" />
     <Compile Include="Assets\Codes\BlockFieldParameter.cs" />
     <Compile Include="Assets\Codes\BlockManager.cs" />
+    <Compile Include="Assets\Codes\BlockUnit.cs" />
     <Compile Include="Assets\Codes\common\Bezier.cs" />
     <Compile Include="Assets\Codes\common\camera\CameraPicker.cs" />
     <Compile Include="Assets\Codes\common\camera\CameraUtil.cs" />

@@ -34,9 +34,9 @@ public class BlockDistributer
         //  プレイヤーの位置( 0, 0 )から一定以上の距離を保ち且つ各ダイヤモンド間も一定距離を保って配置
         {
             // 指定数の3倍くらい作成して調整
-            var playerIgnore = new RandomPlace.IgnoreCircle( param.playerPos_, param.diamondIntervalForPlayer_ );
+            var playerIgnore = new RandomPlace.IgnoreCircle( param.playerPos_, param.diamond_.intervalForPlayer_ );
             var ignoreList = new List< RandomPlace.IgnoreShape >() { playerIgnore };
-            var poses = RandomPlace.distanceBase( param.regionMin_, param.regionMax_, param.diamondInterval_, param.diamondNum_ * 3, ignoreList );
+            var poses = RandomPlace.distanceBase( param.regionMin_, param.regionMax_, param.diamond_.interval_, param.diamond_.num_ * 3, ignoreList );
             var diamondPoses = new List<Vector2Int>();
             int count = 0;
             foreach ( var p in poses ) {
@@ -44,11 +44,30 @@ public class BlockDistributer
                 int y = ( int )p.y;
                 var bi = new BlockInfo();
                 bi.bUpdateLock_ = false;
-                bi.block_.hp_ = param.diamondHP_;
+                bi.block_.hp_ = param.diamond_.HP_;
                 bi.block_.type_ = Block.Type.Juel0;
                 info[ x, y ] = bi;
                 count++;
-                if ( count >= param.diamondNum_ )
+                if ( count >= param.diamond_.num_ )
+                    break;
+            }
+        }
+
+        // サファイヤを配置
+        {
+            var poses = RandomPlace.distanceBase( param.regionMin_, param.regionMax_, param.sapphire_.interval_, param.sapphire_.num_ );
+            var diamondPoses = new List<Vector2Int>();
+            int count = 0;
+            foreach ( var p in poses ) {
+                int x = ( int )p.x;
+                int y = ( int )p.y;
+                var bi = new BlockInfo();
+                bi.bUpdateLock_ = false;
+                bi.block_.hp_ = param.sapphire_.HP_;
+                bi.block_.type_ = Block.Type.Juel1;
+                info[ x, y ] = bi;
+                count++;
+                if ( count >= param.sapphire_.num_ )
                     break;
             }
         }

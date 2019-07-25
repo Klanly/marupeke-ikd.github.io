@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    GameObject diamondPref_;
+    BlockUnit blockPref_;
 
     void Start()
     {
@@ -15,11 +15,15 @@ public class GameManager : MonoBehaviour
         bp.regionMax_ = new Vector2( 1024.0f, 1024.0f );
         bp.sepX_ = 1024;
         bp.sepY_ = 1024;
-        bp.diamondNum_ = 5;
-        bp.diamondInterval_ = 200.0f;
-        bp.diamondIntervalForPlayer_ = 150.0f;
-        bp.diamondHP_ = 100;
-
+        bp.diamond_.num_ = 50;
+        bp.diamond_.interval_ = 50.0f;
+        bp.diamond_.intervalForPlayer_ = 350.0f;
+        bp.diamond_.HP_ = 100;
+        bp.sapphire_.num_ = 250;
+        bp.sapphire_.interval_ = 20.0f;
+        bp.sapphire_.intervalForPlayer_ = 0.0f;
+        bp.sapphire_.HP_ = 50;
+ 
         var blocks = distributer.createField( bp );
 
         for ( int y = 0; y < bp.sepY_; ++y ) {
@@ -30,6 +34,9 @@ public class GameManager : MonoBehaviour
                         case Block.Type.Juel0:
                             createDiamond( bp, x, y, blocks[ x, y ] );
                             break;
+                        case Block.Type.Juel1:
+                            createSapphire( bp, x, y, blocks[ x, y ] );
+                            break;
                     }
                 }
             }
@@ -37,8 +44,15 @@ public class GameManager : MonoBehaviour
     }
 
     void createDiamond(BlockFieldParameter bp, int x, int y, Block block ) {
-        var obj = PrefabUtil.createInstance( diamondPref_, transform );
-        obj.transform.localPosition = new Vector3( x + 0.5f, 0.5f, y + 0.5f );
+        var obj = PrefabUtil.createInstance( blockPref_, transform );
+        obj.transform.localPosition = new Vector3( x, 0.0f, y );
+        obj.setBlock( block );
+    }
+
+    void createSapphire(BlockFieldParameter bp, int x, int y, Block block) {
+        var obj = PrefabUtil.createInstance( blockPref_, transform );
+        obj.transform.localPosition = new Vector3( x, 0.0f, y );
+        obj.setBlock( block );
     }
 
     void Update()
