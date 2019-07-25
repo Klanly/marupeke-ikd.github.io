@@ -7,6 +7,53 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     BlockUnit blockPref_;
 
+    [SerializeField]
+    ChunkBlocks chunkBlocksPref_;
+
+    [SerializeField]
+    Vector3 pos_;
+
+    [SerializeField]
+    float chunkSize_ = 8.0f;
+
+    [SerializeField]
+    GameObject chunkRoot_;
+
+    private void Awake() {
+        // チャンクストック作成
+        for ( int i = 0; i < 12; ++i ) {
+            var root = PrefabUtil.createInstance( chunkBlocksPref_, chunkRoot_.transform );
+            chunkRootStack_.Push( root );
+            root.transform.SetParent( chunkRoot_.transform );
+            root.name = "nullChunk";
+            root.gameObject.SetActive( false );
+        }
+
+        chunkManager_.ChangeChunkCallback = (acts, nonActs) => {
+            // 削除対象になったチャンク領域を非アクティブに
+            foreach ( var p in nonActs ) {
+                if ( activeChunkRoots_.ContainsKey( p ) == true ) {
+                    var root = activeChunkRoots_[ p ];
+                    root.gameObject.SetActive( false );
+                    root.name = "nullChunk";
+                    activeChunkRoots_.Remove( p );
+                    chunkRootStack_.Push( root );
+                }
+            }
+            // 新規にアクティブになったチャンク領域をアクティブに
+            foreach ( var p in acts ) {
+                var root = chunkRootStack_.Pop();
+                if ( root != null ) {
+                    root.transform.localPosition = new Vector3( chunkSize_ * p.x, 0.0f, chunkSize_ * p.y );
+                    root.gameObject.SetActive( true );
+                    activeChunkRoots_[ p ] = root;
+                    root.name = p.ToString();
+                }
+            }
+        };
+        chunkManager_.setup( chunkSize_, 1, SquareChunkManager.PlaneType.XZ, Vector3.zero, pos_ );
+    }
+
     void Start()
     {
         var distributer = new BlockDistributer();
@@ -57,6 +104,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        
+        chunkManager_.updateChunk( pos_ );
     }
+
+    SquareChunkManager chunkManager_ = new SquareChunkManager();
+    Stack<ChunkBlocks> chunkRootStack_ = new Stack<ChunkBlocks>();
+    Dictionary<Vector2, ChunkBlocks> activeChunkRoots_ = new Dictionary<Vector2, ChunkBlocks>();
 }

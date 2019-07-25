@@ -22,7 +22,7 @@ public class Test : MonoBehaviour
             }
             Debug.Log( str );
         };
-        scm.setup( 1.0f, 1, SquareChunkManager.PlaneType.XZ, Vector3.zero, pos_ );
+        scm.setup( 2.0f, 1, SquareChunkManager.PlaneType.XZ, Vector3.zero, pos_ );
     }
 
     // Update is called once per frame

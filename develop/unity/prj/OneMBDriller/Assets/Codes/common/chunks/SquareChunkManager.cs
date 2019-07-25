@@ -131,20 +131,20 @@ public class SquareChunkManager : ChunkManager<Vector2Int>
 
 	Vector2Int calcPlaneXYChunkId( Vector3 pos ) {
 		return new Vector2Int(
-			Mathf.FloorToInt( ( pos - offset_ ).x ),
-			Mathf.FloorToInt( ( pos - offset_ ).y )
+			Mathf.FloorToInt( ( pos - offset_ ).x / size_ ),
+			Mathf.FloorToInt( ( pos - offset_ ).y / size_ )
 		);
 	}
 	Vector2Int calcPlaneXZChunkId(Vector3 pos) {
 		return new Vector2Int(
-			Mathf.FloorToInt( ( pos - offset_ ).x ),
-			Mathf.FloorToInt( ( pos - offset_ ).z )
+			Mathf.FloorToInt( ( pos - offset_ ).x / size_ ),
+			Mathf.FloorToInt( ( pos - offset_ ).z / size_ )
 		);
 	}
 	Vector2Int calcPlaneYZChunkId(Vector3 pos) {
 		return new Vector2Int(
-			Mathf.FloorToInt( ( pos - offset_ ).y ),
-			Mathf.FloorToInt( ( pos - offset_ ).z )
+			Mathf.FloorToInt( ( pos - offset_ ).y / size_ ),
+			Mathf.FloorToInt( ( pos - offset_ ).z / size_ )
 		);
 	}
 
