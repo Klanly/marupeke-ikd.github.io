@@ -19,6 +19,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     GameObject chunkRoot_;
 
+    [SerializeField]
+    Player player_;
+
+
     private void Awake() {
         // チャンクストック作成
         for ( int i = 0; i < 12; ++i ) {
@@ -51,7 +55,7 @@ public class GameManager : MonoBehaviour
                 }
             }
         };
-        chunkManager_.setup( chunkSize_, 1, SquareChunkManager.PlaneType.XZ, Vector3.zero, pos_ );
+        chunkManager_.setup( chunkSize_, 1, SquareChunkManager.PlaneType.XZ, Vector3.zero, player_.transform.localPosition );
     }
 
     void Start()
@@ -104,7 +108,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        chunkManager_.updateChunk( pos_ );
+        chunkManager_.updateChunk( player_.transform.localPosition );
     }
 
     SquareChunkManager chunkManager_ = new SquareChunkManager();
