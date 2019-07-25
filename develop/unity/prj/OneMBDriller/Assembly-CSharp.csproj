@@ -71,6 +71,8 @@
     <Compile Include="Assets\Codes\common\camera\CameraPicker.cs" />
     <Compile Include="Assets\Codes\common\camera\CameraUtil.cs" />
     <Compile Include="Assets\Codes\common\camera\FPSCameraMotion.cs" />
+    <Compile Include="Assets\Codes\common\chunks\ChunkManager.cs" />
+    <Compile Include="Assets\Codes\common\chunks\SquareChunkManager.cs" />
     <Compile Include="Assets\Codes\common\CollideUtil.cs" />
     <Compile Include="Assets\Codes\common\ColorHelper.cs" />
     <Compile Include="Assets\Codes\common\DeltaLerpManager.cs" />
@@ -120,6 +122,7 @@
     <Compile Include="Assets\Codes\common\UIIntroTextColorAnimation.cs" />
     <Compile Include="Assets\Codes\common\Vector3Util.cs" />
     <Compile Include="Assets\Codes\GameManager.cs" />
+    <Compile Include="Assets\Codes\Test.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/OneMBDriller/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
