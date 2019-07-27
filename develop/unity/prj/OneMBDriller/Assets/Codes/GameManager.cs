@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake() {
 
+        // ブロックを配置
         var distributer = new BlockDistributer();
         var bp = new BlockFieldParameter();
         bp.regionMin_ = new Vector2( 0.0f, 0.0f );
@@ -40,14 +41,13 @@ public class GameManager : MonoBehaviour
         bp.sapphire_.intervalForPlayer_ = 0.0f;
         bp.sapphire_.HP_ = 50;
 
-        var blocks = distributer.createField( bp );
-        blocks_ = blocks;
+        blocks_ = distributer.createField( bp );
 
-        for ( int x = 0; x < 1024; ++x ) {
-            blocks_[ x, 5 ].type_ = Block.Type.Juel0;
-        }
-        for ( int y = 0; y < 1024; ++y ) {
-            blocks_[ 5, y ].type_ = Block.Type.Juel0;
+        for ( int y = 0; y < bp.sepY_; ++y ) {
+            for ( int x = 0; x < bp.sepX_; ++x ) {
+                if ( x % 2 == 1 && y % 5 == 0 )
+                    blocks_[ x, y ].type_ = Block.Type.Juel1;
+            }
         }
 
         // チャンクストック作成
@@ -84,6 +84,8 @@ public class GameManager : MonoBehaviour
         };
 
         chunkManager_.setup( chunkSize_, 1, SquareChunkManager.PlaneType.XZ, Vector3.zero, player_.transform.localPosition );
+        collideManager_.setup( blocks_, 1.0f );
+        player_.setup( collideManager_ );
     }
 
     void Start()
@@ -100,4 +102,5 @@ public class GameManager : MonoBehaviour
     Stack<ChunkBlocks> chunkRootStack_ = new Stack<ChunkBlocks>();
     Dictionary<Vector2, ChunkBlocks> activeChunkRoots_ = new Dictionary<Vector2, ChunkBlocks>();
     Block[,] blocks_;
+    BlockCollideManager collideManager_ = new BlockCollideManager();
 }

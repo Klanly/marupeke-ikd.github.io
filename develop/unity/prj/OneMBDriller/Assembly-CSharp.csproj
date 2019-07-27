@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Codes\Block.cs" />
+    <Compile Include="Assets\Codes\BlockCollideManager.cs" />
     <Compile Include="Assets\Codes\BlockDistributer.cs" />
     <Compile Include="Assets\Codes\BlockFieldParameter.cs" />
     <Compile Include="Assets\Codes\BlockManager.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Assets\Codes\common\ResourceLoader.cs" />
     <Compile Include="Assets\Codes\common\ResurceLoaderUpdater.cs" />
     <Compile Include="Assets\Codes\common\shape\AABB.cs" />
+    <Compile Include="Assets\Codes\common\shape\AABB2D.cs" />
     <Compile Include="Assets\Codes\common\shape\Segment.cs" />
     <Compile Include="Assets\Codes\common\SimplePath.cs" />
     <Compile Include="Assets\Codes\common\sound\SoundManager.cs" />
@@ -123,6 +125,7 @@
     <Compile Include="Assets\Codes\common\UIIntroAnimation.cs" />
     <Compile Include="Assets\Codes\common\UIIntroColorAnimation.cs" />
     <Compile Include="Assets\Codes\common\UIIntroTextColorAnimation.cs" />
+    <Compile Include="Assets\Codes\common\Vector2Util.cs" />
     <Compile Include="Assets\Codes\common\Vector3Util.cs" />
     <Compile Include="Assets\Codes\GameManager.cs" />
     <Compile Include="Assets\Codes\Player.cs" />
