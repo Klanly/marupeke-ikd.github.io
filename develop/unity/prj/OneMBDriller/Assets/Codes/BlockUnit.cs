@@ -13,6 +13,9 @@ public class BlockUnit : MonoBehaviour
 
     public void setBlock( Block block ) {
         allBlockOff();
+        if ( block == null )
+            return;
+
         switch ( block.type_ ) {
             case Block.Type.Juel0:
                 diamond_.SetActive( true );
@@ -23,7 +26,7 @@ public class BlockUnit : MonoBehaviour
         }
     }
 
-    void allBlockOff() {
+    public void allBlockOff() {
         diamond_.SetActive( false );
         sapphire_.SetActive( false );
     }

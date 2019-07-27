@@ -75,6 +75,7 @@
     <Compile Include="Assets\Codes\common\camera\TPSCameraMotion.cs" />
     <Compile Include="Assets\Codes\common\chunks\ChunkManager.cs" />
     <Compile Include="Assets\Codes\common\chunks\SquareChunkManager.cs" />
+    <Compile Include="Assets\Codes\common\Clamps.cs" />
     <Compile Include="Assets\Codes\common\CollideUtil.cs" />
     <Compile Include="Assets\Codes\common\ColorHelper.cs" />
     <Compile Include="Assets\Codes\common\DeltaLerpManager.cs" />

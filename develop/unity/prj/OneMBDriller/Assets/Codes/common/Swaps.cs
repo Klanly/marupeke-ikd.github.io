@@ -13,6 +13,20 @@ public class Swaps
     }
 
     // 成分の最小、最大を揃える
+    static public void minMax(ref Vector2Int min, ref Vector2Int max) {
+        int minX = min.x;
+        int minY = min.y;
+        int maxX = max.x;
+        int maxY = max.y;
+        if ( min.x > max.x )
+            swap( ref minX, ref maxX );
+        if ( min.y > max.y )
+            swap( ref minY, ref maxY );
+        min.x = minX;
+        min.y = minY;
+        max.x = maxX;
+        max.y = maxY;
+    }
     static public void minMax( ref Vector2 min, ref Vector2 max ) {
         if ( min.x > max.x )
             swap( ref min.x, ref max.x );

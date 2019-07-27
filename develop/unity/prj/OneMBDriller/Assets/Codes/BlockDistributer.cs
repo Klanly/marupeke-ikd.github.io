@@ -22,8 +22,11 @@ public class BlockDistributer
 		for ( int y = 0; y < param.sepY_; ++y ) {
 			for ( int x = 0; x < param.sepX_; ++x ) {
                 if ( info[ x, y ] != null )
-    				blocks[ x, y ] = info[ x, y ].block_;
-			}
+                    blocks[ x, y ] = info[ x, y ].block_;
+                else {
+                    blocks[ x, y ] = new Block();
+                }
+            }
 		}
 		return blocks;
 	}
