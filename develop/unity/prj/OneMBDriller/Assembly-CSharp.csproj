@@ -129,6 +129,8 @@
     <Compile Include="Assets\Codes\common\Vector3Util.cs" />
     <Compile Include="Assets\Codes\GameManager.cs" />
     <Compile Include="Assets\Codes\Player.cs" />
+    <Compile Include="Assets\Codes\PlayerBullet.cs" />
+    <Compile Include="Assets\Codes\Singleton.cs" />
     <Compile Include="Assets\Codes\Test.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/OneMBDriller/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

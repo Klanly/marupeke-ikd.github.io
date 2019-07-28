@@ -25,6 +25,9 @@ public class GameManager : MonoBehaviour
 
     private void Awake() {
 
+        // シングルトンに登録
+        Singleton< GameManager >.set( this );
+
         // ブロックを配置
         var distributer = new BlockDistributer();
         var bp = new BlockFieldParameter();
