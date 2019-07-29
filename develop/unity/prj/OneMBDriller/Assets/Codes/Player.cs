@@ -18,8 +18,20 @@ public class Player : MonoBehaviour
         fieldCollider_ = fieldCollider;
     }
 
+    // ブロック衝突コライダー取得
     public BlockCollideManager getBlockCollideManager() {
         return fieldCollider_;
+    }
+
+    // 敵弾を登録
+    //  Playerは自分で自分の衝突を検知します
+    public void addEnemyBullet( EnemyBulletBase bullet ) {
+        if ( enemyBullets_.Count > curEnemyBulletNum_ ) {
+            enemyBullets_[ curEnemyBulletNum_ ] = bullet;
+        } else {
+            enemyBullets_.Add( bullet );
+        }
+        curEnemyBulletNum_++;
     }
 
     void shootBullet() {
@@ -67,8 +79,34 @@ public class Player : MonoBehaviour
             pos.z -= penetration.y;
             transform.position = pos;
         }
+
+        // 敵弾との衝突判定
+        int n = curEnemyBulletNum_;
+        int idx = 0;
+        var pp = transform.position;
+        for ( int i = 0; i < n; ++i ) {
+            var e = enemyBullets_[ i ];
+            if ( e == null ) {
+                continue;   // 弾自体が消えたらしい
+            }
+            // 弾当たってる？
+            float er = e.getRadius();
+            var ep = e.transform.position;
+            float len = ( er + radius_ );
+            if ( ( ep - pp ).sqrMagnitude <= len * len ) {
+                // 衝突により消滅
+                Destroy( e.gameObject );
+            } else {
+                // まだ生きてる弾なので位置を詰めて再登録
+                enemyBullets_[ idx ] = e;
+                idx++;
+            }
+        }
+        curEnemyBulletNum_ = idx;
     }
 
     BlockCollideManager fieldCollider_;
     Stack<PlayerBullet> bullets_ = new Stack<PlayerBullet>();
+    List<EnemyBulletBase> enemyBullets_ = new List<EnemyBulletBase>();
+    int curEnemyBulletNum_ = 0;
 }

@@ -22,8 +22,16 @@ public class GameManager : MBSingleton<GameManager>
     [SerializeField]
     Player player_;
 
-	// チャンク内にブロックの状態リセットを要求
-	public void updateBlock( Block block) {
+    [SerializeField]
+    BlockEventManager blockEventManager_;
+
+    // Playerを取得
+    public Player getPlayer( int idx = 0 ) {
+        return player_;
+    }
+
+    // チャンク内にブロックの状態リセットを要求
+    public void updateBlock( Block block) {
 		// ブロックの所属するチャンクに状態リセットを要求
 		var idx = block.getIdx();
 		var pos = new Vector3( idx.x + 0.5f, 0.0f, idx.y + 0.5f );
@@ -45,6 +53,11 @@ public class GameManager : MBSingleton<GameManager>
 			}
 		}
 	}
+
+    // ブロックイベント発動
+    public void emitBlockEvent( Block block ) {
+        blockEventManager_.emitEvent( block );
+    }
 
     private void Awake() {
 
