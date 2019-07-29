@@ -6,7 +6,7 @@ using UnityEngine;
 public class Block
 {
 	// ブロックタイプ
-	public enum Type : uint
+	public enum Type : byte
 	{
 		Empty = 0,
 
@@ -41,12 +41,54 @@ public class Block
 		Trap9 = 73,
 	}
 
-	public Block() { }
+	public Block( int x, int y ) {
+		data0_ = ( x & 0x3FF ) | ( ( y & 0x3FF ) << 12 );
+	}
+	public Block( Vector2Int idx ) {
+		data0_ = ( idx.x & 0x3FF ) | ( ( idx.y & 0x3FF  ) << 12 );
+	}
 
-	public Block( Block.Type type ) {
+	public Block( Block.Type type, Vector2Int idx ) {
 		type_ = type;
+		data0_ = ( idx.x & 0x3FF ) | ( ( idx.y & 0x3FF ) << 12 );
+	}
+	public Block(Block.Type type, int x, int y) {
+		type_ = type;
+		data0_ = ( x & 0x3FF ) | ( ( y & 0x3FF ) << 12 );
+	}
+
+	public Vector2Int getIdx() {
+		return new Vector2Int( data0_ & 0x3FF, ( data0_ >> 12 ) & 0x3FF );
+	}
+
+	// HP減少
+	//  戻り値: HPをゼロにしたらtrue
+	public bool damage( short dmg ) {
+		if (isDestroy() == true)
+			return false;	// 既に破壊されているブロックは追加ダメージを与えられない
+		hp_ -= dmg;
+		if ( hp_ <= 0 ) {
+			hp_ = 0;
+			setDestroy();
+			return true;
+		}
+		return false;
+	}
+
+	public bool isDestroy() {
+		return ( data0_ & ( 1 << 24 ) ) != 0;
+	}
+
+	void setDestroy() {
+		data0_ |= ( 1 << 24 );
+        type_ = Type.Empty;
 	}
 
 	public Type type_ = Type.Empty;
-	public short hp_;		// ブロックの耐久力
+	public short hp_ = 1;   // ブロックの耐久力
+	int data0_ = 0;			// データ
+								//  0-11: x座標(0～1023)
+								// 12-23: y座標(0～1023)
+								// 24   : destroyed
+								// 25-31: reserved
 }

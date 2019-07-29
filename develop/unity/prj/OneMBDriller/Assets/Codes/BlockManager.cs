@@ -64,5 +64,5 @@ public class BlockManager
 
 	BlockFieldParameter param_;
 	Block[,] blocks_;
-	Block nullBlock_ = new Block( Block.Type.Lock_Wall );
+	Block nullBlock_ = new Block( Block.Type.Lock_Wall, 0, 0 );
 }

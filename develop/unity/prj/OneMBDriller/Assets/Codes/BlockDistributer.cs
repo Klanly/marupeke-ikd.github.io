@@ -6,7 +6,10 @@ public class BlockDistributer
 {
 	protected class BlockInfo
 	{
-		public Block block_ = new Block();
+        public BlockInfo( int x, int y ) {
+            block_ = new Block( x, y );
+        }
+        public Block block_;
 		public bool bUpdateLock_ = false;	// 上書きして良い？
 	}
 
@@ -24,7 +27,7 @@ public class BlockDistributer
                 if ( info[ x, y ] != null )
                     blocks[ x, y ] = info[ x, y ].block_;
                 else {
-                    blocks[ x, y ] = new Block();
+					blocks[ x, y ] = new Block( x, y );
                 }
             }
 		}
@@ -45,7 +48,7 @@ public class BlockDistributer
             foreach ( var p in poses ) {
                 int x = ( int )p.x;
                 int y = ( int )p.y;
-                var bi = new BlockInfo();
+                var bi = new BlockInfo(x, y);
                 bi.bUpdateLock_ = false;
                 bi.block_.hp_ = param.diamond_.HP_;
                 bi.block_.type_ = Block.Type.Juel0;
@@ -64,7 +67,7 @@ public class BlockDistributer
             foreach ( var p in poses ) {
                 int x = ( int )p.x;
                 int y = ( int )p.y;
-                var bi = new BlockInfo();
+                var bi = new BlockInfo( x, y );
                 bi.bUpdateLock_ = false;
                 bi.block_.hp_ = param.sapphire_.HP_;
                 bi.block_.type_ = Block.Type.Juel1;

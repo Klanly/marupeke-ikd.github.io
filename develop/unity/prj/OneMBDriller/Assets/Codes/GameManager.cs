@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MBSingleton<GameManager>
 {
     [SerializeField]
     BlockUnit blockPref_;
@@ -22,11 +22,31 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     Player player_;
 
+	// チャンク内にブロックの状態リセットを要求
+	public void updateBlock( Block block) {
+		// ブロックの所属するチャンクに状態リセットを要求
+		var idx = block.getIdx();
+		var pos = new Vector3( idx.x + 0.5f, 0.0f, idx.y + 0.5f );
+		var chunkIdx = chunkManager_.calcChunkId( pos );
+		if (activeChunkRoots_.ContainsKey( chunkIdx ) == true) {
+			activeChunkRoots_[ chunkIdx ].updateBlock( block );
+		}
+	}
+
+	// チャンク内にブロックの状態リセットを要求
+	public void updateBlocks( List<Block> blocks ) {
+		foreach ( var b in blocks ) {
+			// ブロックの所属するチャンクに状態リセットを要求
+			var idx = b.getIdx();
+			var pos = new Vector3( idx.x + 0.5f, 0.0f, idx.y + 0.5f );
+			var chunkIdx = chunkManager_.calcChunkId( pos );
+			if ( activeChunkRoots_.ContainsKey( chunkIdx ) == true ) {
+				activeChunkRoots_[ chunkIdx ].updateBlock( b );
+			}
+		}
+	}
 
     private void Awake() {
-
-        // シングルトンに登録
-        Singleton< GameManager >.set( this );
 
         // ブロックを配置
         var distributer = new BlockDistributer();
@@ -46,9 +66,20 @@ public class GameManager : MonoBehaviour
 
         blocks_ = distributer.createField( bp );
 
+        var b = blocks_[ 0, 0 ];
+        b = blocks_[ 0, 1 ];
+        b = blocks_[ 0, 2 ];
+        b = blocks_[ 0, 3 ];
+        b = blocks_[ 1, 1 ];
+        b = blocks_[ 1, 2 ];
+        b = blocks_[ 1, 3 ];
+        b = blocks_[ 2, 1 ];
+        b = blocks_[ 2, 2 ];
+        b = blocks_[ 2, 3 ];
+
         for ( int y = 0; y < bp.sepY_; ++y ) {
             for ( int x = 0; x < bp.sepX_; ++x ) {
-                if ( x % 2 == 1 && y % 5 == 0 )
+                if ( x % 1 == 0 && y % 1 == 0 )
                     blocks_[ x, y ].type_ = Block.Type.Juel1;
             }
         }
@@ -103,7 +134,7 @@ public class GameManager : MonoBehaviour
 
     SquareChunkManager chunkManager_ = new SquareChunkManager();
     Stack<ChunkBlocks> chunkRootStack_ = new Stack<ChunkBlocks>();
-    Dictionary<Vector2, ChunkBlocks> activeChunkRoots_ = new Dictionary<Vector2, ChunkBlocks>();
+    Dictionary<Vector2Int, ChunkBlocks> activeChunkRoots_ = new Dictionary<Vector2Int, ChunkBlocks>();
     Block[,] blocks_;
     BlockCollideManager collideManager_ = new BlockCollideManager();
 }

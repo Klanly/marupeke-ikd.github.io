@@ -125,7 +125,8 @@ public class SquareChunkManager : ChunkManager<Vector2Int>
 		}
 	}
 
-	Vector2Int calcChunkId( Vector3 pos ) {
+	// 位置をチャンクIDに変換
+	public Vector2Int calcChunkId( Vector3 pos ) {
 		return calcPlaneChunkId_( pos );
 	}
 
