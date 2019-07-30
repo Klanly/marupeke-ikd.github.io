@@ -58,9 +58,10 @@ public class PlayerBullet : MonoBehaviour
         var block = blockCollideManager_.toCircleCollide( new Vector2( pos.x, pos.z ), radius_, ref pene );
         if ( block != null ) {
 			// ブロックのHPを自分の攻撃力分下げる
-			if ( block.damage( attackPower_ ) == true ) {
+			if ( block.damage( attackPower_, false ) == true ) {
                 // 破壊したので中のイベントを発生
                 GameManager.getInstance().emitBlockEvent( block );
+                block.setDestroy();
             }
 
             // ブロック変更通知

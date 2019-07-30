@@ -23,6 +23,12 @@ public class BlockUnit : MonoBehaviour
             case Block.Type.Juel1:
                 sapphire_.SetActive( true );
                 break;
+            case Block.Type.Trap0:
+                sapphire_.SetActive( true );
+                break;
+            case Block.Type.Trap1:
+                sapphire_.SetActive( true );
+                break;
         }
     }
 

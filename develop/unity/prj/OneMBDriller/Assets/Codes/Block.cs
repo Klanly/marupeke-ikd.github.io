@@ -63,13 +63,14 @@ public class Block
 
 	// HP減少
 	//  戻り値: HPをゼロにしたらtrue
-	public bool damage( short dmg ) {
+	public bool damage( short dmg, bool autoChangeEmpty = false ) {
 		if (isDestroy() == true)
 			return false;	// 既に破壊されているブロックは追加ダメージを与えられない
 		hp_ -= dmg;
 		if ( hp_ <= 0 ) {
 			hp_ = 0;
-			setDestroy();
+			if ( autoChangeEmpty == true )
+                setDestroy();
 			return true;
 		}
 		return false;
@@ -79,7 +80,7 @@ public class Block
 		return ( data0_ & ( 1 << 24 ) ) != 0;
 	}
 
-	void setDestroy() {
+	public void setDestroy() {
 		data0_ |= ( 1 << 24 );
         type_ = Type.Empty;
 	}

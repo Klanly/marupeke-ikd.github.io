@@ -79,21 +79,12 @@ public class GameManager : MBSingleton<GameManager>
 
         blocks_ = distributer.createField( bp );
 
-        var b = blocks_[ 0, 0 ];
-        b = blocks_[ 0, 1 ];
-        b = blocks_[ 0, 2 ];
-        b = blocks_[ 0, 3 ];
-        b = blocks_[ 1, 1 ];
-        b = blocks_[ 1, 2 ];
-        b = blocks_[ 1, 3 ];
-        b = blocks_[ 2, 1 ];
-        b = blocks_[ 2, 2 ];
-        b = blocks_[ 2, 3 ];
-
         for ( int y = 0; y < bp.sepY_; ++y ) {
             for ( int x = 0; x < bp.sepX_; ++x ) {
-                if ( x % 1 == 0 && y % 1 == 0 )
-                    blocks_[ x, y ].type_ = Block.Type.Juel1;
+                if ( x % 2 == 0 && y % 3 == 0 )
+                    blocks_[ x, y ].type_ = Block.Type.Trap1;
+                if ( x % 2 != 0 && y % 3 != 0 )
+                    blocks_[ x, y ].type_ = Block.Type.Trap0;
             }
         }
 

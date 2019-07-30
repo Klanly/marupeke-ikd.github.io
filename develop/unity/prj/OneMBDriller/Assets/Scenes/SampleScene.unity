@@ -619,6 +619,7 @@ MonoBehaviour:
   bulletPrefab_: {fileID: 2609800415627385095, guid: 66ab0450a8b0c1f41a770cb94baa7bee,
     type: 3}
   bulletStockRoot_: {fileID: 2113199615}
+  velosity_: {x: 0, y: 0, z: 0}
 --- !u!1 &1531805502
 GameObject:
   m_ObjectHideFlags: 0
