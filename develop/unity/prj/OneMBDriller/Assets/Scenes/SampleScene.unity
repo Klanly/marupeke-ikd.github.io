@@ -300,6 +300,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyBullet01Pref_: {fileID: 6176144764610674775, guid: d214bdd0f5024274b87ccde3d8906d55,
     type: 3}
+  enemyBullet02Pref_: {fileID: 7916142047812717332, guid: de954afbc5be62b43b11a5ba9e369423,
+    type: 3}
 --- !u!1 &768233343
 GameObject:
   m_ObjectHideFlags: 0

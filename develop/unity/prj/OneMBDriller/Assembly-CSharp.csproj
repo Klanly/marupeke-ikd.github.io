@@ -128,7 +128,9 @@
     <Compile Include="Assets\Codes\common\UIIntroTextColorAnimation.cs" />
     <Compile Include="Assets\Codes\common\Vector2Util.cs" />
     <Compile Include="Assets\Codes\common\Vector3Util.cs" />
+    <Compile Include="Assets\Codes\DeviationShooting.cs" />
     <Compile Include="Assets\Codes\EnemyBullet01.cs" />
+    <Compile Include="Assets\Codes\EnemyBullet02.cs" />
     <Compile Include="Assets\Codes\EnemyBulletBase.cs" />
     <Compile Include="Assets\Codes\GameManager.cs" />
     <Compile Include="Assets\Codes\MBSingleton.cs" />

@@ -9,11 +9,15 @@ public class BlockEventManager : MonoBehaviour
     [SerializeField]
     EnemyBullet01 enemyBullet01Pref_;
 
+    [SerializeField]
+    EnemyBullet02 enemyBullet02Pref_;
+
     // イベント発生
     public void emitEvent( Block block ) {
         var idx = block.getIdx();
         var emitPos = new Vector3( idx.x + 0.5f, 0.0f, idx.y + 0.5f );
-        var b = PrefabUtil.createInstance( enemyBullet01Pref_, null );
+        // var b = PrefabUtil.createInstance( enemyBullet01Pref_, null );
+        var b = PrefabUtil.createInstance( enemyBullet02Pref_, null );
         b.transform.position = emitPos;
     }
 
