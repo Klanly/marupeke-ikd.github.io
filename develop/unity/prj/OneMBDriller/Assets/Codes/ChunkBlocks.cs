@@ -14,6 +14,9 @@ public class ChunkBlocks : MonoBehaviour
     [SerializeField]
     float blockSize_ = 1.0f;
 
+    [SerializeField]
+    TextMesh position_;
+
     // 再セット
     public void resetBlocks( Block[,] blocks, Vector2Int indexPos, Vector2 OriginOffset, float chunkUnitSize, bool isActive = true ) {
 		// ブロック配列の参照範囲を算出
@@ -34,6 +37,9 @@ public class ChunkBlocks : MonoBehaviour
         // チャンク位置を変更
         transform.localPosition = new Vector3( OriginOffset.x + chunkUnitSize * indexPos.x, 0.0f, OriginOffset.y + chunkUnitSize * indexPos.y );
         gameObject.SetActive( true );
+
+        // 減点座標を変更
+        position_.text = string.Format("{0},{1}", startBlockIdx_.x, startBlockIdx_.y );
     }
 
 	// 指定ブロックの状態を更新

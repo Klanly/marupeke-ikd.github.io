@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initSpeed_: 30
-  lifeTime_: 0.75
+  lifeTime_: 0.35
   radius_: 0.25
 --- !u!1001 &6067034744784101534
 PrefabInstance:
