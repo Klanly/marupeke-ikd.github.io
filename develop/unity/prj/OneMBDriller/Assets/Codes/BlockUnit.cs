@@ -11,6 +11,9 @@ public class BlockUnit : MonoBehaviour
     [SerializeField]
     GameObject sapphire_;
 
+    [SerializeField]
+    GameObject block_;
+
     public void setBlock( Block block ) {
         allBlockOff();
         if ( block == null )
@@ -24,10 +27,10 @@ public class BlockUnit : MonoBehaviour
                 sapphire_.SetActive( true );
                 break;
             case Block.Type.Trap0:
-                sapphire_.SetActive( true );
+                block_.SetActive( true );
                 break;
             case Block.Type.Trap1:
-                sapphire_.SetActive( true );
+                block_.SetActive( true );
                 break;
         }
     }
@@ -35,6 +38,7 @@ public class BlockUnit : MonoBehaviour
     public void allBlockOff() {
         diamond_.SetActive( false );
         sapphire_.SetActive( false );
+        block_.SetActive( false );
     }
 
     // Start is called before the first frame update

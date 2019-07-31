@@ -73,5 +73,5 @@ public class PlayerBullet : MonoBehaviour
 
     float curTime_ = 0.0f;
     BlockCollideManager blockCollideManager_;
-	short attackPower_ = 300;
+	short attackPower_ = 100;
 }

@@ -68,23 +68,25 @@ public class GameManager : MBSingleton<GameManager>
         bp.regionMax_ = new Vector2( 1024.0f, 1024.0f );
         bp.sepX_ = 1024;
         bp.sepY_ = 1024;
-        bp.diamond_.num_ = 50;
+        bp.diamond_.num_ = 250;
         bp.diamond_.interval_ = 50.0f;
-        bp.diamond_.intervalForPlayer_ = 350.0f;
-        bp.diamond_.HP_ = 100;
-        bp.sapphire_.num_ = 250;
+        bp.diamond_.intervalForPlayer_ = 35.0f;
+        bp.diamond_.HP_ = 5000;
+        bp.sapphire_.num_ = 2500;
         bp.sapphire_.interval_ = 20.0f;
         bp.sapphire_.intervalForPlayer_ = 0.0f;
-        bp.sapphire_.HP_ = 50;
+        bp.sapphire_.HP_ = 2500;
 
         blocks_ = distributer.createField( bp );
 
         for ( int y = 0; y < bp.sepY_; ++y ) {
             for ( int x = 0; x < bp.sepX_; ++x ) {
-                if ( x % 2 == 0 && y % 3 == 0 )
-                    blocks_[ x, y ].type_ = Block.Type.Trap1;
-                if ( x % 2 != 0 && y % 3 != 0 )
-                    blocks_[ x, y ].type_ = Block.Type.Trap0;
+                if ( blocks_[x,y].type_ == Block.Type.Empty ) {
+                    if ( x % 2 == 0 && y % 3 == 0 )
+                        blocks_[ x, y ].type_ = Block.Type.Trap1;
+                    if ( x % 2 != 0 && y % 3 != 0 )
+                        blocks_[ x, y ].type_ = Block.Type.Trap0;
+                }
             }
         }
 
