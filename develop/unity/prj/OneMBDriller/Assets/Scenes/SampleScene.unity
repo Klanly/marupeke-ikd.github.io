@@ -589,7 +589,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bVisibleCursor_: 1
   sensitivity_: 1
-  moveSpeed_: 0.1666667
+  moveSpeed_: 0.3
 --- !u!4 &990321098
 Transform:
   m_ObjectHideFlags: 0
