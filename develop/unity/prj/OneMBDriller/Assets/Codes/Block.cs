@@ -84,7 +84,7 @@ public class Block
 		data0_ |= ( 1 << 24 );
         type_ = Type.Empty;
 		// 通知
-		GameManager.getInstance().setBrokenBlockNum( 1 );
+		GameManager.getInstance().setBrokenBlock( this );
 	}
 
 	public Type type_ = Type.Empty;

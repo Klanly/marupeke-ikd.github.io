@@ -28,11 +28,30 @@ public class GameManager : MBSingleton<GameManager>
 	[SerializeField]
 	UnityEngine.UI.Text blockNumText_;
 
+    [SerializeField]
+    UnityEngine.UI.Image mapImage_;
+
+    [SerializeField]
+    UnityEngine.UI.Image arrowImage_;
+
+    Texture2D mapTex_;
 
 	// 破壊されたブロック数を設定
-	public void setBrokenBlockNum( int num ) {
-		breakBlockNum_ += num;
+	public void setBrokenBlock( Block block ) {
+		breakBlockNum_++;
+
+        // 破壊ブロック座標を保持（塗りつぶし用）
+        brokenBlockCoords_.Add( block.getIdx() );
 	}
+
+    // 破壊ブロック座標を塗りつぶし
+    void paintBrokenTexture() {
+        foreach ( var pos in brokenBlockCoords_ ) {
+            mapTex_.SetPixel( pos.x, pos.y, Color.black );
+        }
+        mapTex_.Apply();
+        brokenBlockCoords_.Clear();
+    }
 
     // Playerを取得
     public Player getPlayer( int idx = 0 ) {
@@ -144,9 +163,38 @@ public class GameManager : MBSingleton<GameManager>
         chunkManager_.setup( chunkSize_, 1, SquareChunkManager.PlaneType.XZ, Vector3.zero, player_.transform.localPosition );
         collideManager_.setup( blocks_, 1.0f );
         player_.setup( collideManager_ );
+
+        // マップ用スプライト作成
+        if ( mapTex_ == null ) {
+            mapTex_ = new Texture2D( 1024, 1024, TextureFormat.RGBA32, false );
+            Color32[] colors = new Color32[ 1024 * 1024 ];
+            Color32 color = new Color32( 255, 255, 255, 255 );
+            for ( int i = 0; i < 1024 * 1024; ++i ) {
+                colors[ i ] = color;
+            }
+            mapTex_.SetPixels32( colors );
+            mapTex_.Apply();
+            var sprite = Sprite.Create( mapTex_, new Rect( 0.0f, 0.0f, 1024.0f, 1024.0f ), Vector2.zero );
+            mapImage_.sprite = sprite;
+        }
+
+        // インディケーター初期設定
+        setArrowPose( 0.0f, 0.0f, new Vector3( 0.0f, 0.0f, 1.0f ) );
     }
 
-	void updateBlockNumText() {
+    void setArrowPose( float x, float y, Vector3 forward ) {
+        var basePos = new Vector3( -256.0f, 0.0f, 0.0f );
+        var pos = new Vector3( x / 4.0f, y / 4.0f, 0.0f );  // Worldが1024,1024に対しテクセル座標が256,256なので1/4している
+        arrowImage_.rectTransform.localPosition = basePos + pos;
+
+        forward = forward.normalized;
+        float th = Mathf.Atan2( forward.z, forward.x );
+        var rot = new Vector3( 0.0f, 0.0f, th / ( Mathf.PI * 2.0f ) * 360.0f );
+        var q = Quaternion.Euler( rot );
+        arrowImage_.rectTransform.rotation = q;
+    }
+
+    void updateBlockNumText() {
 		float r = ( float )breakBlockNum_ / totalBlockNum_;
 		blockNumText_.text = string.Format( "{0:#,0}/{1:#,0}({2:#.###%})", breakBlockNum_, totalBlockNum_, r );
 	}
@@ -162,7 +210,14 @@ public class GameManager : MBSingleton<GameManager>
 
 		// ブロック数表記更新
 		updateBlockNumText();
-	}
+
+        // 破壊ブロック位置ペイント
+        paintBrokenTexture();
+
+        // インディケータ更新
+        var p = player_.transform.position;
+        setArrowPose( p.x, p.z, player_.transform.forward );
+    }
 
 	SquareChunkManager chunkManager_ = new SquareChunkManager();
     Stack<ChunkBlocks> chunkRootStack_ = new Stack<ChunkBlocks>();
@@ -171,4 +226,5 @@ public class GameManager : MBSingleton<GameManager>
     BlockCollideManager collideManager_ = new BlockCollideManager();
 	int breakBlockNum_ = 0;
 	int totalBlockNum_ = 0;
+    List<Vector2Int> brokenBlockCoords_ = new List<Vector2Int>();
 }
