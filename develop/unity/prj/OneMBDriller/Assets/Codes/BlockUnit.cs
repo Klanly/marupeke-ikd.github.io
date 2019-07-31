@@ -32,6 +32,9 @@ public class BlockUnit : MonoBehaviour
             case Block.Type.Trap1:
                 block_.SetActive( true );
                 break;
+            case Block.Type.Lock0:
+                block_.SetActive( true );
+                break;
         }
     }
 

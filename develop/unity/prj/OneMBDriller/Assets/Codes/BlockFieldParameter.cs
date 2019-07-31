@@ -18,4 +18,6 @@ public class BlockFieldParameter
     public Vector2 playerPos_ = Vector2.zero;
     public Block diamond_ = new Block();
     public Block sapphire_ = new Block();
+    public Block enemyBullet1_ = new Block();
+    public Block enemyBullet2_ = new Block();
 }

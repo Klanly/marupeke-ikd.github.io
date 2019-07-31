@@ -43,7 +43,7 @@ public class BlockDistributer
             var playerIgnore = new RandomPlace.IgnoreCircle( param.playerPos_, param.diamond_.intervalForPlayer_ );
             var ignoreList = new List< RandomPlace.IgnoreShape >() { playerIgnore };
             var poses = RandomPlace.distanceBase( param.regionMin_, param.regionMax_, param.diamond_.interval_, param.diamond_.num_ * 3, ignoreList );
-            var diamondPoses = new List<Vector2Int>();
+//            var diamondPoses = new List<Vector2Int>();
             int count = 0;
             foreach ( var p in poses ) {
                 int x = ( int )p.x;
@@ -62,7 +62,7 @@ public class BlockDistributer
         // サファイヤを配置
         {
             var poses = RandomPlace.distanceBase( param.regionMin_, param.regionMax_, param.sapphire_.interval_, param.sapphire_.num_ );
-            var diamondPoses = new List<Vector2Int>();
+//            var diamondPoses = new List<Vector2Int>();
             int count = 0;
             foreach ( var p in poses ) {
                 int x = ( int )p.x;
@@ -75,6 +75,52 @@ public class BlockDistributer
                 count++;
                 if ( count >= param.sapphire_.num_ )
                     break;
+            }
+        }
+        // 敵弾1を配置
+        //  ランダムにバラまく
+        {
+            for ( int i = 0; i < param.enemyBullet1_.num_; ++i ) {
+                var p = Vector2Util.mul( Randoms.Vec2.value(), param.regionMax_ - param.regionMin_ );
+                int x = ( int )p.x;
+                int y = ( int )p.y;
+                var bi = new BlockInfo( x, y );
+                bi.bUpdateLock_ = false;
+                bi.block_.hp_ = param.enemyBullet1_.HP_;
+                bi.block_.type_ = Block.Type.Trap0;
+                info[ x, y ] = bi;
+            }
+        }
+        // 敵弾2を配置
+        //  ランダムにバラまく
+        {
+            for ( int i = 0; i < param.enemyBullet2_.num_; ++i ) {
+                var p = Vector2Util.mul( Randoms.Vec2.value(), param.regionMax_ - param.regionMin_ );
+                int x = ( int )p.x;
+                int y = ( int )p.y;
+                var bi = new BlockInfo( x, y );
+                bi.bUpdateLock_ = false;
+                bi.block_.hp_ = param.enemyBullet2_.HP_;
+                bi.block_.type_ = Block.Type.Trap1;
+                info[ x, y ] = bi;
+            }
+        }
+        // 残りは空っぽブロックで
+        for ( int y = 0; y < info.GetLength( 1 ); ++y ) {
+            for ( int x = 0; x < info.GetLength( 0 ); ++x ) {
+                if ( info[ x, y ] == null ) {
+                    var bi = new BlockInfo( x, y );
+                    bi.bUpdateLock_ = false;
+                    bi.block_.hp_ = 10;
+                    bi.block_.type_ = Block.Type.Lock0;
+                    info[ x, y ] = bi;
+                } else if ( info[ x, y ].block_.type_ == Block.Type.Empty ) {
+                    var bi = new BlockInfo( x, y );
+                    bi.bUpdateLock_ = false;
+                    bi.block_.hp_ = 10;
+                    bi.block_.type_ = Block.Type.Lock0;
+                    info[ x, y ] = bi;
+                }
             }
         }
     }

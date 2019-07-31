@@ -85,16 +85,22 @@ public class GameManager : MBSingleton<GameManager>
         bp.sapphire_.interval_ = 20.0f;
         bp.sapphire_.intervalForPlayer_ = 0.0f;
         bp.sapphire_.HP_ = 2500;
+        bp.enemyBullet1_.num_ = 100000;
+        bp.enemyBullet1_.interval_ = 0.5f;
+        bp.enemyBullet1_.intervalForPlayer_ = 0.0f;
+        bp.enemyBullet1_.HP_ = 10;
+        bp.enemyBullet2_.num_ = 10000;
+        bp.enemyBullet2_.interval_ = 0.5f;
+        bp.enemyBullet2_.intervalForPlayer_ = 0.0f;
+        bp.enemyBullet2_.HP_ = 10;
 
         blocks_ = distributer.createField( bp );
 
         for ( int y = 0; y < bp.sepY_; ++y ) {
             for ( int x = 0; x < bp.sepX_; ++x ) {
                 if ( blocks_[x,y].type_ == Block.Type.Empty ) {
-                    if ( x % 2 == 0 && y % 3 == 0 )
-                        blocks_[ x, y ].type_ = Block.Type.Trap1;
-                    if ( x % 2 != 0 && y % 3 != 0 )
-                        blocks_[ x, y ].type_ = Block.Type.Trap0;
+//                    if ( x % 2 == 0 && y % 3 == 0 )
+//                        blocks_[ x, y ].type_ = Block.Type.Trap1;
                 }
 				if ( blocks_[ x, y ].type_ != Block.Type.Empty ) {
 					totalBlockNum_++;

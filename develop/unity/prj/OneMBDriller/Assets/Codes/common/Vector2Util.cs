@@ -47,4 +47,9 @@ public class Vector2Util {
         max = curMax;
         return true;
     }
+
+    // 成分同士の掛け算
+    static public Vector2 mul(Vector2 l, Vector2 r) {
+        return new Vector2( l.x * r.x, l.y * r.y );
+    }
 }
