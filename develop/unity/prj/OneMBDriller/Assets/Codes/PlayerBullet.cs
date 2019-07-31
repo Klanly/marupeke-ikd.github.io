@@ -18,12 +18,14 @@ public class PlayerBullet : MonoBehaviour
     System.Action finishCallback_;
 
     // セットアップ
-    public void setup( Player player ) {
+	//  deg: 進行方向に対する撃ち出し角度
+    public void setup( Player player, float deg ) {
         curTime_ = 0.0f;
         blockCollideManager_ = player.getBlockCollideManager();
 
-        // Playerの進行方向へ飛ばす
-        transform.forward = player.transform.forward;
+		// Playerの進行方向を0度として+angle度へ飛ばす
+		var q = Quaternion.Euler( 0.0f, deg, 0.0f );
+		transform.forward = q * player.transform.forward;
         transform.position = player.transform.position;
         gameObject.SetActive( true );
     }

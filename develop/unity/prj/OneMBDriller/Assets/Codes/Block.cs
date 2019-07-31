@@ -83,6 +83,8 @@ public class Block
 	public void setDestroy() {
 		data0_ |= ( 1 << 24 );
         type_ = Type.Empty;
+		// 通知
+		GameManager.getInstance().setBrokenBlockNum( 1 );
 	}
 
 	public Type type_ = Type.Empty;

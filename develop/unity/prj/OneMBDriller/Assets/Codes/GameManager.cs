@@ -25,6 +25,15 @@ public class GameManager : MBSingleton<GameManager>
     [SerializeField]
     BlockEventManager blockEventManager_;
 
+	[SerializeField]
+	UnityEngine.UI.Text blockNumText_;
+
+
+	// 破壊されたブロック数を設定
+	public void setBrokenBlockNum( int num ) {
+		breakBlockNum_ += num;
+	}
+
     // Playerを取得
     public Player getPlayer( int idx = 0 ) {
         return player_;
@@ -87,7 +96,10 @@ public class GameManager : MBSingleton<GameManager>
                     if ( x % 2 != 0 && y % 3 != 0 )
                         blocks_[ x, y ].type_ = Block.Type.Trap0;
                 }
-            }
+				if ( blocks_[ x, y ].type_ != Block.Type.Empty ) {
+					totalBlockNum_++;
+				}
+			}
         }
 
         // チャンクストック作成
@@ -128,6 +140,11 @@ public class GameManager : MBSingleton<GameManager>
         player_.setup( collideManager_ );
     }
 
+	void updateBlockNumText() {
+		float r = ( float )breakBlockNum_ / totalBlockNum_;
+		blockNumText_.text = string.Format( "{0:#,0}/{1:#,0}({2:#.###%})", breakBlockNum_, totalBlockNum_, r );
+	}
+
     void Start()
     {
     }
@@ -136,11 +153,16 @@ public class GameManager : MBSingleton<GameManager>
     {
         // チャンク座標更新
         chunkManager_.updateChunk( player_.transform.localPosition );
-    }
 
-    SquareChunkManager chunkManager_ = new SquareChunkManager();
+		// ブロック数表記更新
+		updateBlockNumText();
+	}
+
+	SquareChunkManager chunkManager_ = new SquareChunkManager();
     Stack<ChunkBlocks> chunkRootStack_ = new Stack<ChunkBlocks>();
     Dictionary<Vector2Int, ChunkBlocks> activeChunkRoots_ = new Dictionary<Vector2Int, ChunkBlocks>();
     Block[,] blocks_;
     BlockCollideManager collideManager_ = new BlockCollideManager();
+	int breakBlockNum_ = 0;
+	int totalBlockNum_ = 0;
 }
