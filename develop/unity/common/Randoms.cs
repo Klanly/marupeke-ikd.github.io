@@ -13,7 +13,7 @@ public class Randoms {
             return new Vector3( Random.value, Random.value, Random.value );
         }
 
-        // 各要素0～1の乱数（スケール）
+        // 各要素0～scaleの乱数
         static public Vector3 value( Vector3 scale ) {
             return new Vector3( Random.value * scale.x, Random.value * scale.y, Random.value * scale.z );
         }
@@ -24,16 +24,16 @@ public class Randoms {
             return new Vector3( Random.value, 0.0f, Random.value );
         }
 
-        // 各要素-1.0f～1.0fの乱数
+        // 各要素-0.5f～0.5fの乱数
         static public Vector3 valueCenter()
         {
-            return new Vector3( 2.0f * ( Random.value - 0.5f ), 2.0f * ( Random.value - 0.5f ), 2.0f * ( Random.value - 0.5f ) );
+            return new Vector3( Random.value - 0.5f, Random.value - 0.5f, Random.value - 0.5f );
         }
 
-        // XZ要素-1.0f～1.0fの乱数
+        // XZ要素-0.5f～0.5fの乱数
         static public Vector3 valueCenterXZ()
         {
-            return new Vector3( 2.0f * ( Random.value - 0.5f ), 0.0f, 2.0f * ( Random.value - 0.5f ) );
+            return new Vector3( Random.value - 0.5f, 0.0f, Random.value - 0.5f );
         }
 
         // あるNに対して角度θだけ開きのあるランダムな方向
@@ -63,15 +63,43 @@ public class Randoms {
         }
     }
 
+    public class Vec2 {
+        // 各要素0～1の乱数
+        static public Vector2 value() {
+            return new Vector2( Random.value, Random.value );
+        }
+
+        // 各要素0～scaleの乱数
+        static public Vector2 value( float scaleX, float scaleY ) {
+            return new Vector2( Random.value * scaleX, Random.value * scaleY );
+        }
+        static public Vector2 value( Vector2 scale ) {
+            return new Vector2( Random.value * scale.x, Random.value * scale.y );
+        }
+
+        // 各要素-0.5f～0.5fの乱数
+        static public Vector3 valueCenter() {
+            return new Vector3( Random.value - 0.5f, Random.value - 0.5f );
+        }
+
+        // 各要素-scale*0.5～scale*0.5の乱数（幅高さ）
+        static public Vector2 valueCenter( float scaleX, float scaleY ) {
+            return new Vector2( ( Random.value - 0.5f ) * scaleX, ( Random.value - 0.5f ) * scaleY );
+        }
+        static public Vector2 valueCenter(Vector2 scale) {
+            return new Vector2( ( Random.value - 0.5f ) * scale.x, ( Random.value - 0.5f ) * scale.y );
+        }
+    }
+
     public class Float {
         // 0～1乱数
         static public float value() {
             return Random.value;
         }
 
-        // -1～1乱数
+        // -0.5～0.5乱数
         static public float valueCenter() {
-            return ( Random.value - 0.5f ) * 2.0f;
+            return ( Random.value - 0.5f );
         }
 
         // 指数分布待ち時間

@@ -1,0 +1,35 @@
+14
+31
+id	name	material	weight	weightUnit	dimensionX	dimensionY	dimensionZ	dimensionUnit	point	answer	image	errPos	comment
+string	string	string	float	string	float	float	float	string	string	string	string	string	string
+garbage_0001	ペットボトル	PET	10	g	7	25	7	cm	-	recycle	plastic-bottle-500ml	-	ペットボトルは「資源ゴミ」です
+garbage_0002	生ごみ	野菜の切れ端	60	g	10	8	7	cm	-	burn	369386	-	生ごみは「可燃ごみ」です
+garbage_0003	アイロン	鉄、プラスチック	2.1	kg	27	15	16	cm	-	noburn	924600	-	アイロンなどの小型家電は@「不燃ごみ」になります
+garbage_0004	衣類	布地	600	g	22	34	3	cm	-	recycle	3151衣類	-	衣類は拠点回収している@「リサイクル」ゴミです
+garbage_0005	サッカーボール	合皮	430	g	22	22	22	cm	-	burn	117	-	皮製品は「可燃ごみ」です
+garbage_0006	油の容器	プラスチック	75	g	14	27	14	cm	残り油あり	burn	1332327	-	汚れたプラスチック容器は@「可燃ごみ」です
+garbage_0007	アルミ箔	アルミニウム	5	g	28	1.2E-2	30	cm	-	noburn	1412166	-	アルミ箔は「不燃ごみ」扱いです
+garbage_0008	じゅうたん	コットン糸、パイルウール	8.5	kg	200	1.5	250	cm	-	huge	jutan	-	じゅうたんは「粗大ごみ」です
+garbage_0009	鏡	ガラス、アルミニウム	700	g	25	28	3	cm	-	noburn	mirror	-	30cm角以下の鏡は「不燃ごみ」です
+garbage_0010	瓶	ガラス	450	g	8	10	8	cm	割れている	noburn	1505404	-	割れた瓶は「不燃ごみ」扱い。@「割れ物危険」など張り紙を
+garbage_0011	瓶	ガラス	450	g	8	28	8	cm	-	recycle	1505379	-	ガラス瓶は「資源ごみ」です
+garbage_0012	鏡	ガラス、アルミニウム	3.7	kg	27	105	4	cm	-	huge	00734	-	30cm角以上の鏡は「粗大ごみ」扱いです
+garbage_0013	乾電池	マンガン	18	g	1.4	5	1.4	cm	-	noburn	1412217	-	マンガン電池は「不燃ごみ」です
+garbage_0014	乾電池	アルカリ	18	g	1.4	5	1.4	cm	-	noburn	1412217	-	アルカリ電池は「不燃ごみ」です
+garbage_0015	充電電池	ニッケル	18	g	1.4	5	1.4	cm	-	recycle	1544431	-	充電電池は拠点回収している@「リサイクル」ゴミです
+garbage_0016	携帯音楽プレイヤー	アルミニウム、プラスチック	76	g	4	8	0.6	cm	-	recycle	133664	-	携帯音楽プレイヤーは拠点回収@「リサイクル」ゴミです
+garbage_0017	CD	ポリカーボネイト	50	g	12	12	0.2	cm	-	burn	588	-	CDは「可燃ごみ」です
+garbage_0018	自転車	鉄	12.5	kg	130	80	45	cm	乗れる	recycle	3096自転車	-	乗れる自転車は拠点回収の@「リサイクル」ゴミです
+garbage_0019	自転車	鉄	12.5	kg	130	80	45	cm	壊れている	huge	3588壊れた自転車	-	壊れた自転車は「粗大ごみ」扱いです
+garbage_0020	洗濯機	鉄、プラスチック他	45	kg	70	110	65	cm	-	elec	wash_a02	-	洗濯機は「家電リサイクル法」対象@電化製品です
+garbage_0021	石油	石油	1	kg	8	12	8	cm	-	notop	sekiyu_oil	-	石油は収集対象外です。@販売店・専門業者に依頼します。
+garbage_0022	液晶テレビ	プラスチック、ガラス他	14	kg	65	48	22	cm	-	elec	5082	-	テレビは「家電リサイクル法」対象@家電製品です
+garbage_0023	長靴	ゴム	1.4	kg	28	35	14	cm	-	burn	45828	-	長靴等のゴム製品は「可燃ごみ」です
+garbage_0024	ぬいぐるみ	綿、ポリエステル	500	g	20	24	20	cm	-	burn	852975	-	ぬいぐるみは「可燃ごみ」です
+garbage_0025	ぬいぐるみ	綿、ポリエステル	3	kg	50	70	50	cm	-	huge	852975	-	30cm角以上のぬいぐるみは@「可燃ごみ」です
+garbage_0026	油粘土	鉱物粉、ワセリン、ひまし油等	400	g	14	9	3	cm	-	burn	1547204	-	油粘土は「可燃ごみ」です
+garbage_0027	コップ	ガラス	150	g	6	14	6	cm	-	noburn	dish_a26	-	ガラス製のコップは「不燃ごみ」です
+garbage_0028	蛍光管	ガラス、水銀	500	g	3	100	3	cm	-	recycle	284005	-	水銀を含む蛍光管は「資源ごみ」です
+garbage_0029	エアコン	鉄、プラスチック他	30	kg	85	35	30	cm	-	elec	illustkun-00915-ac-520x520	-	エアコンは「家電リサイクル法」対象@家電製品です
+garbage_0030	木の枝	木	3.7	kg	8	45	8	cm	-	burn	292185	-	木の枝は50cm、太さ10cmまでなら@「可燃ごみ」です
+garbage_0031	木の枝	木	5.8	kg	13	78	13	cm	-	notop	292185	-	木の枝は50cm、太さ10cm以上は収集@できません（業者依頼）。
