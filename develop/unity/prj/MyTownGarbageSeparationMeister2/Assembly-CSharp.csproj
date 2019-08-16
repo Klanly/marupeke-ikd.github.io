@@ -68,6 +68,10 @@
     <Compile Include="Assets\Codes\common\camera\CameraPicker.cs" />
     <Compile Include="Assets\Codes\common\camera\CameraUtil.cs" />
     <Compile Include="Assets\Codes\common\camera\FPSCameraMotion.cs" />
+    <Compile Include="Assets\Codes\common\camera\TPSCameraMotion.cs" />
+    <Compile Include="Assets\Codes\common\chunks\ChunkManager.cs" />
+    <Compile Include="Assets\Codes\common\chunks\SquareChunkManager.cs" />
+    <Compile Include="Assets\Codes\common\Clamps.cs" />
     <Compile Include="Assets\Codes\common\CollideUtil.cs" />
     <Compile Include="Assets\Codes\common\ColorHelper.cs" />
     <Compile Include="Assets\Codes\common\DeltaLerpManager.cs" />
@@ -97,9 +101,11 @@
     <Compile Include="Assets\Codes\common\OnCollideCallback.cs" />
     <Compile Include="Assets\Codes\common\PrefabUtil.cs" />
     <Compile Include="Assets\Codes\common\Randoms.cs" />
+    <Compile Include="Assets\Codes\common\Randoms\RandomPlace.cs" />
     <Compile Include="Assets\Codes\common\ResourceLoader.cs" />
     <Compile Include="Assets\Codes\common\ResurceLoaderUpdater.cs" />
     <Compile Include="Assets\Codes\common\shape\AABB.cs" />
+    <Compile Include="Assets\Codes\common\shape\AABB2D.cs" />
     <Compile Include="Assets\Codes\common\shape\Segment.cs" />
     <Compile Include="Assets\Codes\common\SimplePath.cs" />
     <Compile Include="Assets\Codes\common\sound\SoundManager.cs" />
@@ -108,11 +114,13 @@
     <Compile Include="Assets\Codes\common\SpriteUI\SpriteUI.cs" />
     <Compile Include="Assets\Codes\common\SpriteUI\SpriteUIController.cs" />
     <Compile Include="Assets\Codes\common\State.cs" />
+    <Compile Include="Assets\Codes\common\Swaps.cs" />
     <Compile Include="Assets\Codes\common\Table.cs" />
     <Compile Include="Assets\Codes\common\ToVal.cs" />
     <Compile Include="Assets\Codes\common\UIIntroAnimation.cs" />
     <Compile Include="Assets\Codes\common\UIIntroColorAnimation.cs" />
     <Compile Include="Assets\Codes\common\UIIntroTextColorAnimation.cs" />
+    <Compile Include="Assets\Codes\common\Vector2Util.cs" />
     <Compile Include="Assets\Codes\common\Vector3Util.cs" />
     <Compile Include="Assets\Codes\ErrorWindowFrame.cs" />
     <Compile Include="Assets\Codes\GabageInfoWindow.cs" />

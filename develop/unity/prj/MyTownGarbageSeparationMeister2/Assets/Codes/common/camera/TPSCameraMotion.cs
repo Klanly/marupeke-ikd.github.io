@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// FPSの基本操作をカメラに反映させるクラス
+// TPSの基本操作をカメラに反映させるクラス
 //  マウスカーソルは強制的に画面内に固定し、マウス移動量のみを捉える
 //  ESCを押すとカーソル固定は解除
 //  再度画面内をクリックしたら固定モードに
 //
-//  マウスの移動：視点を上下左右に動かす
-public class FPSCameraMotion : MonoBehaviour {
+//  マウスの左右移動：ターゲットキャラクタを上下左右に動かす
 
+public class TPSCameraMotion : MonoBehaviour
+{
     [SerializeField]
     bool bVisibleCursor_ = true;
     bool preVisibleCursor_ = true;
@@ -18,57 +19,31 @@ public class FPSCameraMotion : MonoBehaviour {
     float sensitivity_ = 1.0f;      // マウス1ドットに対する回転角度
 
     [SerializeField]
-    float maxPitchAngle_ = 80.0f;
-
-    [SerializeField]
-    float minPitchAngle_ = -80.0f;
-
-    [SerializeField]
     float moveSpeed_ = 1.0f / 60.0f;    // 1フレームでの移動スピード
 
-    [SerializeField]
-    Vector3 moveRangeMin_ = -Vector3.one;
-
-    [SerializeField]
-    Vector3 moveRangeMax_ = Vector3.one;
-
-    [SerializeField]
-    GameObject reticle_;
-
     // マウスモーションを反映させる？
-    public void setEnable( bool isEnable ) {
+    public void setEnable(bool isEnable) {
         bEnable_ = isEnable;
     }
 
-    // FPS視点移動のアクティブを切り替え
-    public void setActive( bool isAcive ) {
+    // TPS回転移動のアクティブを切り替え
+    public void setActive(bool isAcive) {
         bVisibleCursor_ = !isAcive;
     }
 
-    // レティクルの表示切替
-    public void showReticle( bool isShow ) {
-        reticle_.SetActive( isShow );
-    }
-
-    // 視点をリセット
-    public void resetPose( Vector3 forward ) {
-        SphereSurfUtil.convPosToPoler( forward, out pitchRot_, out yawRot_ );
-    }
-
     private void OnDestroy() {
-        Cursor.visible = true;    
+        Cursor.visible = true;
     }
 
-    private void Awake() {
-        resetPose( transform.forward );
-    }
-
-    // Use this for initialization
-    void Start () {
+    // Start is called before the first frame update
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         // Escapeで強制カーソル表示後に画面内をクリックしたら
         // カーソルを再度非表示に
         if (
@@ -104,7 +79,7 @@ public class FPSCameraMotion : MonoBehaviour {
             return;
         }
 
-        // FPSカメラはカーソルがOFFの時だけアクティブ
+        // TPSカメラはカーソルがOFFの時だけアクティブ
         if ( bVisibleCursor_ == true )
             return;
 
@@ -114,19 +89,10 @@ public class FPSCameraMotion : MonoBehaviour {
 
         // 基点からの相対値で軸回転角度を算出
         // X軸方向：Y軸差分回転量
-        // Y軸方向：X軸回転量 (minPitchAngle_～maxPitchAngle_）
+        // Y軸方向：なし
         Vector2 refDist = new Vector2( Input.GetAxis( "Mouse X" ), Input.GetAxis( "Mouse Y" ) ) * sensitivity_;
-        refDist.x *= -1.0f;     // マウスを左右に移動したらそちらへ向く
-        if ( pitchRot_ + refDist.y < minPitchAngle_ )
-            pitchRot_ = minPitchAngle_;
-        else if ( pitchRot_ + refDist.y > maxPitchAngle_ )
-            pitchRot_ = maxPitchAngle_;
-        else
-            pitchRot_ += refDist.y;
-        yawRot_ += refDist.x;
-
-        var forward = SphereSurfUtil.convPolerToPos( pitchRot_, yawRot_ );
-        var q = Quaternion.LookRotation( forward );
+        var defQ = Quaternion.Euler( 0.0f, refDist.x, 0.0f );
+        var q = defQ * transform.localRotation;
         transform.localRotation = q;
 
         // WASDで移動（現在の姿勢ベース）
@@ -153,6 +119,7 @@ public class FPSCameraMotion : MonoBehaviour {
 
         var p = transform.localPosition;
         p += xMove + yMove;
+/*
         if ( p.x < moveRangeMin_.x ) {
             p.x = moveRangeMin_.x;
         } else if ( p.x > moveRangeMax_.x ) {
@@ -163,6 +130,7 @@ public class FPSCameraMotion : MonoBehaviour {
         } else if ( p.z > moveRangeMax_.z ) {
             p.z = moveRangeMax_.z;
         }
+*/
         transform.localPosition = p;
     }
 
