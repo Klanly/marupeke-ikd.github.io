@@ -15,6 +15,7 @@ public class SpriteUIController : MonoBehaviour
 
     void Update()
     {
+        // クリック押し下げ判定
         if ( Input.GetMouseButtonDown( 0 ) == true ) {
             Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
             RaycastHit hit;
@@ -48,6 +49,31 @@ public class SpriteUIController : MonoBehaviour
                     curSelectUI_ = null;
                 }
             }
+        } else {
+            // カーソルフォーカス判定
+/*
+            Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
+            RaycastHit hit;
+            if ( Physics.Raycast( ray, out hit, maxDistance_ ) == true ) {
+                var UI = hit.collider.gameObject.GetComponent<SpriteUI>();
+                if ( UI != null ) {
+                    if ( curFocusUI_ == null ) {
+                        curFocusUI_ = UI;
+                        UI.onFocus();
+                    } else if ( curFocusUI_ != UI ) {
+                        curSelectUI_.releaseFocus();
+                        curFocusUI_ = UI;
+                        UI.onFocus();
+                    }
+                }
+            } else {
+                // カーソル案フォーカス
+                if ( curFocusUI_ != null ) {
+                    curFocusUI_.onUnfocus();
+                    curFocusUI_ = null;
+                }
+            }
+*/
         }
     }
 
