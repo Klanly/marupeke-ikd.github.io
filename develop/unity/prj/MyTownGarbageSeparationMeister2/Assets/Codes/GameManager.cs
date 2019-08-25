@@ -36,7 +36,12 @@ public class GameManager : MonoBehaviour {
     public System.Action FinishCallback { set { finishCallback_ = value; } }
     System.Action finishCallback_ = null;
 
+    // 間違った後の処理
+    void retry() {
+        uiActive( true );
+    }
 
+    // 正解したので次へ
     void turnNext() {
         uiActive( false );
         infoWindow_.shrink();
@@ -120,7 +125,8 @@ public class GameManager : MonoBehaviour {
         } else {
             // 不正解
             onUncorrect( () => {
-                turnNext();
+                retry();
+                // turnNext();
             } );
         }
     }
