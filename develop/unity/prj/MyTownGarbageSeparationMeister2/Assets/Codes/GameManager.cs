@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour {
     // 正解したので次へ
     void turnNext() {
         uiActive( false );
+        alreadyMissed_ = false;
         infoWindow_.shrink();
         if ( turnTableManage_.setNext( (param) => {
 
@@ -96,7 +97,13 @@ public class GameManager : MonoBehaviour {
             card.point = p.point_;
             param.cards.Add( card );
         }
-        param.cards = ListUtil.shuffle( ref param.cards );
+        int testNum = n < 10 ? n : 10;
+        var shuffledList = ListUtil.shuffle( ref param.cards );
+        var pickups = new List< Card.Param >();
+        for ( int i = 0; i < testNum; ++i ) {
+            pickups.Add( shuffledList[ i ] );
+        }
+        param.cards = pickups;
 
         turnTableManage_.setup( param );
 
@@ -136,7 +143,8 @@ public class GameManager : MonoBehaviour {
         Debug.Log( "正解！" );
 
         // カウンタ
-        correctNum_++;
+        if ( alreadyMissed_ == false )
+            correctNum_++;
         conter_.text = string.Format( "正解：{0} 不正解：{1}  {2}/{3}", correctNum_, missNum_, correctNum_ + missNum_, turnTableManage_.getCardNum() );
 
         good_.SetActive( true );
@@ -152,7 +160,9 @@ public class GameManager : MonoBehaviour {
         Debug.Log( "不正解…" );
 
         // カウンタ
-        missNum_++;
+        if ( alreadyMissed_ == false )
+            missNum_++;
+        alreadyMissed_ = true;
         conter_.text = string.Format( "正解：{0} 不正解：{1}  {2}/{3}", correctNum_, missNum_, correctNum_ + missNum_, turnTableManage_.getCardNum() );
 
         no_.SetActive( true );
@@ -233,4 +243,5 @@ public class GameManager : MonoBehaviour {
     State state_;
     int correctNum_ = 0;
     int missNum_ = 0;
+    bool alreadyMissed_ = false;
 }
