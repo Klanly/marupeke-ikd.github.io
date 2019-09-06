@@ -205,6 +205,27 @@ namespace Mahjang {
             return !isTyunTyan();
         }
 
+        // 数字を取得
+        public int toNumber() {
+            if ( isValid() == false || isJi() == true ) {
+                return -1;
+            }
+            return ( PaiType % 9 ) + 1;
+        }
+
+        // タイプ取得
+        public Type getType() {
+            if ( isValid() == false )
+                return Type.None;
+            if ( PaiType >= S1 && PaiType <= S9 )
+                return Type.Sozu;
+            else if ( PaiType >= P1 && PaiType <= P9 )
+                return Type.Pinzu;
+            else if ( PaiType >= M1 && PaiType <= M9 )
+                return Type.Manzu;
+            return Type.Ji;
+        }
+
         // 順子として次の牌が成立している？
         public bool isNext( Pai next ) {
             if ( isNumber() == false || next.isNumber() == false ) {
@@ -335,6 +356,7 @@ namespace Mahjang {
             }
             pais_ = pais;
             bMinko_ = isMinko;
+            calcHash(); // ハッシュ値算出
             return type_;
         }
 
@@ -400,6 +422,11 @@ namespace Mahjang {
             return null;
         }
 
+        // ハッシュ値を取得
+        public long getHash() {
+            return hash_;
+        }
+
         // 符数を取得
         //  待ちは考慮しない
         //  bakaze: 場風（対子の符に関係する）
@@ -456,9 +483,42 @@ namespace Mahjang {
             return 0;
         }
 
+        // ハッシュ値算出
+        void calcHash() {
+            // Noneは考えない事にする
+            if ( type_ == Type.None ) {
+                hash_ = -1;
+                return;
+            }
+            // 1-6: 牌の種類(0～33)。順子は最初の牌
+            // 7-8: 門面種（00:対子、01:順子、10:刻子、11:槓子）
+            // 9  : 明刻（0:明刻、1:暗刻）
+            // 10 : 国士無双（他のビットは全部0）
+            int tn = 0;
+            switch ( type_ ) {
+                case Type.Shuntsu:
+                    tn = 1;
+                    break;
+                case Type.Koutsu:
+                    tn = 2;
+                    break;
+                case Type.Kantsu:
+                    tn = 3;
+                    break;
+                case Type.Kokushi:
+                    hash_ = 1 << 9;
+                    return;
+            }
+            int mn = ( bMinko_ ? 0 : 1 );
+            int p = pais_[ 0 ].PaiType;
+
+            hash_ = p | ( tn << 6 ) | ( mn << 8 );
+        }
+
         Pai[] pais_;
         Type type_ = Type.None;
         bool bMinko_ = false;
+        long hash_ = -1;
     }
 
     // 手配セット
@@ -730,44 +790,42 @@ namespace Mahjang {
 					parentGroupTree.nextGroupTrees_.Add( tree );
 					// 残りのサブセットで再度解析
 					mentsuAnalyze( subPais, ref tree );
-					return;
-				} else {
-					// 刻子不成立
-					// nを先頭にした順子が出来るかチェック
-					if ( n  % 9 >= 7 ) {
-						// 順子不成立
-						continue;
-					}
-					subPais.Clear();
-					List<Pai> shuntsu = new List<Pai>();
-					int searchNum = n;
-					for ( int i = 0; i < pais.Count; ++i ) {
-						if (pais[ i ].PaiType == searchNum) {
-							shuntsu.Add( pais[ i ] );
-							if (shuntsu.Count == 3) {
-								// 順子成立
-								// 残りをサブセットへ
-								for (i = i + 1; i < pais.Count; ++i) {
-									subPais.Add( pais[ i ] );
-								}
-								break;
-							}
-							searchNum++;
-						} else {
-							subPais.Add( pais[ i ] );
-						}
-					}
-					if ( shuntsu.Count == 3 ) {
-						// 順子成立
-						PaiGroup g = new PaiGroup();
-						g.set( shuntsu, false );
-						var tree = new GroupTree();
-						tree.group_ = g;
-						parentGroupTree.nextGroupTrees_.Add( tree );
-						// 残りのサブセットで再度解析
-						mentsuAnalyze( subPais, ref tree );
-						return;
-					}
+				}
+
+                if ( n % 9 >= 7 ) {
+                    // 順子不成立
+                    continue;
+                }
+
+                // nを先頭にした順子が出来るかチェック
+                subPais.Clear();
+                List<Pai> shuntsu = new List<Pai>();
+                int searchNum = n;
+                for ( int i = 0; i < pais.Count; ++i ) {
+                    if ( pais[ i ].PaiType == searchNum ) {
+                        shuntsu.Add( pais[ i ] );
+                        if ( shuntsu.Count == 3 ) {
+                            // 順子成立
+                            // 残りをサブセットへ
+                            for ( i = i + 1; i < pais.Count; ++i ) {
+                                subPais.Add( pais[ i ] );
+                            }
+                            break;
+                        }
+                        searchNum++;
+                    } else {
+                        subPais.Add( pais[ i ] );
+                    }
+                }
+				if ( shuntsu.Count == 3 ) {
+					// 順子成立
+					PaiGroup g = new PaiGroup();
+					g.set( shuntsu, false );
+					var tree = new GroupTree();
+					tree.group_ = g;
+					parentGroupTree.nextGroupTrees_.Add( tree );
+					// 残りのサブセットで再度解析
+					mentsuAnalyze( subPais, ref tree );
 				}
 			}
 		}
@@ -796,9 +854,23 @@ namespace Mahjang {
 				var groupStack = new Stack<PaiGroup>();
 				collectMentsuGroups( g, groupStack , ref tmpGroups );
 			}
+            var sameMenzenChecker = new HashSet<long>();
 			foreach ( var g in tmpGroups ) {
-				if ( g.Count == mentsuNum )
-					mentsuGroups.Add( g );
+                if ( g.Count == mentsuNum ) {
+                    g.Sort( (a, b) => {
+                        if ( a.getHash() == b.getHash() )
+                            return 0;
+                        return ( a.getHash() < b.getHash() ? -1 : 1 );
+                    } );
+                    long hash = 0;
+                    for ( int i = 0; i < g.Count; ++i ) {
+                        hash |= ( g[i].getHash() << ( i * 9 ) );
+                    }
+                    if ( sameMenzenChecker.Contains( hash ) == false ) {
+                        mentsuGroups.Add( g );
+                        sameMenzenChecker.Add( hash );
+                    }
+                }
 			}
 
 			return mentsuGroups.Count > 0;
@@ -913,11 +985,24 @@ namespace Mahjang {
             public List<YakuUnit> yakuList_ = new List<YakuUnit>();
         }
 
+        // 場の状態
+        public class BaState {
+            public Kaze bakaze_ = Kaze.Ton;    // 場風
+            public Kaze zikaze_ = Kaze.Ton;    // 上がり手の風
+            public int ponba_ = 1;             // 本場数
+            public bool bOya_ = false; // 上り手は親？
+
+            // 点数レート
+            public float rate() {
+                return bOya_ ? 1.5f : 1.0f;
+            }
+        }
+
         // 役と点数を解析
         //  ankous : 伏せ牌
         //  minkous: 明刻及び槓子（暗槓、明槓）
         //  isOya  : 親？
-        public bool analyze( List< Pai > ankous, List< PaiGroup > minkous, bool isOya ) {
+        public bool analyze( List< Pai > ankous, List< PaiGroup > minkous, BaState baState ) {
             Pais tehai = new Pais();
             if ( tehai.setPais( ankous, minkous ) == false ) {
                 // 成立していない
@@ -928,7 +1013,7 @@ namespace Mahjang {
             List<YakuData> yakuDataList = new List<YakuData>();
             foreach ( var ps in paiSetList ) {
                 YakuData yakuData = null;
-                if ( analyzeYaku( ps, isOya, out yakuData ) == true ) {
+                if ( analyzeYaku( ps, baState, out yakuData ) == true ) {
                     yakuDataList.Add( yakuData );
                 }
             }
@@ -937,32 +1022,97 @@ namespace Mahjang {
         }
 
         // 役を解析
-        bool analyzeYaku( PaiSet paiSet, bool isOya, out YakuData data ) {
+        bool analyzeYaku( PaiSet paiSet, BaState baState, out YakuData data ) {
             data = new YakuData();
-            float oyaRate = isOya ? 1.5f : 1.0f;
 
             // 国士無双？
+            if ( judge_Kokushimusou( paiSet, baState, data ) == true ) {
+                return true;
+            }
+
+            // 九蓮宝燈（チューレンポートウ）
+            if ( judge_Tyurenpoto( paiSet, baState, data ) == true ) {
+                return true;
+            }
+            return true;
+        }
+
+        // 国士無双？
+        bool judge_Kokushimusou( PaiSet paiSet, BaState baState, YakuData yakuData ) {
             if ( paiSet.ankouGroup_[ 0 ].getType() == PaiGroup.Type.Kokushi ) {
                 // 13面待ち？
                 var pais = paiSet.ankouGroup_[ 0 ].getPais();
                 Pai agari = paiSet.ankouGroup_[ 0 ].getAgarihai();
                 if ( agari == null ) {
-                    data.bValid_ = false;
+                    yakuData.bValid_ = false;
                     return false;   // 上がり牌が無い
                 }
                 foreach ( var p in pais ) {
                     if ( p != agari && p.PaiType == agari.PaiType ) {
                         // 13面待ちなのでダブル役満
-                        data.yakuList_.Add( new YakuUnit { yaku_ = Yaku.KokushiMusou13, score_ = ( int )( 8000 * 8 * oyaRate ), bYakuman_ = true } );
+                        yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.KokushiMusou13, score_ = ( int )( 8000 * 8 * baState.rate() ), bYakuman_ = true } );
                         return true;
                     }
                 }
                 // 単騎待ち通常国士無双
-                data.yakuList_.Add( new YakuUnit { yaku_ = Yaku.Kokushimusou, score_ = ( int )( 8000 * 4 * oyaRate ), bYakuman_ = true } );
+                yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.Kokushimusou, score_ = ( int )( 8000 * 4 * baState.rate() ), bYakuman_ = true } );
                 return true;
             }
+            return false;
+        }
 
-
+        // 
+        bool judge_Tyurenpoto( PaiSet paiSet, BaState baState, YakuData yakuData ) {
+            // 全て伏せ牌
+            // 全て同じ種類の数牌
+            // 11123456789999 + 任意の数牌
+            if ( paiSet.minkoGroup_.Count > 0 ) {
+                return false;
+            }
+            Pai agari = null;
+            var nums = new Dictionary<int, int>();
+            Pai def = paiSet.ankouGroup_[ 0 ].getPais()[ 0 ];
+            var type = def.getType();
+            if ( type == Pai.Type.None || type == Pai.Type.Ji ) {
+                return false;
+            }
+            foreach ( var g in paiSet.ankouGroup_ ) {
+                if ( agari == null ) {
+                    agari = g.getAgarihai();
+                }
+                foreach ( var p in g.getPais() ) {
+                    if ( p.isNumber() == false || p.getType() != type ) {
+                        return false;
+                    }
+                    int n = p.toNumber();
+                    if ( nums.ContainsKey( n ) == false ) {
+                        nums[ n ] = 0;
+                    }
+                    nums[ n ]++;
+                }
+            }
+            if ( nums.Count != 9 ) {
+                return false;   // 種類が足りない
+            }
+            int[] nset = new int[] { 3, 1, 1, 1, 1, 1, 1, 1, 3 };
+            int toitsuNum = 0;
+            for ( int i = 1; i <= 9; ++i ) {
+                nums[ i ] -= nset[ i - 1 ];
+                if ( nums[ i ] < 0 ) {
+                    return false;
+                }
+                if ( nums[ i ] == 1 ) {
+                    toitsuNum = i;  // 対子の数
+                }
+            }
+            // 九連確定
+            if ( toitsuNum == agari.toNumber() ) {
+                // 純正九連
+                yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.ZyunseiTyurenpoto, score_ = ( int )( 8000 * 8 * baState.rate() ), bYakuman_ = true } );
+                return true;
+            }
+            // 九連
+            yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.Tyurenpoto, score_ = ( int )( 8000 * 4 * baState.rate() ), bYakuman_ = true } );
             return true;
         }
     }
