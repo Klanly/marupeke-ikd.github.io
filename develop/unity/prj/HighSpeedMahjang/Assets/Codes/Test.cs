@@ -295,7 +295,7 @@ public class Test : MonoBehaviour
         }
 
         // 大四喜、四槓子、四暗刻単騎、字一色
-        if ( true ) {
+        if ( false ) {
             var ankous = new List<Pai>() {
                 new Pai( 33 ),
                 new Pai( 33 ) { Agari = true },
@@ -329,6 +329,414 @@ public class Test : MonoBehaviour
             var calc = new MahjangScoreCalculator();
             var ba = new MahjangScoreCalculator.BaState();
             ba.bOya_ = true;
+            calc.analyze( ankous, minkous, ba );
+        }
+        // 清一色
+        if ( false ) {
+            var ankous = new List<Pai>() {
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 2 ),
+                new Pai( Pai.S1 + 2 ),
+                new Pai( Pai.S1 + 2 ),
+                new Pai( Pai.S1 + 3 ),
+                new Pai( Pai.S1 + 3 ),
+                new Pai( Pai.S1 + 3 ),
+                new Pai( Pai.S1 + 5 ),
+                new Pai( Pai.S1 + 5 ),
+                new Pai( Pai.S1 + 5 ) { Agari = true },
+                new Pai( Pai.S1 + 6 ),
+                new Pai( Pai.S1 + 6 ),
+            };
+            var minkous = new List<PaiGroup>();
+            var calc = new MahjangScoreCalculator();
+            var ba = new MahjangScoreCalculator.BaState();
+            ba.bOya_ = true;
+            calc.analyze( ankous, minkous, ba );
+        }
+        // 二盃口
+        if ( false ) {
+            var ankous = new List<Pai>() {
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 2 ),
+                new Pai( Pai.S1 + 2 ),
+                new Pai( Pai.S1 + 2 ),
+                new Pai( Pai.S1 + 2 ),
+                new Pai( Pai.S1 + 3 ),
+                new Pai( Pai.S1 + 3 ),
+                new Pai( Pai.S1 + 3 ),
+                new Pai( Pai.S1 + 3 ) { Agari = true },
+                new Pai( Pai.S1 + 6 ),
+                new Pai( Pai.S1 + 6 ),
+            };
+            var minkous = new List<PaiGroup>();
+            var calc = new MahjangScoreCalculator();
+            var ba = new MahjangScoreCalculator.BaState();
+            ba.bOya_ = true;
+            calc.analyze( ankous, minkous, ba );
+        }
+
+        // 純チャン
+        if ( false ) {
+            var ankous = new List<Pai>() {
+                new Pai( Pai.S1 + 0 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 2 ),
+                new Pai( Pai.S1 + 0 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 2 ),
+                new Pai( Pai.S1 + 6 ),
+                new Pai( Pai.S1 + 7 ),
+                new Pai( Pai.S1 + 8 ),
+                new Pai( Pai.S1 + 8 ),
+                new Pai( Pai.S1 + 8 ),
+                new Pai( Pai.S1 + 8 ) { Agari = true },
+                new Pai( Pai.P1 ),
+                new Pai( Pai.P1 ),
+            };
+            var minkous = new List<PaiGroup>();
+            var calc = new MahjangScoreCalculator();
+            var ba = new MahjangScoreCalculator.BaState();
+            ba.bOya_ = true;
+            calc.analyze( ankous, minkous, ba );
+        }
+
+        // 混一色
+        if ( false ) {
+            var ankous = new List<Pai>() {
+                new Pai( Pai.S1 + 0 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 2 ),
+                new Pai( Pai.S1 + 0 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 2 ),
+                new Pai( Pai.S1 + 6 ),
+                new Pai( Pai.S1 + 7 ),
+                new Pai( Pai.S1 + 8 ),
+                new Pai( Pai.S1 + 8 ),
+                new Pai( Pai.S1 + 8 ),
+                new Pai( Pai.S1 + 8 ) { Agari = true },
+                new Pai( Pai.Ha ),
+                new Pai( Pai.Ha ),
+            };
+            var minkous = new List<PaiGroup>();
+            var calc = new MahjangScoreCalculator();
+            var ba = new MahjangScoreCalculator.BaState();
+            ba.bOya_ = true;
+            calc.analyze( ankous, minkous, ba );
+        }
+        // 三槓子
+        if ( false ) {
+            var ankous = new List<Pai>() {
+                new Pai( 9 ),
+                new Pai( 9 ),
+                new Pai( 7 ),
+                new Pai( 7 ),
+                new Pai( 7 ) { Agari = true }
+            };
+            var mp = new List<Pai>() {
+                new Pai( 28 ),
+                new Pai( 28 ),
+                new Pai( 28 ),
+                new Pai( 28 ),
+                new Pai( 29 ),
+                new Pai( 29 ),
+                new Pai( 29 ),
+                new Pai( 29 ),
+                new Pai( 30 ),
+                new Pai( 30 ),
+                new Pai( 30 ),
+                new Pai( 30 ),
+            };
+            var minkous = new List<PaiGroup>();
+            for ( int i = 0; i < 3; ++i ) {
+                var pg = new PaiGroup();
+                for ( int p = 0; p < 4; ++p ) {
+                    pg.set( mp, i * 4, 4, true );
+                }
+                minkous.Add( pg );
+            }
+            var calc = new MahjangScoreCalculator();
+            var ba = new MahjangScoreCalculator.BaState();
+            ba.bOya_ = true;
+            calc.analyze( ankous, minkous, ba );
+        }
+
+        // 小三元
+        if ( false ) {
+            var ankous = new List<Pai>() {
+                new Pai( Pai.Ha ),
+                new Pai( Pai.Ha ),
+                new Pai( Pai.Ha ),
+                new Pai( Pai.Ht ),
+                new Pai( Pai.Ht ),
+                new Pai( Pai.Ht ),
+                new Pai( Pai.M1 ),
+                new Pai( Pai.M1 + 1 ),
+                new Pai( Pai.M1 + 2 ),
+                new Pai( Pai.S1 + 8 ),
+                new Pai( Pai.S1 + 8 ),
+                new Pai( Pai.S1 + 8 ) { Agari = true },
+                new Pai( Pai.Tu ),
+                new Pai( Pai.Tu ),
+            };
+            var minkous = new List<PaiGroup>();
+            var calc = new MahjangScoreCalculator();
+            var ba = new MahjangScoreCalculator.BaState();
+            ba.bOya_ = true;
+            calc.analyze( ankous, minkous, ba );
+        }
+        // チャンタ
+        if ( false ) {
+            var ankous = new List<Pai>() {
+                new Pai( Pai.S1 ),
+                new Pai( Pai.S1 ),
+                new Pai( Pai.S1 ),
+                new Pai( Pai.S1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 2 ),
+                new Pai( Pai.M1 ),
+                new Pai( Pai.M1 + 1 ),
+                new Pai( Pai.M1 + 2 ),
+                new Pai( Pai.Tu ),
+                new Pai( Pai.Tu ),
+                new Pai( Pai.Tu ) { Agari = true },
+                new Pai( Pai.P9 ),
+                new Pai( Pai.P9 ),
+            };
+            var ms = new List<Pai>() {
+                new Pai( Pai.M1 ),
+                new Pai( Pai.M1 + 1 ),
+                new Pai( Pai.M1 + 2 ),
+            };
+            var minkous = new List<PaiGroup>();
+            var pg = new PaiGroup();
+            pg.set( ms, true );
+            minkous.Add( pg );
+            var calc = new MahjangScoreCalculator();
+            var ba = new MahjangScoreCalculator.BaState();
+            ba.bOya_ = true;
+            calc.analyze( ankous, minkous, ba );
+        }
+        // 一気通貫
+        if ( false ) {
+            var ankous = new List<Pai>() {
+                new Pai( Pai.S1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 2 ),
+                new Pai( Pai.S1 + 3 ),
+                new Pai( Pai.S1 + 4 ),
+                new Pai( Pai.S1 + 5 ),
+                new Pai( Pai.S1 + 6 ),
+                new Pai( Pai.S1 + 7 ),
+                new Pai( Pai.S1 + 8 ),
+                new Pai( Pai.Tu ),
+                new Pai( Pai.Tu ),
+                new Pai( Pai.Tu ) { Agari = true },
+                new Pai( Pai.P9 ),
+                new Pai( Pai.P9 ),
+            };
+            var minkous = new List<PaiGroup>();
+            var calc = new MahjangScoreCalculator();
+            var ba = new MahjangScoreCalculator.BaState();
+            ba.bOya_ = true;
+            calc.analyze( ankous, minkous, ba );
+        }
+        // 混老頭
+        if ( false ) {
+            var ankous = new List<Pai>() {
+                new Pai( Pai.S1 ),
+                new Pai( Pai.S1 ),
+                new Pai( Pai.S1 ),
+                new Pai( Pai.S9 ),
+                new Pai( Pai.S9 ),
+                new Pai( Pai.S9 ),
+                new Pai( Pai.M1 ),
+                new Pai( Pai.M1 ),
+                new Pai( Pai.M1 ),
+                new Pai( Pai.Ha ) { Agari = true },
+                new Pai( Pai.Ha ),
+            };
+            var ms = new List<Pai>() {
+                new Pai( Pai.M9 ),
+                new Pai( Pai.M9 ),
+                new Pai( Pai.M9 ),
+            };
+            var minkous = new List<PaiGroup>();
+            var pg = new PaiGroup();
+            pg.set( ms, true );
+            minkous.Add( pg );
+            var calc = new MahjangScoreCalculator();
+            var ba = new MahjangScoreCalculator.BaState();
+            ba.bOya_ = true;
+            calc.analyze( ankous, minkous, ba );
+        }
+        // 三色同順
+        if ( false ) {
+            var ankous = new List<Pai>() {
+                new Pai( Pai.S1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 2 ),
+                new Pai( Pai.P1 ),
+                new Pai( Pai.P1 + 1 ),
+                new Pai( Pai.P1 + 2 ),
+                new Pai( Pai.M1 ),
+                new Pai( Pai.M1 + 1 ),
+                new Pai( Pai.M1 + 2 ),
+                new Pai( Pai.Tu ),
+                new Pai( Pai.Tu ),
+                new Pai( Pai.Tu ) { Agari = true },
+                new Pai( Pai.P9 ),
+                new Pai( Pai.P9 ),
+            };
+            var minkous = new List<PaiGroup>();
+            var calc = new MahjangScoreCalculator();
+            var ba = new MahjangScoreCalculator.BaState();
+            ba.bOya_ = true;
+            calc.analyze( ankous, minkous, ba );
+        }
+        // 三色同刻
+        if ( false ) {
+            var ankous = new List<Pai>() {
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.P1 + 1 ),
+                new Pai( Pai.P1 + 1 ),
+                new Pai( Pai.P1 + 1 ),
+                new Pai( Pai.M1 + 1 ),
+                new Pai( Pai.M1 + 1 ),
+                new Pai( Pai.M1 + 1 ),
+                new Pai( Pai.P1 + 2 ),
+                new Pai( Pai.P1 + 3 ),
+                new Pai( Pai.P1 + 4 ) { Agari = true },
+                new Pai( Pai.P9 ),
+                new Pai( Pai.P9 ),
+            };
+            var minkous = new List<PaiGroup>();
+            var calc = new MahjangScoreCalculator();
+            var ba = new MahjangScoreCalculator.BaState();
+            ba.bOya_ = true;
+            calc.analyze( ankous, minkous, ba );
+        }
+        // 三暗刻
+        if ( false ) {
+            var ankous = new List<Pai>() {
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.P1 + 1 ),
+                new Pai( Pai.P1 + 1 ),
+                new Pai( Pai.P1 + 1 ),
+                new Pai( Pai.M1 + 1 ),
+                new Pai( Pai.M1 + 1 ),
+                new Pai( Pai.M1 + 1 ),
+                new Pai( Pai.P1 + 2 ),
+                new Pai( Pai.P1 + 3 ),
+                new Pai( Pai.P1 + 4 ) { Agari = true },
+                new Pai( Pai.P9 ),
+                new Pai( Pai.P9 ),
+            };
+            var minkous = new List<PaiGroup>();
+            var calc = new MahjangScoreCalculator();
+            var ba = new MahjangScoreCalculator.BaState();
+            ba.bOya_ = true;
+            calc.analyze( ankous, minkous, ba );
+        }
+        // 対々和
+        if ( false ) {
+            var ankous = new List<Pai>() {
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.P1 + 1 ),
+                new Pai( Pai.P1 + 1 ),
+                new Pai( Pai.P1 + 1 ),
+                new Pai( Pai.M1 + 1 ),
+                new Pai( Pai.M1 + 1 ),
+                new Pai( Pai.M1 + 1 ),
+                new Pai( Pai.P9 ){ Agari = true },
+                new Pai( Pai.P9 ),
+            };
+            var ms = new List<Pai>() {
+                new Pai( Pai.M9 ),
+                new Pai( Pai.M9 ),
+                new Pai( Pai.M9 ),
+                new Pai( Pai.M9 ),
+            };
+            var minkous = new List<PaiGroup>();
+            var pg = new PaiGroup();
+            pg.set( ms, true );
+            minkous.Add( pg );
+            var calc = new MahjangScoreCalculator();
+            var ba = new MahjangScoreCalculator.BaState();
+            ba.bOya_ = true;
+            calc.analyze( ankous, minkous, ba );
+        }
+        // ダブ東
+        if ( false ) {
+            var ankous = new List<Pai>() {
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.P1 + 1 ),
+                new Pai( Pai.P1 + 1 ),
+                new Pai( Pai.P1 + 1 ),
+                new Pai( Pai.M1 + 1 ),
+                new Pai( Pai.M1 + 2 ),
+                new Pai( Pai.M1 + 3 ),
+                new Pai( Pai.P9 ){ Agari = true },
+                new Pai( Pai.P9 ),
+            };
+            var ms = new List<Pai>() {
+                new Pai( Pai.To ),
+                new Pai( Pai.To ),
+                new Pai( Pai.To ),
+            };
+            var minkous = new List<PaiGroup>();
+            var pg = new PaiGroup();
+            pg.set( ms, true );
+            minkous.Add( pg );
+            var calc = new MahjangScoreCalculator();
+            var ba = new MahjangScoreCalculator.BaState();
+            ba.bOya_ = true;
+            ba.bakaze_ = Kaze.Ton;
+            ba.zikaze_ = Kaze.Ton;
+            calc.analyze( ankous, minkous, ba );
+        }
+        // ダブ南
+        if ( true ) {
+            var ankous = new List<Pai>() {
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.S1 + 1 ),
+                new Pai( Pai.P1 + 1 ),
+                new Pai( Pai.P1 + 1 ),
+                new Pai( Pai.P1 + 1 ),
+                new Pai( Pai.Na ),
+                new Pai( Pai.Na ),
+                new Pai( Pai.Na ),
+                new Pai( Pai.P9 ){ Agari = true },
+                new Pai( Pai.P9 ),
+            };
+            var ms = new List<Pai>() {
+                new Pai( Pai.S1 + 3 ),
+                new Pai( Pai.S1 + 4 ),
+                new Pai( Pai.S1 + 5 ),
+            };
+            var minkous = new List<PaiGroup>();
+            var pg = new PaiGroup();
+            pg.set( ms, true );
+            minkous.Add( pg );
+            var calc = new MahjangScoreCalculator();
+            var ba = new MahjangScoreCalculator.BaState();
+            ba.bOya_ = true;
+            ba.bakaze_ = Kaze.Nan;
+            ba.zikaze_ = Kaze.Nan;
             calc.analyze( ankous, minkous, ba );
         }
     }

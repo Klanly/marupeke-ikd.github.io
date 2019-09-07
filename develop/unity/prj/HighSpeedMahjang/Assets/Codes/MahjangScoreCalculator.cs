@@ -959,31 +959,31 @@ namespace Mahjang {
 
             // 2飜役
             Daburi,         // ダブリー
-            Titoitsu,       // 七対子
-            Dabuton,        // ダブ東
-            Dabunan,        // ダブ南
-            Dabusha,        // ダブ西
-            Dabupei,        // ダブ北
-            ToiToi,         // 対々和
-            Sananko,        // 三暗刻
-            Sanshokudouko,  // 三色同刻
-            Sansyokudouzyun,// 三色同順
-            Honroutou,      // 混老頭（ホンロウトウ）
-            Ikkitukan,      // 一気通貫
-            Tyanta,         // チャンタ
-            Shousangen,     // 小三元
-            Sankantsu,      // 三槓子（サンカンツ）
+            Titoitsu,       // 七対子                   ///
+            Dabuton,        // ダブ東                   ///
+            Dabunan,        // ダブ南                   ///
+            Dabusha,        // ダブ西                   ///
+            Dabupei,        // ダブ北                   ///
+            ToiToi,         // 対々和                   ///
+            Sananko,        // 三暗刻                   ///
+            Sanshokudouko,  // 三色同刻                 ///
+            Sansyokudouzyun,// 三色同順                 ///
+            Honroutou,      // 混老頭（ホンロウトウ）   ///
+            Ikkitukan,      // 一気通貫                 ///
+            Tyanta,         // チャンタ                 ///
+            Shousangen,     // 小三元                   /// 
+            Sankantsu,      // 三槓子（サンカンツ）     ///
 
             // 3飜役
-            Honiso,         // 混一色（ホンイーソー）
-            Zyuntyan,       // 純チャン（ジュンチャン）
-            Ryanpeiko,      // 二盃口
+            Honiso,         // 混一色（ホンイーソー）   ///
+            Zyuntyan,       // 純チャン（ジュンチャン） ///
+            Ryanpeiko,      // 二盃口                   ///
 
             // 5飜役
             NagashiMangan,  // 流し満貫
 
             // 6飜役
-            Tiniso,         // 清一色（チンイーソー）
+            Tiniso,         // 清一色（チンイーソー）   ///
 
             // 役満
             Tenho,          // 天和
@@ -1063,19 +1063,40 @@ namespace Mahjang {
                 return true;
             }
 
-            // 九蓮宝燈？
-            if ( judge_Tyurenpoto( paiSet, baState, data ) == true ) {
-                return true;
-            }
-
-            judge_Suanko( paiSet, baState, data );      // 四暗刻
-            judge_Daisushi( paiSet, baState, data );    // 大四喜
-            judge_Sukantsu( paiSet, baState, data );    // 四槓子
             judge_Tinrouto( paiSet, baState, data );    // 清老頭
             judge_Tuiso( paiSet, baState, data );       // 字一色
-            judge_Shosushi( paiSet, baState, data );    // 小四喜
-            judge_Daisangen( paiSet, baState, data );   // 大三元
             judge_Ryuiso( paiSet, baState, data );      // 緑一色
+
+            // 七対子？
+            if ( judge_Titoitsu( paiSet, baState, data ) == true ) {
+            } else {
+                // 九蓮宝燈？
+                if ( judge_Tyurenpoto( paiSet, baState, data ) == true ) {
+                    return true;
+                }
+                judge_Suanko( paiSet, baState, data );      // 四暗刻
+                judge_Daisushi( paiSet, baState, data );    // 大四喜
+                judge_Sukantsu( paiSet, baState, data );    // 四槓子
+                judge_Shosushi( paiSet, baState, data );    // 小四喜
+                judge_Daisangen( paiSet, baState, data );   // 大三元
+
+                judge_Ryanpeiko( paiSet, baState, data );   // 二盃口
+            }
+
+            judge_Tiniso( paiSet, baState, data );       // 清一色
+            judge_Zyuntyan( paiSet, baState, data );     // 純チャン
+            judge_Honiso( paiSet, baState, data );       // 混一色（ホンイーソー）
+            judge_Sankantsu( paiSet, baState, data );    // 三槓子
+            judge_Shousangen( paiSet, baState, data );   // 小三元
+            judge_Tyanta( paiSet, baState, data );       // チャンタ
+            judge_Ikkitukan( paiSet, baState, data );    // 一気通貫
+            judge_Honroutou( paiSet, baState, data );    // 混老頭
+            judge_Sansyokudouzyun( paiSet, baState, data );  // 三色同順
+            judge_Sanshokudouko( paiSet, baState, data );    // 三色同刻
+            judge_Sananko( paiSet, baState, data );          // 三暗刻
+            judge_ToiToi( paiSet, baState, data );           // 対々和
+            judge_DabuKaze( paiSet, baState, data );         // ダブ風
+
             return true;
         }
 
@@ -1335,5 +1356,562 @@ namespace Mahjang {
             yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.Ryuiso, score_ = ( int )( 8000 * 4 * baState.rate() ), bYakuman_ = true } );
             return true;
         }
+
+        // 清一色
+        bool judge_Tiniso(PaiSet paiSet, BaState baState, YakuData yakuData) {
+            // 索子、筒子、萬子いずれかのみで構成
+            //  門前6ハン、鳴き5ハン
+            // 判定除外：各種役満
+            if ( containsYakuman( yakuData.yakuList_ ) == true ) {
+                return false;
+            }
+            var unit = paiSet.ankouGroup_[ 0 ].getPais()[ 0 ];
+            if ( unit.isNumber() == false )
+                return false;
+            var type = unit.getType();
+            foreach ( var pg in paiSet.ankouGroup_ ) {
+                var pais = pg.getPais();
+                foreach ( var p in pais ) {
+                    if ( p.getType() != type )
+                        return false;
+                }
+            }
+            foreach ( var pg in paiSet.minkoGroup_ ) {
+                var pais = pg.getPais();
+                foreach ( var p in pais ) {
+                    if ( p.getType() != type )
+                        return false;
+                }
+            }
+            // 確定
+            yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.Tiniso, han_ = 6 + ( paiSet.minkoGroup_.Count > 0 ? -1 : 0 ), bYakuman_ = false } );
+            return true;
+        }
+
+        // 七対子
+        bool judge_Titoitsu(PaiSet paiSet, BaState baState, YakuData yakuData) {
+            // 対子が7個（種類は問わない、同じ対子が複数も許可）
+            if ( paiSet.ankouGroup_.Count != 7 ) {
+                return false;
+            }
+            // 確定
+            yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.Titoitsu, han_ = 2, bYakuman_ = false } );
+            return true;
+        }
+
+        // 二盃口
+        bool judge_Ryanpeiko(PaiSet paiSet, BaState baState, YakuData yakuData) {
+            // 同型の順子が2組（暗刻のみ）
+            // 判定除外：各種役満
+            if ( containsYakuman( yakuData.yakuList_ ) == true ) {
+                return false;
+            }
+            if ( paiSet.ankouGroup_ .Count < 5 ) {
+                return false;
+            }
+            var shuntus = new List<PaiGroup>();
+            for ( int i = 0; i < paiSet.ankouGroup_.Count; ++i ) {
+                var pg = paiSet.ankouGroup_[ i ];
+                if ( pg.getType() == PaiGroup.Type.Toitsu )
+                    continue;
+                if ( pg.getType() != PaiGroup.Type.Shuntsu )
+                    return false;
+                shuntus.Add( pg );
+            }
+            // 1個目
+            var idx = new List<int> { 1, 2, 3 };
+            var pg0 = shuntus[ 0 ].getPais()[ 0 ].PaiType;
+            for ( int j = 1; j < shuntus.Count; ++j ) {
+                var pg1 = shuntus[ j ].getPais()[ 0 ].PaiType;
+                if ( pg0 == pg1 ) {
+                    // 同型順子あり
+                    idx.Remove( j );
+                    break;
+                }
+            }
+            if ( idx.Count != 2 ) {
+                return false;
+            }
+
+            // 2個目
+            var pg1_0 = shuntus[ idx[ 0 ] ].getPais()[ 0 ].PaiType;
+            var pg1_1 = shuntus[ idx[ 1 ] ].getPais()[ 0 ].PaiType;
+            if ( pg1_0 != pg1_1 ) {
+                return false;
+            }
+            // 確定
+            yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.Ryanpeiko, han_ = 3, bYakuman_ = false } );
+            return true;
+        }
+
+        // 純チャン
+        bool judge_Zyuntyan( PaiSet paiSet, BaState baState, YakuData yakuData ) {
+            // 1,9の刻子、及び123,789の順子で構成
+            if ( containsYakuman( yakuData.yakuList_ ) == true ) {
+                return false;
+            }
+            int num = 0;
+            foreach ( var pg in paiSet.ankouGroup_ ) {
+                var pais = pg.getPais();
+                foreach ( var pi in pais ) {
+                    if ( pi.isNumber() == false )
+                        return false;
+                }
+                var p = pg.getPais()[ 0 ];
+                if ( pg.isSamePai() == true ) {
+                    if ( p.isTyunTyan() == true ) {
+                        return false;
+                    }
+                    num++;
+                    continue;
+                } else if ( pg.getType() == PaiGroup.Type.Shuntsu && ( p.toNumber() == 1 || p.toNumber() == 7 ) ) {
+                    num++;
+                    continue;
+                }
+                return false;
+            }
+            foreach ( var pg in paiSet.minkoGroup_ ) {
+                var pais = pg.getPais();
+                foreach ( var pi in pais ) {
+                    if ( pi.isNumber() == false )
+                        return false;
+                }
+                var p = pg.getPais()[ 0 ];
+                if ( pg.isSamePai() == true ) {
+                    if ( p.isTyunTyan() == true ) {
+                        return false;
+                    }
+                    num++;
+                    continue;
+                } else if ( pg.getType() == PaiGroup.Type.Shuntsu && ( p.toNumber() == 1 || p.toNumber() == 7 ) ) {
+                    num++;
+                    continue;
+                }
+                return false;
+            }
+            // 確定
+            yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.Zyuntyan, han_ = 3 + ( paiSet.minkoGroup_.Count > 0 ? -1 : 0 ), bYakuman_ = false } );
+            return true;
+        }
+
+        // 混一色（ホンイーソー）
+        bool judge_Honiso(PaiSet paiSet, BaState baState, YakuData yakuData) {
+            // 索子、筒子、萬子のどれか1種類＋字牌（刻子）
+            if ( containsYakuman( yakuData.yakuList_ ) == true ) {
+                return false;
+            }
+            int num = 0;
+            // 色判定
+            Pai numPai = null;
+            bool detect = false;
+            foreach ( var pg in paiSet.ankouGroup_ ) {
+                var ps = pg.getPais();
+                foreach ( var p in ps ) {
+                    if ( p.isNumber() == true ) {
+                        numPai = p;
+                        detect = true;
+                        break;
+                    }
+                }
+                if ( detect == true ) {
+                    break;
+                }
+            }
+            if ( detect == false ) {
+                foreach ( var pg in paiSet.minkoGroup_ ) {
+                    var ps = pg.getPais();
+                    foreach ( var p in ps ) {
+                        if ( p.isNumber() == true ) {
+                            numPai = p;
+                            detect = true;
+                            break;
+                        }
+                    }
+                    if ( detect == true ) {
+                        break;
+                    }
+                }
+            }
+            if ( detect == false ) {
+                return false;
+            }
+
+            foreach ( var pg in paiSet.ankouGroup_ ) {
+                var pais = pg.getPais();
+                var p = pg.getPais()[ 0 ];
+                if ( p.isNumber() == true && p.getType() != numPai.getType() ) {
+                    return false;
+                }
+            }
+            foreach ( var pg in paiSet.minkoGroup_ ) {
+                var pais = pg.getPais();
+                var p = pg.getPais()[ 0 ];
+                if ( p.isNumber() == true && p.getType() != numPai.getType() ) {
+                    return false;
+                }
+            }
+            // 確定
+            yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.Honiso, han_ = 3 + ( paiSet.minkoGroup_.Count > 0 ? -1 : 0 ), bYakuman_ = false } );
+            return true;
+        }
+
+        // 三槓子
+        bool judge_Sankantsu(PaiSet paiSet, BaState baState, YakuData yakuData) {
+            // 槓子が3つ
+            if ( containsYakuman( yakuData.yakuList_ ) == true ) {
+                return false;
+            }
+            int num = 0;
+            foreach ( var pg in paiSet.ankouGroup_ ) {
+                if ( pg.getType() == PaiGroup.Type.Kantsu ) {
+                    num++;
+                }
+            }
+            foreach ( var pg in paiSet.minkoGroup_ ) {
+                if ( pg.getType() == PaiGroup.Type.Kantsu ) {
+                    num++;
+                }
+            }
+            if ( num != 3 ) {
+                return false;
+            }
+            // 確定
+            yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.Sankantsu, han_ = 2, bYakuman_ = false } );
+            return true;
+        }
+
+        // 小三元
+        bool judge_Shousangen( PaiSet paiSet, BaState baState, YakuData yakuData ) {
+            // 役牌2つ刻子＋頭
+            if ( containsYakuman( yakuData.yakuList_ ) == true ) {
+                return false;
+            }
+            int num = 0;
+            foreach ( var pg in paiSet.ankouGroup_ ) {
+                if ( pg.isSamePai() && pg.getPais()[ 0 ].isYaku() == true ) {
+                    num++;
+                }
+            }
+            foreach ( var pg in paiSet.minkoGroup_ ) {
+                if ( pg.isSamePai() && pg.getPais()[ 0 ].isYaku() == true ) {
+                    num++;
+                }
+            }
+            if ( num != 3 ) {
+                return false;
+            }
+            // 確定
+            yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.Shousangen, han_ = 2, bYakuman_ = false } );
+            return true;
+        }
+
+        // チャンタ
+        bool judge_Tyanta(PaiSet paiSet, BaState baState, YakuData yakuData) {
+            // 刻子は1,9,字牌で、順子は123,789で構成
+            //  1,9のみだと純チャンになるので必ず1つ以上の字牌が含まれる -> 純チャンがある場合は無視
+            //  順子が無いと混老頭になるので1つ以上の順子必須
+            if ( containsYakuman( yakuData.yakuList_ ) == true || containsYaku( yakuData.yakuList_, Yaku.Zyuntyan, Yaku.Honroutou ) == true ){
+                return false;
+            }
+            int num = 0;
+            int shuntusNum = 0;
+            foreach ( var pg in paiSet.ankouGroup_ ) {
+                var p = pg.getPais()[ 0 ];
+                if ( pg.isSamePai() && p.isYaotyu() == true ) {
+                    num++;
+                    continue;
+                } else if ( pg.getType() == PaiGroup.Type.Shuntsu && ( p.toNumber() == 1 || p.toNumber() == 7 ) ) {
+                    num++;
+                    shuntusNum++;
+                    continue;
+                }
+                return false;
+            }
+            foreach ( var pg in paiSet.minkoGroup_ ) {
+                var p = pg.getPais()[ 0 ];
+                if ( pg.isSamePai() && p.isYaotyu() == true ) {
+                    num++;
+                    continue;
+                } else if ( pg.getType() == PaiGroup.Type.Shuntsu && ( p.toNumber() == 1 || p.toNumber() == 7 ) ) {
+                    num++;
+                    shuntusNum++;
+                    continue;
+                }
+                return false;
+            }
+            if ( num != 5 || shuntusNum == 0 ) {
+                return false;
+            }
+            // 確定
+            yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.Tyanta, han_ = 2 + ( paiSet.minkoGroup_.Count > 0 ? -1 : 0 ), bYakuman_ = false } );
+            return true;
+        }
+
+        // 一気通貫
+        bool judge_Ikkitukan( PaiSet paiSet, BaState baState, YakuData yakuData ) {
+            // 同じ色で123 456 789（明刻でもOK）
+            if ( containsYakuman( yakuData.yakuList_ ) == true ) {
+                return false;
+            }
+            // 順子をビットでチェック
+            //  0: 123
+            //  1: 456
+            //  2: 789
+            // 値が7だったら役成立
+            var check = new Dictionary<Pai.Type, int> {
+                { Pai.Type.Sozu, 0 },
+                { Pai.Type.Pinzu, 0 },
+                { Pai.Type.Manzu, 0 },
+            };
+            int num = 0;
+            foreach ( var pg in paiSet.ankouGroup_ ) {
+                var p = pg.getPais()[ 0 ];
+                if ( pg.getType() == PaiGroup.Type.Shuntsu && ( p.toNumber() % 3 == 1 ) ) {
+                    check[ p.getType() ] |= ( 1 << ( p.toNumber() / 3 ) );
+                }
+            }
+            foreach ( var pg in paiSet.minkoGroup_ ) {
+                var p = pg.getPais()[ 0 ];
+                if ( pg.getType() == PaiGroup.Type.Shuntsu && ( p.toNumber() % 3 == 1 ) ) {
+                    check[ p.getType() ] |= ( 1 << ( p.toNumber() / 3 ) );
+                }
+            }
+            bool isValid = false;
+            foreach ( var n in check ) {
+                if ( n.Value == 7 ) {
+                    isValid = true;
+                    break;
+                }
+            }
+            if ( isValid == false ) {
+                return false;
+            }
+            // 確定
+            yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.Ikkitukan, han_ = 2 + ( paiSet.minkoGroup_.Count > 0 ? -1 : 0 ), bYakuman_ = false } );
+            return true;
+        }
+
+        // 混老頭
+        bool judge_Honroutou( PaiSet paiSet, BaState baState, YakuData yakuData ) {
+            // 1,9,字牌のみで構成（刻子のみ）
+            // 鳴かないと四暗刻になるので明刻が1つ以上必須
+            if ( containsYakuman( yakuData.yakuList_ ) == true ) {
+                return false;
+            }
+            if ( paiSet.minkoGroup_.Count == 0 ) {
+                return false;
+            }
+
+            int num = 0;
+            foreach ( var pg in paiSet.ankouGroup_ ) {
+                var p = pg.getPais()[ 0 ];
+                if ( pg.isSamePai() == true && p.isYaotyu() == true ) {
+                    num++;
+                }
+            }
+            foreach ( var pg in paiSet.minkoGroup_ ) {
+                var p = pg.getPais()[ 0 ];
+                if ( pg.isSamePai() == true && p.isYaotyu() == true ) {
+                    num++;
+                }
+            }
+            if ( num != 5 ) {
+                return false;
+            }
+            // 確定
+            yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.Honroutou, han_ = 2, bYakuman_ = false } );
+            return true;
+        }
+
+        // 三色同順
+        bool judge_Sansyokudouzyun(PaiSet paiSet, BaState baState, YakuData yakuData) {
+            // 3色同じ並びの順子
+            if ( containsYakuman( yakuData.yakuList_ ) == true ) {
+                return false;
+            }
+            int num = 0;
+            int[] shuntsuIdx = new int[ 27 ];
+            foreach ( var pg in paiSet.ankouGroup_ ) {
+                var p = pg.getPais()[ 0 ];
+                if ( pg.getType() == PaiGroup.Type.Shuntsu && p.isNumber() == true ) {
+                    shuntsuIdx[ p.PaiType ] = 1;
+                    num++;
+                }
+            }
+            foreach ( var pg in paiSet.minkoGroup_ ) {
+                var p = pg.getPais()[ 0 ];
+                if ( pg.getType() == PaiGroup.Type.Shuntsu && p.isNumber() == true ) {
+                    shuntsuIdx[ p.PaiType ] = 1;
+                    num++;
+                }
+            }
+            if ( num <= 2 ) {
+                return false;
+            }
+            bool detect = false;
+            for ( int i = 0; i < 9; ++i ) {
+                if ( shuntsuIdx[ Pai.S1 + i ] == 1 && shuntsuIdx[ Pai.P1 + i ] == 1 && shuntsuIdx[ Pai.M1 + i ] == 1 ) {
+                    detect = true;
+                    break;
+                }
+            }
+            if ( detect == false ) {
+                return false;
+            }
+            // 確定
+            yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.Sansyokudouzyun, han_ = 2 + (paiSet.minkoGroup_.Count > 0 ? -1 : 0), bYakuman_ = false } );
+            return true;
+        }
+
+        // 三色同刻
+        bool judge_Sanshokudouko(PaiSet paiSet, BaState baState, YakuData yakuData) {
+            // 3色の同刻が揃っている
+            if ( containsYakuman( yakuData.yakuList_ ) == true ) {
+                return false;
+            }
+            int num = 0;
+            int[] koutsuIdx = new int[ 27 ];
+            foreach ( var pg in paiSet.ankouGroup_ ) {
+                var p = pg.getPais()[ 0 ];
+                if ( pg.isKoutsuPai() && p.isNumber() == true ) {
+                    koutsuIdx[ p.PaiType ] = 1;
+                    num++;
+                }
+            }
+            foreach ( var pg in paiSet.minkoGroup_ ) {
+                var p = pg.getPais()[ 0 ];
+                if ( pg.getType() == PaiGroup.Type.Shuntsu && p.isNumber() == true ) {
+                    koutsuIdx[ p.PaiType ] = 1;
+                    num++;
+                }
+            }
+            if ( num <= 2 ) {
+                return false;
+            }
+            bool detect = false;
+            for ( int i = 0; i < 9; ++i ) {
+                if ( koutsuIdx[ Pai.S1 + i ] == 1 && koutsuIdx[ Pai.P1 + i ] == 1 && koutsuIdx[ Pai.M1 + i ] == 1 ) {
+                    detect = true;
+                    break;
+                }
+            }
+            if ( detect == false ) {
+                return false;
+            }
+            // 確定
+            yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.Sanshokudouko, han_ = 2, bYakuman_ = false } );
+            return true;
+        }
+
+        // 三暗刻
+        bool judge_Sananko(PaiSet paiSet, BaState baState, YakuData yakuData) {
+            // 暗刻が3つ
+            // 明刻はカウントしない
+            if ( containsYakuman( yakuData.yakuList_ ) == true ) {
+                return false;
+            }
+            int num = 0;
+            foreach ( var pg in paiSet.ankouGroup_ ) {
+                if ( pg.isKoutsuPai() == true ) {
+                    num++;
+                }
+            }
+            if ( num != 3 ) {
+                return false;
+            }
+            // 確定
+            yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.Sananko, han_ = 2, bYakuman_ = false } );
+            return true;
+        }
+
+        // 対々和
+        bool judge_ToiToi(PaiSet paiSet, BaState baState, YakuData yakuData) {
+            // 刻子のみで構成
+            if ( containsYakuman( yakuData.yakuList_ ) == true ) {
+                return false;
+            }
+            int num = 0;
+            foreach ( var pg in paiSet.ankouGroup_ ) {
+                if ( pg.isKoutsuPai() == true ) {
+                    num++;
+                }
+            }
+            foreach ( var pg in paiSet.minkoGroup_ ) {
+                if ( pg.isKoutsuPai() == true ) {
+                    num++;
+                }
+            }
+            if ( num != 4 ) {
+                return false;
+            }
+            // 確定
+            yakuData.yakuList_.Add( new YakuUnit { yaku_ = Yaku.ToiToi, han_ = 2, bYakuman_ = false } );
+            return true;
+        }
+
+        // ダブ風
+        bool judge_DabuKaze(PaiSet paiSet, BaState baState, YakuData yakuData) {
+            // 場風と自風の刻子がある
+            if ( containsYakuman( yakuData.yakuList_ ) == true ) {
+                return false;
+            }
+            // 風が違う場合は対象外
+            if ( baState.bakaze_ != baState.zikaze_ ) {
+                return false;
+            }
+            var kazes = new Dictionary< int, Kaze>{
+                { Pai.To, Kaze.Ton },
+                { Pai.Na, Kaze.Nan },
+                { Pai.Sh, Kaze.Sha },
+                { Pai.Pe, Kaze.Pei },
+            };
+            var dabuKazes = new Dictionary<int, Yaku>{
+                { Pai.To, Yaku.Dabuton },
+                { Pai.Na, Yaku.Dabunan },
+                { Pai.Sh, Yaku.Dabusha },
+                { Pai.Pe, Yaku.Dabupei },
+            };
+            foreach ( var pg in paiSet.ankouGroup_ ) {
+                var p = pg.getPais()[ 0 ];
+                if ( pg.isKoutsuPai() == true && p.isKaze() == true && kazes[ p.PaiType ] == baState.bakaze_ ) {
+                    // 確定
+                    yakuData.yakuList_.Add( new YakuUnit { yaku_ = dabuKazes[ p.PaiType ], han_ = 2, bYakuman_ = false } );
+                    return true;
+                }
+            }
+            foreach ( var pg in paiSet.minkoGroup_ ) {
+                var p = pg.getPais()[ 0 ];
+                if ( pg.isKoutsuPai() == true && p.isKaze() == true && kazes[ p.PaiType ] == baState.bakaze_ ) {
+                    // 確定
+                    yakuData.yakuList_.Add( new YakuUnit { yaku_ = dabuKazes[ p.PaiType ], han_ = 2, bYakuman_ = false } );
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // 指定の役が含まれている？
+        bool containsYaku(List<YakuUnit> yakuList, params Yaku[] yakus ) {
+            if ( yakus.Length == 0 )
+                return false;
+            foreach( var y in yakuList ) {
+                foreach ( var targetYaku in yakus ) {
+                    if ( y.yaku_ == targetYaku ) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        // 役満を含んでいる？
+        bool containsYakuman( List<YakuUnit> yakuList ) {
+            foreach ( var y in yakuList ) {
+                if ( y.bYakuman_ == true )
+                    return true;
+            }
+            return false;
+        }
+
     }
 }
