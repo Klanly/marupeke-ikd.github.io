@@ -11,7 +11,7 @@ public class Controller : MonoBehaviour {
     [SerializeField]
     float quickFallSpeed_ = 5.0f;   // 急速落下速度
 
-    void checkPlace( System.Action move, System.Action enableCallback ) {
+    void checkPlace(System.Action move, System.Action enableCallback) {
         var gm = GameManager.getInstance();
         var field = gm.Field;
         var pos0 = paiObjects_[ 0 ].transform.localPosition;
@@ -109,7 +109,7 @@ public class Controller : MonoBehaviour {
             var pos = paiObjects_[ 0 ].transform.localPosition;
             pos.x -= field.UnitWidth;
             paiObjects_[ 0 ].transform.localPosition = pos;
-        }, () => {} );
+        }, () => { } );
     }
 
     // 右移動
@@ -124,7 +124,7 @@ public class Controller : MonoBehaviour {
     }
 
     // 急速落下
-    void fall( bool isQuick ) {
+    void fall(bool isQuick) {
         curFallSpeed_ = ( isQuick ? quickFallSpeed_ : fallSpeed_ );
     }
 
@@ -172,6 +172,7 @@ public class Controller : MonoBehaviour {
 
     class SetNewPai : State<Controller> {
         public SetNewPai(Controller parent) : base( parent ) {
+            parent_.rotIdx_ = 0;
         }
         protected override State innerInit() {
             // 新規の牌を2つ作成しFieldのクライアント位置へ
@@ -209,24 +210,34 @@ public class Controller : MonoBehaviour {
             fallDist_ = parent_.curFallSpeed_;
 
             // 落下可能？
-            var pos = parent_.paiObjects_[ 0 ].transform.localPosition;
-            if ( parent_.moveUtil.enableFall( pos, fallDist_ * Time.deltaTime, field.Box ) == true ) {
-                pos.y -= fallDist_ * Time.deltaTime;
-                parent_.paiObjects_[ 0 ].transform.localPosition = pos;
+            var pos0 = parent_.paiObjects_[ 0 ].transform.localPosition;
+            var pos1 = parent_.paiObjects_[ 0 ].transform.localPosition + parent_.paiObjects_[ 1 ].transform.localPosition;
+            if (
+                parent_.moveUtil.enableFall( pos0, fallDist_ * Time.deltaTime, field.Box ) == true &&
+                parent_.moveUtil.enableFall( pos1, fallDist_ * Time.deltaTime, field.Box ) == true
+            ) {
+                pos0.y -= fallDist_ * Time.deltaTime;
+                parent_.paiObjects_[ 0 ].transform.localPosition = pos0;
+            } else {
+                // 底を合わせる
+                parent_.paiObjects_[ 0 ].transform.localPosition = parent_.moveUtil.calcCellCenter( parent_.paiObjects_[ 0 ].transform.localPosition );
+                var p = parent_.moveUtil.calcCellCenter( parent_.paiObjects_[ 0 ].transform.localPosition + parent_.paiObjects_[ 1 ].transform.localPosition );
+                parent_.paiObjects_[ 1 ].transform.localPosition = p - parent_.paiObjects_[ 0 ].transform.position;
+                return new Fix( parent_ );
             }
 
-            if ( Input.GetKeyDown(KeyCode.Z) == true ) {
+            if ( Input.GetKeyDown( KeyCode.Z ) == true ) {
                 // 左回り
                 parent_.turnLeft();
-            } else if ( Input.GetKeyDown(KeyCode.X) == true ) {
+            } else if ( Input.GetKeyDown( KeyCode.X ) == true ) {
                 // 右回り
                 parent_.turnRight();
             }
-            
-            if ( Input.GetKeyDown(KeyCode.LeftArrow) == true ) {
+
+            if ( Input.GetKeyDown( KeyCode.LeftArrow ) == true ) {
                 // 左移動
                 parent_.transLeft();
-            } else if ( Input.GetKeyDown( KeyCode.RightArrow ) == true ){
+            } else if ( Input.GetKeyDown( KeyCode.RightArrow ) == true ) {
                 // 右移動
                 parent_.transRight();
             }
@@ -234,5 +245,91 @@ public class Controller : MonoBehaviour {
             return this;
         }
         float fallDist_ = 1.0f;
+    }
+
+    class Fix : State<Controller> {
+        public Fix(Controller parent) : base( parent ) {
+        }
+        protected override State innerUpdate() {
+            // 指定時間待つ
+            t_ -= Time.deltaTime;
+            if ( t_ <= 0.0f ) {
+                return new FallAfterFix( parent_ );
+            }
+            return this;
+        }
+        float t_ = 0.1f;
+    }
+
+    class FallAfterFix : State<Controller> {
+        public FallAfterFix( Controller parent ) : base( parent ) { }
+        protected override State innerInit() {
+            // 牌の関係を絶つ
+            parent_.paiObjects_[ 1 ].transform.SetParent( null );
+
+            // 落下対象牌を判定
+            var field = GameManager.getInstance().Field;
+            var pos0 = parent_.paiObjects_[ 0 ].transform.position;
+            var pos1 = parent_.paiObjects_[ 1 ].transform.position;
+            if ( parent_.moveUtil.enableFall( pos0, 0.1f, field.Box ) == false ) {
+                // 0は接地
+                // 1が0の上にある場合、及び接地なら固定確定
+                if ( parent_.rotIdx_ == 1 || parent_.moveUtil.enableFall( pos1, 0.1f, field.Box ) == false ) {
+                    return new AddToField( parent_ );
+                }
+                // 1落下決定
+                target_ = parent_.paiObjects_[ 1 ];
+            } else if ( parent_.moveUtil.enableFall( pos1, 0.1f, field.Box ) == false ) {
+                // 1は接地
+                // 0が1の上にある場合、及び接地なら固定確定
+                if ( parent_.rotIdx_ == 3 || parent_.moveUtil.enableFall( pos0, 0.1f, field.Box ) == false ) {
+                    return new AddToField( parent_ );
+                }
+                // 0落下決定
+                target_ = parent_.paiObjects_[ 0 ];
+            } else {
+                return new AddToField( parent_ );
+            }
+            return null;
+        }
+
+        protected override State innerUpdate() {
+            var field = GameManager.getInstance().Field;
+            var pos = target_.transform.position;
+            if ( parent_.moveUtil.enableFall( pos, fallSpeed_ * Time.deltaTime, field.Box ) == true ) {
+                pos.y -= fallSpeed_ * Time.deltaTime;
+                target_.transform.position = pos;
+            } else {
+                // 底を合わせる
+                target_.transform.position = parent_.moveUtil.calcCellCenter( target_.transform.position );
+                return new AddToField( parent_ );
+            }
+            return this;
+        }
+        float fallSpeed_ = 20.0f;
+        PaiObject target_;
+    }
+
+    class AddToField : State<Controller> {
+        public AddToField( Controller parent ) : base( parent ) {
+        }
+        protected override State innerUpdate() {
+            // 指定時間待つ
+            t_ -= Time.deltaTime;
+            if ( bWait_  == false && t_ <= 0.0f ) {
+                bWait_ = true;
+                // フィールドに追加
+                var field = GameManager.getInstance().Field;
+                field.addPai( parent_.paiObjects_[ 0 ], parent_.moveUtil.convPosToIdx( parent_.paiObjects_[ 0 ].transform.position, true ) );
+                field.addPai( parent_.paiObjects_[ 1 ], parent_.moveUtil.convPosToIdx( parent_.paiObjects_[ 1 ].transform.position, true ) );
+
+                field.updateBox( () => {
+                    setNextState( new SetNewPai( parent_ ) );
+                } );
+            }
+            return this;
+        }
+        float t_ = 0.2f;
+        bool bWait_ = false;
     }
 }

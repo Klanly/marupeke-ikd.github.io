@@ -12,7 +12,7 @@ using UnityEngine;
 //        [1]
 //
 // ・縦横判定
-//  ・挿し込んだ後にフィールの無いの全部の牌について3つ以上並ぶ同種の塊を縦横それぞれで判定
+//  ・挿し込んだ後にフィール内の全部の牌について3つ以上並ぶ同種の塊を縦横それぞれで判定
 //  ・横検索が先。見た目の左上から、下段へと進行。縦検索は左上から下方向へ、右段と進行。
 //  ・役作りの為の面子及び対子は検索順に判断される。
 //
@@ -44,17 +44,93 @@ using UnityEngine;
 //
 //  
 //
-public class PaiGroupChecker : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+public class PaiGroupChecker {
+    public bool check( PaiObject[,] box, out List<List<PaiObject>> paiSetList, out List<MenzenSet> menzenSetList ) {
+        // 横判定
+        int w = box.GetLength( 0 );
+        int h = box.GetLength( 1 );
+
+        paiSetList = new List<List<PaiObject>>();
+        var tmpPaiSetList = new List<List<PaiObject>>();
+        menzenSetList = new List<MenzenSet>();
+
+        Mahjang.Pai.Type type = Mahjang.Pai.Type.None;
+        System.Func< int, int, List<PaiObject>, bool, bool > collectPaiSet = (x, y, paiList, isLast ) => {
+            if ( paiList.Count == 0 ) {
+                var obj = box[ x, y ];
+                if ( obj == null )
+                    return false;
+                type = obj.getPai().getType();
+                paiList.Add( obj );
+                return false;
+            } else {
+                var obj = box[ x, y ];
+                if ( obj == null ) {
+                    if ( paiList.Count >= 3 ) {
+                        // セット確定
+                        tmpPaiSetList.Add( paiList );
+                        type = Mahjang.Pai.Type.None;
+                        return true;
+                    }
+                    paiList.Clear();
+                    type = Mahjang.Pai.Type.None;
+                    return false;
+                }
+                if ( obj.getPai().getType() == type ) {
+                    paiList.Add( obj );
+                    if ( paiList.Count >= 3 && isLast == true ) {
+                        // セット確定
+                        tmpPaiSetList.Add( paiList );
+                        return true;
+                    }
+                } else{
+                    if ( paiList.Count >= 3 ) {
+                        // セット確定
+                        tmpPaiSetList.Add( paiList );
+                        return true;
+                    }
+                    paiList.Clear();
+                    type = obj.getPai().getType();
+                    paiList.Add( obj ); // 入れ替え
+                }
+            }
+            return false;
+        };
+        // 横方向チェック
+        for ( int y = h - 1; y >= 0; y-- ) {
+            var paiList = new List<PaiObject>();
+            for ( int x = 0; x < w; ++x ) {
+                if ( collectPaiSet( x, y, paiList, x + 1 == w ) == true ) {
+                    paiList = new List<PaiObject>();
+                }
+            }
+        }
+        // 縦方向チェック
+        for ( int x = 0; x < w; ++x ) {
+            var paiList = new List<PaiObject>();
+            for ( int y = h - 1; y >= 0; y-- ) {
+                if ( collectPaiSet( x, y, paiList, y == 0 ) == true ) {
+                    paiList = new List<PaiObject>();
+                }
+            }
+        }
+        if ( tmpPaiSetList.Count == 0 ) {
+            return false;
+        }
+
+        paiSetList = tmpPaiSetList;
+
+        // 各牌セットに含まれるメンゼンをチェック
+        foreach ( var list in paiSetList ) {
+            for ( var i = 0; i < list.Count - 2; ) {
+                MenzenSet ms = new MenzenSet();
+                i += ms.set( list, i );     // 順子なら1つ、暗子なら3つ、槓子なら4つずれる
+                if ( ms.isValid() == true ) {
+                    menzenSetList.Add( ms );
+                }
+            }
+        }
+        return true;
     }
 }

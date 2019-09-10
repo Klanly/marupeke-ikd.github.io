@@ -14,8 +14,11 @@ public class PaiMoveUtil
 	float paiH_ = 1.0f;	// 牌の高さ（通常unitYと一緒）
 
 	// 牌の位置をインデックスに変換
-	public Vector2Int convPosToIdx( Vector3 pos ) {
-		return new Vector2Int( (int)Mathf.Floor( pos.x / unitX_ - 0.5f ), ( int )Mathf.Floor( pos.y / unitY_ - 0.5f ) );
+    // inCell : 中心位置が存在するインデックスにする？（falseの場合牌の右下点が存在するインデックス）
+	public Vector2Int convPosToIdx( Vector3 pos, bool inCell ) {
+        // 中心点が含まれるインデックスにする
+        float offset = ( inCell ? 0.0f : 0.5f );
+		return new Vector2Int( (int)Mathf.Floor( pos.x / unitX_ - offset ), ( int )Mathf.Floor( pos.y / unitY_ - offset ) );
 	}
 
     // インデックスをセル中心座標に変換
@@ -24,13 +27,14 @@ public class PaiMoveUtil
 	}
 
     // 牌中心座標からセル中心座標を算出
+    //  中心点が存在するインデックスを返す
     public Vector3 calcCellCenter(Vector3 pos) {
-		return convIdxToPos( convPosToIdx( pos ) );
+		return convIdxToPos( convPosToIdx( pos, true ) );
 	}
 
     // 配置可能？
     public bool enablePlace<T>(Vector3 pos, T[,] field) where T : class {
-		var idx = convPosToIdx( pos );
+		var idx = convPosToIdx( pos, false );
 		// そもそも位置が不正？
 		if (idx.x < 0 || idx.x >= field.GetLength( 0 ) || idx.y < 0 || idx.y >= field.GetLength( 1 )) {
 			return false;
@@ -71,7 +75,7 @@ public class PaiMoveUtil
 		if ( enablePlace( pos, field ) == false ) {
 			return false;
 		}
-		outIdx = convPosToIdx( pos );
+		outIdx = convPosToIdx( pos, false );
 		for ( int y = outIdx.y; y >= 0; y-- ) {
 			outIdx.y = y;
 			if ( field[ outIdx.x, y] != null ) {
