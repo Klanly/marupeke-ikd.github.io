@@ -42,12 +42,15 @@ public class Field : MonoBehaviour
     }
 
     // フィールドボックスを更新
-    public void updateBox( System.Action finishCallback ) {
+    public void updateBox( System.Action finishCallback, int rensa = 1 ) {
         // 連鎖がある
         var checker = new PaiGroupChecker();
         List<List<PaiObject>> paiSetList = null;
         List<MenzenSet> menzenSetList = null;
         checker.check( box_, out paiSetList, out menzenSetList );
+
+        // 点数計算
+        calcScore( rensa, paiSetList, menzenSetList );
 
         // TODO:
         foreach ( var list in paiSetList ) {
@@ -62,11 +65,54 @@ public class Field : MonoBehaviour
         // 全体フォール（非同期）
         allFall( ( res ) => {
             if ( res == true ) {
-                updateBox( finishCallback );
+                updateBox( finishCallback, rensa + 1 );
             } else {
                 finishCallback();
             }
         } );
+    }
+
+    // 点数計算
+    void calcScore( int rensa, List<List<PaiObject>> paiSetList, List<MenzenSet> memzens ) {
+        // 1ライン点数 s
+        // 3牌: 100
+        // 4牌: 500
+        // 5牌: 2000
+        // 6牌: 5000
+        // 7牌: 10000
+        // 8牌: 20000
+        // 同時削除ライン数 l
+        // 同時削除ライン倍数 t = 2 * l - 1
+        // 連鎖倍率 r = 1, 4, 8, ...
+        //
+        // 削除スコア ds = t * l * Σs 
+        // (ex)
+        //  3牌, 4牌同時消し、3連鎖目
+        //   ds = 3 * ( 4 - 1 ) * ( 100 + 500 ) = 5400
+
+        var lineScore = new Dictionary<int, int> {
+            { 3, 100 },
+            { 4, 500 },
+            { 5, 2000 },
+            { 6, 5000 },
+            { 7, 10000 },
+            { 8, 20000 },
+        };
+        int s = 0;
+        foreach ( var ps in paiSetList ) {
+            s += lineScore[ ps.Count ];
+        }
+        int t = paiSetList.Count * 2 - 1;
+        int r = ( rensa == 1 ? 1 : ( rensa - 1 ) * 4 );
+        int ds = r * t * s;
+
+        if ( ds > 0 ) {
+            Debug.Log( "rensa: " + rensa + ", linescore: " + s + ", set num: " + paiSetList.Count + ", score: " + ds );
+            GameManager.getInstance().addScore( ds, rensa );
+        }
+
+        // 面子登録
+        GameManager.getInstance().addMentsu( memzens );
     }
 
     // 全牌をフォール

@@ -65,6 +65,25 @@ public class MenzenSet {
             pais_ = ps;
         }
 
+        // 対子チェック
+        if ( ps[ 0 ].getPai().PaiType == ps[ 1 ].getPai().PaiType ) {
+            pais_.Add( ps[ 0 ] );
+            pais_.Add( ps[ 1 ] );
+            paiGroup_.set( new Mahjang.Pai[] { ps[ 0 ].getPai(), ps[ 1 ].getPai() }, false );
+            // 右端は次に回せるので
+            return 2;
+        } else if ( ps[ 0 ].getPai().PaiType == ps[ 2 ].getPai().PaiType ) {
+            pais_.Add( ps[ 0 ] );
+            pais_.Add( ps[ 2 ] );
+            paiGroup_.set( new Mahjang.Pai[] { ps[ 0 ].getPai(), ps[ 2 ].getPai() }, false );
+            return 3;
+        } else if ( ps[ 1 ].getPai().PaiType == ps[ 2 ].getPai().PaiType ) {
+            pais_.Add( ps[ 1 ] );
+            pais_.Add( ps[ 2 ] );
+            paiGroup_.set( new Mahjang.Pai[] { ps[ 1 ].getPai(), ps[ 2 ].getPai() }, false );
+            return 3;
+        }
+
         // 成立無し
         return 1;
     }

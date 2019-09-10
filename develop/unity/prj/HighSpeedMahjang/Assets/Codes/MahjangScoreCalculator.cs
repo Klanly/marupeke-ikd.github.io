@@ -1034,15 +1034,25 @@ namespace Mahjang {
             }
         }
 
+        public List<YakuData> analyze(List<PaiGroup> ankous, List<PaiGroup> minkous, BaState baState) {
+            var ankouPais = new List<Pai>();
+            foreach ( var g in ankous ) {
+                foreach ( var p in g.getPais() ) {
+                    ankouPais.Add( p );
+                }
+            }
+            return analyze( ankouPais, minkous, baState );
+        }
+
         // 役と点数を解析
         //  ankous : 伏せ牌
         //  minkous: 明刻及び槓子（暗槓、明槓）
         //  isOya  : 親？
-        public bool analyze(List<Pai> ankous, List<PaiGroup> minkous, BaState baState) {
+        public List<YakuData> analyze(List<Pai> ankous, List<PaiGroup> minkous, BaState baState) {
             Pais tehai = new Pais();
             if ( tehai.setPais( ankous, minkous ) == false ) {
                 // 成立していない
-                return false;
+                return null;
             }
 
             var paiSetList = tehai.getPaiSetList();
@@ -1054,7 +1064,7 @@ namespace Mahjang {
                 }
             }
 
-            return true;
+            return yakuDataList;
         }
 
         // 役を解析
@@ -2185,5 +2195,51 @@ namespace Mahjang {
             return false;
         }
 
+        // スコア計算
+        public int calcScore( YakuData yakuData, out int han, out bool isYakuman ) {
+            int score = 0;
+            isYakuman = false;
+            han = 0;
+            if ( yakuData.bValid_ == false ) {
+                return 0;
+            }
+            foreach ( var unit in yakuData.yakuList_ ) {
+                // 役満は別格
+                if ( unit.bYakuman_ == true ) {
+                    score = unit.score_;
+                    continue;
+                }
+                // 通常役
+                han += unit.han_;
+            }
+            if ( han == 0 ) {
+                return 0;   // 役無し
+            }
+
+            // TODO:
+            // 符計算は後日！
+            var scores = new Dictionary<int, int> {
+                { 1, 1000 },
+                { 2, 2000 },
+                { 3, 4000 },
+                { 4, 8000 },
+                { 5, 8000 },
+                { 6, 12000 },
+                { 7, 12000 },
+                { 8, 16000 },
+                { 9, 16000 },
+                { 10, 16000 },
+                { 11, 24000 },
+                { 12, 24000 },
+                { 13, 32000 },
+            };
+            if ( scores.ContainsKey( han ) == true ) {
+                return scores[ han ];
+            }
+
+            // 数え役満
+            isYakuman = true;
+            return 32000;
+        }
     }
 }
