@@ -2206,12 +2206,18 @@ namespace Mahjang {
             foreach ( var unit in yakuData.yakuList_ ) {
                 // 役満は別格
                 if ( unit.bYakuman_ == true ) {
-                    score = unit.score_;
+                    score += unit.score_;
+                    isYakuman = true;
                     continue;
                 }
                 // 通常役
                 han += unit.han_;
             }
+
+            if ( isYakuman == true ) {
+                return score;
+            }
+
             if ( han == 0 ) {
                 return 0;   // 役無し
             }

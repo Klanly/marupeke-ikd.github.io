@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour {
     NextPaiManager nextPaiManager_;
     public NextPaiManager NextPaiManager { get { return nextPaiManager_; } }
 
+    [SerializeField]
+    TextMesh scoreText_;
+
     public static GameManager getInstance() {
         return manager_g;
     }
@@ -26,6 +29,7 @@ public class GameManager : MonoBehaviour {
     // スコアを追加
     public void addScore( int score, int rensa ) {
         score_ += score;
+        scoreText_.text = string.Format( "{0}", score_ );
         Debug.Log( "rensa: " + rensa + ", score: " + score_ );
     }
 
@@ -141,6 +145,7 @@ public class GameManager : MonoBehaviour {
     private void Awake() {
         manager_g = this;
         curTehaiSet_ = tehaiSetManager_.createNewTehaiSet();
+        scoreText_.text = "0";
     }
 
     private void OnDestroy() {
