@@ -15,6 +15,10 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     TehaiSetManager tehaiSetManager_;
 
+    [SerializeField]
+    NextPaiManager nextPaiManager_;
+    public NextPaiManager NextPaiManager { get { return nextPaiManager_; } }
+
     public static GameManager getInstance() {
         return manager_g;
     }

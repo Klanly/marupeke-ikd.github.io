@@ -179,9 +179,10 @@ public class Controller : MonoBehaviour {
             // [0]を中心とする。[0,1]の並びして初期位置へ
             var gm = GameManager.getInstance();
             var field = gm.Field;
-            var gen = gm.PaiGenerator;
-            parent_.paiObjects_[ 0 ] = gen.createRandom();
-            parent_.paiObjects_[ 1 ] = gen.createRandom();
+            var nextPaiManager = gm.NextPaiManager;
+            var pais = nextPaiManager.pop();
+            parent_.paiObjects_[ 0 ] = pais[ 0 ];
+            parent_.paiObjects_[ 1 ] = pais[ 1 ];
             parent_.paiObjects_[ 0 ].transform.SetParent( field.ClientRoot );
             parent_.paiObjects_[ 1 ].transform.SetParent( parent_.paiObjects_[ 0 ].transform );
             parent_.paiObjects_[ 1 ].transform.localPosition = new Vector3( field.UnitWidth, 0.0f, 0.0f );
