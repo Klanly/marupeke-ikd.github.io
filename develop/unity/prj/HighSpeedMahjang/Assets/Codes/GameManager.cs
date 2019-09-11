@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour {
     Field field_;
     public Field Field { get { return field_; } }
 
+    [SerializeField]
+    TehaiSetManager tehaiSetManager_;
+
     public static GameManager getInstance() {
         return manager_g;
     }
@@ -29,6 +32,7 @@ public class GameManager : MonoBehaviour {
             if ( m.PaiGroup.getType() == Mahjang.PaiGroup.Type.Toitsu ) {
                 if ( toitsu_ == null ) {
                     toitsu_ = m;
+                    curTehaiSet_.addToitsu( m );
                     checkYaku();
                 }
                 continue;
@@ -36,12 +40,14 @@ public class GameManager : MonoBehaviour {
             // 面子に空きが無くて対子のみ必要で、手が刻子の場合は対子として採用し直す
             if ( menzens_.Count == 4 && toitsu_ == null && m.PaiGroup.isSamePai() == true ) {
                 toitsu_ = m;
+                curTehaiSet_.addToitsu( m );
                 checkYaku();
                 continue;
             }
             // 面子に空きがあれば挿入
             if ( menzens_.Count < 4 ) {
                 menzens_.Add( m );
+                curTehaiSet_.addMentsu( m );
                 checkYaku();
                 continue;
             }
@@ -108,8 +114,21 @@ public class GameManager : MonoBehaviour {
                 Debug.Log( "Han: " + highHan + ", Score: " + highScore );
             }
 
-            score_ += highScore;
+            // 門前手揃ったので役判定＋表現を別タスクへ
+            TehaiSet tehaiSet = curTehaiSet_;
 
+            GlobalState.wait( 1.5f, () => {
+                Destroy( tehaiSet.gameObject );
+/*                yakuDataList;
+                tehaiSet;
+                highScore;
+                highScoreIdx;
+                highHan = 0;
+*/                return false;
+            } );
+
+            addScore( highScore, 1 );
+            curTehaiSet_ = tehaiSetManager_.createNewTehaiSet();
             menzens_.Clear();
             toitsu_ = null;
         }
@@ -117,6 +136,7 @@ public class GameManager : MonoBehaviour {
 
     private void Awake() {
         manager_g = this;
+        curTehaiSet_ = tehaiSetManager_.createNewTehaiSet();
     }
 
     private void OnDestroy() {
@@ -140,4 +160,5 @@ public class GameManager : MonoBehaviour {
     List<MenzenSet> menzens_ = new List<MenzenSet>();
     List<MenzenSet> stockMenzens_ = new List<MenzenSet>();
     MenzenSet toitsu_ = null;
+    TehaiSet curTehaiSet_;
 }

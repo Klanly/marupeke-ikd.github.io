@@ -50,7 +50,10 @@ public class Field : MonoBehaviour
         checker.check( box_, out paiSetList, out menzenSetList );
 
         // 点数計算
-        calcScore( rensa, paiSetList, menzenSetList );
+        calclineDeleteScore( rensa, paiSetList );
+
+        // 面子設定
+        addMenzenSet( menzenSetList );
 
         // TODO:
         foreach ( var list in paiSetList ) {
@@ -72,8 +75,8 @@ public class Field : MonoBehaviour
         } );
     }
 
-    // 点数計算
-    void calcScore( int rensa, List<List<PaiObject>> paiSetList, List<MenzenSet> memzens ) {
+    // ライン消しの点数計算
+    void calclineDeleteScore( int rensa, List<List<PaiObject>> paiSetList ) {
         // 1ライン点数 s
         // 3牌: 100
         // 4牌: 500
@@ -110,10 +113,16 @@ public class Field : MonoBehaviour
             Debug.Log( "rensa: " + rensa + ", linescore: " + s + ", set num: " + paiSetList.Count + ", score: " + ds );
             GameManager.getInstance().addScore( ds, rensa );
         }
-
-        // 面子登録
-        GameManager.getInstance().addMentsu( memzens );
     }
+
+    //
+    // 面子設定
+    void addMenzenSet( List<MenzenSet> menzenSetList ) {
+        // 面子登録
+        //  面子になった牌の引き渡し
+        GameManager.getInstance().addMentsu( menzenSetList );
+    }
+
 
     // 全牌をフォール
     void allFall( System.Action< bool > result ) {

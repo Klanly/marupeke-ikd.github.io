@@ -129,6 +129,8 @@
     <Compile Include="Assets\Codes\PaiGroupChecker.cs" />
     <Compile Include="Assets\Codes\PaiMoveUtil.cs" />
     <Compile Include="Assets\Codes\PaiObject.cs" />
+    <Compile Include="Assets\Codes\TehaiSet.cs" />
+    <Compile Include="Assets\Codes\TehaiSetManager.cs" />
     <Compile Include="Assets\Codes\Test.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/HighSpeedMahjang/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
