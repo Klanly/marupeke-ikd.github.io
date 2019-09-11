@@ -1289,6 +1289,7 @@ MonoBehaviour:
   - {fileID: 1934105713}
   - {fileID: 317626629}
   - {fileID: 1655998015}
+  debugPaiType: 0
 --- !u!1 &2135514957
 GameObject:
   m_ObjectHideFlags: 0

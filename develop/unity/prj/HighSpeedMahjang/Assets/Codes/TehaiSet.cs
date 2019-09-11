@@ -28,6 +28,10 @@ public class TehaiSet : MonoBehaviour
         }
         toitus_[ 0 ].transform.localPosition = new Vector3( c - w_ * 0.5f, h_ * 0.5f, 0.0f );
         toitus_[ 1 ].transform.localPosition = new Vector3( c + w_ * 0.5f, h_ * 0.5f, 0.0f );
+
+        foreach( var p in nullPais[ 4 ] ) {
+            Destroy( p.gameObject );
+        }
     }
 
     // 面子をセット
@@ -50,11 +54,14 @@ public class TehaiSet : MonoBehaviour
                 pais[ i ] = GameManager.getInstance().PaiGenerator.create( list[ i ].getPai().PaiType );
                 pais[ i ].transform.SetParent( transform );
             }
-            list[ 0 ].transform.localPosition = new Vector3( c - w_ * 1.5f, h_ * 0.5f, 0.0f );
-            list[ 1 ].transform.localPosition = new Vector3( c - w_ * 0.5f, h_ * 0.5f, 0.0f );
-            list[ 2 ].transform.localPosition = new Vector3( c + w_ * 0.5f, h_ * 0.5f, 0.0f );
-            list[ 3 ].transform.localPosition = new Vector3( c + w_ * 1.5f, h_ * 0.5f, 0.0f );
+            pais[ 0 ].transform.localPosition = new Vector3( c - w_ * 1.5f, h_ * 0.5f, 0.0f );
+            pais[ 1 ].transform.localPosition = new Vector3( c - w_ * 0.5f, h_ * 0.5f, 0.0f );
+            pais[ 2 ].transform.localPosition = new Vector3( c + w_ * 0.5f, h_ * 0.5f, 0.0f );
+            pais[ 3 ].transform.localPosition = new Vector3( c + w_ * 1.5f, h_ * 0.5f, 0.0f );
             mentsuList_.Add( pais );
+        }
+        foreach ( var p in nullPais[ mentsuList_.Count - 1 ] ) {
+            Destroy( p.gameObject );
         }
     }
 

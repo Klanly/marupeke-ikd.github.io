@@ -8,13 +8,16 @@ public class NextPaiManager : MonoBehaviour {
     [SerializeField]
     Transform[] poses_;
 
+    [SerializeField]
+    int debugPaiType = -1;
+
     public  PaiObject[] pop() {
         var ary = new PaiObject[ 2 ];
-        ary[ 0 ] = GameManager.getInstance().PaiGenerator.createRandom();
+        ary[ 0 ] = createPai();
         ary[ 0 ].transform.SetParent( poses_[ poses_.Length - 1 ] );
         ary[ 0 ].transform.localPosition = Vector3.zero;
 
-        ary[ 1 ] = GameManager.getInstance().PaiGenerator.createRandom();
+        ary[ 1 ] = createPai();
         ary[ 1 ].transform.SetParent( poses_[ poses_.Length - 1 ] );
         ary[ 1 ].transform.localPosition = new Vector3( 2.0f, 0.0f, 0.0f );
 
@@ -37,16 +40,23 @@ public class NextPaiManager : MonoBehaviour {
     private void Awake() {
     }
 
+    PaiObject createPai() {
+        if ( debugPaiType != -1 ) {
+            return GameManager.getInstance().PaiGenerator.create( debugPaiType );
+        }
+        return GameManager.getInstance().PaiGenerator.createRandom();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         for ( int i = 0; i < poses_.Length; ++i ) {
             var ary = new PaiObject[ 2 ];
-            ary[ 0 ] = GameManager.getInstance().PaiGenerator.createRandom();
+            ary[ 0 ] = createPai();
             ary[ 0 ].transform.SetParent( poses_[ i ] );
             ary[ 0 ].transform.localPosition = Vector3.zero;
 
-            ary[ 1 ] = GameManager.getInstance().PaiGenerator.createRandom();
+            ary[ 1 ] = createPai();
             ary[ 1 ].transform.SetParent( poses_[ i ] );
             ary[ 1 ].transform.localPosition = new Vector3( 2.0f, 0.0f, 0.0f );
 
