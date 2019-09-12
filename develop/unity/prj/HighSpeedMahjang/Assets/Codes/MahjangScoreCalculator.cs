@@ -689,37 +689,42 @@ namespace Mahjang {
             var jiGroupList = new List<PaiGroup>();
 
             // 字牌が暗刻になっていない、対子が2つ以上ある場合は不成立
+            var jiPaiList = new Dictionary<int, List<Pai>>();
             if ( paiTypeList[ 3 ].Count > 0 ) {
-                int count = 0;
-                var p = paiTypeList[ 3 ][ 0 ];
-                for ( int i = 0; i < paiTypeList[ 3 ].Count; ++i ) {
-                    count++;    // 自分はカウント
-                                // 最後以外の牌で次の牌と同じだったら次へ
-                    if ( i + 1 < paiTypeList[ 3 ].Count && paiTypeList[ 3 ][ i ].PaiType == paiTypeList[ 3 ][ i + 1 ].PaiType ) {
-                        continue;
-                    } else {
-                        // 次が別の牌（＝自分が塊の最後）
-                        if ( count == 1 )
-                            return false;   // 不成立
-                        else if ( count == 2 ) {
-                            // 対子
-                            toitsuCount++;
-                            if ( toitsuCount >= 2 )
-                                return false;   // 対子が複数ある
-                            PaiGroup g = new PaiGroup();
-                            g.set( new Pai[] { paiTypeList[ 3 ][ i ], paiTypeList[ 3 ][ i - 1 ] }, false );
-                            jiGroupList.Add( g );
-                            count = 0;
-                        } else if ( count == 3 ) {
-                            // 暗刻
-                            PaiGroup g = new PaiGroup();
-                            g.set( new Pai[] { paiTypeList[ 3 ][ i ], paiTypeList[ 3 ][ i - 1 ], paiTypeList[ 3 ][ i - 2 ] }, false );
-                            jiGroupList.Add( g );
-                            count = 0;
-                        } else {
-                            // 4枚以上なので不成立
+                foreach( var p in paiTypeList[ 3 ] ) {
+                    if ( jiPaiList.ContainsKey( p.PaiType ) == false ) {
+                        jiPaiList[ p.PaiType ] = new List<Pai>();
+                    }
+                    jiPaiList[ p.PaiType ].Add( p );
+                }
+                foreach ( var jl in jiPaiList ) {
+                    if ( jl.Value.Count % 3 == 2 ) {
+                        if ( toitsuCount > 0 ) {
                             return false;
                         }
+                        // 対子
+                        PaiGroup g = new PaiGroup();
+                        g.set( new Pai[] { jl.Value[ 0 ], jl.Value[ 1 ] }, false );
+                        jiGroupList.Add( g );
+                        toitsuCount++;
+                        // 暗刻
+                        int kumi = jl.Value.Count / 3;
+                        for ( int i = 0; i < kumi; ++i ) {
+                            PaiGroup ag = new PaiGroup();
+                            ag.set( new Pai[] { jl.Value[ 2 + i * 3 ], jl.Value[ 2 + i * 3 + 1 ], jl.Value[ 2 + i * 3 + 2 ] }, false );
+                            jiGroupList.Add( ag );
+                        }
+                    } else if ( jl.Value.Count % 3 == 0 ) {
+                        // 暗刻（2組み以上も認める）
+                        int kumi = jl.Value.Count / 3;
+                        for ( int i = 0; i < kumi; ++i ) {
+                            PaiGroup g = new PaiGroup();
+                            g.set( new Pai[] { jl.Value[ i * 3 ], jl.Value[ i * 3 + 1 ], jl.Value[ i * 3 + 2 ] }, false );
+                            jiGroupList.Add( g );
+                        }
+                    } else {
+                        // 不成立
+                        return false;
                     }
                 }
             }
