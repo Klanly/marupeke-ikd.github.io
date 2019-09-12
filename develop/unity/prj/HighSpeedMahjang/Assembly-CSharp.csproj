@@ -124,6 +124,7 @@
     <Compile Include="Assets\Codes\Controller.cs" />
     <Compile Include="Assets\Codes\Field.cs" />
     <Compile Include="Assets\Codes\GameManager.cs" />
+    <Compile Include="Assets\Codes\GameStateManager.cs" />
     <Compile Include="Assets\Codes\MahjangScoreCalculator.cs" />
     <Compile Include="Assets\Codes\MenzenSet.cs" />
     <Compile Include="Assets\Codes\MoveText.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="Assets\Codes\Test.cs" />
     <Compile Include="Assets\Codes\YakuViewer.cs" />
     <None Include="Assets\Codes\common\Plugins\BitmapFontImporter\Shaders\Font2.shader" />
+    <None Include="Assets\Fonts\messages.fnt" />
     <None Include="Assets\Codes\common\Plugins\BitmapFontImporter\Shaders\BFILogic.cginc" />
     <None Include="Assets\Codes\common\Plugins\BitmapFontImporter\Shaders\Font4.shader" />
     <None Include="Assets\Codes\common\Plugins\BitmapFontImporter\Shaders\Font5.shader" />

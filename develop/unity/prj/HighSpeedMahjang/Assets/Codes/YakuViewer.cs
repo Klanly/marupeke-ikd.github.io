@@ -17,7 +17,7 @@ public class YakuViewer : MonoBehaviour
         float yOffset = -3.7f;
         float delaySec = 0.37f;
         float moveSec = 0.35f;
-        int yakuNum = yakuData.yakuList_.Count;
+        int yakuNum = yakuData != null ? yakuData.yakuList_.Count : 0;
 
         if ( yakuData == null || yakuNum == 0 ) {
             // 役無し

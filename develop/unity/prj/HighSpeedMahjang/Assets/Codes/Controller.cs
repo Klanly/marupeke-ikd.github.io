@@ -11,6 +11,10 @@ public class Controller : MonoBehaviour {
     [SerializeField]
     float quickFallSpeed_ = 5.0f;   // 急速落下速度
 
+    public void toStart() {
+        bStart_ = true;
+    }
+
     void checkPlace(System.Action move, System.Action enableCallback) {
         var gm = GameManager.getInstance();
         var field = gm.Field;
@@ -263,7 +267,7 @@ public class Controller : MonoBehaviour {
     }
 
     class FallAfterFix : State<Controller> {
-        public FallAfterFix( Controller parent ) : base( parent ) { }
+        public FallAfterFix(Controller parent) : base( parent ) { }
         protected override State innerInit() {
             // 牌の関係を絶つ
             parent_.paiObjects_[ 1 ].transform.SetParent( null );
@@ -312,25 +316,32 @@ public class Controller : MonoBehaviour {
     }
 
     class AddToField : State<Controller> {
-        public AddToField( Controller parent ) : base( parent ) {
+        public AddToField(Controller parent) : base( parent ) {
         }
         protected override State innerUpdate() {
             // 指定時間待つ
             t_ -= Time.deltaTime;
-            if ( bWait_  == false && t_ <= 0.0f ) {
+            if ( bWait_ == false && t_ <= 0.0f ) {
                 bWait_ = true;
                 // フィールドに追加
                 var field = GameManager.getInstance().Field;
                 field.addPai( parent_.paiObjects_[ 0 ], parent_.moveUtil.convPosToIdx( parent_.paiObjects_[ 0 ].transform.position, true ) );
                 field.addPai( parent_.paiObjects_[ 1 ], parent_.moveUtil.convPosToIdx( parent_.paiObjects_[ 1 ].transform.position, true ) );
 
-                field.updateBox( () => {
-                    setNextState( new SetNewPai( parent_ ) );
+                field.updateBox( (res) => {
+                    if ( res == true )
+                        setNextState( new SetNewPai( parent_ ) );
+                    else
+                        setNextState( new Stop( parent_ ) );
                 } );
             }
             return this;
         }
         float t_ = 0.2f;
         bool bWait_ = false;
+    }
+
+    class Stop : State<Controller> {
+        public Stop(Controller parent) : base( parent ) { }
     }
 }

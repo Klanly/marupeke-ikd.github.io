@@ -22,22 +22,31 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     YakuViewer yakuViewer_;
 
-    [ SerializeField]
+    [SerializeField]
     TextMesh scoreText_;
+
+    [SerializeField]
+    Controller controller_;
+
+    [SerializeField]
+    TextMesh messageText_;
+
+    public System.Action FinishCallback { set { finishCallback_ = value; } }
+    System.Action finishCallback_;
 
     public static GameManager getInstance() {
         return manager_g;
     }
 
     // スコアを追加
-    public void addScore( int score, int rensa ) {
+    public void addScore(int score, int rensa) {
         score_ += score;
         scoreText_.text = string.Format( "{0}", score_ );
         Debug.Log( "rensa: " + rensa + ", score: " + score_ );
     }
 
     // 面子追加
-    public void addMentsu( List<MenzenSet> menzens ) {
+    public void addMentsu(List<MenzenSet> menzens) {
         foreach ( var m in menzens ) {
             // 対子？
             if ( m.PaiGroup.getType() == Mahjang.PaiGroup.Type.Toitsu ) {
@@ -145,25 +154,66 @@ public class GameManager : MonoBehaviour {
     }
 
     private void OnDestroy() {
-        manager_g = null;    
+        manager_g = null;
     }
 
     // Start is called before the first frame update
-    void Start()
-    {
-        
+    void Start() {
+        state_ = new Intro( this );
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
+    void Update() {
+        if ( state_ != null )
+            state_ = state_.update();
     }
 
     static GameManager manager_g = null;
+
     int score_ = 0;
     List<MenzenSet> menzens_ = new List<MenzenSet>();
     List<MenzenSet> stockMenzens_ = new List<MenzenSet>();
     MenzenSet toitsu_ = null;
     TehaiSet curTehaiSet_;
+    State state_;
+
+    class Intro : State<GameManager> {
+        public Intro(GameManager parent) : base( parent ) { }
+        protected override State innerInit() {
+            parent_.messageText_.text = "Press [Z] to start";
+            return null;
+        }
+        protected override State innerUpdate() {
+            // [Z]ボタンを押したらスタート
+            if ( Input.GetKeyDown( KeyCode.Z ) == true ) {
+                parent_.messageText_.text = "";
+                return new GameStart( parent_ );
+            }
+            return this;
+        }
+    }
+
+    class GameStart : State<GameManager> {
+        public GameStart(GameManager parent) : base( parent ) { }
+        protected override State innerInit() {
+            parent_.controller_.toStart();
+            parent_.field_.FinishCallback = () => {
+                setNextState( new GameOver( parent_ ) );
+            };
+            return this;
+        }
+    }
+
+    class GameOver : State<GameManager> {
+        public GameOver(GameManager parent) : base( parent ) { }
+        protected override State innerInit() {
+            // GameOver表記
+            parent_.messageText_.text = "Game Over";
+            GlobalState.wait( 4.0f, () => {
+                parent_.finishCallback_();
+                return false;
+            } );
+            return null;
+        }
+    }
 }

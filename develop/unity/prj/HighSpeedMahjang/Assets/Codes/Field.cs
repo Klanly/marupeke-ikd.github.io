@@ -19,6 +19,8 @@ public class Field : MonoBehaviour
     [SerializeField]
     Transform clientRoot_;
 
+    public System.Action FinishCallback { set { finishCallback_ = value; } }
+    System.Action finishCallback_;
     public int XNum { get { return xNum_; } }
     public int YNum { get { return yNum_; } }
     public float UnitWidth { get { return unitWidth_; } }
@@ -42,7 +44,7 @@ public class Field : MonoBehaviour
     }
 
     // フィールドボックスを更新
-    public void updateBox( System.Action finishCallback, int rensa = 1 ) {
+    public void updateBox( System.Action< bool > finishCallback, int rensa = 1 ) {
         // 連鎖がある
         var checker = new PaiGroupChecker();
         List<List<PaiObject>> paiSetList = null;
@@ -55,7 +57,7 @@ public class Field : MonoBehaviour
         // 面子設定
         addMenzenSet( menzenSetList );
 
-        // TODO:
+        // 揃った牌は消す
         foreach ( var list in paiSetList ) {
             foreach ( var p in list ) {
                 if ( box_[ p.Index.x, p.Index.y ] != null ) {
@@ -70,7 +72,15 @@ public class Field : MonoBehaviour
             if ( res == true ) {
                 updateBox( finishCallback, rensa + 1 );
             } else {
-                finishCallback();
+                // boxの最上段に牌が来たらGameOver
+                for ( int x = 0; x < xNum_; ++x ) {
+                    if ( box_[ x, yNum_ ] != null ) {
+                        finishCallback( false );
+                        finishCallback_();  // Field終了
+                        return;
+                    }
+                }
+                finishCallback( true );
             }
         } );
     }
