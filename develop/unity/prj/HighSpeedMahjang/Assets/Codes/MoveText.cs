@@ -7,8 +7,10 @@ public class MoveText : MonoBehaviour
     [SerializeField]
     TextMesh text_;
 
-    public void setup( Vector3 endPos, float time, float delaySec ) {
+    public void setup( Vector3 endPos, Vector3 startOffset, float time, float delaySec ) {
         endPos_ = endPos;
+        transform.localPosition = endPos + startOffset;
+        startPos_ = endPos + startOffset;
         time_ = time;
         gameObject.SetActive( false );
         GlobalState.wait( delaySec, () => {
@@ -24,7 +26,6 @@ public class MoveText : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startPos_ = transform.localPosition;
         t_ = time_;
     }
 
@@ -41,7 +42,7 @@ public class MoveText : MonoBehaviour
             t = 0.0f;
         }
 
-        transform.localPosition = Lerps.Vec3.easeOut( startPos_, endPos_, t );
+        transform.localPosition = Lerps.Vec3.easeIn( startPos_, endPos_, 1.0f - t );
     }
 
     Vector3 startPos_ = Vector3.zero;

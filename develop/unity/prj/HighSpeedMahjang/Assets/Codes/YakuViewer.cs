@@ -12,44 +12,70 @@ public class YakuViewer : MonoBehaviour
 
     // ビュースタート
     public void start( TehaiSet tehaiSet, Mahjang.MahjangScoreCalculator.YakuData yakuData, int score, int han, System.Action finishCallback ) {
-        if ( yakuData == null || yakuData.yakuList_.Count == 0 ) {
-            // 役無し
-            finishCallback();
-            return;
-        }
-        bool isYakuman = false;
-        if ( yakuData.yakuList_[ 0 ].bYakuman_ == true ) {
-            isYakuman = true;
-        }
-        // 役名
-        float yOffset = -4.0f;
-        float delaySec = 0.5f;
+
+        float xOffset = 12.0f;
+        float yOffset = -3.7f;
+        float delaySec = 0.37f;
+        float moveSec = 0.35f;
         int yakuNum = yakuData.yakuList_.Count;
-        for ( int i = 0; i < yakuNum; ++i ) {
-            var yaku = PrefabUtil.createInstance( moveTextPrefab_, transform );
-            yaku.transform.localPosition = YakuPos_.localPosition + new Vector3( 5.0f, yOffset * i, 0.0f );
-            yaku.text( getYakuName( yakuData.yakuList_[ i ].yaku_ ) );
-            yaku.setup( YakuPos_.localPosition + new Vector3( 0.0f, yOffset * i, 0.0f ), 0.75f, delaySec * i );
+
+        if ( yakuData == null || yakuNum == 0 ) {
+            // 役無し
+            var yaku = PrefabUtil.createInstance( moveTextPrefab_, YakuPos_.transform );
+            yaku.text( getYakuName( Mahjang.MahjangScoreCalculator.Yaku.None ) );
+            yaku.setup(
+                new Vector3( 0.0f, 0.0f, 0.0f ),
+                new Vector3( xOffset, 0.0f, 0.0f ),
+                moveSec,
+                0.0f
+            );
             moveTexts_.Add( yaku );
+            yakuNum = 1;
         }
+        else {
+            bool isYakuman = false;
+            if ( yakuData.yakuList_[ 0 ].bYakuman_ == true ) {
+                isYakuman = true;
+            }
+            // 役名
+            for ( int i = 0; i < yakuNum; ++i ) {
+                var yaku = PrefabUtil.createInstance( moveTextPrefab_, YakuPos_.transform );
+                yaku.text( getYakuName( yakuData.yakuList_[ i ].yaku_ ) );
+                yaku.setup(
+                    new Vector3( 0.0f, yOffset * i, 0.0f ),
+                    new Vector3( xOffset, 0.0f, 0.0f ),
+                    moveSec,
+                    delaySec * i
+                );
+                moveTexts_.Add( yaku );
+            }
 
-        // ハン数
-        var hanText = PrefabUtil.createInstance( moveTextPrefab_, transform );
-        hanText.transform.localPosition = YakuPos_.localPosition + new Vector3( 5.0f, yOffset * yakuNum, 0.0f );
-        if ( isYakuman == true ) {
-            hanText.text( string.Format( "役満" ) );
-        } else {
-            hanText.text( string.Format( "{0} 飜", han ) );
+            // ハン数
+            var hanText = PrefabUtil.createInstance( moveTextPrefab_, YakuPos_.transform );
+            if ( isYakuman == true ) {
+                hanText.text( string.Format( "役満" ) );
+            } else {
+                hanText.text( string.Format( "{0} 飜", han ) );
+            }
+            hanText.setup(
+                new Vector3( 0.0f, yOffset * ( yakuNum + 0.3f ), 0.0f ),
+                new Vector3( xOffset, 0.0f, 0.0f ),
+                moveSec,
+                delaySec * yakuNum
+            );
+            moveTexts_.Add( hanText );
+
+            // スコア
+            var scoreText = PrefabUtil.createInstance( moveTextPrefab_, YakuPos_.transform );
+            scoreText.text( string.Format( "{0}", score ) );
+            scoreText.setup(
+                new Vector3( 0.0f, yOffset * ( yakuNum + 1.3f ), 0.0f ),
+                new Vector3( xOffset, 0.0f, 0.0f ),
+                moveSec,
+                delaySec * ( yakuNum + 1.0f )
+            );
+            moveTexts_.Add( scoreText );
         }
-        hanText.setup( YakuPos_.localPosition + new Vector3( 0.0f, yOffset * yakuNum, 0.0f ), 0.75f, delaySec * yakuNum );
-        moveTexts_.Add( hanText );
-
-        // スコア
-        var scoreText = PrefabUtil.createInstance( moveTextPrefab_, transform );
-        scoreText.transform.localPosition = YakuPos_.localPosition + new Vector3( 5.0f, yOffset * ( yakuNum + 1.0f ), 0.0f );
-        scoreText.text( string.Format( "{0}", score ) );
-        scoreText.setup( YakuPos_.localPosition + new Vector3( 0.0f, yOffset * ( yakuNum + 1.0f ), 0.0f ), 0.75f, delaySec * ( yakuNum + 1.0f ) );
-        moveTexts_.Add( scoreText );
 
         float waitSec = delaySec * ( yakuNum + 2.0f ) + 4.0f; 
         GlobalState.wait( waitSec, () => {
