@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour {
     public NextPaiManager NextPaiManager { get { return nextPaiManager_; } }
 
     [SerializeField]
+    YakuViewer yakuViewer_;
+
+    [ SerializeField]
     TextMesh scoreText_;
 
     public static GameManager getInstance() {
@@ -124,15 +127,8 @@ public class GameManager : MonoBehaviour {
 
             // 門前手揃ったので役判定＋表現を別タスクへ
             TehaiSet tehaiSet = curTehaiSet_;
-
-            GlobalState.wait( 1.5f, () => {
+            yakuViewer_.start( tehaiSet, highScoreIdx >= 0 ? yakuDataList[ highScoreIdx ] : null, highScore, highHan, () => {
                 Destroy( tehaiSet.gameObject );
-/*                yakuDataList;
-                tehaiSet;
-                highScore;
-                highScoreIdx;
-                highHan = 0;
-*/                return false;
             } );
 
             addScore( highScore, 1 );

@@ -125,6 +125,7 @@
     <Compile Include="Assets\Codes\GameManager.cs" />
     <Compile Include="Assets\Codes\MahjangScoreCalculator.cs" />
     <Compile Include="Assets\Codes\MenzenSet.cs" />
+    <Compile Include="Assets\Codes\MoveText.cs" />
     <Compile Include="Assets\Codes\NextPaiManager.cs" />
     <Compile Include="Assets\Codes\PaiGenerator.cs" />
     <Compile Include="Assets\Codes\PaiGroupChecker.cs" />
@@ -133,11 +134,13 @@
     <Compile Include="Assets\Codes\TehaiSet.cs" />
     <Compile Include="Assets\Codes\TehaiSetManager.cs" />
     <Compile Include="Assets\Codes\Test.cs" />
+    <Compile Include="Assets\Codes\YakuViewer.cs" />
     <None Include="Assets\Codes\common\Plugins\BitmapFontImporter\Shaders\Font2.shader" />
     <None Include="Assets\Codes\common\Plugins\BitmapFontImporter\Shaders\BFILogic.cginc" />
     <None Include="Assets\Codes\common\Plugins\BitmapFontImporter\Shaders\Font4.shader" />
     <None Include="Assets\Codes\common\Plugins\BitmapFontImporter\Shaders\Font5.shader" />
     <None Include="Assets\Codes\common\Plugins\BitmapFontImporter\Shaders\Font3.shader" />
+    <None Include="Assets\Fonts\yakuFont.fnt" />
     <None Include="Assets\Fonts\ScoreNumbers.fnt" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/HighSpeedMahjang/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
