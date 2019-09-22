@@ -27,13 +27,16 @@ public class PrefabUtil {
     }
 
     // プレハブをインスタンシングして親と関連付け
-    static public T createInstance<T>( T prefab, Transform parent = null, Vector3? refPosition = null ) where T : Object {
+    static public T createInstance<T>( T prefab, Transform parent = null, Vector3? refPosition = null, Quaternion? refRotation = null ) where T : Object {
         var obj = GameObject.Instantiate<T>( prefab );
         var o = obj as MonoBehaviour;
         if ( o != null ) {
             o.transform.SetParent( parent );
             if ( refPosition != null ) {
                 o.transform.localPosition = refPosition ?? Vector3.zero;
+            }
+            if ( refRotation != null ) {
+                o.transform.localRotation = refRotation ?? Quaternion.identity;
             }
             return obj;
         }
@@ -44,6 +47,9 @@ public class PrefabUtil {
             if ( refPosition != null ) {
                 o2.transform.localPosition = refPosition ?? Vector3.zero;
             }
+            if ( refRotation != null ) {
+                o.transform.localRotation = refRotation ?? Quaternion.identity;
+            }
             return obj;
         }
 
@@ -53,6 +59,9 @@ public class PrefabUtil {
         }
         if ( refPosition != null ) {
             o3.transform.localPosition = refPosition ?? Vector3.zero;
+        }
+        if ( refRotation != null ) {
+            o.transform.localRotation = refRotation ?? Quaternion.identity;
         }
         return obj;
     }
