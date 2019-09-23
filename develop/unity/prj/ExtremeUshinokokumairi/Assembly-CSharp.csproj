@@ -126,6 +126,7 @@
     <Compile Include="Assets\Codes\Countdown.cs" />
     <Compile Include="Assets\Codes\GameManager.cs" />
     <Compile Include="Assets\Codes\GameStateManager.cs" />
+    <Compile Include="Assets\Codes\HummerMotion.cs" />
     <Compile Include="Assets\Codes\KugiPoint.cs" />
     <Compile Include="Assets\Codes\TitleManager.cs" />
     <Compile Include="Assets\Codes\WaraDoll.cs" />

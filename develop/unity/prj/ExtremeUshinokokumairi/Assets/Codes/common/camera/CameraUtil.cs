@@ -36,4 +36,17 @@ public class CameraUtil {
         pos = cameraPos + curZ * forwardN;
         q = Quaternion.LookRotation( aabb.Center - pos, up );
     }
+
+    // マウスクリックした座標の先にある任意平面との衝突位置取得
+    static public bool calcClickPosition( Camera camera, Vector3? screenPos, out Vector3 pos ) {
+        var touchPos = screenPos ?? Input.mousePosition;
+        var plane = new Plane( Vector3.forward, 0 );
+        var ray = camera.ScreenPointToRay( touchPos );
+        if ( plane.Raycast( ray, out float enter ) ) {
+            pos = ray.GetPoint( enter );
+            return true;
+        }
+        pos = Vector3.zero;
+        return false;
+    }
 }

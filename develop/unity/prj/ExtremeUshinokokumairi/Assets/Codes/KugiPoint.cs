@@ -7,6 +7,9 @@ public class KugiPoint : MonoBehaviour
     [SerializeField]
     SpriteButton point_;
 
+    public System.Action HitCallback { set { hitCallback_ = value; } }
+    System.Action hitCallback_;
+
     // セットトップ
     //  kugiCount: 打ち込む釘の回数
     public void setup( int kugiCount ) {
@@ -19,10 +22,12 @@ public class KugiPoint : MonoBehaviour
     {
         // 押し下げ時処理
         point_.OnDecide = ( btnName ) => {
-            // 釘カウンターが残っていたらエフェクト出して減らす
+            // 釘カウンターが残っていたら減らす
             var p = GameManager.getInstance().ParticleEmitter.emit( "KugiHitPt" );
             p.transform.SetParent( transform );
             p.transform.localPosition = Vector3.zero;
+            if ( hitCallback_ != null )
+                hitCallback_();
         };
     }
 

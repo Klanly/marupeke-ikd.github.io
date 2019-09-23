@@ -18,6 +18,9 @@ public class GameManager : GameManagerBase {
     ParticleEmitter particleEmitter_;
     public ParticleEmitter ParticleEmitter { get { return particleEmitter_; } }
 
+    [SerializeField]
+    HummerMotion hummer_;
+
 
     public static GameManager getInstance() {
         return gameManager_g;
@@ -26,7 +29,9 @@ public class GameManager : GameManagerBase {
     private void Awake() {
         gameManager_g = this;
         countDown_.gameObject.SetActive( false );
+        hummer_.gameObject.SetActive( false );
         waraDollSys_ = PrefabUtil.createInstance( waraDollSysPrefab_, transform, Vector3.zero );
+        waraDollSys_.setup( new WaraDollSystem.Parameter(), hummer_ );
     }
 
     private void OnDestroy() {
@@ -68,6 +73,10 @@ public class GameManager : GameManagerBase {
 
     class Idle : State<GameManager> {
         public Idle(GameManager parent) : base( parent ) { }
+        protected override State innerInit() {
+            parent_.hummer_.gameObject.SetActive( true );
+            return null;
+        }
         protected override State innerUpdate() {
             return this;
         }
