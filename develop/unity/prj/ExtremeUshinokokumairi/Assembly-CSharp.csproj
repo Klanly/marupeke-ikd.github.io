@@ -128,7 +128,10 @@
     <Compile Include="Assets\Codes\GameStateManager.cs" />
     <Compile Include="Assets\Codes\HummerMotion.cs" />
     <Compile Include="Assets\Codes\KugiPoint.cs" />
+    <Compile Include="Assets\Codes\NoroiGetCounter.cs" />
+    <Compile Include="Assets\Codes\NoroiGetParticle.cs" />
     <Compile Include="Assets\Codes\TitleManager.cs" />
+    <Compile Include="Assets\Codes\Tree.cs" />
     <Compile Include="Assets\Codes\WaraDoll.cs" />
     <Compile Include="Assets\Codes\WaraDollSystem.cs" />
     <None Include="Assets\Codes\common\Plugins\BitmapFontImporter\Shaders\Font2.shader" />

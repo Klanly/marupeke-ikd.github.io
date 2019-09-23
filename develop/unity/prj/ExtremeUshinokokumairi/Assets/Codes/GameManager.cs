@@ -21,17 +21,25 @@ public class GameManager : GameManagerBase {
     [SerializeField]
     HummerMotion hummer_;
 
+    [SerializeField]
+    Tree tree_;
+
+    [SerializeField]
+    NoroiGetCounter noroiGetCounter_;
+
 
     public static GameManager getInstance() {
         return gameManager_g;
-    } 
+    }
 
     private void Awake() {
         gameManager_g = this;
         countDown_.gameObject.SetActive( false );
         hummer_.gameObject.SetActive( false );
-        waraDollSys_ = PrefabUtil.createInstance( waraDollSysPrefab_, transform, Vector3.zero );
+        waraDollSys_ = PrefabUtil.createInstance( waraDollSysPrefab_, null, Vector3.zero );
+        tree_.setDoolSys( waraDollSys_ );
         waraDollSys_.setup( new WaraDollSystem.Parameter(), hummer_ );
+        waraDollSys_.setActive( false );
     }
 
     private void OnDestroy() {
@@ -75,12 +83,51 @@ public class GameManager : GameManagerBase {
         public Idle(GameManager parent) : base( parent ) { }
         protected override State innerInit() {
             parent_.hummer_.gameObject.SetActive( true );
+            parent_.waraDollSys_.setActive( true );
+            parent_.waraDollSys_.AllHitCallback = () => {
+                setNextState( new NextDoolSet( parent_ ) );
+            };
             return null;
         }
         protected override State innerUpdate() {
             return this;
         }
     }
+
+    class NextDoolSet : State<GameManager> {
+        public NextDoolSet(GameManager parent) : base( parent ) { }
+        protected override State innerInit() {
+            // 呪い獲得パーティクルをカウンターに向けて飛ばす
+            var noroiGetParticle = parent_.ParticleEmitter.emit( "NoroiGetMovePt" );
+            noroiGetParticle.transform.localPosition = Vector3.zero;
+            var p = noroiGetParticle as NoroiGetParticle;
+            if ( p != null ) {
+                var nextPos = parent_.noroiGetCounter_.getNextCountPosition();
+                p.setEndPosition( nextPos );
+                p.FinishCallback = () => {
+                    parent_.noroiGetCounter_.add();
+                };
+            }
+            // 同時に今のワラ人形を次へ
+            parent_.hummer_.gameObject.SetActive( false );
+            parent_.waraDollSys_.setActive( false );
+            var preWaraDollSys = parent_.waraDollSys_;
+            GlobalState.wait( 0.5f, () => {
+                parent_.waraDollSys_ = PrefabUtil.createInstance( parent_.waraDollSysPrefab_, null, Vector3.zero );
+                parent_.tree_.setDoolSys( parent_.waraDollSys_ );
+                parent_.waraDollSys_.setup( new WaraDollSystem.Parameter(), parent_.hummer_ );
+                parent_.waraDollSys_.setActive( false );
+
+                parent_.tree_.turnNext( () => {
+                    Destroy( preWaraDollSys.gameObject );
+                    setNextState( new Idle( parent_ ) );
+                } );
+                return false;
+            } );
+            return this;
+        }
+    }
+
 
     class FadeOut : State<GameManager> {
         public FadeOut(GameManager parent) : base( parent ) { }

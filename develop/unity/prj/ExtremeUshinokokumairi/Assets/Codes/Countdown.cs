@@ -27,7 +27,7 @@ public class Countdown : MonoBehaviour
             curZoom = Lerps.Float.easeInOut( zoomFactor_, 1.0f, t );
             text_.transform.localScale = new Vector3( curZoom, curZoom, curZoom );
             return true;
-        } ).nextTime( 1.0f - zoomTime_, (sec, t) => {
+        } ).nextTime( 0.5f - zoomTime_, (sec, t) => {
             return true;
         } ).finish( () => {
             finishCallback();
