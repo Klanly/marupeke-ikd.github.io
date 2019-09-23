@@ -67,6 +67,9 @@ public class SpriteUI : MonoBehaviour
 
     private void Awake() {
         collider_ = GetComponent<Collider>();
+        if ( collider_ = null ) {
+            Debug.Log( "SpriteUI warning: " + name + " has no collider." );
+        }
     }
 
     void Start()

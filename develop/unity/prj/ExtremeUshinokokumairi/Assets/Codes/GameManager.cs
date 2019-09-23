@@ -10,10 +10,27 @@ public class GameManager : GameManagerBase {
     [SerializeField]
     WaraDollSystem waraDollSysPrefab_;
 
+    [SerializeField]
+    Transform uiCameraRoot_;
+    public Transform UIRoot { get { return uiCameraRoot_; } }
+
+    [SerializeField]
+    ParticleEmitter particleEmitter_;
+    public ParticleEmitter ParticleEmitter { get { return particleEmitter_; } }
+
+
+    public static GameManager getInstance() {
+        return gameManager_g;
+    } 
 
     private void Awake() {
+        gameManager_g = this;
         countDown_.gameObject.SetActive( false );
         waraDollSys_ = PrefabUtil.createInstance( waraDollSysPrefab_, transform, Vector3.zero );
+    }
+
+    private void OnDestroy() {
+        gameManager_g = null;
     }
 
     void Start() {
@@ -25,6 +42,7 @@ public class GameManager : GameManagerBase {
         stateUpdate();
     }
 
+    static GameManager gameManager_g;
     WaraDollSystem waraDollSys_;
 
     class FadeIn : State<GameManager> {
@@ -50,12 +68,7 @@ public class GameManager : GameManagerBase {
 
     class Idle : State<GameManager> {
         public Idle(GameManager parent) : base( parent ) { }
-        protected override State innerInit() {
-            GlobalState.time( 1.0f, (sec, t) => {
-                return true;
-            } ).finish( () => {
-                setNextState( new FadeOut( parent_ ) );
-            } );
+        protected override State innerUpdate() {
             return this;
         }
     }

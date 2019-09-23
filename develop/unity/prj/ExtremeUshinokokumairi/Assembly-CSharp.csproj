@@ -98,6 +98,8 @@
     <Compile Include="Assets\Codes\common\MoveValueLong.cs" />
     <Compile Include="Assets\Codes\common\ObjectLooker.cs" />
     <Compile Include="Assets\Codes\common\OnCollideCallback.cs" />
+    <Compile Include="Assets\Codes\common\Particle\Particle.cs" />
+    <Compile Include="Assets\Codes\common\Particle\ParticleEmitter.cs" />
     <Compile Include="Assets\Codes\common\PrefabUtil.cs" />
     <Compile Include="Assets\Codes\common\Randoms.cs" />
     <Compile Include="Assets\Codes\common\Randoms\RandomPlace.cs" />
@@ -124,6 +126,7 @@
     <Compile Include="Assets\Codes\Countdown.cs" />
     <Compile Include="Assets\Codes\GameManager.cs" />
     <Compile Include="Assets\Codes\GameStateManager.cs" />
+    <Compile Include="Assets\Codes\KugiPoint.cs" />
     <Compile Include="Assets\Codes\TitleManager.cs" />
     <Compile Include="Assets\Codes\WaraDoll.cs" />
     <Compile Include="Assets\Codes\WaraDollSystem.cs" />
