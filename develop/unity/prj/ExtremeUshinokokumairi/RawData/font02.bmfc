@@ -1,0 +1,60 @@
+# AngelCode Bitmap Font Generator configuration file
+fileVersion=1
+
+# font settings
+fontName=衡山毛筆フォント
+fontFile=
+charSet=0
+fontSize=64
+aa=1
+scaleH=100
+useSmoothing=1
+isBold=0
+isItalic=0
+useUnicode=1
+disableBoxChars=1
+outputInvalidCharGlyph=0
+dontIncludeKerningPairs=0
+useHinting=1
+renderFromOutline=0
+useClearType=1
+
+# character alignment
+paddingDown=0
+paddingUp=0
+paddingRight=0
+paddingLeft=0
+spacingHoriz=1
+spacingVert=1
+useFixedHeight=0
+forceZero=0
+
+# output file
+outWidth=512
+outHeight=512
+outBitDepth=32
+fontDescFormat=0
+fourChnlPacked=0
+textureFormat=png
+textureCompression=0
+alphaChnl=1
+redChnl=0
+greenChnl=0
+blueChnl=0
+invA=0
+invR=0
+invG=0
+invB=0
+
+# outline
+outlineThickness=0
+
+# selected chars
+chars=32,34,44,46,48-57,65,77,84,97,100-101,103-105,107-108,111-112,114-118,8230,12289,12354,12356,12364
+chars=12375-12376,12383-12384,12387,12390-12392,12394,12398-12400,12414,12417,12419-12420,12426,12428
+chars=12431,12435,12456,12463,12473,12483,12488,12512,12522,12540,19971,19985,20061,20102,20116,20154
+chars=20309,20843,20845,21051,21361,21442,21491,21610,22235,22769,22810,22987,24038,24336,24515,25163
+chars=25171,25968,26412,26524,32066,32080,33145,33235,35492,36275,36817,37336,38283,38291,38957,65281
+chars=65311
+
+# imported icon images

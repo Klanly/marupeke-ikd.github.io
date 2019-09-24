@@ -134,6 +134,7 @@
     <Compile Include="Assets\Codes\Tree.cs" />
     <Compile Include="Assets\Codes\WaraDoll.cs" />
     <Compile Include="Assets\Codes\WaraDollSystem.cs" />
+    <Compile Include="Assets\Codes\Watch.cs" />
     <None Include="Assets\Codes\common\Plugins\BitmapFontImporter\Shaders\Font2.shader" />
     <None Include="Assets\Codes\common\Plugins\BitmapFontImporter\Shaders\BFILogic.cginc" />
     <None Include="Assets\Codes\common\Plugins\BitmapFontImporter\Shaders\Font4.shader" />

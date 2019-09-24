@@ -27,6 +27,9 @@ public class GameManager : GameManagerBase {
     [SerializeField]
     NoroiGetCounter noroiGetCounter_;
 
+    [SerializeField]
+    Watch watch_;
+
 
     public static GameManager getInstance() {
         return gameManager_g;
@@ -40,6 +43,7 @@ public class GameManager : GameManagerBase {
         tree_.setDoolSys( waraDollSys_ );
         waraDollSys_.setup( new WaraDollSystem.Parameter(), hummer_ );
         waraDollSys_.setActive( false );
+        watch_.setActive( false );
     }
 
     private void OnDestroy() {
@@ -84,6 +88,7 @@ public class GameManager : GameManagerBase {
         protected override State innerInit() {
             parent_.hummer_.gameObject.SetActive( true );
             parent_.waraDollSys_.setActive( true );
+            parent_.watch_.setActive( true );
             parent_.waraDollSys_.AllHitCallback = () => {
                 setNextState( new NextDoolSet( parent_ ) );
             };
