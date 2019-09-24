@@ -95,8 +95,18 @@ public class GameManager : GameManagerBase {
             return null;
         }
         protected override State innerUpdate() {
+            // 時刻が午前3時を過ぎたら終了
+            int curSec = parent_.watch_.getCurSec();
+            if ( curSec >= limitSec_ ) {
+                parent_.hummer_.gameObject.SetActive( false );
+                parent_.waraDollSys_.setActive( false );
+                parent_.watch_.setActive( false );
+                parent_.waraDollSys_.AllHitCallback = null;
+                return new FadeOut( parent_ );
+            }
             return this;
         }
+        int limitSec_ = 3 * 3600;   // 午前3時
     }
 
     class NextDoolSet : State<GameManager> {

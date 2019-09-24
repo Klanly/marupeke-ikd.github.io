@@ -27,6 +27,10 @@ public class Watch : MonoBehaviour {
     [SerializeField]
     bool bActive_ = false;
 
+    // 現在時刻秒を取得
+    public  int getCurSec() {
+        return curSecond_;
+    }
 
     // 時刻を設定
     public void setTime(int hour, int minute, int sec) {
