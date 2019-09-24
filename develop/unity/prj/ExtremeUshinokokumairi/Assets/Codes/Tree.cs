@@ -23,11 +23,11 @@ public class Tree : MonoBehaviour
         waraDoll.transform.localRotation = Quaternion.identity;
     }
 
-    public void turnNext( System.Action finishCallback ) {
+    public void turnNext( float turnTime, System.Action finishCallback ) {
         // 120度回転
         var sq = transform.localRotation;
         var eq = Quaternion.Euler( 0.0f, -120.0f, 0.0f ) * sq;
-        GlobalState.time( 1.0f, (sec, t) => {
+        GlobalState.time( turnTime, (sec, t) => {
             transform.localRotation = Lerps.Quaternion.easeInOut( sq, eq, t );
             return true;
         } ).finish( () => {

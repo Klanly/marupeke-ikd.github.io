@@ -8,6 +8,12 @@ public class SpriteUIController : MonoBehaviour
     [SerializeField]
     float maxDistance_ = 25.0f;
 
+    // 現在のポジションで強制的にマウスクリックを1回行う
+    public void forceMouseButtonClick() {
+        bForceMouseButton0Down_ = true;
+        bForceMouseButton0Up_ = false;
+    }
+
     void Start()
     {
         
@@ -15,7 +21,11 @@ public class SpriteUIController : MonoBehaviour
 
     void Update()
     {
-        if ( Input.GetMouseButtonDown( 0 ) == true ) {
+        if ( Input.GetMouseButtonDown( 0 ) == true || bForceMouseButton0Down_ == true ) {
+            if ( bForceMouseButton0Down_ == true ) {
+                bForceMouseButton0Down_ = false;
+                bForceMouseButton0Up_ = true;
+            }
             Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
             RaycastHit hit;
             if ( Physics.Raycast( ray, out hit , maxDistance_ ) == true ) {
@@ -27,7 +37,10 @@ public class SpriteUIController : MonoBehaviour
                     curSelectUI_ = UI;
                 }
             }
-        } else if ( Input.GetMouseButtonUp( 0 ) == true ) {
+        } else if ( Input.GetMouseButtonUp( 0 ) == true || bForceMouseButton0Up_ == true ) {
+            if ( bForceMouseButton0Up_ == true ) {
+                bForceMouseButton0Up_ = false;
+            }
             Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
             RaycastHit hit;
             if ( Physics.Raycast( ray, out hit, maxDistance_ ) == true ) {
@@ -52,4 +65,6 @@ public class SpriteUIController : MonoBehaviour
     }
 
     SpriteUI curSelectUI_ = null;
+    bool bForceMouseButton0Down_ = false;
+    bool bForceMouseButton0Up_ = false;
 }

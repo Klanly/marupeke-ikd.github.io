@@ -58,6 +58,9 @@ public class WaraDollSystem : MonoBehaviour
     void kugiHit( int kugiIdx, string pointName, int remain, bool isFirst ) {
         hummer_.hit( kugiPoints_[ kugiIdx ].transform.position );
 
+        // 成功失敗を通知
+        hummer_.notifySuccessHit( remain >= 0 );
+
         if ( allHitCallback_ == null )
             return;
 

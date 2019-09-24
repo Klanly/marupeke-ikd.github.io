@@ -30,6 +30,15 @@ public class GameManager : GameManagerBase {
     [SerializeField]
     Watch watch_;
 
+    [SerializeField]
+    ECG ecg_;
+
+    [SerializeField]
+    SpriteUIController uiController_;
+
+    [SerializeField]
+    SpriteButton failButton_;
+
 
     public static GameManager getInstance() {
         return gameManager_g;
@@ -52,15 +61,71 @@ public class GameManager : GameManagerBase {
 
     void Start() {
         state_ = new FadeIn( this );
+        extremeState_ = null;
+        // 成功を続けたら心拍数を上げていく
+        hummer_.SuccessHit = () => {
+            if ( extremeState_ != null ) {
+                return;
+            }
+            float b = ecg_.addBeat( 2.0f );
+            if ( b >= 150.0f ) {
+                // エクストリーム！
+                // ハンマー下ろしまくり！
+                extremeState_ = new Extreme( this );
+            }
+        };
+        // 失敗したら心拍数下げる
+        hummer_.FailHit = () => {
+            if ( extremeState_ != null ) {
+                return;
+            }
+            ecg_.addBeat( 1.0f );
+        };
+        // 空ぶり
+        failButton_.OnDecide = ( name ) => {
+            // ハンマーの位置をXY平面投影点へ
+            Vector3 pos = Vector3.zero;
+            if ( CameraUtil.calcClickPosition( Camera.main, Input.mousePosition, out pos ) == true ) {
+                hummer_.hit( pos );
+            }
+        };
     }
 
     // Update is called once per frame
     void Update() {
         stateUpdate();
+        if ( extremeState_ != null ) {
+            extremeState_ = extremeState_.update();
+        }
     }
 
     static GameManager gameManager_g;
     WaraDollSystem waraDollSys_;
+    State extremeState_;
+
+    // ハンマー叩きまくり
+    class Extreme : State<GameManager> {
+        public Extreme( GameManager parent ) : base( parent ) {}
+        protected override State innerInit() {
+            return null;
+        }
+        protected override State innerUpdate() {
+            interval_ += Time.deltaTime;
+            t_ += Time.deltaTime;
+            float num = 8.0f;
+            if ( interval_ >= 1.0f / num ) {
+                parent_.uiController_.forceMouseButtonClick();  // 強制ハンマー振り下ろし
+                interval_ -= 1.0f / num;
+            }
+            if ( t_ >= 12.0f ) {
+                parent_.ecg_.setBeat( 65.0f );
+                return null;
+            }
+            return this;
+        }
+        float interval_ = 0.0f;
+        float t_ = 0.0f;
+    }
 
     class FadeIn : State<GameManager> {
         public FadeIn(GameManager parent) : base( parent ) { }
@@ -107,6 +172,7 @@ public class GameManager : GameManagerBase {
             return this;
         }
         int limitSec_ = 3 * 3600;   // 午前3時
+        bool bExtreme_ = false;
     }
 
     class NextDoolSet : State<GameManager> {
@@ -124,16 +190,19 @@ public class GameManager : GameManagerBase {
                 };
             }
             // 同時に今のワラ人形を次へ
+            //  エクストリーム中はチョッパヤで
             parent_.hummer_.gameObject.SetActive( false );
             parent_.waraDollSys_.setActive( false );
             var preWaraDollSys = parent_.waraDollSys_;
-            GlobalState.wait( 0.5f, () => {
+            float waitTime = ( parent_.extremeState_ != null ? 0.1f : 0.5f );
+            float turnTime = ( parent_.extremeState_ != null ? 0.3f : 1.0f );
+            GlobalState.wait( waitTime, () => {
                 parent_.waraDollSys_ = PrefabUtil.createInstance( parent_.waraDollSysPrefab_, null, Vector3.zero );
                 parent_.tree_.setDoolSys( parent_.waraDollSys_ );
                 parent_.waraDollSys_.setup( new WaraDollSystem.Parameter(), parent_.hummer_ );
                 parent_.waraDollSys_.setActive( false );
 
-                parent_.tree_.turnNext( () => {
+                parent_.tree_.turnNext( turnTime, () => {
                     Destroy( preWaraDollSys.gameObject );
                     setNextState( new Idle( parent_ ) );
                 } );

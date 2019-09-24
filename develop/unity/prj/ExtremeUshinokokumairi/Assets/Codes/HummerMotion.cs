@@ -12,6 +12,23 @@ public class HummerMotion : MonoBehaviour {
     [SerializeField]
     float hummerHeadOffset_ = 0.0f;
 
+    // 成功ヒット時コールバック
+    public System.Action SuccessHit { set { successHit_ = value; } }
+    System.Action successHit_;
+
+    // 失敗ヒット時コールバック
+    public System.Action FailHit { set { failHit_ = value; } }
+    System.Action failHit_;
+
+    // 成功、失敗を通知
+    public void notifySuccessHit( bool isSuccess ) {
+        if ( isSuccess == true ) {
+            successHit_();
+        } else {
+            failHit_();
+        }
+    }
+
     // 打つ
     public void hit( Vector3 pos ) {
         setPosition( pos );
@@ -71,10 +88,13 @@ public class HummerMotion : MonoBehaviour {
 
         void swing() {
             // ハンマーを振る
+            t_ += Time.deltaTime;
+            if ( t_ >= sec_ ) {
+                t_ = sec_;
+            }
             float deg = 90.0f - Lerps.Float.easeIn01( Mathf.Clamp01( t_ / sec_ ) );
             var q = Quaternion.Euler( 90.0f - deg, 0.0f, 0.0f );
             parent_.snapRoot_.localRotation = q;
-            t_ += Time.deltaTime;
             if ( t_ >= sec_ ) {
                 t_ = 0.0f;
                 action_ = wait;
