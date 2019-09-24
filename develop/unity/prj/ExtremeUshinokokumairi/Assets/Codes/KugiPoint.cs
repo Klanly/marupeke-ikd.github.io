@@ -13,10 +13,15 @@ public class KugiPoint : MonoBehaviour
     [SerializeField]
     TextMesh countText_;
 
-    // name: 箇所の名前
+    [SerializeField]
+    GameObject KugiPrefab_;
+
+
+    // string: 箇所の名前
     // int: 残り規定回数
-    public System.Action< string, int > HitCallback { set { hitCallback_ = value; } }
-    System.Action< string, int > hitCallback_;
+    // bool: 最初のヒットか？
+    public System.Action< string, int, bool > HitCallback { set { hitCallback_ = value; } }
+    System.Action< string, int, bool > hitCallback_;
 
     public void setActive( bool isActive ) {
         point_.setEnable( isActive );
@@ -29,6 +34,7 @@ public class KugiPoint : MonoBehaviour
     //  kugiCount: 打ち込む釘の回数
     public void setup( int kugiCount ) {
         kugiCount_ = kugiCount;
+        initKugiCount_ = kugiCount;
         setCounter( kugiCount );
     }
 
@@ -50,16 +56,29 @@ public class KugiPoint : MonoBehaviour
     {
         // 押し下げ時処理
         point_.OnDecide = ( btnName ) => {
+            kugiCount_--;
+            setCounter( kugiCount_ );
+            if ( initKugiCount_ > 0 ) {
+                if ( isFirstHit_ == true ) {
+                    // 釘を刺す
+                    kugi_ = PrefabUtil.createInstance( KugiPrefab_, transform );
+                }
+                // 釘を打ち込む
+                if ( initKugiCount_ > 0 && kugiCount_ >= -1 ) {
+                    kugi_.transform.localPosition = new Vector3( 0.0f, 0.0f, kugiInsertDist_ * ( 1.0f - ( float )kugiCount_ / initKugiCount_ ) );
+                }
+            }
+
             // 火花バシーン
             var p = GameManager.getInstance().ParticleEmitter.emit( "KugiHitPt" );
             p.transform.SetParent( transform );
             p.transform.localPosition = Vector3.zero;
 
             // 釘カウンター処理
-            kugiCount_--;
-            setCounter( kugiCount_ );
-            if ( hitCallback_ != null )
-                hitCallback_( pointName_, kugiCount_ );
+            if ( hitCallback_ != null ) {
+                hitCallback_( pointName_, kugiCount_, isFirstHit_ );
+                isFirstHit_ = false;
+            }
         };
     }
 
@@ -69,5 +88,9 @@ public class KugiPoint : MonoBehaviour
         
     }
 
+    int initKugiCount_ = 1;
     int kugiCount_ = 1;
+    bool isFirstHit_ = true;
+    GameObject kugi_;
+    float kugiInsertDist_ = 1.5f;
 }

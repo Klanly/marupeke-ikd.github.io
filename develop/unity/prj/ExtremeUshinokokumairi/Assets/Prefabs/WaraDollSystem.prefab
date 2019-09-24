@@ -35558,6 +35558,8 @@ MonoBehaviour:
   pointName_: Heart
   point_: {fileID: 1141118608}
   countText_: {fileID: 1203701314}
+  KugiPrefab_: {fileID: 7315150955335273277, guid: 93618e9dcc0cc0d489564d08b41fb186,
+    type: 3}
 --- !u!1 &1878681922876517659
 GameObject:
   m_ObjectHideFlags: 0
@@ -35606,6 +35608,8 @@ MonoBehaviour:
   pointName_: LeftFoot
   point_: {fileID: 841918599}
   countText_: {fileID: 1730981253}
+  KugiPrefab_: {fileID: 7315150955335273277, guid: 93618e9dcc0cc0d489564d08b41fb186,
+    type: 3}
 --- !u!1 &2663538236550610493
 GameObject:
   m_ObjectHideFlags: 0
@@ -35654,6 +35658,8 @@ MonoBehaviour:
   pointName_: LeftHand
   point_: {fileID: 1210244215}
   countText_: {fileID: 1378624040}
+  KugiPrefab_: {fileID: 7315150955335273277, guid: 93618e9dcc0cc0d489564d08b41fb186,
+    type: 3}
 --- !u!1 &3153915845204554163
 GameObject:
   m_ObjectHideFlags: 0
@@ -35702,6 +35708,8 @@ MonoBehaviour:
   pointName_: RightHand
   point_: {fileID: 840303640}
   countText_: {fileID: 1873086999}
+  KugiPrefab_: {fileID: 7315150955335273277, guid: 93618e9dcc0cc0d489564d08b41fb186,
+    type: 3}
 --- !u!1 &3290892182328616951
 GameObject:
   m_ObjectHideFlags: 0
@@ -35750,6 +35758,8 @@ MonoBehaviour:
   pointName_: RightFoot
   point_: {fileID: 1116744397}
   countText_: {fileID: 194044892}
+  KugiPrefab_: {fileID: 7315150955335273277, guid: 93618e9dcc0cc0d489564d08b41fb186,
+    type: 3}
 --- !u!1 &5023916249754464297
 GameObject:
   m_ObjectHideFlags: 0
@@ -35798,6 +35808,8 @@ MonoBehaviour:
   pointName_: Head
   point_: {fileID: 459765240}
   countText_: {fileID: 1581909720}
+  KugiPrefab_: {fileID: 7315150955335273277, guid: 93618e9dcc0cc0d489564d08b41fb186,
+    type: 3}
 --- !u!1 &6650139931057288878
 GameObject:
   m_ObjectHideFlags: 0
@@ -35846,6 +35858,8 @@ MonoBehaviour:
   pointName_: Hara
   point_: {fileID: 241541024}
   countText_: {fileID: 356544249}
+  KugiPrefab_: {fileID: 7315150955335273277, guid: 93618e9dcc0cc0d489564d08b41fb186,
+    type: 3}
 --- !u!1 &8816116636326954087
 GameObject:
   m_ObjectHideFlags: 0

@@ -41,9 +41,9 @@ public class WaraDollSystem : MonoBehaviour
         for ( int i = 0; i < pointNum; ++i ) {
             int e = indices[ i ];
             kugiPoints_[ e ].setup( Random.Range( param.minKugiCount_, param.maxKugiCount_ + 1 ) );
-            kugiPoints_[ e ].HitCallback = ( pointName, remain ) => {
+            kugiPoints_[ e ].HitCallback = ( pointName, remain, isFirst ) => {
                 if ( bActive_ )
-                    kugiHit( e, pointName, remain );
+                    kugiHit( e, pointName, remain, isFirst );
 
             };
         }
@@ -55,7 +55,7 @@ public class WaraDollSystem : MonoBehaviour
     }
 
     // 釘を打った
-    void kugiHit( int kugiIdx, string pointName, int remain ) {
+    void kugiHit( int kugiIdx, string pointName, int remain, bool isFirst ) {
         hummer_.hit( kugiPoints_[ kugiIdx ].transform.position );
 
         if ( allHitCallback_ == null )
