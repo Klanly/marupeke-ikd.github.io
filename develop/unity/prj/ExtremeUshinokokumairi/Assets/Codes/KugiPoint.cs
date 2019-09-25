@@ -44,6 +44,8 @@ public class KugiPoint : MonoBehaviour
             Vector3 ss = Vector3.one;
             Vector3 es = ss * 2.0f;
             GlobalState.time( 0.4f, (sec, t) => {
+                if ( this == null )
+                    return false;
                 transform.localScale = Lerps.Vec3.easeOut( ss, es, t );
                 return true;
             } );
@@ -51,6 +53,8 @@ public class KugiPoint : MonoBehaviour
             Vector3 ss = transform.localScale;
             Vector3 es = Vector3.one;
             GlobalState.time( 0.4f, (sec, t) => {
+                if ( this == null )
+                    return false;
                 transform.localScale = Lerps.Vec3.easeOut( ss, es, t );
                 return true;
             } );

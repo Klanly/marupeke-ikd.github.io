@@ -45,6 +45,9 @@ public class GameManager : GameManagerBase {
     [SerializeField]
     TextMesh deadMessage_;
 
+    [SerializeField]
+    TextMesh scoreText_;
+
 
     public static GameManager getInstance() {
         return gameManager_g;
@@ -72,6 +75,7 @@ public class GameManager : GameManagerBase {
         extremeState_ = null;
         // 成功を続けたら心拍数を上げていく
         hummer_.SuccessHit = () => {
+            addScore( 1 );
             if ( extremeState_ != null ) {
                 return;
             }
@@ -87,6 +91,7 @@ public class GameManager : GameManagerBase {
             if ( extremeState_ != null ) {
                 return;
             }
+            addScore( -10 );
             ecg_.addBeat( -20.0f );
         };
         // 空ぶり
@@ -101,6 +106,7 @@ public class GameManager : GameManagerBase {
 
     // Update is called once per frame
     void Update() {
+        updateScore();
         stateUpdate();
         if ( extremeState_ != null ) {
             extremeState_ = extremeState_.update();
@@ -110,10 +116,20 @@ public class GameManager : GameManagerBase {
         }
     }
 
+    void addScore( int s ) {
+        score_ += s;
+        if ( score_ < 0 )
+            score_ = 0;
+    }
+    void updateScore() {
+        scoreText_.text = string.Format( "{0}", score_ );
+    }
+
     static GameManager gameManager_g;
     WaraDollSystem waraDollSys_;
     State extremeState_;
     State gameState_;
+    int score_ = 0;
 
     // ゲーム全体の状態監視
     class GameState : State<GameManager> {
@@ -209,6 +225,7 @@ public class GameManager : GameManagerBase {
             parent_.waraDollSys_.setActive( true );
             parent_.watch_.setActive( true );
             parent_.waraDollSys_.AllHitCallback = () => {
+                parent_.score_ += 50;
                 setNextState( new NextDoolSet( parent_ ) );
             };
             return null;
