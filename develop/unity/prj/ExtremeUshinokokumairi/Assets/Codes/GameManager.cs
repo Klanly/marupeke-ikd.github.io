@@ -48,6 +48,12 @@ public class GameManager : GameManagerBase {
     [SerializeField]
     TextMesh scoreText_;
 
+    [SerializeField]
+    GameObject finishText_;
+
+    [SerializeField]
+    ResultDollDistributor resultDollDistributor_;
+
 
     public static GameManager getInstance() {
         return gameManager_g;
@@ -62,7 +68,7 @@ public class GameManager : GameManagerBase {
         waraDollSys_.setup( new WaraDollSystem.Parameter(), hummer_ );
         waraDollSys_.setActive( false );
         watch_.setActive( false );
-
+        finishText_.SetActive( false );
         gameState_ = new GameState( this );
     }
 
@@ -130,6 +136,7 @@ public class GameManager : GameManagerBase {
     State extremeState_;
     State gameState_;
     int score_ = 0;
+    int waraCount_ = 0;
 
     // ゲーム全体の状態監視
     class GameState : State<GameManager> {
@@ -226,6 +233,7 @@ public class GameManager : GameManagerBase {
             parent_.watch_.setActive( true );
             parent_.waraDollSys_.AllHitCallback = () => {
                 parent_.score_ += 50;
+                parent_.waraCount_++;
                 setNextState( new NextDoolSet( parent_ ) );
             };
             return null;
@@ -238,7 +246,7 @@ public class GameManager : GameManagerBase {
                 parent_.waraDollSys_.setActive( false );
                 parent_.watch_.setActive( false );
                 parent_.waraDollSys_.AllHitCallback = null;
-                return new FadeOut( parent_ );
+                return new Result( parent_ );
             }
             return this;
         }
@@ -283,6 +291,28 @@ public class GameManager : GameManagerBase {
         }
     }
 
+    class Result : State<GameManager> {
+        public Result(GameManager parent ) : base(parent) { }
+        protected override State innerInit() {
+            parent_.finishText_.SetActive( true );
+            GlobalState.wait( 1.5f, () => {
+                // 人形ばら撒き
+                parent_.finishText_.SetActive( false );
+                parent_.resultDollDistributor_.start( parent_.waraCount_, () => {
+                    bWait_ = false;
+                } );
+                return false;
+            } );
+            return null;
+        }
+        protected override State innerUpdate() {
+            if ( bWait_ == false && Input.GetMouseButtonDown( 0 ) == true ) {
+                return new FadeOut( parent_ );
+            }
+            return this;
+        }
+        bool bWait_ = true;
+    }
 
     class FadeOut : State<GameManager> {
         public FadeOut(GameManager parent) : base( parent ) { }

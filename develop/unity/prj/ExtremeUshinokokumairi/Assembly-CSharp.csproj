@@ -132,6 +132,7 @@
     <Compile Include="Assets\Codes\KugiPoint.cs" />
     <Compile Include="Assets\Codes\NoroiGetCounter.cs" />
     <Compile Include="Assets\Codes\NoroiGetParticle.cs" />
+    <Compile Include="Assets\Codes\ResultDollDistributor.cs" />
     <Compile Include="Assets\Codes\TitleManager.cs" />
     <Compile Include="Assets\Codes\Tree.cs" />
     <Compile Include="Assets\Codes\UramiCursor.cs" />

@@ -36,6 +36,11 @@ public class Randoms {
             return new Vector3( Random.value - 0.5f, 0.0f, Random.value - 0.5f );
         }
 
+        // XY要素-0.5f～0.5fの乱数
+        static public Vector3 valueCenterXY() {
+            return new Vector3( Random.value - 0.5f, Random.value - 0.5f, 0.0f );
+        }
+
         // あるNに対して角度θだけ開きのあるランダムな方向
         static public Vector3 angleVariance( Vector3 N, float deg ) {
             // Nがゼロベクトルの場合は任意方向を
