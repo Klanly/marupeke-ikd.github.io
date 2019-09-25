@@ -155,13 +155,14 @@ public class GameManager : GameManagerBase {
         }
     }
 
-    // ハンマー叩きまくり
+    // エクストリーム！ハンマー叩きまくり
     class Extreme : State<GameManager> {
         public Extreme(GameManager parent) : base( parent ) { }
         protected override State innerInit() {
             return null;
         }
         protected override State innerUpdate() {
+            parent_.waraDollSys_.extreme( true );
             interval_ += Time.deltaTime;
             t_ += Time.deltaTime;
             float num = 8.0f;
@@ -170,6 +171,7 @@ public class GameManager : GameManagerBase {
                 interval_ -= 1.0f / num;
             }
             if ( t_ >= 12.0f ) {
+                parent_.waraDollSys_.extreme( false );
                 parent_.ecg_.setBeat( 65.0f );
                 return null;
             }

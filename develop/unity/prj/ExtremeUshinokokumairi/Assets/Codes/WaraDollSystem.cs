@@ -82,6 +82,16 @@ public class WaraDollSystem : MonoBehaviour
         }
     }
 
+    // エクストリーム
+    public void extreme( bool isExtreme ) {
+        if ( bExtreme_ == isExtreme )
+            return;
+        bExtreme_ = isExtreme;
+        for ( int i = 0; i < kugiPoints_.Length; ++i ) {
+            kugiPoints_[ i ].extreme( isExtreme );
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -104,4 +114,5 @@ public class WaraDollSystem : MonoBehaviour
     Parameter parameter_ = new Parameter();
     HummerMotion hummer_;
     bool bActive_ = false;
+    bool bExtreme_ = false;
 }

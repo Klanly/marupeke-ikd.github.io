@@ -38,6 +38,25 @@ public class KugiPoint : MonoBehaviour
         setCounter( kugiCount );
     }
 
+    // エクストリーム
+    public void extreme(bool isExtreme) {
+        if ( isExtreme == true ) {
+            Vector3 ss = Vector3.one;
+            Vector3 es = ss * 2.0f;
+            GlobalState.time( 0.4f, (sec, t) => {
+                transform.localScale = Lerps.Vec3.easeOut( ss, es, t );
+                return true;
+            } );
+        } else {
+            Vector3 ss = transform.localScale;
+            Vector3 es = Vector3.one;
+            GlobalState.time( 0.4f, (sec, t) => {
+                transform.localScale = Lerps.Vec3.easeOut( ss, es, t );
+                return true;
+            } );
+        }
+    }
+
     void setCounter( int kugiCount ) {
         string[] countTexts = new string[] {
             "呪", "壱", "弐", "参", "四", "五", "六", "七", "八", "九", "多"
