@@ -111,6 +111,7 @@
     <Compile Include="Assets\Codes\common\SimplePath.cs" />
     <Compile Include="Assets\Codes\common\sound\SoundManager.cs" />
     <Compile Include="Assets\Codes\common\SphereSurfUtil.cs" />
+    <Compile Include="Assets\Codes\common\Sprite\SpriteColor.cs" />
     <Compile Include="Assets\Codes\common\SpriteUI\SpriteButton.cs" />
     <Compile Include="Assets\Codes\common\SpriteUI\SpriteUI.cs" />
     <Compile Include="Assets\Codes\common\SpriteUI\SpriteUIController.cs" />

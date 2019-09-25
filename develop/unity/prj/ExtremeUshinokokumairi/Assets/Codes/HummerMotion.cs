@@ -31,13 +31,23 @@ public class HummerMotion : MonoBehaviour {
 
     // 打つ
     public void hit( Vector3 pos ) {
+        if ( stopMotion_ == true )
+            return;
         setPosition( pos );
         state_ = new Hit( this );
     }
 
     // 位置を変更
     public void setPosition( Vector3 pos ) {
+        if ( stopMotion_ == true )
+            return;
         transform.localPosition = pos + new Vector3( 0.0f, hummerHeadOffset_, 0.0f );
+    }
+
+    // ハンマー終了
+    public void finishMove() {
+        stopMotion_ = true;
+        state_ = null;
     }
 
     // Start is called before the first frame update
@@ -55,7 +65,7 @@ public class HummerMotion : MonoBehaviour {
     }
 
     State state_;
-
+    bool stopMotion_ = false;
 
     class Idle : State<HummerMotion> {
         public Idle(HummerMotion parent) : base( parent ) { }

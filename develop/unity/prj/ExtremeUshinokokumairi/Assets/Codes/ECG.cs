@@ -24,13 +24,16 @@ public class ECG : MonoBehaviour
     [SerializeField]
     float power_ = 1.0f;    // 鼓動の強さ
 
+    [SerializeField]
+    TextMesh text_;
+
     // 心拍数を設定
     public void setBeat( float beat ) {
         bpm_ = beat;
         if ( bpm_ >= 200 ) {
             bpm_ = 200;
-        } else if ( bpm_ < 40 ) {
-            bpm_ = 40;
+        } else if ( bpm_ < minBeat_ ) {
+            bpm_ = minBeat_;
         }
     }
 
@@ -39,9 +42,14 @@ public class ECG : MonoBehaviour
         bpm_ += beat;
         if ( bpm_ >= 200 ) {
             bpm_ = 200;
-        } else if ( bpm_ < 40 ) {
-            bpm_ = 40;
+        } else if ( bpm_ < minBeat_ ) {
+            bpm_ = minBeat_;
         }
+        return bpm_;
+    }
+
+    // 心拍数を取得
+    public float getBeat() {
         return bpm_;
     }
 
@@ -60,6 +68,9 @@ public class ECG : MonoBehaviour
 
     // 安静
     float wait() {
+        if ( bpm_ <= 0 )
+            return 0.0f;
+
         if ( interval_ >= 60.0f / bpm_ ) {
             interval_ -= 60.0f / bpm_;
             action_ = beating;
@@ -115,6 +126,8 @@ public class ECG : MonoBehaviour
         }
 
         coolTime();
+
+        text_.text = "" + bpm_ + "bpm";
     }
 
     float dist_;  // 現在の移動距離
@@ -123,4 +136,5 @@ public class ECG : MonoBehaviour
     int curIdx_ = 0;    // 移動中の動点インデックス
     int coolTimeIdx_ = -1;  // 最大距離まで到達してクールタイム中の動点インデックス
     float ct_ = 0.0f;  // クールタイム経過時間
+    int minBeat_ = 0;
 }

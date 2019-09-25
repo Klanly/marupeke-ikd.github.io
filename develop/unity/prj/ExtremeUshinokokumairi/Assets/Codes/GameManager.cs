@@ -39,6 +39,12 @@ public class GameManager : GameManagerBase {
     [SerializeField]
     SpriteButton failButton_;
 
+    [SerializeField]
+    SpriteColor localFader_;
+
+    [SerializeField]
+    TextMesh deadMessage_;
+
 
     public static GameManager getInstance() {
         return gameManager_g;
@@ -53,6 +59,8 @@ public class GameManager : GameManagerBase {
         waraDollSys_.setup( new WaraDollSystem.Parameter(), hummer_ );
         waraDollSys_.setActive( false );
         watch_.setActive( false );
+
+        gameState_ = new GameState( this );
     }
 
     private void OnDestroy() {
@@ -79,10 +87,10 @@ public class GameManager : GameManagerBase {
             if ( extremeState_ != null ) {
                 return;
             }
-            ecg_.addBeat( 1.0f );
+            ecg_.addBeat( -20.0f );
         };
         // 空ぶり
-        failButton_.OnDecide = ( name ) => {
+        failButton_.OnDecide = (name) => {
             // ハンマーの位置をXY平面投影点へ
             Vector3 pos = Vector3.zero;
             if ( CameraUtil.calcClickPosition( Camera.main, Input.mousePosition, out pos ) == true ) {
@@ -97,15 +105,59 @@ public class GameManager : GameManagerBase {
         if ( extremeState_ != null ) {
             extremeState_ = extremeState_.update();
         }
+        if ( gameState_ != null ) {
+            gameState_ = gameState_.update();
+        }
     }
 
     static GameManager gameManager_g;
     WaraDollSystem waraDollSys_;
     State extremeState_;
+    State gameState_;
+
+    // ゲーム全体の状態監視
+    class GameState : State<GameManager> {
+        public GameState(GameManager parent) : base( parent ) { }
+        protected override State innerUpdate() {
+            if ( parent_.ecg_.getBeat() <= 0.1f ) {
+                // 死にました
+                parent_.state_ = null;
+                parent_.hummer_.finishMove();
+                parent_.waraDollSys_.setActive( false );
+                return new LocalFade( parent_ );
+            }
+            return this;
+        }
+    }
+
+    // 半暗転
+    class LocalFade : State<GameManager> {
+        public LocalFade(GameManager parent) : base( parent ) { }
+        protected override State innerInit() {
+            parent_.localFader_.fadeColor( 0, 0, 0, 128, 2.0f );
+            var deadFontColor = parent_.deadMessage_.color;
+            deadFontColor.a = 0.0f;
+            parent_.deadMessage_.color = deadFontColor;
+            GlobalState.wait( 3.0f, () => {
+                parent_.deadMessage_.gameObject.SetActive( true );
+                return false;
+            } )
+            .nextTime( 1.5f, (sec,t) => {
+                deadFontColor.a = Lerps.Float.easeIn01( t );
+                parent_.deadMessage_.color = deadFontColor;
+                return true;
+            } )
+            .wait( 1.0f )
+            .finish( () => {
+                setNextState( new FadeOut( parent_ ) );
+            } );
+            return this;
+        }
+    }
 
     // ハンマー叩きまくり
     class Extreme : State<GameManager> {
-        public Extreme( GameManager parent ) : base( parent ) {}
+        public Extreme(GameManager parent) : base( parent ) { }
         protected override State innerInit() {
             return null;
         }
