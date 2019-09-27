@@ -8,7 +8,7 @@ using UnityEngine;
 public class ParticleEmitter : MonoBehaviour
 {
     [SerializeField]
-    List<Particle> particlePrefabs_;
+    List<Particle> particlePrefabs_ = new List<Particle>();
 
     private void Awake() {
         foreach ( var s in particlePrefabs_ ) {

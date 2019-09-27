@@ -8,7 +8,16 @@ class FaderManager {
 	static public FaderManager getInstance() {
 		return instance_;
 	}
-	static public Fader Fader { get { return fader_; } }
+	static public Fader Fader {
+		get {
+			// フェーダが無い場合にGlobalFaderの作成を試みる
+			// CommonResourcesがプロジェクトにあればロード可能
+			if ( fader_ == null ) {
+				fader_ = PrefabUtil.createInstance<Fader>( "GlobalFader" );
+			}
+			return fader_;
+		}
+	}
 	public void setFader( Fader fader ) {
 		fader_ = fader;
 	}

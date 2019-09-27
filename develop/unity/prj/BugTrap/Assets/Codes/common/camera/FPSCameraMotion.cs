@@ -33,7 +33,7 @@ public class FPSCameraMotion : MonoBehaviour {
     Vector3 moveRangeMax_ = Vector3.one;
 
     [SerializeField]
-    GameObject reticle_;
+    GameObject reticle_ = null;
 
     // マウスモーションを反映させる？
     public void setEnable( bool isEnable ) {

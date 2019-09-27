@@ -5,13 +5,13 @@ using UnityEngine;
 public class ColorRotation : MonoBehaviour {
 
     [SerializeField]
-    Renderer renderer_;
+    Renderer renderer_ = null;
 
     [SerializeField]
-    Color color0_;
+    Color color0_ = Color.white;
 
     [SerializeField]
-    Color color1_;
+    Color color1_ = Color.white;
 
     [SerializeField]
     float loopSec_ = 1.0f;  // 1ループにかかる秒

@@ -8,7 +8,7 @@ using UnityEngine;
 public class ImageBillboarding : MonoBehaviour {
 
     [SerializeField]
-    GameObject target_;
+    GameObject target_ = null;
 
     [SerializeField]
     bool useCameraUp_ = false;

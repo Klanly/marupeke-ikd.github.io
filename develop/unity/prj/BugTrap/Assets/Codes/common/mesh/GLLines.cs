@@ -10,7 +10,7 @@ public class GLLines : MonoBehaviour {
 	Material material_;
 
 	[SerializeField]
-	GLLine[] fixLines_;
+	GLLine[] fixLines_ = new GLLine[0];
 
 
 	static Material lineMaterial_;

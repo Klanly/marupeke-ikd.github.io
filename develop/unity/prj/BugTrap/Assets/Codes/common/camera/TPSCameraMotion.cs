@@ -134,8 +134,6 @@ public class TPSCameraMotion : MonoBehaviour
         transform.localPosition = p;
     }
 
-    float pitchRot_ = 0.0f;
-    float yawRot_ = 0.0f;
     bool bEscape_ = true;
     bool bEnable_ = true;
 }
