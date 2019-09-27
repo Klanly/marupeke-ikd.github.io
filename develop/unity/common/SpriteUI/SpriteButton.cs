@@ -25,6 +25,8 @@ public class SpriteButton : SpriteUI
     override protected void innerOnDown() {
         var e = scale_ * downScale_;
         GlobalState.time( downSec_, (sec, t) => {
+            if ( this == null )
+                return false;
             transform.localScale = Lerps.Vec3.easeIn( scale_, e, t );
             return true;
         } );
@@ -36,6 +38,8 @@ public class SpriteButton : SpriteUI
         var s = transform.localScale;
         var e = scale_;
         GlobalState.time( downSec_, (sec, t) => {
+            if ( this == null )
+                return false;
             transform.localScale = Lerps.Vec3.easeIn( s, e, t );
             return true;
         } );
@@ -51,6 +55,8 @@ public class SpriteButton : SpriteUI
         var s = transform.localScale;
         var e = s / downScale_;
         GlobalState.time( 0.2f, (sec, t) => {
+            if ( this == null )
+                return false;
             transform.localScale = Lerps.Vec3.easeIn( s, e, t );
             return true;
         } );

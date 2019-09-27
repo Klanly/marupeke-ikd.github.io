@@ -27,22 +27,44 @@ public class PrefabUtil {
     }
 
     // プレハブをインスタンシングして親と関連付け
-    static public T createInstance<T>( T prefab, Transform parent = null) where T : Object {
+    static public T createInstance<T>( T prefab, Transform parent = null, Vector3? refPosition = null, Quaternion? refRotation = null ) where T : Object {
         var obj = GameObject.Instantiate<T>( prefab );
         var o = obj as MonoBehaviour;
-        if ( o != null )
+        if ( o != null ) {
             o.transform.SetParent( parent );
-        else {
-            var o2 = obj as GameObject;
-            if ( o2 != null )
-                o2.transform.SetParent( parent );
-            else {
-                var o3 = obj as Component;
-                if ( o3 != null ) {
-                    o3.transform.SetParent( parent );
-                }
+            if ( refPosition != null ) {
+                o.transform.localPosition = refPosition ?? Vector3.zero;
             }
+            if ( refRotation != null ) {
+                o.transform.localRotation = refRotation ?? Quaternion.identity;
+            }
+            return obj;
+        }
+
+        var o2 = obj as GameObject;
+        if ( o2 != null ) {
+            o2.transform.SetParent( parent );
+            if ( refPosition != null ) {
+                o2.transform.localPosition = refPosition ?? Vector3.zero;
+            }
+            if ( refRotation != null ) {
+                o.transform.localRotation = refRotation ?? Quaternion.identity;
+            }
+            return obj;
+        }
+
+        var o3 = obj as Component;
+        if ( o3 != null ) {
+            o3.transform.SetParent( parent );
+        }
+        if ( refPosition != null ) {
+            o3.transform.localPosition = refPosition ?? Vector3.zero;
+        }
+        if ( refRotation != null ) {
+            o.transform.localRotation = refRotation ?? Quaternion.identity;
         }
         return obj;
     }
+
+    static Vector3 defaultRefPos_g = new Vector3( 0.0f, 0.0f, 0.0f );
 }

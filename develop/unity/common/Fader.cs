@@ -94,7 +94,6 @@ public class Fader : MonoBehaviour {
 		rate_.setAim( color, 0.0f );
 	}
 
-	// Use this for initialization
 	void Update () {
 		fadeVal_ = rate_.getCurVal();
 		if ( rate_.getCurVal().a < 0.001f ) {
