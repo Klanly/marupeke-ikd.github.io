@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Codes\Bug.cs" />
     <Compile Include="Assets\Codes\common\Bezier.cs" />
     <Compile Include="Assets\Codes\common\camera\CameraPicker.cs" />
     <Compile Include="Assets\Codes\common\camera\CameraUtil.cs" />
@@ -125,8 +126,11 @@
     <Compile Include="Assets\Codes\common\UIIntroTextColorAnimation.cs" />
     <Compile Include="Assets\Codes\common\Vector2Util.cs" />
     <Compile Include="Assets\Codes\common\Vector3Util.cs" />
+    <Compile Include="Assets\Codes\FieldObject.cs" />
     <Compile Include="Assets\Codes\GameManager.cs" />
     <Compile Include="Assets\Codes\GameStateManager.cs" />
+    <Compile Include="Assets\Codes\ObjectManager.cs" />
+    <Compile Include="Assets\Codes\Tento.cs" />
     <Compile Include="Assets\Codes\TitleManager.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/BugTrap/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
