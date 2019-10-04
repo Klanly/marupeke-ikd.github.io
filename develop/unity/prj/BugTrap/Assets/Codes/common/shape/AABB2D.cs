@@ -6,60 +6,72 @@ using UnityEngine;
 //
 //  左下隅（最小座標）-右上隅（最大座標）で表現
 
-public class AABB2D {
+public class AABB2D : Shape2D {
+	public Vector2 Center {
+		set {
+			center_ = value;
+		}
+		get {
+			return center_;
+		}
+	} 
+	public Vector2 HalfLen {
+		set {
+			len_ = value;
+		}
+		get {
+			return len_;
+		}
+	}
     public Vector2 Min {
-        set {
-            min_ = value;
-            Swaps.minMax( ref min_, ref max_ );
-        }
         get {
-            return min_;
+            return center_ - len_;
         }
     }
     public Vector2 Max {
-        set {
-            max_ = value;
-            Swaps.minMax( ref min_, ref max_ );
-        }
         get {
-            return max_;
-        }
-    }
-    public Vector2 Center {
-        get {
-            return ( min_ + max_ ) * 0.5f;
-        }
-    }
+			return center_ + len_;
+		}
+	}
     public Vector2 Len {
         get {
-            return ( max_ - min_ );
+            return len_ * 2.0f;
         }
     }
     public AABB2D() {
 
     }
     public AABB2D( float minX, float minY, float maxX, float maxY ) {
-        min_.x = minX;
-        min_.y = minY;
-        max_.x = maxX;
-        max_.y = maxY;
-        Swaps.minMax( ref min_, ref max_ );
+		Swaps.minMax( ref minX, ref maxX );
+		Swaps.minMax( ref minY, ref maxY );
+		center_.x = ( maxX + minX ) * 0.5f;
+		center_.y = ( maxY + minY ) * 0.5f;
+		len_.x = ( maxX - minX ) * 0.5f;
+		len_.y = ( maxY - minY ) * 0.5f;
     }
     public bool collide( Vector2 point ) {
-        if ( Vector2Util.orMin( point, min_ ) == true )
+        if ( Vector2Util.orMin( point, Min ) == true )
             return false;
-        if ( Vector2Util.orMax( point, min_ ) == true )
+        if ( Vector2Util.orMax( point, Min ) == true )
             return false;
         return true;
     }
     public bool collide( AABB2D r ) {
-        if ( Vector2Util.orMin( max_, r.min_ ) == true )
+        if ( Vector2Util.orMin( Max, r.Min ) == true )
             return false;
-        if ( Vector2Util.orMin( r.max_, min_ ) == true )
+        if ( Vector2Util.orMin( r.Max, Min ) == true )
             return false;
         return true;
     }
-    public Vector2 distance( Vector2 point, ref Vector2 normal ) {
+	public bool collide(Circle2D r)
+	{
+		return r.collide( this );
+	}
+	public bool collide(OBB2D r)
+	{
+		return r.collide( this );
+	}
+	public Vector2 distance( Vector2 point, ref Vector2 normal ) {
         if ( collide( point ) == true ) {
             // めり込んでいるので中心点から外へ向かう方向を法線とする
             normal = ( point - Center ).normalized;
@@ -67,30 +79,31 @@ public class AABB2D {
         }
 
         var colPos = new Vector2(
-            point.x < min_.x ? min_.x : ( point.x > max_.x ? max_.x : point.x ),
-            point.y < min_.y ? min_.y : ( point.y > max_.y ? max_.y : point.y )
+            point.x < Min.x ? Min.x : ( point.x > Max.x ? Max.x : point.x ),
+            point.y < Min.y ? Min.y : ( point.y > Max.y ? Max.y : point.y )
         );
 
-        normal.x = ( colPos.x <= min_.x ? -1.0f : ( colPos.x >= max_.x ? 1.0f : 0.0f ) );
-        normal.y = ( colPos.y <= min_.y ? -1.0f : ( colPos.y >= max_.y ? 1.0f : 0.0f ) );
+        normal.x = ( colPos.x <= Min.x ? -1.0f : ( colPos.x >= Max.x ? 1.0f : 0.0f ) );
+        normal.y = ( colPos.y <= Min.y ? -1.0f : ( colPos.y >= Max.y ? 1.0f : 0.0f ) );
         normal = normal.normalized;
 
         return colPos;
     }
 
 
-    public void set( List<Vector2> list ) {
-        Vector2Util.calcRegion( list, out min_, out max_ );
-    }
-    public Vector2[] getVertices() {
-        return new Vector2[] {
-            new Vector2( min_.x, min_.y ),
-            new Vector2( max_.x, min_.y ),
-            new Vector2( min_.x, max_.y ),
-            new Vector2( max_.x, max_.y )
-        };
+    public void set( Vector2 center, Vector2 halfLen ) {
+		center_ = center;
+		len_ = halfLen;	// half
     }
 
-    Vector2 min_ = Vector2.zero;
-    Vector2 max_ = Vector3.zero;
+    public Vector2[] getVertices() {
+        return new Vector2[] {
+            Min,
+			new Vector2( Min.x, Max.y ),
+			Max,
+			new Vector2( Max.x, Min.y )
+        };
+    }
+	Vector2 center_ = Vector2.zero;
+	Vector2 len_ = Vector2.zero;	// half
 }

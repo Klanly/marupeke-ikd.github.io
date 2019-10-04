@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Codes\Bug.cs" />
+    <Compile Include="Assets\Codes\ColTest.cs" />
     <Compile Include="Assets\Codes\common\Bezier.cs" />
     <Compile Include="Assets\Codes\common\camera\CameraPicker.cs" />
     <Compile Include="Assets\Codes\common\camera\CameraUtil.cs" />
@@ -71,7 +72,6 @@
     <Compile Include="Assets\Codes\common\chunks\ChunkManager.cs" />
     <Compile Include="Assets\Codes\common\chunks\SquareChunkManager.cs" />
     <Compile Include="Assets\Codes\common\Clamps.cs" />
-    <Compile Include="Assets\Codes\common\CollideUtil.cs" />
     <Compile Include="Assets\Codes\common\ColorHelper.cs" />
     <Compile Include="Assets\Codes\common\DeltaLerpManager.cs" />
     <Compile Include="Assets\Codes\common\Fader.cs" />
@@ -109,7 +109,12 @@
     <Compile Include="Assets\Codes\common\ResurceLoaderUpdater.cs" />
     <Compile Include="Assets\Codes\common\shape\AABB.cs" />
     <Compile Include="Assets\Codes\common\shape\AABB2D.cs" />
+    <Compile Include="Assets\Codes\common\shape\Circle2D.cs" />
+    <Compile Include="Assets\Codes\common\shape\CollideUtil.cs" />
+    <Compile Include="Assets\Codes\common\shape\OBB2D.cs" />
     <Compile Include="Assets\Codes\common\shape\Segment.cs" />
+    <Compile Include="Assets\Codes\common\shape\Shape.cs" />
+    <Compile Include="Assets\Codes\common\shape\Shape2D.cs" />
     <Compile Include="Assets\Codes\common\SimplePath.cs" />
     <Compile Include="Assets\Codes\common\sound\SoundManager.cs" />
     <Compile Include="Assets\Codes\common\SphereSurfUtil.cs" />
@@ -132,6 +137,7 @@
     <Compile Include="Assets\Codes\ObjectManager.cs" />
     <Compile Include="Assets\Codes\Tento.cs" />
     <Compile Include="Assets\Codes\TitleManager.cs" />
+    <Compile Include="Assets\Codes\Wood.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/BugTrap/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
