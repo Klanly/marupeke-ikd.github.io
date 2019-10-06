@@ -49,7 +49,12 @@ public class AABB2D : Shape2D {
 		len_.x = ( maxX - minX ) * 0.5f;
 		len_.y = ( maxY - minY ) * 0.5f;
     }
-    public bool collide( Vector2 point ) {
+
+	public bool collide(Shape2D r) {
+		return r.collide( this );
+	}
+
+	public bool collide( Vector2 point ) {
         if ( Vector2Util.orMin( point, Min ) == true )
             return false;
         if ( Vector2Util.orMax( point, Min ) == true )

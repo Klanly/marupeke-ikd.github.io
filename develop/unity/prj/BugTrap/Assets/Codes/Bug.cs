@@ -32,10 +32,12 @@ public class Bug : FieldObject
 		float distPerFrame = walkSpeed_ / 60.0f;
 
 		// 歩きを妨げる物とのコリジョンをチェック
-		FieldObject collideObj;
-		if ( checkWalkCollision( transform.position, transform.forward, distPerFrame, out collideObj ) == true ) {
-			// 妨げる物があった
-			onCollideWalkAvoidObject( collideObj, ref state );
+		List< FieldObject > collideObjects = null;
+		if ( 
+			checkWalkCollision( transform.position, transform.forward, distPerFrame, out collideObjects ) == true &&
+			onCollideWalkAvoidObject( collideObjects, ref state ) == true
+		) {
+			// 妨げる物があったので歩みを止める
 		} else {
 			// ちょっと進む
 			var p =transform.position;
@@ -46,14 +48,20 @@ public class Bug : FieldObject
 	}
 
 	// 歩いている最中に妨げる物に当たったかチェック
-	protected virtual bool checkWalkCollision( Vector3 pos, Vector3 forward, float advanceDist, out FieldObject collideObj ) {
-		collideObj = null;
-		return false;
+	protected virtual bool checkWalkCollision( Vector3 pos, Vector3 forward, float advanceDist, out List< FieldObject > collideObjcts ) {
+		if (objectManager_ == null) {
+			collideObjcts = null;
+			return false;
+		}
+		collideObjcts = objectManager_.checkCollide( this );
+		return collideObjcts.Count > 0;
 	}
 
 	// 歩いている時に障害物に当たった
-	protected virtual void onCollideWalkAvoidObject( FieldObject collideObj, ref State<Bug> state ) {
+	//  戻り値：歩みを止める必要がある場合はtrue
+	protected virtual bool onCollideWalkAvoidObject( List< FieldObject > collideObjects, ref State<Bug> state ) {
 		// 状況に応じてstate_を更新
+		return false;
 	}
 
 	protected State state_;

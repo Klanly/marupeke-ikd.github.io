@@ -52,4 +52,30 @@ public class Vector3Util {
     static public Vector3 mul( Vector3 l ,Vector3 r ) {
         return new Vector3( l.x * r.x, l.y * r.y, l.z * r.z );
     }
+
+	// XZ成分でVector2化
+	static public Vector2 toVector2XZ( Vector3 v3 )
+	{
+		tmpV2_.x = v3.x;
+		tmpV2_.y = v3.z;
+		return tmpV2_;
+	}
+
+	// 反射ベクトル算出
+	static public Vector3 reflect( Vector3 dir, Vector3 normal, bool useDoubleSide = true ) {
+		var d = dir.normalized;
+		var n = normal.normalized;
+		float dot = Vector3.Dot( d, n );
+		if ( dot > 0.0f ) {
+			if ( useDoubleSide == false ) {
+				return dir;
+			}
+			n *= -1.0f;
+		} else {
+			dot *= -1.0f;
+		}
+		return ( 2.0f * dot * n + d ).normalized;
+	}
+
+	static Vector2 tmpV2_ = new Vector2();
 }

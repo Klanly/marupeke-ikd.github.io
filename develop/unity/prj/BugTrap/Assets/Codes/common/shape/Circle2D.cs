@@ -18,6 +18,10 @@ public class Circle2D : Shape2D
 		get { return c_; }
 	}
 
+	public bool collide(Shape2D r) {
+		return r.collide( this );
+	}
+
 	public bool collide(Vector2 point) {
 		if (( point - Center ).magnitude <= r_)
 			return true;

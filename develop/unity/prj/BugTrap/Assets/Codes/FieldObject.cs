@@ -22,6 +22,11 @@ public class FieldObject : MonoBehaviour
 		}
 	}
 
+	// Shapeグループを取得
+	public ShapeGroup2D getShapeGroup() {
+		return shapeGroup_;
+	}
+
 	// 更新エントリー
 	// 派生クラスのUpdate関数内で呼びます
 	protected void updateEntry() {
@@ -64,6 +69,7 @@ public class FieldObject : MonoBehaviour
     }
 
 	protected ObjectManager objectManager_;
+	protected ShapeGroup2D shapeGroup_ = new ShapeGroup2D();
 	bool bWaitCountDown_ = false;
 	bool bFinish_ = false;  // 寿命が尽きた？
 	State innerState_;

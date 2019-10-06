@@ -35,6 +35,10 @@ public class OBB2D : Shape2D {
 		}
 	}
 
+	public bool collide(Shape2D r) {
+		return r.collide( this );
+	}
+
 	public bool collide(Vector2 point) {
 		Vector2 cp = Vector2.zero;
 		float dist = CollideUtil.closestPointOBB2D_Point( this, point, out cp );

@@ -11,4 +11,5 @@ public interface Shape2D
 	bool collide(AABB2D r);
 	bool collide(Circle2D r);
 	bool collide(OBB2D r);
+	bool collide(Shape2D r);
 }

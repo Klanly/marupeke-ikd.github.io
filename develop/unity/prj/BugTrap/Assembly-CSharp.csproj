@@ -78,6 +78,7 @@
     <Compile Include="Assets\Codes\common\game\GameManagerBase.cs" />
     <Compile Include="Assets\Codes\common\game\GameManagerFadeTrans.cs" />
     <Compile Include="Assets\Codes\common\GameObjectUtil.cs" />
+    <Compile Include="Assets\Codes\common\gizmo\GizmosUtil.cs" />
     <Compile Include="Assets\Codes\common\GlobalStateManager.cs" />
     <Compile Include="Assets\Codes\common\ImageBillboarding.cs" />
     <Compile Include="Assets\Codes\common\IntroAnimation.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Assets\Codes\common\shape\Segment.cs" />
     <Compile Include="Assets\Codes\common\shape\Shape.cs" />
     <Compile Include="Assets\Codes\common\shape\Shape2D.cs" />
+    <Compile Include="Assets\Codes\common\shape\ShapeGroup.cs" />
     <Compile Include="Assets\Codes\common\SimplePath.cs" />
     <Compile Include="Assets\Codes\common\sound\SoundManager.cs" />
     <Compile Include="Assets\Codes\common\SphereSurfUtil.cs" />
