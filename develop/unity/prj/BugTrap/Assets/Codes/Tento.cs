@@ -7,8 +7,12 @@ public class Tento : Bug
 	[SerializeField]
 	float colRadius_ = 1.0f;
 
+	[SerializeField]
+	Animator animator_;
+
 	private void Awake()
 	{
+		animator_.SetInteger( "motion", 1 );
 		col_.Radius = colRadius_;
 		shapeGroup_.addShape( col_ );
 		state_ = new StartIdle( this );

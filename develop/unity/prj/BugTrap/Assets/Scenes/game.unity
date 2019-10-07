@@ -887,26 +887,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1145613253, guid: 28047dfc91953004d93b8f4b033c8575, type: 3}
-      propertyPath: prefabList_.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1145613253, guid: 28047dfc91953004d93b8f4b033c8575, type: 3}
-      propertyPath: debugFieldObjectParam_.waitCountDown_
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1145613253, guid: 28047dfc91953004d93b8f4b033c8575, type: 3}
-      propertyPath: debugFieldObjectParam_.objName_
-      value: wood
-      objectReference: {fileID: 0}
-    - target: {fileID: 1145613253, guid: 28047dfc91953004d93b8f4b033c8575, type: 3}
-      propertyPath: prefabList_.Array.data[1].name_
-      value: wood
-      objectReference: {fileID: 0}
-    - target: {fileID: 1145613253, guid: 28047dfc91953004d93b8f4b033c8575, type: 3}
-      propertyPath: prefabList_.Array.data[1].fieldObjectPrefab_
-      value: 
-      objectReference: {fileID: 6340129930643852660, guid: 6d0044517c8669846a561454e703ab48,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 28047dfc91953004d93b8f4b033c8575, type: 3}

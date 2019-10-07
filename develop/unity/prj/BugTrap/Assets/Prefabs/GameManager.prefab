@@ -217,15 +217,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86c79a1bb474e454b8704286d8aa08cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bDebug_AddFieldObject_: 0
+  bDebug_AddTento_: 0
+  bDebug_AddWood_: 0
   debugFieldObjectParam_:
-    objName_: 
+    objName_: wood
     initPos_: {x: 0, y: 0, z: 0}
     forward_: {x: 1, y: 0, z: 0}
-    waitCountDown_: 0
+    waitCountDown_: 1
   prefabList_:
   - name_: tento
-    fieldObjectPrefab_: {fileID: 8065877082716872492, guid: 487205e5a3823f740b498a69536f706e,
+    fieldObjectPrefab_: {fileID: 1175845822, guid: 61f83c797ba9b5b4785c94cffc5d47ba,
+      type: 3}
+  - name_: wood
+    fieldObjectPrefab_: {fileID: 6340129930643852660, guid: 6d0044517c8669846a561454e703ab48,
       type: 3}
 --- !u!1 &3925047482704412647
 GameObject:
