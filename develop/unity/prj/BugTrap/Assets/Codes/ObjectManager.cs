@@ -12,6 +12,18 @@ public class ObjectManager : MonoBehaviour
 	bool bDebug_AddWood_ = false;
 
 	[SerializeField]
+	bool bDebug_Wood_V_ = false;
+
+	[SerializeField]
+	bool bDebug_Wood_H_ = false;
+
+	[SerializeField]
+	bool bDebug_Wood_RUp_ = false;
+
+	[SerializeField]
+	bool bDebug_Wood_LUp_ = false;
+
+	[SerializeField]
 	bool bDebug_AddGoal_ = false;
 
 	[SerializeField]
@@ -31,7 +43,7 @@ public class ObjectManager : MonoBehaviour
 	public class FieldObjectParam {
 		public string objName_;                                 // 生成するオブジェクト名
 		public Vector3 initPos_ = Vector3.zero;                 // 初期位置
-		public Vector3 forward_ = new Vector3( 1.0f, 0.0f, 0.0f );  // 最初の向き
+		public Vector3 forward_ = new Vector3( 0.0f, 0.0f, 1.0f );  // 最初の向き
 		public bool waitCountDown_ = false;
 	}
 
@@ -40,7 +52,8 @@ public class ObjectManager : MonoBehaviour
 		foreach ( var pair in prefabList_ ) {
 			if ( pair.name_ == fieldParam.objName_ ) {
 				Quaternion q = Quaternion.LookRotation( fieldParam.forward_ );
-				var obj = PrefabUtil.createInstance( pair.fieldObjectPrefab_, transform, fieldParam.initPos_, q );
+				var obj = PrefabUtil.createInstance( pair.fieldObjectPrefab_, transform, fieldParam.initPos_ );
+				obj.transform.rotation = q * obj.transform.rotation;
 				obj.setObjectManager( this );
 				obj.onStart( fieldParam.waitCountDown_ );
 
@@ -106,9 +119,24 @@ public class ObjectManager : MonoBehaviour
 			debugFieldObjectParam_.objName_ = "tento";
 			addFieldObject( debugFieldObjectParam_ );
 		}
-		if (bDebug_AddWood_ == true) {
-			bDebug_AddWood_ = false;
-			debugFieldObjectParam_.objName_ = "wood";
+		if (bDebug_Wood_V_ == true) {
+			bDebug_Wood_V_ = false;
+			debugFieldObjectParam_.objName_ = "wood_v";
+			addFieldObject( debugFieldObjectParam_ );
+		}
+		if (bDebug_Wood_H_ == true) {
+			bDebug_Wood_H_ = false;
+			debugFieldObjectParam_.objName_ = "wood_h";
+			addFieldObject( debugFieldObjectParam_ );
+		}
+		if (bDebug_Wood_RUp_ == true) {
+			bDebug_Wood_RUp_ = false;
+			debugFieldObjectParam_.objName_ = "wood_ru";
+			addFieldObject( debugFieldObjectParam_ );
+		}
+		if (bDebug_Wood_LUp_ == true) {
+			bDebug_Wood_LUp_ = false;
+			debugFieldObjectParam_.objName_ = "wood_lu";
 			addFieldObject( debugFieldObjectParam_ );
 		}
 		if (bDebug_AddGoal_ == true) {
