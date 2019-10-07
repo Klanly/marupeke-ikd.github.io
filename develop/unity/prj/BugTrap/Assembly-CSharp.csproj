@@ -136,6 +136,7 @@
     <Compile Include="Assets\Codes\FieldObject.cs" />
     <Compile Include="Assets\Codes\GameManager.cs" />
     <Compile Include="Assets\Codes\GameStateManager.cs" />
+    <Compile Include="Assets\Codes\Goal.cs" />
     <Compile Include="Assets\Codes\ObjectManager.cs" />
     <Compile Include="Assets\Codes\Tento.cs" />
     <Compile Include="Assets\Codes\TitleManager.cs" />

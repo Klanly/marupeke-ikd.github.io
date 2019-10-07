@@ -12,6 +12,9 @@ public class ObjectManager : MonoBehaviour
 	bool bDebug_AddWood_ = false;
 
 	[SerializeField]
+	bool bDebug_AddGoal_ = false;
+
+	[SerializeField]
 	FieldObjectParam debugFieldObjectParam_ = null;
 
 	[SerializeField]
@@ -41,7 +44,12 @@ public class ObjectManager : MonoBehaviour
 				obj.setObjectManager( this );
 				obj.onStart( fieldParam.waitCountDown_ );
 
-				barriers_.Add( obj );
+				var bug = obj as Bug;
+				if ( bug != null ) {
+					bugs_.Add( bug );
+				} else {
+					barriers_.Add( obj );
+				}
 			}
 		}
 	}
@@ -55,6 +63,33 @@ public class ObjectManager : MonoBehaviour
 			}
 		}
 		return list;
+	}
+
+	// フィールド上のBugとの衝突チェック
+	public List<FieldObject> checkCollideToBug(FieldObject target)
+	{
+		var list = new List<FieldObject>();
+		foreach (var b in bugs_) {
+			if (b != target && b.getShapeGroup().collide( target.getShapeGroup() ) == true) {
+				list.Add( b );
+			}
+		}
+		return list;
+	}
+
+	// 捉えた虫を削除
+	public void catchBug( Bug bug ) {
+		foreach( var b in bugs_) {
+			if ( b == bug ) {
+				bugs_.Remove( b );
+
+				// 残り虫数を更新
+
+				// 削除
+				Destroy( b.gameObject );
+				return;
+			}
+		}
 	}
 
 	// Start is called before the first frame update
@@ -76,7 +111,13 @@ public class ObjectManager : MonoBehaviour
 			debugFieldObjectParam_.objName_ = "wood";
 			addFieldObject( debugFieldObjectParam_ );
 		}
+		if (bDebug_AddGoal_ == true) {
+			bDebug_AddGoal_ = false;
+			debugFieldObjectParam_.objName_ = "goal";
+			addFieldObject( debugFieldObjectParam_ );
+		}
 	}
 
 	List<FieldObject> barriers_ = new List<FieldObject>();
+	List<Bug> bugs_ = new List<Bug>();
 }

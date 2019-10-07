@@ -231,6 +231,9 @@ MonoBehaviour:
   - name_: wood
     fieldObjectPrefab_: {fileID: 6340129930643852660, guid: 6d0044517c8669846a561454e703ab48,
       type: 3}
+  - name_: goal
+    fieldObjectPrefab_: {fileID: 3875075711199298707, guid: 8ee0817b31c25424ba5ed1155ddd7e3e,
+      type: 3}
 --- !u!1 &3925047482704412647
 GameObject:
   m_ObjectHideFlags: 0
