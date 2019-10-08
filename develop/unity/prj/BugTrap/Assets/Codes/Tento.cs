@@ -53,6 +53,14 @@ public class Tento : Bug
 					n *= -1.0f;
 				}
 				transform.rotation = Quaternion.LookRotation( Vector3Util.reflect( transform.forward, n ) );
+				continue;
+			}
+			Rock r = fo as Rock;
+			if ( r != null ) {
+				preCollideMap_[ curCollIndex_ ].Add( fo );
+				// 岩は正面衝突で右に曲がる
+				transform.localRotation = Quaternion.Euler( 0.0f, 90.0f, 0.0f ) * transform.localRotation;
+				continue;
 			}
 		}
 		return isStopWalk;
