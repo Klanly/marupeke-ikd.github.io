@@ -32,6 +32,9 @@ public class Goal : FieldObject
 		updateEntry();
 
 		// 虫を捉えたかチェック
+		if (objectManager_ == null)
+			return;
+
 		var list = objectManager_.checkCollideToBug( this );
 		if ( list != null ) {
 			foreach( var o in list ) {

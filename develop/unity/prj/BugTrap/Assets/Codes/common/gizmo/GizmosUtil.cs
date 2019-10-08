@@ -31,6 +31,8 @@ public class GizmosUtil
 
 	// OBB描画
 	static public void drawOBB2D( OBB2D obb, Color? color ) {
+		if (obb == null)
+			return;
 		Color c = color ?? Color.white;
 		Gizmos.color = c;
 		tmpV3_0_.y = 0.0f;

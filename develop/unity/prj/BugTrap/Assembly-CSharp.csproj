@@ -138,6 +138,9 @@
     <Compile Include="Assets\Codes\GameStateManager.cs" />
     <Compile Include="Assets\Codes\Goal.cs" />
     <Compile Include="Assets\Codes\ObjectManager.cs" />
+    <Compile Include="Assets\Codes\Rock.cs" />
+    <Compile Include="Assets\Codes\StageManager.cs" />
+    <Compile Include="Assets\Codes\StartWood.cs" />
     <Compile Include="Assets\Codes\Tento.cs" />
     <Compile Include="Assets\Codes\TitleManager.cs" />
     <Compile Include="Assets\Codes\Wood.cs" />

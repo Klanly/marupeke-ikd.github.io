@@ -3,15 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : GameManagerBase {
+	[SerializeField]
+	int stageId_ = 0;
+
+	[SerializeField]
+	ObjectManager objectManager_;
+
+	[SerializeField]
+	StageManager stageManager_;
+
+	[SerializeField]
+	GameObject ground_;
+
 	void Start()
 	{
 		FaderManager.Fader.setColor( new Color( 0.0f, 0.0f, 0.0f, 1.0f ) );
-		state_ = new FadeIn( this );
+		state_ = new CreateStage( this );
 	}
 
 	void Update()
 	{
 		stateUpdate();
+	}
+
+	class CreateStage : State<GameManager> {
+		public CreateStage(GameManager parent) : base( parent ) { }
+		protected override State innerInit()
+		{
+			var data = parent_.stageManager_.createStage( parent_.stageId_, parent_.objectManager_ );
+			parent_.ground_.transform.localPosition = data.center_;
+			return new FadeIn( parent_ );
+		}
 	}
 
 	class FadeIn : State<GameManager> {
