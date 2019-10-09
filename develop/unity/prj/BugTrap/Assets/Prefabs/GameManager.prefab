@@ -231,7 +231,7 @@ MonoBehaviour:
     waitCountDown_: 1
   prefabList_:
   - name_: tento
-    fieldObjectPrefab_: {fileID: 1175845822, guid: 61f83c797ba9b5b4785c94cffc5d47ba,
+    fieldObjectPrefab_: {fileID: 3071355985034270477, guid: c0d0606b4458b84459ce49a1c17c3304,
       type: 3}
   - name_: wood_v
     fieldObjectPrefab_: {fileID: 6340129930643852660, guid: 6d0044517c8669846a561454e703ab48,

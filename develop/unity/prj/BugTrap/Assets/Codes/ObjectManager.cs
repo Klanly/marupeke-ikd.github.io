@@ -70,8 +70,9 @@ public class ObjectManager : MonoBehaviour
 	// フィールド上の物との衝突チェック
 	public List< FieldObject > checkCollide( FieldObject target ) {
 		var list = new List<FieldObject>();
+		var targetShape = target.getShapeGroup();
 		foreach ( var b in barriers_ ) {
-			if ( b != target && b.getShapeGroup().collide( target.getShapeGroup() ) == true ) {
+			if ( b != target && b.getShapeGroup().collide( targetShape ) == true ) {
 				list.Add( b );
 			}
 		}
