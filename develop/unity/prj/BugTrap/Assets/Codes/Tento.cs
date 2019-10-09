@@ -30,6 +30,7 @@ public class Tento : Bug
 	protected override bool onCollideWalkAvoidObject(List<FieldObject> collideObjects, ref State<Bug> state)
 	{
 		bool isStopWalk = false;
+		float backDist = 0.05f;
 		foreach( var fo in collideObjects ) {
 			if ( isPreCollide( fo ) == true ) {
 				preCollideMap_[ curCollIndex_ ].Add( fo );
@@ -43,7 +44,8 @@ public class Tento : Bug
 				float dot = Vector3.Dot( n, transform.forward );
 				// 長辺側と短辺側に真っすぐ当たった場合は正面衝突と判定
 				if ( Mathf.Abs( dot ) > 0.99f || Mathf.Abs( dot ) < 0.01 ) {
-					// 正面衝突の場合は右に曲がる
+					// 正面衝突の場合はちょっと下がって右に曲がる
+					transform.localPosition = transform.localPosition - transform.forward * backDist;
 					transform.localRotation = Quaternion.Euler( 0.0f, 90.0f, 0.0f ) * transform.localRotation;
 					continue;
 				}
@@ -58,7 +60,8 @@ public class Tento : Bug
 			Rock r = fo as Rock;
 			if ( r != null ) {
 				preCollideMap_[ curCollIndex_ ].Add( fo );
-				// 岩は正面衝突で右に曲がる
+				// 岩は正面衝突でちょっと下がって右に曲がる
+				transform.localPosition = transform.localPosition - transform.forward * backDist;
 				transform.localRotation = Quaternion.Euler( 0.0f, 90.0f, 0.0f ) * transform.localRotation;
 				continue;
 			}

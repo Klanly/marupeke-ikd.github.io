@@ -82,13 +82,17 @@ public class StageManager : MonoBehaviour
 		}
 
 		// 虫
+		float bugEmitSec = 1.5f;
 		foreach ( var st in starts_ ) {
 			var p = new ObjectManager.FieldObjectParam();
 			p.forward_ = st.forward_;
 			p.initPos_ = st.initPos_;
 			p.objName_ = "tento";
 			for ( int i = 0; i < data.emitBugNum_; ++i ) {
-				objectManager.addFieldObject( p );
+				GlobalState.wait( bugEmitSec * i, () => {
+					objectManager.addFieldObject( p );
+					return false;
+				} );
 			}
 		}
 
