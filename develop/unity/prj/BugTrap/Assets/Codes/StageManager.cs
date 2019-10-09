@@ -27,6 +27,7 @@ public class StageManager : MonoBehaviour
 		public int emitBugNum_ = 0;
 		public Vector3 center_ = Vector3.zero;
 		public Vector2 region_ = Vector2.zero;
+		public List< Goal > goals_ = new List<Goal>();
 	}
 
 	// ステージ作成
@@ -79,7 +80,10 @@ public class StageManager : MonoBehaviour
 					starts_.Add( p );
 					break;
 				}
-				objectManager.addFieldObject( p );
+				var obj = objectManager.addFieldObject( p );
+				if ( data.fieldObjectTypes_[ x, y ] == FieldObjectType.Goal ) {
+					data.goals_.Add( obj as Goal );
+				}
 			}
 		}
 
@@ -92,6 +96,8 @@ public class StageManager : MonoBehaviour
 			p.objName_ = "tento";
 			for ( int i = 0; i < data.emitBugNum_; ++i ) {
 				GlobalState.wait( bugEmitSec * i, () => {
+					if (this == null || objectManager == null )
+						return false;
 					objectManager.addFieldObject( p );
 					return false;
 				} );

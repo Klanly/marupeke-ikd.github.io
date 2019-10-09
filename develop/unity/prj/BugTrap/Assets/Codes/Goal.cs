@@ -10,6 +10,10 @@ public class Goal : FieldObject
 	[SerializeField]
 	float colY_;
 
+	public System.Action BugCatchCallback { set { bugCatchCallback_ = value;  } }
+	public System.Action bugCatchCallback_;
+
+
 	private void Awake()
 	{
 		shapeGroup_.addShape( col_ );
@@ -41,6 +45,7 @@ public class Goal : FieldObject
 				var bug = o as Bug;
 				if ( bug != null ) {
 					objectManager_.catchBug( bug );
+					bugCatchCallback_();
 				}
 			}
 		}

@@ -48,7 +48,7 @@ public class ObjectManager : MonoBehaviour
 	}
 
 	// フィールドオブジェクトを追加
-	public void addFieldObject( FieldObjectParam fieldParam ) {
+	public FieldObject addFieldObject( FieldObjectParam fieldParam ) {
 		foreach ( var pair in prefabList_ ) {
 			if ( pair.name_ == fieldParam.objName_ ) {
 				Quaternion q = Quaternion.LookRotation( fieldParam.forward_ );
@@ -63,8 +63,10 @@ public class ObjectManager : MonoBehaviour
 				} else {
 					barriers_.Add( obj );
 				}
+				return obj;
 			}
 		}
+		return null;
 	}
 
 	// フィールド上の物との衝突チェック
