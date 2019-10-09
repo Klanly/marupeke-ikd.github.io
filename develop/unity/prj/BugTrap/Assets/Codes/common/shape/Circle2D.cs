@@ -41,7 +41,9 @@ public class Circle2D : Shape2D
 	}
 
 	public bool collide(OBB2D r ) {
-		return r.collide( this );
+		Vector2 cp = Vector2.zero;
+		float dist = CollideUtil.closestPointOBB2D_Point( r, Center, out cp );
+		return dist <= Radius;
 	}
 	float r_ = 0.0f;
 	Vector2 c_ = Vector2.zero;

@@ -22,9 +22,11 @@ public class ShapeGroup2D : Shape2D {
 
 	public bool collide( ShapeGroup2D group ) {
 		var list = group.shapes_;
-		foreach ( var g in list ) {
-			foreach (var s in shapes_) {
-				if (s.collide( g ) == true) {
+		int listSz = list.Count;
+		for ( int i = 0; i < listSz; ++i ){
+			int shapeSz = shapes_.Count;
+			for (int j = 0; j < shapeSz; ++j ) {
+				if (shapes_[ j ].collide( list[ i ] ) == true) {
 					return true;
 				}
 			}

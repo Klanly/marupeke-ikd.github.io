@@ -29,7 +29,6 @@ public class StartWood : FieldObject
 			collisions_[ i ].HalfLen = new Vector2( colWidth_, 1.0f );
 			collisions_[ i ].Center = Vector3Util.toVector2XZ( collisionPoses_[ i ].transform.position );
 			collisions_[ i ].XAxis = Vector3Util.toVector2XZ( collisionPoses_[ i ].transform.forward );
-			shapeGroup_.addShape( collisions_[ i ] );
 		}
 		updateEntry();
 	}

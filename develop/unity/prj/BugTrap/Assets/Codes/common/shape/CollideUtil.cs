@@ -110,32 +110,36 @@ public class CollideUtil {
 		Vector2 d = p - obb.Center;
 		int insertCount = 0;
 		Vector2 q = obb.Center;
-		float distX = Vector2.Dot( d, obb.XAxis );
-		if (distX > obb.HalfLen.x) {
-			distX = obb.HalfLen.x;
+		float obbHalfLenX = obb.HalfLen.x;
+		var obbXAxis = obb.XAxis;
+		float distX = Vector2.Dot( d, obbXAxis );
+		if (distX > obbHalfLenX) {
+			distX = obbHalfLenX;
 		}
-		else if (distX < -obb.HalfLen.x) {
-			distX = -obb.HalfLen.x;
+		else if (distX < -obbHalfLenX) {
+			distX = -obbHalfLenX;
 		} else {
 			insertCount++;
 		}
-		q += obb.XAxis * distX;
+		q += obbXAxis * distX;
 
+		float obbHalfLenY = obb.HalfLen.y;
+		var obbYAxis = obb.YAxis;
 		float distY = Vector2.Dot( d, obb.YAxis );
-		if (distY > obb.HalfLen.y) {
-			distY = obb.HalfLen.y;
-		} else if (distY < -obb.HalfLen.y) {
-			distY = -obb.HalfLen.y;
+		if (distY > obbHalfLenY) {
+			distY = obbHalfLenY;
+		} else if (distY < -obbHalfLenY) {
+			distY = -obbHalfLenY;
 		} else {
 			insertCount++;
 		}
-		q += obb.YAxis * distY;
+		q += obbYAxis * distY;
 		cp = q;
 
 		if ( insertCount == 2 ) {
 			// めり込んでる
-			var p1 = obb.Center + obb.XAxis * distX + obb.YAxis * obb.HalfLen.y * ( distY >= 0.0f ? 1.0f : -1.0f );
-			var p2 = obb.Center + obb.YAxis * distY + obb.XAxis * obb.HalfLen.x * ( distY >= 0.0f ? 1.0f : -1.0f );
+			var p1 = obb.Center + obbXAxis * distX + obbYAxis * obbHalfLenY * ( distY >= 0.0f ? 1.0f : -1.0f );
+			var p2 = obb.Center + obbYAxis * distY + obbXAxis * obbHalfLenX * ( distY >= 0.0f ? 1.0f : -1.0f );
 			float len1 = ( p1 - p ).magnitude;
 			float len2 = ( p2 - p ).magnitude;
 			if ( len1 < len2 ) {
