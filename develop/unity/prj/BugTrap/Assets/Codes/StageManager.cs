@@ -25,6 +25,7 @@ public class StageManager : MonoBehaviour
 		public FieldObjectType[,] fieldObjectTypes_;
 		public FieldObjectType bugType_;
 		public int emitBugNum_ = 0;
+		public int totalEmitBugNum_ = 0;
 		public Vector3 center_ = Vector3.zero;
 		public Vector2 region_ = Vector2.zero;
 		public List< Goal > goals_ = new List<Goal>();
@@ -131,16 +132,17 @@ public class StageManager : MonoBehaviour
 			stage = new string[] {
 				"oooooooooo",
 				"o--------o",
-				"o-----g--o",
-				"o--------o",
-				"o-----l-lo",
 				"o--------o",
 				"o--------o",
-				"o--d--l--o",
+				"o--------o",
+				"o--------o",
+				"o--------o",
+				"o--------o",
 				"o--------o",
 				"oooooooooo",
 			};
 			data.emitBugNum_ = 10;
+			data.totalEmitBugNum_ = 10;
 			data.bugType_ = FieldObjectType.Tento;
 		}
 
@@ -155,6 +157,7 @@ public class StageManager : MonoBehaviour
 				maxX = stage[ y ].Length;
 			}
 		}
+
 		FieldObjectType[,] f = new FieldObjectType[ maxX, maxY ];
 		for (int y = 0; y < stage.Length; ++y) {
 			var s = stage[ y ];
@@ -163,6 +166,69 @@ public class StageManager : MonoBehaviour
 				f[ x, ey ] = ( x >= s.Length ? FieldObjectType.Empty : fd[ s[x] ] );
 			}
 		}
+
+		// ランダム要素入れてみる
+		int randRockNum = Random.Range( 5, 11 );
+		for (int i = 0; i < randRockNum; ++i) {
+			int x = Random.Range( 1, maxX - 1 );
+			int y = Random.Range( 1, maxY - 1 );
+			if ( f[ x, y ] == FieldObjectType.Empty ) {
+				f[ x, y ] = FieldObjectType.Rock;
+			}
+		}
+
+		// ランダム要素入れてみる
+		int randWood = Random.Range( 3, 6 );
+		for (int i = 0; i < randWood; ++i) {
+			int x = Random.Range( 1, maxX - 1 );
+			int y = Random.Range( 1, maxY - 1 );
+			if (f[ x, y ] == FieldObjectType.Empty) {
+				f[ x, y ] = Random.Range( 0, 2 ) == 0 ? FieldObjectType.Wood_R : FieldObjectType.Wood_L;
+			}
+		}
+
+		// ランダム要素入れてみる
+		FieldObjectType[] starts = new FieldObjectType[] {
+			FieldObjectType.Start_D,
+			FieldObjectType.Start_L,
+			FieldObjectType.Start_R,
+			FieldObjectType.Start_U
+		};
+		while (true) {
+			int randStart = Random.Range( 1, 3 );
+			int count = 0;
+			bool ok = false;
+			for (int i = 0; i < randStart; ++i) {
+				int x = Random.Range( 1, maxX - 1 );
+				int y = Random.Range( 1, maxY - 1 );
+				if (f[ x, y ] == FieldObjectType.Empty) {
+					f[ x, y ] = starts[ Random.Range( 0, 4 ) ];
+					ok = true;
+					count++;
+				}
+			}
+			if (ok == true) {
+				data.totalEmitBugNum_ = data.emitBugNum_ * count;
+				break;
+			}
+		}
+
+		// ランダム要素入れてみる
+		while (true) {
+			int randGoal = Random.Range( 1, 2 );
+			bool ok = false;
+			for (int i = 0; i < randGoal; ++i) {
+				int x = Random.Range( 1, maxX - 1 );
+				int y = Random.Range( 1, maxY - 1 );
+				if (f[ x, y ] == FieldObjectType.Empty) {
+					f[ x, y ] = FieldObjectType.Goal;
+					ok = true;
+				}
+			}
+			if (ok == true)
+				break;
+		}
+
 		data.fieldObjectTypes_ = f;
 		data.center_ = new Vector3( 0.5f * ( maxX - 1 ), 0.0f, 0.5f * ( maxY - 1 ) );
 		data.region_ = new Vector2( maxX - 2, maxY - 2 ); // 壁は除く

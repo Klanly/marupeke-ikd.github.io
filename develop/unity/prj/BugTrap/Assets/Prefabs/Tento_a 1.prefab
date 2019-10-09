@@ -188,7 +188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startWaitSec_: 0
-  walkSpeed_: 2.5
+  walkSpeed_: 2
   colRadius_: 0.7
   animator_: {fileID: 3336704354464415811}
 --- !u!1 &8547551682016026410

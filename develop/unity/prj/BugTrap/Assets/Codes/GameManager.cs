@@ -83,7 +83,7 @@ public class GameManager : GameManagerBase {
 			parent_.ground_.transform.localPosition = data.center_;
 			parent_.groundRegion_.transform.localScale = new Vector3( data.region_.x, 1.0f, data.region_.y );
 			parent_.groundRegion_.transform.localPosition = data.center_;
-			parent_.setGoals( data.goals_, data.emitBugNum_ );
+			parent_.setGoals( data.goals_, data.totalEmitBugNum_ );
 			return new FadeIn( parent_ );
 		}
 	}
