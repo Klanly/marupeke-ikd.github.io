@@ -11,21 +11,48 @@ using System.IO;
 
 namespace CommonCollector {
     public partial class Form1 : Form {
+
+        string inputFolderPath_ = "";
         public Form1() {
             InitializeComponent();
         }
 
         private void inputCommonFolderBtn_Click(object sender, EventArgs e) {
-            var dlg = new FolderBrowserDialog();
-            if ( dlg.ShowDialog() == DialogResult.OK ) {
-                inputCommonFolderTxt.Text = dlg.SelectedPath;
+//            var dlg = new FolderBrowserDialog();
+//            if ( dlg.ShowDialog() == DialogResult.OK ) {
+//                inputCommonFolderTxt.Text = dlg.SelectedPath;
+//            }
+            var ofd = new OpenFileDialog();
+            ofd.ReadOnlyChecked = true;
+            ofd.ShowHelp = false;
+            ofd.CheckFileExists = false;
+            ofd.FileName = "Select src common folder";
+            ofd.FileOk += ( _sender, _e ) => {
+                ofd.FileName = System.IO.Path.GetDirectoryName(ofd.FileName);
+            };
+            if ( ofd.ShowDialog() == DialogResult.OK )
+            {
+                inputCommonFolderTxt.Text = ofd.FileName;
+                inputFolderPath_ = ofd.FileName;
             }
         }
 
         private void outputFolderBtn_Click(object sender, EventArgs e) {
-            var dlg = new FolderBrowserDialog();
-            if ( dlg.ShowDialog() == DialogResult.OK ) {
-                outputFolderTxt.Text = dlg.SelectedPath;
+//            var dlg = new FolderBrowserDialog();
+//            if ( dlg.ShowDialog() == DialogResult.OK ) {
+//               outputFolderTxt.Text = dlg.SelectedPath;
+//            }
+            var ofd = new OpenFileDialog();
+            ofd.ReadOnlyChecked = true;
+            ofd.ShowHelp = false;
+            ofd.CheckFileExists = false;
+            ofd.FileName = "Select dest common folder";
+            ofd.FileOk += (_sender, _e) => {
+                ofd.FileName = System.IO.Path.GetDirectoryName(ofd.FileName);
+            };
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                outputFolderTxt.Text = ofd.FileName;
             }
         }
 
@@ -36,6 +63,18 @@ namespace CommonCollector {
                 return;
             if ( outputFolderTxt.Text == "" )
                 return;
+
+            // 上書きの場合はDest側のフォルダ下のファイルおよびフォルダを全部消す
+            if (bCheckOverwrite.Checked == true)
+            {
+                DirectoryInfo target = new DirectoryInfo( outputFolderTxt.Text);
+                foreach (FileInfo file in target.GetFiles()) {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo dir in target.GetDirectories()) {
+                    dir.Delete(true);
+                }
+            }
 
             string[] files = System.IO.Directory.GetFiles( inputCommonFolderTxt.Text, "*.cs", SearchOption.AllDirectories );
 
@@ -48,6 +87,8 @@ namespace CommonCollector {
                 }
                 System.IO.File.Copy( path, outputPath, true );
             }
+
+            MessageBox.Show("更新しました。");
         }
     }
 }
