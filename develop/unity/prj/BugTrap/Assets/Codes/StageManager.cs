@@ -26,6 +26,7 @@ public class StageManager : MonoBehaviour
 		public FieldObjectType bugType_;
 		public int emitBugNum_ = 0;
 		public Vector3 center_ = Vector3.zero;
+		public Vector2 region_ = Vector2.zero;
 	}
 
 	// ステージ作成
@@ -52,6 +53,7 @@ public class StageManager : MonoBehaviour
 
 		// フィールド
 		float s = 2.0f;
+		data.region_ *= s;
 		var starts_ = new List<ObjectManager.FieldObjectParam>();
 		for ( int y = 0; y < data.fieldObjectTypes_.GetLength( 1 ); ++y ) {
 			for (int x = 0; x < data.fieldObjectTypes_.GetLength( 0 ); ++x ) {
@@ -157,6 +159,7 @@ public class StageManager : MonoBehaviour
 		}
 		data.fieldObjectTypes_ = f;
 		data.center_ = new Vector3( 0.5f * ( maxX - 1 ), 0.0f, 0.5f * ( maxY - 1 ) );
+		data.region_ = new Vector2( maxX - 2, maxY - 2 ); // 壁は除く
 
 		return data;
 	}

@@ -15,10 +15,19 @@ public class GameManager : GameManagerBase {
 	[SerializeField]
 	GameObject ground_;
 
+	[SerializeField]
+	GameObject groundRegion_;
+
+	[SerializeField]
+	Player player_;
+
+	public ObjectManager ObjectManager { get { return objectManager_; } }
+
 	void Start()
 	{
 		FaderManager.Fader.setColor( new Color( 0.0f, 0.0f, 0.0f, 1.0f ) );
 		state_ = new CreateStage( this );
+		player_.setup( this );
 	}
 
 	void Update()
@@ -32,6 +41,8 @@ public class GameManager : GameManagerBase {
 		{
 			var data = parent_.stageManager_.createStage( parent_.stageId_, parent_.objectManager_ );
 			parent_.ground_.transform.localPosition = data.center_;
+			parent_.groundRegion_.transform.localScale = new Vector3( data.region_.x, 1.0f, data.region_.y );
+			parent_.groundRegion_.transform.localPosition = data.center_;
 			return new FadeIn( parent_ );
 		}
 	}
@@ -51,9 +62,9 @@ public class GameManager : GameManagerBase {
 		public Idle(GameManager parent) : base( parent ) { }
 		protected override State innerUpdate()
 		{
-			if (Input.GetMouseButtonDown( 0 ) == true) {
-				setNextState( new FadeOut( parent_ ) );
-			}
+//			if (Input.GetMouseButtonDown( 0 ) == true) {
+//				setNextState( new FadeOut( parent_ ) );
+//			}
 			return this;
 		}
 	}
