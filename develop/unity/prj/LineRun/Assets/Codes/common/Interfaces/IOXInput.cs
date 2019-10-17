@@ -87,7 +87,17 @@ public class IOXInput {
 	{
 		return innerJustUp( wired_[ d ] );
 	}
-	
+
+	public bool holdDown( Digital d )
+	{
+		return innerHoldDown( wired_[ d ] );
+	}
+
+	public bool holdUp(Digital d)
+	{
+		return innerHoldUp( wired_[ d ] );
+	}
+
 	// 決定ボタン押した？
 	public virtual bool decide()
 	{
@@ -101,6 +111,23 @@ public class IOXInput {
 		return Input.mousePosition;
 	}
 
+	// 方向ベクトルを取得
+	public Vector2 getDirection()
+	{
+		Vector2 dir = Vector2.zero;
+		if ( holdDown( Digital.LL ) == true ) {
+			dir.x = -1.0f;
+		} else if (holdDown( Digital.LR ) == true ) {
+			dir.x = 1.0f;
+		}
+		if (holdDown( Digital.LU ) == true) {
+			dir.y = 1.0f;
+		} else if (holdDown( Digital.LD ) == true) {
+			dir.y = -1.0f;
+		}
+		return dir.normalized;
+	}
+
 	// 丁度Downしたか
 	protected virtual bool innerJustDown( Digital d )
 	{
@@ -111,6 +138,36 @@ public class IOXInput {
 	protected virtual bool innerJustUp(Digital d)
 	{
 		return false;
+	}
+
+	// Down中か
+	protected virtual bool innerHoldDown(Digital d)
+	{
+		if ( d == Digital.LL && Input.GetKey(KeyCode.LeftArrow) ) {
+			return true;
+		} else if ( d == Digital.LR && Input.GetKey(KeyCode.RightArrow) ) {
+			return true;
+		} else if ( d == Digital.LU && Input.GetKey(KeyCode.UpArrow) ) {
+			return true;
+		} else if ( d == Digital.LD && Input.GetKey(KeyCode.DownArrow) ) {
+			return true;
+		}
+		return false;
+	}
+
+	// Up中したか
+	protected virtual bool innerHoldUp(Digital d)
+	{
+		if (d == Digital.LL && !Input.GetKey( KeyCode.LeftArrow )) {
+			return true;
+		} else if (d == Digital.LR && !Input.GetKey( KeyCode.RightArrow )) {
+			return true;
+		} else if (d == Digital.LU && !Input.GetKey( KeyCode.UpArrow )) {
+			return true;
+		} else if (d == Digital.LD && !Input.GetKey( KeyCode.DownArrow )) {
+			return true;
+		}
+		return true;
 	}
 
 	Wired wired_ = new Wired();

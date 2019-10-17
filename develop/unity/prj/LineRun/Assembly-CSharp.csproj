@@ -127,13 +127,16 @@
     <Compile Include="Assets\Codes\common\State.cs" />
     <Compile Include="Assets\Codes\common\Swaps.cs" />
     <Compile Include="Assets\Codes\common\Table.cs" />
+    <Compile Include="Assets\Codes\common\Texture\DrawableTexture.cs" />
     <Compile Include="Assets\Codes\common\ToVal.cs" />
     <Compile Include="Assets\Codes\common\UIIntroAnimation.cs" />
     <Compile Include="Assets\Codes\common\UIIntroColorAnimation.cs" />
     <Compile Include="Assets\Codes\common\UIIntroTextColorAnimation.cs" />
     <Compile Include="Assets\Codes\common\Vector2Util.cs" />
     <Compile Include="Assets\Codes\common\Vector3Util.cs" />
+    <Compile Include="Assets\Codes\GameManager.cs" />
     <Compile Include="Assets\Codes\MainGameDIInstaller.cs" />
+    <Compile Include="Assets\Codes\Player.cs" />
     <Compile Include="Assets\Codes\Test.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/LineRun/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
@@ -339,20 +342,20 @@
     <Reference Include="UnityEngine.XRModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.6f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
     </Reference>
-    <Reference Include="Zenject.ReflectionBaking.Mono.Cecil.Mdb">
-      <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/LineRun/Assets/Plugins/Zenject/OptionalExtras/ReflectionBaking/Lib/Zenject.ReflectionBaking.Mono.Cecil.Mdb.dll</HintPath>
-    </Reference>
     <Reference Include="Zenject.ReflectionBaking.Mono.Cecil">
       <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/LineRun/Assets/Plugins/Zenject/OptionalExtras/ReflectionBaking/Lib/Zenject.ReflectionBaking.Mono.Cecil.dll</HintPath>
     </Reference>
-    <Reference Include="Zenject-usage">
-      <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/LineRun/Assets/Plugins/Zenject/Source/Usage/Zenject-usage.dll</HintPath>
+    <Reference Include="Zenject.ReflectionBaking.Mono.Cecil.Mdb">
+      <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/LineRun/Assets/Plugins/Zenject/OptionalExtras/ReflectionBaking/Lib/Zenject.ReflectionBaking.Mono.Cecil.Mdb.dll</HintPath>
     </Reference>
     <Reference Include="Zenject.ReflectionBaking.Mono.Cecil.Pdb">
       <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/LineRun/Assets/Plugins/Zenject/OptionalExtras/ReflectionBaking/Lib/Zenject.ReflectionBaking.Mono.Cecil.Pdb.dll</HintPath>
     </Reference>
     <Reference Include="Zenject.ReflectionBaking.Mono.Cecil.Rocks">
       <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/LineRun/Assets/Plugins/Zenject/OptionalExtras/ReflectionBaking/Lib/Zenject.ReflectionBaking.Mono.Cecil.Rocks.dll</HintPath>
+    </Reference>
+    <Reference Include="Zenject-usage">
+      <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/LineRun/Assets/Plugins/Zenject/Source/Usage/Zenject-usage.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.6f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
