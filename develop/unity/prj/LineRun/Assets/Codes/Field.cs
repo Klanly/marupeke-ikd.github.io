@@ -17,7 +17,7 @@ public class Field : MonoBehaviour
 	Camera mainCamera_ = null;
 
 	[SerializeField]
-	Camera[] subCameras_ = new Camera[ 3 ]; // ループ境界先のオブジェクトを描画するカメラ 0: 左右境界、1:上下境界、2:斜め境界
+	Camera[] subCameras_ = new Camera[ 5 ]; // ループ境界先のオブジェクトを描画するカメラ 0: 左境界、1:上下境界、2:斜め左境界、3:右境界、4:斜め右境界
 
 	public float Left { get { return -fieldWidth_ * 0.5f; } }
 	public float Right { get { return fieldWidth_ * 0.5f; } }
@@ -55,6 +55,7 @@ public class Field : MonoBehaviour
 	{
 		foreach (var c in subCameras_) {
 			c.gameObject.SetActive( false );
+			c.transform.rotation = mainCamera_.transform.rotation;
 		}
 
 		// メインカメラのXY平面への撮影範囲を監視
@@ -65,6 +66,7 @@ public class Field : MonoBehaviour
 		invView.m21 *= -1.0f;
 		invView.m22 *= -1.0f;
 		invView.m23 *= -1.0f;
+		Swaps.swap( ref invView.m12, ref invView.m21 );
 		var wr0 = invView * rays_[ 0 ];
 		var wr1 = invView * rays_[ 1 ];
 		var wr2 = invView * rays_[ 2 ];
@@ -82,6 +84,7 @@ public class Field : MonoBehaviour
 
 		float hw = fieldWidth_ / 2.0f;
 		float hh = fieldHeight_ / 2.0f;
+		bool bLR = false;
 		if (wr0.x < -hw || wr2.x < -hw) {
 			// 左側はみ出し
 			subCameras_[ 0 ].transform.position = cameraPos + new Vector3( fieldWidth_, 0.0f, 0.0f );
@@ -99,24 +102,28 @@ public class Field : MonoBehaviour
 				subCameras_[ 2 ].transform.position = cameraPos + new Vector3( fieldWidth_, fieldHeight_, 0.0f );
 				subCameras_[ 2 ].gameObject.SetActive( true );
 			}
-		} else if (wr1.x > hw || wr3.x > hw) {
+			bLR = true;
+		} if (wr1.x > hw || wr3.x > hw) {
 			// 右側はみ出し
-			subCameras_[ 0 ].transform.position = cameraPos + new Vector3( -fieldWidth_, 0.0f, 0.0f );
-			subCameras_[ 0 ].gameObject.SetActive( true );
+			subCameras_[ 3 ].transform.position = cameraPos + new Vector3( -fieldWidth_, 0.0f, 0.0f );
+			subCameras_[ 3 ].gameObject.SetActive( true );
 			if (wr2.y > hh || wr3.y > hh) {
 				// 右上はみ出し
 				subCameras_[ 1 ].transform.position = cameraPos + new Vector3( 0.0f, -fieldHeight_, 0.0f );
 				subCameras_[ 1 ].gameObject.SetActive( true );
-				subCameras_[ 2 ].transform.position = cameraPos + new Vector3( -fieldWidth_, -fieldHeight_, 0.0f );
-				subCameras_[ 2 ].gameObject.SetActive( true );
+				subCameras_[ 4 ].transform.position = cameraPos + new Vector3( -fieldWidth_, -fieldHeight_, 0.0f );
+				subCameras_[ 4 ].gameObject.SetActive( true );
 			} else if (wr0.y < -hh || wr1.y < -hh) {
 				// 右下はみ出し
 				subCameras_[ 1 ].transform.position = cameraPos + new Vector3( 0.0f, fieldHeight_, 0.0f );
 				subCameras_[ 1 ].gameObject.SetActive( true );
-				subCameras_[ 2 ].transform.position = cameraPos + new Vector3( -fieldWidth_, fieldHeight_, 0.0f );
-				subCameras_[ 2 ].gameObject.SetActive( true );
+				subCameras_[ 4 ].transform.position = cameraPos + new Vector3( -fieldWidth_, fieldHeight_, 0.0f );
+				subCameras_[ 4 ].gameObject.SetActive( true );
 			}
-		} else {
+			bLR = true;
+		}
+		
+		if (bLR == false ) {
 			if (wr2.y > hh || wr3.y > hh) {
 				// 上はみ出し
 				subCameras_[ 1 ].transform.position = cameraPos + new Vector3( 0.0f, -fieldHeight_, 0.0f );
