@@ -104,6 +104,7 @@ public class Player : MonoBehaviour
 			if ( l <= raillingLen_ + 1.0f ) {
 				// フィールド内に収まっている柵
 				var railling = PrefabUtil.createInstance( raillingPrefab_, field_.transform );
+				field_.addRailling( railling );
 				railling.create( preRail_, p2, -p.z + 1.0f );
 				preNodePos_ = p;
 				preRail_ = railling;
@@ -132,9 +133,11 @@ public class Player : MonoBehaviour
 				}
 				if (f >= raillingLen_ && f <= raillingLen_ + 1.0f ) {
 					var railling = PrefabUtil.createInstance( raillingPrefab_, field_.transform );
+					field_.addRailling( railling );
 					railling.create( preRail_, adjPos, -p.z + 1.0f );
 					preNodePos_ = p;
 					var railling2 = PrefabUtil.createInstance( raillingPrefab_, field_.transform );
+					field_.addRailling( railling2 );
 					railling2.create( null, p, -p.z + 1.0f );
 					preRail_ = railling2;
 				}

@@ -26,6 +26,16 @@ public class Field : MonoBehaviour
 	public float Width { get { return fieldWidth_; } }
 	public float Height { get { return fieldHeight_; } }
 
+	// 柵を登録
+	public void addRailling( Railling railling )
+	{
+		raillings_.Enqueue( railling );
+		if ( raillings_.Count > curMaxRaillingNum_ ) {
+			var destRail = raillings_.Dequeue();
+			Destroy( destRail.gameObject );
+		}
+	}
+
 	private void Awake()
 	{
 		foreach ( var c in subCameras_ ) {
@@ -138,8 +148,19 @@ public class Field : MonoBehaviour
 
 	void Update()
     {
+		t_ += Time.deltaTime;
+		float N = 10;
+		float RN1 = 25;
+		float RN2 = 55;
+		float b = Mathf.Log( ( RN1 - N ) / ( RN2 - N ) ) / Mathf.Log( 60.0f / 120.0f );
+		float a = ( RN1 - N ) / ( Mathf.Pow( 60.0f, b ) );
+		curMaxRaillingNum_ = ( int )( a * Mathf.Pow( t_, b ) + N );
 	}
 
 	Vector4[] rays_ = new Vector4[ 4 ];
 	Vector3[] colPoses_ = new Vector3[ 4 ];
+	Queue<Railling> raillings_ = new Queue<Railling>();
+	[SerializeField]
+	int curMaxRaillingNum_ = 10;
+	float t_ = 0.0f;
 }
