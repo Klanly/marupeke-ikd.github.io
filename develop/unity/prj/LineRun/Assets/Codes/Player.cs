@@ -6,7 +6,7 @@ using Zenject;
 public class Player : MonoBehaviour
 {
 	[Inject]
-	IOXInput input_;
+	IOXInput input_ = null;
 
 	[Inject]
 	GameManager gameManager_;
