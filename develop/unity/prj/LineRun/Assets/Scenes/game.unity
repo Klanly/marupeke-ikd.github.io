@@ -1166,9 +1166,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b0063b26f791a84d8eb9a978a010014, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed_: 2.5
+  speed_: 6
   flyTime_: 0.8
   flyHeight_: 3
+  field_: {fileID: 792426690}
 --- !u!1 &1465594316
 GameObject:
   m_ObjectHideFlags: 0

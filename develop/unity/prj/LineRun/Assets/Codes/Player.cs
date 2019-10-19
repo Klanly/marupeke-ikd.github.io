@@ -20,6 +20,9 @@ public class Player : MonoBehaviour
 	[SerializeField]
 	float flyHeight_ = 2.0f;
 
+	[SerializeField]
+	Field field_;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +34,18 @@ public class Player : MonoBehaviour
     {
 		// 上下左右移動
 		Vector3 dir = input_.getDirection();
-		transform.localPosition = transform.localPosition + dir * speed_ * Time.deltaTime;
+		var p = transform.localPosition + dir * speed_ * Time.deltaTime;
+		if ( p.x < field_.Left ) {
+			p.x += field_.Width;
+		} else if ( p.x > field_.Right ) {
+			p.x -= field_.Height;
+		}
+		if ( p.y < field_.Bottom ) {
+			p.y += field_.Height;
+		} else if ( p.y > field_.Top ) {
+			p.y -= field_.Height;
+		}
+		transform.localPosition = p;
 
 		// ジャンプ
 		if (jumpState_ == null ) {
@@ -43,10 +57,10 @@ public class Player : MonoBehaviour
 			jumpState_();
 		}
 
-		var p = transform.localPosition;
-		var tex = gameManager_.getLineRecordTexture();
-		tex.setPixel( ( int )p.x, ( int )p.y, Color.black, true );
-		tex.apply();
+//		var p = transform.localPosition;
+//		var tex = gameManager_.getLineRecordTexture();
+//		tex.setPixel( ( int )p.x, ( int )p.y, Color.black, true );
+//		tex.apply();
 	}
 
 	void jump()

@@ -19,6 +19,13 @@ public class Field : MonoBehaviour
 	[SerializeField]
 	Camera[] subCameras_ = new Camera[ 3 ]; // ループ境界先のオブジェクトを描画するカメラ 0: 左右境界、1:上下境界、2:斜め境界
 
+	public float Left { get { return -fieldWidth_ * 0.5f; } }
+	public float Right { get { return fieldWidth_ * 0.5f; } }
+	public float Bottom { get { return -fieldHeight_ * 0.5f; } }
+	public float Top { get { return fieldHeight_ * 0.5f; } }
+	public float Width { get { return fieldWidth_; } }
+	public float Height { get { return fieldHeight_; } }
+
 	private void Awake()
 	{
 		foreach ( var c in subCameras_ ) {
@@ -44,8 +51,8 @@ public class Field : MonoBehaviour
 		colPoses_[ 3 ] = Vector3.zero;
 	}
 
-	void Update()
-    {
+	private void LateUpdate()
+	{
 		foreach (var c in subCameras_) {
 			c.gameObject.SetActive( false );
 		}
@@ -75,24 +82,24 @@ public class Field : MonoBehaviour
 
 		float hw = fieldWidth_ / 2.0f;
 		float hh = fieldHeight_ / 2.0f;
-		if ( wr0.x < -hw || wr2.x < -hw ) {
+		if (wr0.x < -hw || wr2.x < -hw) {
 			// 左側はみ出し
 			subCameras_[ 0 ].transform.position = cameraPos + new Vector3( fieldWidth_, 0.0f, 0.0f );
 			subCameras_[ 0 ].gameObject.SetActive( true );
-			if ( wr2.y > hh || wr3.y > hh ) {
+			if (wr2.y > hh || wr3.y > hh) {
 				// 左上はみ出し
 				subCameras_[ 1 ].transform.position = cameraPos + new Vector3( 0.0f, -fieldHeight_, 0.0f );
 				subCameras_[ 1 ].gameObject.SetActive( true );
 				subCameras_[ 2 ].transform.position = cameraPos + new Vector3( fieldWidth_, -fieldHeight_, 0.0f );
 				subCameras_[ 2 ].gameObject.SetActive( true );
-			} else if ( wr0.y < -hh || wr1.y < -hh ) {
+			} else if (wr0.y < -hh || wr1.y < -hh) {
 				// 左下はみ出し
 				subCameras_[ 1 ].transform.position = cameraPos + new Vector3( 0.0f, fieldHeight_, 0.0f );
 				subCameras_[ 1 ].gameObject.SetActive( true );
 				subCameras_[ 2 ].transform.position = cameraPos + new Vector3( fieldWidth_, fieldHeight_, 0.0f );
 				subCameras_[ 2 ].gameObject.SetActive( true );
 			}
-		} else if ( wr1.x > hw || wr3.x > hw ) {
+		} else if (wr1.x > hw || wr3.x > hw) {
 			// 右側はみ出し
 			subCameras_[ 0 ].transform.position = cameraPos + new Vector3( -fieldWidth_, 0.0f, 0.0f );
 			subCameras_[ 0 ].gameObject.SetActive( true );
@@ -120,6 +127,10 @@ public class Field : MonoBehaviour
 				subCameras_[ 1 ].gameObject.SetActive( true );
 			}
 		}
+	}
+
+	void Update()
+    {
 	}
 
 	Vector4[] rays_ = new Vector4[ 4 ];
