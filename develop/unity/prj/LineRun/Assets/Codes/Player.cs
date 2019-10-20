@@ -73,10 +73,10 @@ public class Player : MonoBehaviour
 		// 柵作成チェック
 		checkRaillingCreation();
 
-//		var p = transform.localPosition;
-//		var tex = gameManager_.getLineRecordTexture();
-//		tex.setPixel( ( int )p.x, ( int )p.y, Color.black, true );
-//		tex.apply();
+		//		var p = transform.localPosition;
+		//		var tex = gameManager_.getLineRecordTexture();
+		//		tex.setPixel( ( int )p.x, ( int )p.y, Color.black, true );
+		//		tex.apply();
 	}
 
 	void jump()

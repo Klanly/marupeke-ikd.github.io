@@ -62,6 +62,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Codes\Block.cs" />
+    <Compile Include="Assets\Codes\BlockEmitter.cs" />
     <Compile Include="Assets\Codes\common\Bezier.cs" />
     <Compile Include="Assets\Codes\common\camera\CameraPicker.cs" />
     <Compile Include="Assets\Codes\common\camera\CameraUtil.cs" />

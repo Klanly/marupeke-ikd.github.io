@@ -19,6 +19,7 @@ public class Field : MonoBehaviour
 	[SerializeField]
 	Camera[] subCameras_ = new Camera[ 5 ]; // ループ境界先のオブジェクトを描画するカメラ 0: 左境界、1:上下境界、2:斜め左境界、3:右境界、4:斜め右境界
 
+
 	public float Left { get { return -fieldWidth_ * 0.5f; } }
 	public float Right { get { return fieldWidth_ * 0.5f; } }
 	public float Bottom { get { return -fieldHeight_ * 0.5f; } }
@@ -148,6 +149,7 @@ public class Field : MonoBehaviour
 
 	void Update()
     {
+		// 柵の長さを更新
 		t_ += Time.deltaTime;
 		float N = 10;
 		float RN1 = 25;

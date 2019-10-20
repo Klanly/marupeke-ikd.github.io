@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class GameManager : GameManagerBase
 {
-	[SerializeField]
-	SpriteRenderer renderer_;
-
 	public DrawableTexture getLineRecordTexture()
 	{
 		return dt_;
@@ -15,8 +12,6 @@ public class GameManager : GameManagerBase
 	// Start is called before the first frame update
 	private void Awake()
 	{
-		dt_.setup( 64, 64, Color.white );
-		renderer_.sprite = dt_.getSprite();
 	}
 
 	void Start()
