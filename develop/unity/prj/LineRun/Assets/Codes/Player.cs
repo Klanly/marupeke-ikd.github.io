@@ -77,6 +77,8 @@ public class Player : MonoBehaviour
 		//		var tex = gameManager_.getLineRecordTexture();
 		//		tex.setPixel( ( int )p.x, ( int )p.y, Color.black, true );
 		//		tex.apply();
+
+		// コリジョンチェック
 	}
 
 	void jump()
@@ -146,6 +148,17 @@ public class Player : MonoBehaviour
 				// 境界を跨ぐ柵をワープ先側にも作成
 			}
 		} 
+	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if ( other.gameObject.tag == "item" ) {
+			// アイテムゲット
+			var item = other.gameObject.GetComponentInParent<Item>();
+			if ( item != null ) {
+				item.getMotion();
+			}
+		}
 	}
 
 	System.Action jumpState_ = null;
