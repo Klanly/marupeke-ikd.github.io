@@ -32,42 +32,59 @@ public class Player : MonoBehaviour
 	[SerializeField]
 	float raillingLen_ = 2.0f;
 
+	[SerializeField]
+	Animation animation_;
+
+	[SerializeField]
+	GameObject sheep_;
+
+	[SerializeField, Range( 0.001f, 1.0f )]
+	float adjRunSpeed_ = 1.0f;
+
+	private void Awake()
+	{
+		animation_.Play( "run" );
+	}
 
 	// Start is called before the first frame update
 	void Start()
     {
 		preNodePos_ = transform.position;
+		prePos_ = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
+		prePos_ = transform.localPosition;
+
 		// 上下左右移動
 		// +スクロール
 		Vector3 dir = input_.getDirection();
 		var p = transform.localPosition + dir * speed_ * Time.deltaTime;
 		p.y += scrollSpeed_ * Time.deltaTime;
-		if ( p.x < field_.Left ) {
-			p.x += field_.Width;
-		} else if ( p.x > field_.Right ) {
-			p.x -= field_.Height;
-		}
-		if ( p.y < field_.Bottom ) {
-			p.y += field_.Height;
-		} else if ( p.y > field_.Top ) {
-			p.y -= field_.Height;
-		}
-
 		transform.localPosition = p;
 
 		// ジャンプ
-		if (jumpState_ == null ) {
+		if (jumpState_ == null) {
+			animation_.Play( "run" );
 			if (input_.decide() == true) {
 				jumpTime_ = 0.0f;
 				jumpState_ = jump;
+				animation_.Play( "jump" );
 			}
 		} else {
 			jumpState_();
+		}
+
+		p = adjustPosition( transform.localPosition );
+
+		Vector3 sheepDir = p - prePos_;
+		if ( sheepDir.magnitude > 0.0f ) {
+			var preRot = sheep_.transform.rotation;
+			var newRot = Quaternion.LookRotation( sheepDir, Vector3.back );
+			sheep_.transform.rotation = Quaternion.Lerp( preRot, newRot, 0.3f );
+			animation_[ "run" ].speed = sheepDir.magnitude / adjRunSpeed_;
 		}
 
 		// 柵作成チェック
@@ -77,8 +94,6 @@ public class Player : MonoBehaviour
 		//		var tex = gameManager_.getLineRecordTexture();
 		//		tex.setPixel( ( int )p.x, ( int )p.y, Color.black, true );
 		//		tex.apply();
-
-		// コリジョンチェック
 	}
 
 	void jump()
@@ -95,6 +110,27 @@ public class Player : MonoBehaviour
 			jumpState_ = null;
 		}
 		transform.localPosition = p;
+	}
+
+	// 位置関係を調整
+	Vector3 adjustPosition( Vector3 p )
+	{
+		if (p.x < field_.Left) {
+			p.x += field_.Width;
+			prePos_.x += field_.Width;
+		} else if (p.x > field_.Right) {
+			p.x -= field_.Height;
+			prePos_.x -= field_.Width;
+		}
+		if (p.y < field_.Bottom) {
+			p.y += field_.Height;
+			prePos_.y += field_.Height;
+		} else if (p.y > field_.Top) {
+			p.y -= field_.Height;
+			prePos_.y -= field_.Height;
+		}
+		transform.localPosition = p;
+		return p;
 	}
 
 	void checkRaillingCreation()
@@ -166,4 +202,5 @@ public class Player : MonoBehaviour
 	float jumpTime_ = 0.0f;
 	Vector2 preNodePos_ = Vector2.zero;
 	Railling preRail_ = null;
+	Vector3 prePos_ = Vector3.zero;
 }

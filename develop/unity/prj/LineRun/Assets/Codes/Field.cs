@@ -16,9 +16,12 @@ public class Field : MonoBehaviour
 	[SerializeField]
 	Camera mainCamera_ = null;
 
+	// ループ境界先のオブジェクトを描画するカメラ
+	//  0:左上  1:上  2:右上
+	//  3:左          4:右
+	//  5:左下  6:下 7 :右下
 	[SerializeField]
-	Camera[] subCameras_ = new Camera[ 5 ]; // ループ境界先のオブジェクトを描画するカメラ 0: 左境界、1:上下境界、2:斜め左境界、3:右境界、4:斜め右境界
-
+	Camera[] subCameras_ = new Camera[ 8 ];
 
 	public float Left { get { return -fieldWidth_ * 0.5f; } }
 	public float Right { get { return fieldWidth_ * 0.5f; } }
@@ -95,56 +98,39 @@ public class Field : MonoBehaviour
 
 		float hw = fieldWidth_ / 2.0f;
 		float hh = fieldHeight_ / 2.0f;
-		bool bLR = false;
-		if (wr0.x < -hw || wr2.x < -hw) {
-			// 左側はみ出し
-			subCameras_[ 0 ].transform.position = cameraPos + new Vector3( fieldWidth_, 0.0f, 0.0f );
-			subCameras_[ 0 ].gameObject.SetActive( true );
-			if (wr2.y > hh || wr3.y > hh) {
-				// 左上はみ出し
-				subCameras_[ 1 ].transform.position = cameraPos + new Vector3( 0.0f, -fieldHeight_, 0.0f );
-				subCameras_[ 1 ].gameObject.SetActive( true );
-				subCameras_[ 2 ].transform.position = cameraPos + new Vector3( fieldWidth_, -fieldHeight_, 0.0f );
-				subCameras_[ 2 ].gameObject.SetActive( true );
-			} else if (wr0.y < -hh || wr1.y < -hh) {
-				// 左下はみ出し
-				subCameras_[ 1 ].transform.position = cameraPos + new Vector3( 0.0f, fieldHeight_, 0.0f );
-				subCameras_[ 1 ].gameObject.SetActive( true );
-				subCameras_[ 2 ].transform.position = cameraPos + new Vector3( fieldWidth_, fieldHeight_, 0.0f );
-				subCameras_[ 2 ].gameObject.SetActive( true );
-			}
-			bLR = true;
-		} if (wr1.x > hw || wr3.x > hw) {
-			// 右側はみ出し
-			subCameras_[ 3 ].transform.position = cameraPos + new Vector3( -fieldWidth_, 0.0f, 0.0f );
-			subCameras_[ 3 ].gameObject.SetActive( true );
-			if (wr2.y > hh || wr3.y > hh) {
-				// 右上はみ出し
-				subCameras_[ 1 ].transform.position = cameraPos + new Vector3( 0.0f, -fieldHeight_, 0.0f );
-				subCameras_[ 1 ].gameObject.SetActive( true );
-				subCameras_[ 4 ].transform.position = cameraPos + new Vector3( -fieldWidth_, -fieldHeight_, 0.0f );
-				subCameras_[ 4 ].gameObject.SetActive( true );
-			} else if (wr0.y < -hh || wr1.y < -hh) {
-				// 右下はみ出し
-				subCameras_[ 1 ].transform.position = cameraPos + new Vector3( 0.0f, fieldHeight_, 0.0f );
-				subCameras_[ 1 ].gameObject.SetActive( true );
-				subCameras_[ 4 ].transform.position = cameraPos + new Vector3( -fieldWidth_, fieldHeight_, 0.0f );
-				subCameras_[ 4 ].gameObject.SetActive( true );
-			}
-			bLR = true;
-		}
-		
-		if (bLR == false ) {
-			if (wr2.y > hh || wr3.y > hh) {
-				// 上はみ出し
-				subCameras_[ 1 ].transform.position = cameraPos + new Vector3( 0.0f, -fieldHeight_, 0.0f );
-				subCameras_[ 1 ].gameObject.SetActive( true );
-			} else if (wr0.y < -hh || wr1.y < -hh) {
-				// 下はみ出し
-				subCameras_[ 1 ].transform.position = cameraPos + new Vector3( 0.0f, fieldHeight_, 0.0f );
-				subCameras_[ 1 ].gameObject.SetActive( true );
+
+		var wrs = new Vector2[ 4 ] {
+			wr0, wr1, wr2, wr3
+		};
+		var actives = new bool[ 8 ] {
+			false, false, false, false, false, false, false, false
+		};
+		var ofsets = new Vector3[ 8 ] {
+			new Vector3(  1.0f, -1.0f, 0.0f ),
+			new Vector3(  0.0f, -1.0f, 0.0f ),
+			new Vector3( -1.0f, -1.0f, 0.0f ),
+			new Vector3(  1.0f,  0.0f, 0.0f ),
+			new Vector3( -1.0f,  0.0f, 0.0f ),
+			new Vector3(  1.0f,  1.0f, 0.0f ),
+			new Vector3(  0.0f,  1.0f, 0.0f ),
+			new Vector3( -1.0f,  1.0f, 0.0f ),
+		};
+		checkViewCollision( wrs, new Vector2( -hw, -hh ), ref actives, 3, 5, 6 );
+		checkViewCollision( wrs, new Vector2(  hw, -hh ), ref actives, 4, 6, 7 );
+		checkViewCollision( wrs, new Vector2( -hw,  hh ), ref actives, 0, 1, 3 );
+		checkViewCollision( wrs, new Vector2(  hw,  hh ), ref actives, 1, 2, 4 );
+		for ( int i = 0; i < 8; ++i ) {
+			if ( actives[ i ] == true ) {
+				subCameras_[ i ].transform.position = cameraPos + new Vector3( fieldWidth_ * ofsets[ i ].x, fieldHeight_ * ofsets[ i ].y, 0.0f );
+				subCameras_[ i ].gameObject.SetActive( true );
 			}
 		}
+	}
+
+	void checkViewCollision( Vector2[] wrs, Vector2 p, ref bool[] actives, int i0, int i1, int i2 ) {
+		actives[ i0 ] = true;
+		actives[ i1 ] = true;
+		actives[ i2 ] = true;
 	}
 
 	void Update()
