@@ -146,6 +146,7 @@
     <Compile Include="Assets\Codes\Player.cs" />
     <Compile Include="Assets\Codes\Railling.cs" />
     <Compile Include="Assets\Codes\Test.cs" />
+    <None Include="Assets\Fonts\font01.fnt" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/LineRun/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

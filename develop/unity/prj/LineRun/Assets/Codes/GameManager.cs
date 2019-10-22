@@ -4,12 +4,20 @@ using UnityEngine;
 
 public class GameManager : GameManagerBase
 {
-	public DrawableTexture getLineRecordTexture()
+	[SerializeField]
+	Player player_ = null;
+
+	[SerializeField]
+	UnityEngine.UI.Text distanceI_;
+	[SerializeField]
+	UnityEngine.UI.Text distanceF_;
+
+
+	public void toGameOver()
 	{
-		return dt_;
+		bGameOver_ = true;
 	}
 
-	// Start is called before the first frame update
 	private void Awake()
 	{
 	}
@@ -19,11 +27,15 @@ public class GameManager : GameManagerBase
         
     }
 
-    // Update is called once per frame
     void Update()
     {
-		stateUpdate();        
+		float m = player_.getCurDistance();
+		int intM = ( int )m;
+		distanceI_.text = string.Format( "{0}.", intM );
+		distanceF_.text = string.Format( "{0}", ( int )( 100 * ( m - intM ) ) );
+
+		stateUpdate();
     }
 
-	DrawableTexture dt_ = new DrawableTexture();
+	bool bGameOver_ = false;
 }

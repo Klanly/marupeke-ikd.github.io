@@ -44,6 +44,10 @@ public class Player : MonoBehaviour
 	[SerializeField]
 	Explosion[] explosions_ = new Explosion[ 9 ];
 
+	public float getCurDistance()
+	{
+		return curDistance_;
+	}
 
 	private void Awake()
 	{
@@ -67,6 +71,9 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+		if (bGameOver_ == true)
+			return;
+
 		prePos_ = transform.localPosition;
 
 		// 上下左右移動
@@ -141,6 +148,9 @@ public class Player : MonoBehaviour
 			prePos_.y -= field_.Height;
 		}
 		transform.localPosition = p;
+
+		curDistance_ += p.y - prePos_.y;
+
 		return p;
 	}
 
@@ -199,6 +209,9 @@ public class Player : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
+		if (bGameOver_ == true)
+			return;
+
 		if ( other.gameObject.tag == "item" ) {
 			// アイテムゲット
 			var item = other.gameObject.GetComponentInParent<Item>();
@@ -213,6 +226,23 @@ public class Player : MonoBehaviour
 				e.DecRate = explosions_[ 0 ].DecRate;
 				e.GravityPower = explosions_[ 0 ].GravityPower;
 			}
+		} else if ( other.gameObject.tag == "rail" ) {
+			var rail = other.gameObject.GetComponentInParent<Railling>();
+			if (rail != null ) {
+				if (rail.noDamageCount() < 0) {
+					// ゲームオーバー
+					gameManager_.toGameOver();
+					bGameOver_ = true;
+				}
+				return;
+			}
+			var block = other.gameObject.GetComponentInParent<Block>();
+			if ( block != null ) {
+				// ゲームオーバー
+				gameManager_.toGameOver();
+				bGameOver_ = true;
+			}
+			return;
 		}
 	}
 
@@ -222,4 +252,6 @@ public class Player : MonoBehaviour
 	Vector2 preNodePos_ = Vector2.zero;
 	Railling preRail_ = null;
 	Vector3 prePos_ = Vector3.zero;
+	float curDistance_ = 0.0f;
+	bool bGameOver_ = false;
 }

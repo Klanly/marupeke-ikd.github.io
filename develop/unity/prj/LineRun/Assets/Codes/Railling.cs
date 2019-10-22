@@ -17,6 +17,11 @@ public class Railling : MonoBehaviour
 
 	float railWoodOffsetH_ = 0.3f;
 
+	public int noDamageCount()
+	{
+		return noDamageCounter_;
+	}
+
 	public void create( Railling preRail, Vector2 pos, float poleHeight )
 	{
 		poleHeight_ = poleHeight;
@@ -46,6 +51,9 @@ public class Railling : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
+		noDamageCounter_--;
+
+	}
+
+	int noDamageCounter_ = 15;
 }
