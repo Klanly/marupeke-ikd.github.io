@@ -36,7 +36,8 @@ public class Field : MonoBehaviour
 		raillings_.Enqueue( railling );
 		if ( raillings_.Count > curMaxRaillingNum_ ) {
 			var destRail = raillings_.Dequeue();
-			Destroy( destRail.gameObject );
+			if (destRail != null)
+				Destroy( destRail.gameObject );
 		}
 	}
 

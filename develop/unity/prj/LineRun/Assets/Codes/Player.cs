@@ -41,9 +41,20 @@ public class Player : MonoBehaviour
 	[SerializeField, Range( 0.001f, 1.0f )]
 	float adjRunSpeed_ = 1.0f;
 
+	[SerializeField]
+	Explosion[] explosions_ = new Explosion[ 9 ];
+
+
 	private void Awake()
 	{
 		animation_.Play( "run" );
+		int c = 0;
+		for ( int y = -1; y <= 1; ++y ) {
+			for (int x = -1; x <= 1; ++x ) {
+				explosions_[ c ].transform.localPosition = new Vector3( field_.Width * x, field_.Height * y, 0.0f );
+				c++;
+			}
+		}
 	}
 
 	// Start is called before the first frame update
@@ -139,7 +150,7 @@ public class Player : MonoBehaviour
 		var p2 = new Vector2( p.x, p.y );
 		float l = ( p2 - preNodePos_ ).magnitude;
 		if ( l >= raillingLen_ ) {
-			if ( l <= raillingLen_ + 1.0f ) {
+			if ( l <= raillingLen_ * 1.9f ) {
 				// フィールド内に収まっている柵
 				var railling = PrefabUtil.createInstance( raillingPrefab_, field_.transform );
 				field_.addRailling( railling );
@@ -169,7 +180,7 @@ public class Player : MonoBehaviour
 						idx = i;
 					}
 				}
-				if (f >= raillingLen_ && f <= raillingLen_ + 1.0f ) {
+				if (f >= raillingLen_ && f <= raillingLen_ * 1.9f ) {
 					var railling = PrefabUtil.createInstance( raillingPrefab_, field_.transform );
 					field_.addRailling( railling );
 					railling.create( preRail_, adjPos, -p.z + 1.0f );
@@ -193,6 +204,14 @@ public class Player : MonoBehaviour
 			var item = other.gameObject.GetComponentInParent<Item>();
 			if ( item != null ) {
 				item.getMotion();
+			}
+			// 周囲を爆破
+			foreach (var e in explosions_) {
+				e.explosion();
+				e.CorePower = explosions_[ 0 ].CorePower;
+				e.SonicVector = explosions_[ 0 ].SonicVector;
+				e.DecRate = explosions_[ 0 ].DecRate;
+				e.GravityPower = explosions_[ 0 ].GravityPower;
 			}
 		}
 	}

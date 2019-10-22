@@ -92,6 +92,7 @@
     <Compile Include="Assets\Codes\common\mesh\GLLineTrail.cs" />
     <Compile Include="Assets\Codes\common\mesh\TorusMesh.cs" />
     <Compile Include="Assets\Codes\common\MiniJSON.cs" />
+    <Compile Include="Assets\Codes\common\motion\AutoExplosion.cs" />
     <Compile Include="Assets\Codes\common\motion\AutoRotation.cs" />
     <Compile Include="Assets\Codes\common\motion\ColorRotation.cs" />
     <Compile Include="Assets\Codes\common\motion\LerpAction.cs" />
