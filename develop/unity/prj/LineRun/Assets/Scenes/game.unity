@@ -903,6 +903,36 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!1 &1288416287
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1288416288}
+  m_Layer: 0
+  m_Name: Explosion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1288416288
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288416287}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1494968207}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1289195032
 GameObject:
   m_ObjectHideFlags: 0
@@ -1244,6 +1274,7 @@ Transform:
   - {fileID: 792426689}
   - {fileID: 1842225644}
   - {fileID: 951936683}
+  - {fileID: 1288416288}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1336,9 +1367,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockPrefab_: {fileID: 7995317344575172549, guid: 8a8a5065562d415429572db1aab0d1b4,
     type: 3}
+  blockPrefab2_: {fileID: 7995317344575172549, guid: a8f11b0df38abd344833ba0c72e570af,
+    type: 3}
   player_: {fileID: 1445455966}
   field_: {fileID: 792426690}
   averageInterval_: 10
+  minWidth_: 2
+  maxWidth_: 3
+  minHeight_: 2
+  maxHeight_: 2.5
 --- !u!1 &1856265339
 GameObject:
   m_ObjectHideFlags: 0
