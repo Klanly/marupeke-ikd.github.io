@@ -14,6 +14,7 @@ public class AutoRotation : MonoBehaviour {
     [SerializeField]
     Vector3 rotAxisRand_ = Vector3.zero;
 
+	public float RotAngPerSec { set { rotAngPerSec_ = value; } get { return rotAngPerSec_; } }
     // Use this for initialization
     void Start () {
         rotAxis_ += Vector3Util.mul( Randoms.Vec3.valueCenter() * 2.0f, rotAxisRand_ );

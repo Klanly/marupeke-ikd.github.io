@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
+	[SerializeField]
+	AutoRotation autoRot_;
+
 	// 取得モーション
 	public void getMotion()
 	{
+		autoRot_.RotAngPerSec *= 3.0f;
+
 		var rigidBody = GetComponent<Rigidbody>();
 		if ( rigidBody != null ) {
 			Destroy( rigidBody );
