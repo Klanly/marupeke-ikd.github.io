@@ -238,9 +238,11 @@ public class Player : MonoBehaviour
 			}
 			var block = other.gameObject.GetComponentInParent<Block>();
 			if ( block != null ) {
-				// ゲームオーバー
-				gameManager_.toGameOver();
-				bGameOver_ = true;
+				if ( block.noDamageCount() < 0 ) {
+					// ゲームオーバー
+					gameManager_.toGameOver();
+					bGameOver_ = true;
+				}
 			}
 			return;
 		}

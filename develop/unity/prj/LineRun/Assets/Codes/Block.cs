@@ -14,8 +14,13 @@ public class Block : MonoBehaviour
 		block_.transform.rotation = Quaternion.Euler( 1.0f, 1.0f, deg );
 	}
 
-    // Start is called before the first frame update
-    void Start()
+	public int noDamageCount()
+	{
+		return noDamageCounter_;
+	}
+
+	// Start is called before the first frame update
+	void Start()
     {
         
     }
@@ -23,6 +28,8 @@ public class Block : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
+		noDamageCounter_--;
+
+	}
+	int noDamageCounter_ = 45;
 }

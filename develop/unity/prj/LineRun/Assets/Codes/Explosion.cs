@@ -82,6 +82,9 @@ public class Explosion : MonoBehaviour
 					return AutoExplosion.DestroyFlag.GameObject;
 				return AutoExplosion.DestroyFlag.Continue;
 			} );
+			var r = other.gameObject.AddComponent<AutoRotation>();
+			r.RotAngPerSec = Random.Range( 0, 2 ) == 0 ? Random.Range( -500.0f, -200.0f ) : Random.Range( 500.0f, 200.0f );
+			r.RotAxisRand = new Vector3( 180.0f, 180.0f, 180.0f );
 		}
 	}
 
