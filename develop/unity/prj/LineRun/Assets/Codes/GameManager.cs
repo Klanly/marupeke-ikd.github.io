@@ -51,6 +51,13 @@ public class GameManager : GameManagerBase
 		distanceF_.text = string.Format( "{0}", ( int )( 100 * ( m - intM ) ) );
 
 		stateUpdate();
+
+		if ( bGameOver_ == true ) {
+			if ( Input.GetKeyDown( KeyCode.Z ) ) {
+				retryBtn_.enabled = false;
+				SceneManager.LoadScene( "game" );
+			}
+		}
     }
 
 	bool bGameOver_ = false;
