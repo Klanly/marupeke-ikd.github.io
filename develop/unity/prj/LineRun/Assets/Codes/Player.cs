@@ -44,6 +44,9 @@ public class Player : MonoBehaviour
 	[SerializeField]
 	Explosion[] explosions_ = new Explosion[ 9 ];
 
+	[SerializeField]
+	GameObject fukidashiPrefab_ = null;
+
 	public float getCurDistance()
 	{
 		return curDistance_;
@@ -245,6 +248,11 @@ public class Player : MonoBehaviour
 				}
 			}
 			return;
+		} else if ( other.gameObject.tag == "rail_upper" ) {
+			// +100m追加
+			var addScore = PrefabUtil.createInstance( fukidashiPrefab_, transform, Vector3.zero );
+			Destroy( addScore, 1.0f );
+			curDistance_ += 100.0f;
 		}
 	}
 

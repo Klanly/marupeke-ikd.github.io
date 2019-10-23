@@ -2397,6 +2397,8 @@ MonoBehaviour:
   - {fileID: 1670002405}
   - {fileID: 1361883043}
   - {fileID: 317684263}
+  fukidashiPrefab_: {fileID: 1645302595144188124, guid: 3ba5992c9df133b44aa69b3861cdc48b,
+    type: 3}
 --- !u!54 &1445455967
 Rigidbody:
   m_ObjectHideFlags: 0

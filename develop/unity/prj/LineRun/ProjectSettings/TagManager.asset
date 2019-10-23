@@ -6,6 +6,7 @@ TagManager:
   tags:
   - item
   - rail
+  - rail_upper
   layers:
   - Default
   - TransparentFX
