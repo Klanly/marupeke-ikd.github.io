@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : GameManagerBase
 {
@@ -12,14 +14,28 @@ public class GameManager : GameManagerBase
 	[SerializeField]
 	UnityEngine.UI.Text distanceF_;
 
+	[SerializeField]
+	UnityEngine.UI.Image gameOver_;
+
+	[SerializeField]
+	UnityEngine.UI.Button retryBtn_;
+
 
 	public void toGameOver()
 	{
 		bGameOver_ = true;
+		gameOver_.gameObject.SetActive( true );
+		retryBtn_.gameObject.SetActive( true );
 	}
 
 	private void Awake()
 	{
+		gameOver_.gameObject.SetActive( false );
+		retryBtn_.gameObject.SetActive( false );
+		retryBtn_.onClick.AddListener( () => {
+			retryBtn_.enabled = false;
+			SceneManager.LoadScene( "game" );
+		} );
 	}
 
 	void Start()

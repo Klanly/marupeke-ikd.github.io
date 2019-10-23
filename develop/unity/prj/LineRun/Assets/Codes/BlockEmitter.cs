@@ -60,7 +60,7 @@ public class BlockEmitter : MonoBehaviour
 			var pp = player_.transform.position;
 			var block = PrefabUtil.createInstance( Random.Range( 0, 2 ) == 0 ? blockPrefab_ : blockPrefab2_, transform );
 			block.emit( Random.Range( minWidth_, maxWidth_ ), 1.0f, Random.Range( minHeight_, maxHeight_ ), 0.0f );
-			block.transform.position = new Vector3( Randoms.Float.valueCenter() * field_.Width,	pp.y - 1.0f, 0.0f );
+			block.transform.position = new Vector3( Randoms.Float.valueCenter() * field_.Width,	pp.y - 2.0f, 0.0f );
 			block.transform.rotation = Quaternion.Euler( 0.0f, 0.0f, Randoms.Float.valueCenter() * 45.0f );
 		}
 	}
