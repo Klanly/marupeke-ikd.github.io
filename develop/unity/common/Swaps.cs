@@ -9,7 +9,7 @@ public class Swaps
     static public void swap<T>( ref T a, ref T b ) {
         T tmp = a;
         a = b;
-        b = a;
+        b = tmp;
     }
 
     // 成分の最小、最大を揃える
