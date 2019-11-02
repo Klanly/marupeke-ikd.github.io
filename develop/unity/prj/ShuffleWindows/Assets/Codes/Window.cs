@@ -115,23 +115,7 @@ public class Window : MonoBehaviour
 		mat.SetVector( "_OtherYAxis", y );
 		mat.SetVector( "_OtherZAxis", z );
 		mat.SetVector( "_OtherPos", p );
-
-		// 相手の世界でのカメラ位置を算出
-		//  1. 窓の中心からカメラまでの距離Lを算出
-		//  2. カメラまでのベクトルをローカル空間へ移動（ただしスケールしない）
-		//  3. ローカルベクトルを相手の世界へ（ただしスケールしない）
-		//  4. 相手の中心から遷移後ベクトル×Lが相手の空間でのカメラ位置
-		var meToCamera = Camera.main.transform.position - transform.position;
-		float L = meToCamera.magnitude;
-		var myInvQ = transform.rotation;
-		myInvQ.x *= -1.0f;  // 反転
-		myInvQ.y *= -1.0f;
-		myInvQ.z *= -1.0f;
-		var otherQ = otherWindow_.transform.rotation;
-		var vInMe = myInvQ * meToCamera.normalized;
-		var vInOther = otherQ * vInMe * L;
-		var camPos = otherWindow_.transform.position + vInOther;
-		mat.SetVector( "_CameraPosInOther", camPos );
+		mat.SetVector( "_CameraPosInOther", Camera.main.transform.position );
 		
 		windowRenderer_.material = mat;
 	}
