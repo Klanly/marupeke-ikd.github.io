@@ -116,6 +116,7 @@ public class Window : MonoBehaviour
 		mat.SetVector( "_OtherZAxis", z );
 		mat.SetVector( "_OtherPos", p );
 		mat.SetVector( "_CameraPosInOther", Camera.main.transform.position );
+		mat.SetTexture( "_CubeMap", CubeMapRenderer.getInstance().getRenderTexture() );
 		
 		windowRenderer_.material = mat;
 	}
