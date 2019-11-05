@@ -137,6 +137,7 @@
     <Compile Include="Assets\Codes\common\Vector3Util.cs" />
     <Compile Include="Assets\Codes\CubeDistributer.cs" />
     <Compile Include="Assets\Codes\CubeMapRenderer.cs" />
+    <Compile Include="Assets\Codes\Player.cs" />
     <Compile Include="Assets\Codes\RotCube.cs" />
     <Compile Include="Assets\Codes\Window.cs" />
     <Compile Include="Assets\Codes\WindowRoom.cs" />

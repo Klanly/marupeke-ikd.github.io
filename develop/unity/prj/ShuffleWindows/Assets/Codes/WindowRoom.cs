@@ -11,7 +11,10 @@ public class WindowRoom : MonoBehaviour
 	Window windowPrefab_ = null;
 
 	[SerializeField]
-	int windowColNum_ = 10;		// 窓の列数
+	int windowColNum_ = 10;     // 窓の列数
+
+	[SerializeField]
+	float windowColMergin_ = 1.0f;	// 窓の横の隙間
 
 	[SerializeField]
 	int windowRowNum_ = 3;		// 窓の行数
@@ -25,7 +28,7 @@ public class WindowRoom : MonoBehaviour
 	// Start is called before the first frame update
 	void Start() {
 		var w = PrefabUtil.createInstance( windowPrefab_ );
-		float fw = w.getFrameWidth();
+		float fw = w.getFrameWidth() + windowColMergin_;
 		float fh = w.getFrameHeight();
 		float th = 180.0f / windowColNum_ * Mathf.Deg2Rad;
 		float r = fw * 0.5f / Mathf.Tan( th );
@@ -43,7 +46,7 @@ public class WindowRoom : MonoBehaviour
 		Destroy( w.gameObject );
 
 		// 窓をシャッフル
-		if (bDebugNoShuffle_ == true) {
+		if (bDebugNoShuffle_ == false) {
 			List<int> indices = new List<int>();
 			ListUtil.numbering( ref indices, windows_.Count );
 			ListUtil.shuffle( ref indices );

@@ -11,6 +11,12 @@ public class Window : MonoBehaviour
 	MeshRenderer windowRenderer_;
 
 	[SerializeField]
+	Color frameSameColor_ = Color.white;
+
+	[SerializeField]
+	Color frameOtherColor_ = Color.white;
+
+	[SerializeField]
 	float windowWidth_ = 5.0f;
 
 	[SerializeField]
@@ -47,9 +53,46 @@ public class Window : MonoBehaviour
 	[SerializeField]
 	Window otherWindow_;
 
+	[SerializeField]
+	SpriteRenderer cursorFrame_;
+
+
+	public enum FrameColor {
+		Same,
+		Other,
+		None
+	}
+
+	public void changeFrameColor( FrameColor frameColor )
+	{
+		if (frameColor_ == frameColor)
+			return;
+		frameColor_ = frameColor;
+
+		foreach ( var r in frameRenderers_ ) {
+			var mat = r.material;
+			if (frameColor == FrameColor.Same) {
+				mat.color = frameSameColor_;
+			} else {
+				mat.color = frameOtherColor_;
+			}
+			r.material = mat;
+		}
+	}
+
+	public void activeCursor( bool isActive )
+	{
+		cursorFrame_.gameObject.SetActive( isActive );
+	}
+
 	public void setOtherWindow( Window other )
 	{
 		otherWindow_ = other;
+	}
+
+	public Window getOtherWindow()
+	{
+		return otherWindow_;
 	}
 
 	public float getFrameWidth()
@@ -64,6 +107,8 @@ public class Window : MonoBehaviour
 
 	private void Awake()
 	{
+		activeCursor( false );
+
 		if ( otherWindow_ == null) {
 			otherWindow_ = this;
 		}
@@ -80,6 +125,9 @@ public class Window : MonoBehaviour
 			L.transform.localScale = new Vector3( sx, sy, sz );
 			var R = PrefabUtil.createInstance( framePrefab_, transform, new Vector3( tx_R, ty, tz ) );
 			R.transform.localScale = new Vector3( sx, sy, sz );
+
+			frameRenderers_.Add( L.GetComponent<MeshRenderer>() );
+			frameRenderers_.Add( R.GetComponent<MeshRenderer>() );
 		}
 
 		// U
@@ -92,6 +140,8 @@ public class Window : MonoBehaviour
 			float sz = dimLengthUp_;
 			var U = PrefabUtil.createInstance( framePrefab_, transform, new Vector3( tx, ty, tz ) );
 			U.transform.localScale = new Vector3( sx, sy, sz );
+
+			frameRenderers_.Add( U.GetComponent<MeshRenderer>() );
 		}
 
 		// D
@@ -104,6 +154,8 @@ public class Window : MonoBehaviour
 			float sz = dimLengthDown_;
 			var D = PrefabUtil.createInstance( framePrefab_, transform, new Vector3( tx, ty, tz ) );
 			D.transform.localScale = new Vector3( sx, sy, sz );
+
+			frameRenderers_.Add( D.GetComponent<MeshRenderer>() );
 		}
 
 		// Window
@@ -133,5 +185,13 @@ public class Window : MonoBehaviour
 		mat.SetTexture( "_CubeMap", CubeMapRenderer.getInstance().getRenderTexture() );
 		
 		windowRenderer_.material = mat;
+
+		if ( this == otherWindow_ )
+			changeFrameColor( FrameColor.Same );
+		else
+			changeFrameColor( FrameColor.Other );
 	}
+
+	List<MeshRenderer> frameRenderers_ = new List<MeshRenderer>();
+	FrameColor frameColor_ = FrameColor.None;
 }
