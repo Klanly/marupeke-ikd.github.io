@@ -421,7 +421,7 @@ MonoBehaviour:
   windowColNum_: 10
   windowRowNum_: 3
   windowBottom_: -4
-  bDebugNoShuffle_: 0
+  bDebugNoShuffle_: 1
 --- !u!4 &1549625966
 Transform:
   m_ObjectHideFlags: 0
