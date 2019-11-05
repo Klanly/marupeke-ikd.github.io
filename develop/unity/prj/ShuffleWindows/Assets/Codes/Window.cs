@@ -56,6 +56,9 @@ public class Window : MonoBehaviour
 	[SerializeField]
 	SpriteRenderer cursorFrame_ = null;
 
+	[SerializeField]
+	Collider windowCollider_ = null;
+
 
 	public enum FrameColor {
 		Same,
@@ -73,6 +76,8 @@ public class Window : MonoBehaviour
 			var mat = r.material;
 			if (frameColor == FrameColor.Same) {
 				mat.color = frameSameColor_;
+				// コライダーを外す
+				Destroy( windowCollider_ );
 			} else {
 				mat.color = frameOtherColor_;
 			}
@@ -103,6 +108,11 @@ public class Window : MonoBehaviour
 	public float getFrameHeight()
 	{
 		return windowHeight_ + ticknessUp_ + upMergin_ + ticknessDown_ + downMergin_;
+	}
+
+	public bool isCorrect()
+	{
+		return frameColor_ == FrameColor.Same;
 	}
 
 	private void Awake()
@@ -186,10 +196,12 @@ public class Window : MonoBehaviour
 		
 		windowRenderer_.material = mat;
 
-		if ( this == otherWindow_ )
-			changeFrameColor( FrameColor.Same );
-		else
-			changeFrameColor( FrameColor.Other );
+		if ( frameColor_ != FrameColor.Same ) {
+			if (this == otherWindow_)
+				changeFrameColor( FrameColor.Same );
+			else
+				changeFrameColor( FrameColor.Other );
+		}
 	}
 
 	List<MeshRenderer> frameRenderers_ = new List<MeshRenderer>();

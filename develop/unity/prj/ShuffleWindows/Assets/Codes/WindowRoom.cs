@@ -25,11 +25,14 @@ public class WindowRoom : MonoBehaviour
 	[SerializeField]
 	bool bDebugNoShuffle_ = false;
 
+	[SerializeField]
+	int initCorrectNum_ = 8;
+
 	// Start is called before the first frame update
 	void Start() {
-		var w = PrefabUtil.createInstance( windowPrefab_ );
-		float fw = w.getFrameWidth() + windowColMergin_;
-		float fh = w.getFrameHeight();
+		var sampleWindow = PrefabUtil.createInstance( windowPrefab_ );
+		float fw = sampleWindow.getFrameWidth() + windowColMergin_;
+		float fh = sampleWindow.getFrameHeight();
 		float th = 180.0f / windowColNum_ * Mathf.Deg2Rad;
 		float r = fw * 0.5f / Mathf.Tan( th );
 		for ( int y = 0; y < windowRowNum_; ++y ) {
@@ -43,7 +46,7 @@ public class WindowRoom : MonoBehaviour
 				windows_.Add( obj );
 			}
 		}
-		Destroy( w.gameObject );
+		Destroy( sampleWindow.gameObject );
 
 		// 窓をシャッフル
 		if (bDebugNoShuffle_ == false) {
@@ -55,8 +58,23 @@ public class WindowRoom : MonoBehaviour
 				windows_[ k ].setOtherWindow( windows_[ j ] );
 				k++;
 			}
+
+			// 指定個の窓は基準用に正解にする
+			ListUtil.shuffle( ref indices );
+			for ( int i = 0; i < initCorrectNum_; ++i ) {
+				var correctWindow = windows_[ indices[ i ] ];
+				foreach ( var w in windows_ ) {
+					if ( w.getOtherWindow() == correctWindow ) {
+						var tmp = w.getOtherWindow();
+						var tmp2 = correctWindow.getOtherWindow();
+						correctWindow.setOtherWindow( tmp );
+						w.setOtherWindow( tmp2 );
+						break;
+					}
+				}
+			}
 		}
-    }
+	}
 
     // Update is called once per frame
     void Update()

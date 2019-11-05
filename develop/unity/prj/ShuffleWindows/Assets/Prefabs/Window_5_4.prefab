@@ -235,3 +235,4 @@ MonoBehaviour:
   ticknessDown_: 0.4
   otherWindow_: {fileID: 0}
   cursorFrame_: {fileID: 1104505205}
+  windowCollider_: {fileID: 7231193733341121843}
