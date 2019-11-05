@@ -5,7 +5,7 @@ using UnityEngine;
 public class CubeDistributer : MonoBehaviour
 {
 	[SerializeField]
-	RotCube cubePrefab_;
+	RotCube cubePrefab_ = null;
 
 	[SerializeField]
 	int num_ = 10;

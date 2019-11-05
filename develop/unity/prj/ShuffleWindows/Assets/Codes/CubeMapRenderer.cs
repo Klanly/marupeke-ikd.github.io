@@ -5,7 +5,7 @@ using UnityEngine;
 public class CubeMapRenderer : MonoBehaviour
 {
 	[SerializeField]
-	Camera cubeMapCamera_;
+	Camera cubeMapCamera_ = null;
 
 	static public CubeMapRenderer getInstance()
 	{
@@ -14,11 +14,11 @@ public class CubeMapRenderer : MonoBehaviour
 
 	private void Awake()
 	{
-		var desc = new RenderTextureDescriptor();
+/*		var desc = new RenderTextureDescriptor();
 		desc.autoGenerateMips = false;
 		desc.bindMS = false;
 		desc.colorFormat = RenderTextureFormat.ARGB32;
-		desc.depthBufferBits = 32;
+		desc.depthBufferBits = 24;
 		desc.dimension = UnityEngine.Rendering.TextureDimension.Cube;
 		desc.enableRandomWrite = false;
 		desc.graphicsFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.R8G8B8A8_UNorm;
@@ -29,7 +29,12 @@ public class CubeMapRenderer : MonoBehaviour
 		desc.width = 1024;
 		desc.volumeDepth = 1;
 		renderTexture_ = new RenderTexture( desc );
-		instance_g = this;	
+*/
+		if ( renderTexture_ == null ) {
+			renderTexture_ = new RenderTexture( 1024, 1024, 24 );
+			renderTexture_.dimension = UnityEngine.Rendering.TextureDimension.Cube;
+		}
+		instance_g = this;
 	}
 
 	public RenderTexture getRenderTexture()

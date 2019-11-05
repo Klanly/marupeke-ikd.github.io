@@ -137,10 +137,19 @@
     <Compile Include="Assets\Codes\common\Vector3Util.cs" />
     <Compile Include="Assets\Codes\CubeDistributer.cs" />
     <Compile Include="Assets\Codes\CubeMapRenderer.cs" />
+    <Compile Include="Assets\Codes\FireWork.cs" />
     <Compile Include="Assets\Codes\Player.cs" />
     <Compile Include="Assets\Codes\RotCube.cs" />
     <Compile Include="Assets\Codes\Window.cs" />
     <Compile Include="Assets\Codes\WindowRoom.cs" />
+    <Compile Include="Assets\Fireworks\Firecracker 1\Script\Firecracker1.cs" />
+    <Compile Include="Assets\Fireworks\Firecracker 2\Script\Firecracker2.cs" />
+    <Compile Include="Assets\Fireworks\Firecracker 3\Script\Firecracker3.cs" />
+    <Compile Include="Assets\Fireworks\Rocket 1\Script\Rocket1.cs" />
+    <Compile Include="Assets\Fireworks\Rocket 2\Script\Rocket2.cs" />
+    <Compile Include="Assets\Fireworks\Rocket 3\Script\Rocket3.cs" />
+    <Compile Include="Assets\Fireworks\Rocket 4\Script\Rocket4.cs" />
+    <Compile Include="Assets\Fireworks\Rocket 5\Script\Rocket5.cs" />
     <None Include="Assets\Shaders\WindowPlate.shader" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/ShuffleWindows/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

@@ -5,10 +5,10 @@ using UnityEngine;
 public class Window : MonoBehaviour
 {
 	[SerializeField]
-	GameObject framePrefab_;
+	GameObject framePrefab_ = null;
 
 	[SerializeField]
-	MeshRenderer windowRenderer_;
+	MeshRenderer windowRenderer_ = null;
 
 	[SerializeField]
 	Color frameSameColor_ = Color.white;
@@ -54,7 +54,7 @@ public class Window : MonoBehaviour
 	Window otherWindow_;
 
 	[SerializeField]
-	SpriteRenderer cursorFrame_;
+	SpriteRenderer cursorFrame_ = null;
 
 
 	public enum FrameColor {
