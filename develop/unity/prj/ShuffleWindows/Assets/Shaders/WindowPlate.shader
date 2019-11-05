@@ -67,7 +67,7 @@
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 texColor = tex2D(_MainTex, i.uv);
-				float4 envColor = UNITY_SAMPLE_TEXCUBE( _CubeMap, normalize( i.ray ) );
+				float4 envColor = UNITY_SAMPLE_TEXCUBE( _CubeMap, -normalize( i.ray ) );
 				float a = _TexAlpha * texColor.a;
 				float4 col = float4( envColor.rgb * ( 1.0f - a ) + texColor.rgb * a, 1.0f );
                 return col;

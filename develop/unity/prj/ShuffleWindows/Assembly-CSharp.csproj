@@ -137,7 +137,9 @@
     <Compile Include="Assets\Codes\common\Vector3Util.cs" />
     <Compile Include="Assets\Codes\CubeDistributer.cs" />
     <Compile Include="Assets\Codes\CubeMapRenderer.cs" />
+    <Compile Include="Assets\Codes\RotCube.cs" />
     <Compile Include="Assets\Codes\Window.cs" />
+    <Compile Include="Assets\Codes\WindowRoom.cs" />
     <None Include="Assets\Shaders\WindowPlate.shader" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/ShuffleWindows/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

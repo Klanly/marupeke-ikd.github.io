@@ -5,7 +5,7 @@ using UnityEngine;
 public class CubeDistributer : MonoBehaviour
 {
 	[SerializeField]
-	GameObject cubePrefab_;
+	RotCube cubePrefab_;
 
 	[SerializeField]
 	int num_ = 10;
@@ -17,8 +17,8 @@ public class CubeDistributer : MonoBehaviour
     void Start()
     {
 		for ( int i = 0; i < num_; ++i ) {
-			var obj = PrefabUtil.createInstance( cubePrefab_, transform );
-			obj.transform.localPosition = SphereSurfUtil.randomPos( Random.value, Random.value ) * radius_;
+			var obj = PrefabUtil.createInstance( cubePrefab_, transform, Vector3.zero );
+			obj.modelRoot_.transform.localPosition = SphereSurfUtil.randomPos( Random.value, Random.value ) * radius_;
 		}
 	}
 

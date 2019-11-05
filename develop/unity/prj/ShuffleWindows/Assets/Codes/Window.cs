@@ -47,16 +47,26 @@ public class Window : MonoBehaviour
 	[SerializeField]
 	Window otherWindow_;
 
+	public void setOtherWindow( Window other )
+	{
+		otherWindow_ = other;
+	}
+
+	public float getFrameWidth()
+	{
+		return windowWidth_ + ticknessLR_ * 2.0f;
+	}
+
+	public float getFrameHeight()
+	{
+		return windowHeight_ + ticknessUp_ + upMergin_ + ticknessDown_ + downMergin_;
+	}
 
 	private void Awake()
 	{
 		if ( otherWindow_ == null) {
 			otherWindow_ = this;
 		}
-	}
-
-	void Start()
-    {
 		// LR
 		{
 			float ty = ( upMergin_ - downMergin_ ) * 0.5f;
@@ -100,6 +110,10 @@ public class Window : MonoBehaviour
 		{
 			windowRenderer_.transform.localScale = new Vector3( windowWidth_, windowHeight_, 1.0f );
 		}
+	}
+
+	void Start()
+    {
 	}
 
 	void Update()
