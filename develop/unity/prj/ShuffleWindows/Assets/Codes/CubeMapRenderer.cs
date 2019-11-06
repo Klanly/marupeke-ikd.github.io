@@ -12,24 +12,14 @@ public class CubeMapRenderer : MonoBehaviour
 		return instance_g;
 	}
 
+	public void toClear()
+	{
+		bClear_ = true;
+		Destroy( cubeMapCamera_.gameObject );
+	}
+
 	private void Awake()
 	{
-/*		var desc = new RenderTextureDescriptor();
-		desc.autoGenerateMips = false;
-		desc.bindMS = false;
-		desc.colorFormat = RenderTextureFormat.ARGB32;
-		desc.depthBufferBits = 24;
-		desc.dimension = UnityEngine.Rendering.TextureDimension.Cube;
-		desc.enableRandomWrite = false;
-		desc.graphicsFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.R8G8B8A8_UNorm;
-		desc.height = 1024;
-		desc.mipCount = 1;
-		desc.msaaSamples = 1;
-		desc.useMipMap = false;
-		desc.width = 1024;
-		desc.volumeDepth = 1;
-		renderTexture_ = new RenderTexture( desc );
-*/
 		if ( renderTexture_ == null ) {
 			renderTexture_ = new RenderTexture( 1024, 1024, 24 );
 			renderTexture_.dimension = UnityEngine.Rendering.TextureDimension.Cube;
@@ -49,10 +39,14 @@ public class CubeMapRenderer : MonoBehaviour
 
     void Update()
     {
-		var res = cubeMapCamera_.RenderToCubemap( renderTexture_, 63 );
-    }
+		if ( bClear_ == false ) {
+			var res = cubeMapCamera_.RenderToCubemap( renderTexture_, 63 );
+		}
+	}
 
 	[SerializeField]
 	RenderTexture renderTexture_;
+
 	static CubeMapRenderer instance_g;
+	bool bClear_ = false;
 }

@@ -28,6 +28,59 @@ public class WindowRoom : MonoBehaviour
 	[SerializeField]
 	int initCorrectNum_ = 8;
 
+	[SerializeField]
+	GameObject room_ = null;
+
+	[SerializeField]
+	CubeMapRenderer cubeMapRenderer_;
+
+	[SerializeField]
+	UnityEngine.UI.Image congImage_ = null;
+
+
+	public bool isClear()
+	{
+		return bClear_;
+	}
+
+	public bool checkClear()
+	{
+		foreach ( var w in windows_) {
+			if ( w.isCorrect() == false )
+				return false;
+		}
+		bClear_ = true;
+		return true;
+	}
+
+	public void toClear()
+	{
+		if ( alwaysClearScene_ == true )
+			return;
+		alwaysClearScene_ = true;
+
+		// クリアシーン
+		Destroy( room_ );
+
+		foreach (var w in windows_) {
+			var mv = w.gameObject.AddComponent<Mover>();
+			mv.Dir = w.transform.localPosition;
+			mv.Speed = 1.0f;
+			Destroy( w.gameObject, 10.0f );
+		}
+
+		cubeMapRenderer_.transform.position = Vector3.zero;
+		cubeMapRenderer_.toClear();
+
+		congImage_.gameObject.SetActive( true );
+		var sc = new Color( 1.0f, 1.0f, 1.0f, 0.0f );
+		var ec = new Color( 1.0f, 1.0f, 1.0f, 1.0f );
+		GlobalState.time( 2.0f, (sec, t) => {
+			congImage_.color = Color.Lerp( sc, ec, t );
+			return true;
+		});
+	}
+
 	// Start is called before the first frame update
 	void Start() {
 		var sampleWindow = PrefabUtil.createInstance( windowPrefab_ );
@@ -83,4 +136,6 @@ public class WindowRoom : MonoBehaviour
     }
 
 	List<Window> windows_ = new List<Window>();
+	bool bClear_ = false;
+	bool alwaysClearScene_ = false;
 }

@@ -66,23 +66,10 @@ public class Window : MonoBehaviour
 		None
 	}
 
-	public void changeFrameColor( FrameColor frameColor )
+	public void removeCollider()
 	{
-		if (frameColor_ == frameColor)
-			return;
-		frameColor_ = frameColor;
-
-		foreach ( var r in frameRenderers_ ) {
-			var mat = r.material;
-			if (frameColor == FrameColor.Same) {
-				mat.color = frameSameColor_;
-				// コライダーを外す
-				Destroy( windowCollider_ );
-			} else {
-				mat.color = frameOtherColor_;
-			}
-			r.material = mat;
-		}
+		// コライダーを外す
+		Destroy( windowCollider_ );
 	}
 
 	public void activeCursor( bool isActive )
@@ -93,6 +80,20 @@ public class Window : MonoBehaviour
 	public void setOtherWindow( Window other )
 	{
 		otherWindow_ = other;
+		if ( other == this ) {
+			frameColor_ = FrameColor.Same;
+		} else {
+			frameColor_ = FrameColor.Other;
+		}
+		foreach (var r in frameRenderers_) {
+			var mat = r.material;
+			if ( frameColor_ == FrameColor.Same ) {
+				mat.color = frameSameColor_;
+			} else {
+				mat.color = frameOtherColor_;
+			}
+			r.material = mat;
+		}
 	}
 
 	public Window getOtherWindow()
@@ -195,13 +196,6 @@ public class Window : MonoBehaviour
 		mat.SetTexture( "_CubeMap", CubeMapRenderer.getInstance().getRenderTexture() );
 		
 		windowRenderer_.material = mat;
-
-		if ( frameColor_ != FrameColor.Same ) {
-			if (this == otherWindow_)
-				changeFrameColor( FrameColor.Same );
-			else
-				changeFrameColor( FrameColor.Other );
-		}
 	}
 
 	List<MeshRenderer> frameRenderers_ = new List<MeshRenderer>();

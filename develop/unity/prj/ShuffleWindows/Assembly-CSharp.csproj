@@ -138,6 +138,7 @@
     <Compile Include="Assets\Codes\CubeDistributer.cs" />
     <Compile Include="Assets\Codes\CubeMapRenderer.cs" />
     <Compile Include="Assets\Codes\FireWork.cs" />
+    <Compile Include="Assets\Codes\Mover.cs" />
     <Compile Include="Assets\Codes\Player.cs" />
     <Compile Include="Assets\Codes\RotCube.cs" />
     <Compile Include="Assets\Codes\Window.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="Assets\Fireworks\Rocket 4\Script\Rocket4.cs" />
     <Compile Include="Assets\Fireworks\Rocket 5\Script\Rocket5.cs" />
     <None Include="Assets\Shaders\WindowPlate.shader" />
+    <None Include="Assets\Fonts\font01.fnt" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/IKDDocs2/Programs/git_marupeke_io/develop/unity/prj/ShuffleWindows/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
