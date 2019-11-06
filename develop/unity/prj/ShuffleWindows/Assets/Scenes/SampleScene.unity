@@ -8003,7 +8003,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cubeMapCamera_: {fileID: 2017194817}
-  renderTexture_: {fileID: 8600000, guid: e4f3d23092a7957499559173771528e2, type: 2}
+  renderTexture_: {fileID: 0}
 --- !u!4 &1501146852
 Transform:
   m_ObjectHideFlags: 0
