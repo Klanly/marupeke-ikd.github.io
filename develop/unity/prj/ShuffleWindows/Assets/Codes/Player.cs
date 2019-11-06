@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+	[SerializeField]
+	float moveSpeed_ = 0.1f;
+
+	[SerializeField]
+	float radius_ = 3.0f;
+
+	// Start is called before the first frame update
+	void Start()
     {
         
     }
@@ -36,7 +42,28 @@ public class Player : MonoBehaviour
 				}
 			}
 		}
-    }
+
+		// 部屋内をちょっと動けるように
+		float dx = 0.0f;
+		float dz = 0.0f;
+		if ( Input.GetKey( KeyCode.W ) ) { dz += 1.0f; }
+		if ( Input.GetKey( KeyCode.S ) ) { dz -= 1.0f; }
+		if ( Input.GetKey( KeyCode.D ) ) { dx += 1.0f; }
+		if ( Input.GetKey( KeyCode.A ) ) { dx -= 1.0f; }
+
+		var fv = Camera.main.transform.forward;
+		fv.y = 0.0f;
+		fv.Normalize();
+		var rv = Camera.main.transform.right;
+		rv.y = 0.0f;
+		rv.Normalize();
+		var p = transform.localPosition;
+		Vector3 np = p + ( fv * dz + rv * dx ).normalized * moveSpeed_;
+		if ( np.magnitude > radius_ ) {
+			np = np.normalized * radius_;
+		}
+		transform.localPosition = np;
+	}
 
 	Window selectWindow_ = null;
 }
